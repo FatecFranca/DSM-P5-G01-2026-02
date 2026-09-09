@@ -57,7 +57,7 @@ O MVP deve comprovar este fluxo completo:
 - alfabetização completa;
 - ranking social;
 - painel completo de professor;
-- treinamento contínuo com dados dos usuários;
+- treinamento contínuo do modelo de classificação de escrita (letra) com dados dos usuários — o mecanismo de aprendizado adotado pelo projeto é o de reclassificação adaptativa de palavras descrito na seção 4, que é tabular, independente do modelo de imagem e não requer amostras de escrita de usuários;
 - reconhecimento de palavras manuscritas inteiras.
 
 ## 4. Decisões técnicas recomendadas
@@ -80,6 +80,21 @@ Relatar accuracy, precision, recall, F1-score e matriz de confusão por classe. 
 
 O modelo deve retornar pelo menos a classe, a confiança e um estado de incerteza. O aplicativo não deve transformar automaticamente “modelo não reconheceu” em “aluno escreveu errado”.
 
+### Machine Learning — dificuldade adaptativa de palavras (classificação tabular)
+
+Além do classificador de escrita, o projeto usará um segundo mecanismo de machine learning, tabular e independente do modelo de imagem, para adaptar a dificuldade e a ordem das palavras apresentadas ao usuário. É este mecanismo que responde ao requisito de o sistema "ir aprendendo" ao longo do uso.
+
+**Classificador A — dificuldade da palavra.** Classificação multiclasse (fácil, médio, difícil) a partir de duas famílias de atributos:
+
+- linguísticos: número de sílabas, presença de acentuação, comprimento, encontros consonantais, frequência de uso da palavra em português;
+- comportamentais agregados: taxa de acerto, tempo médio de resposta e número de tentativas de todos os usuários para aquela palavra.
+
+O rótulo inicial de cada palavra vem de uma regra pedagógica simples (bootstrap), usada para treinar a primeira versão do classificador. O modelo é retreinado periodicamente, em lote, à medida que dados de uso se acumulam — nunca em tempo real a cada interação individual, e sempre avaliado contra um conjunto de teste antes de substituir a versão em produção.
+
+**Classificador B — recomendação de próxima atividade / risco de abandono.** Classificação que usa a saída do Classificador A (dificuldade atual da palavra) como um dos atributos de entrada, combinada com dados da sessão do usuário (tempo de resposta recente, taxa de erro na sessão, repetições de áudio), para recomendar o tipo de exercício mais adequado ou sinalizar risco de abandono.
+
+Ambos os classificadores operam sobre dados já previstos no schema (`attempts`, `progress`) e sobre metadados linguísticos das palavras — não requerem imagem, áudio bruto ou dado pessoal sensível adicional.
+
 ### Backend e armazenamento
 
 Recomenda-se iniciar com uma API simples e PostgreSQL, mas evitar criar um backend grande antes de validar o fluxo pedagógico. O servidor deve armazenar conteúdo, conta, progresso e tentativas; a inferência da letra deve ocorrer localmente quando possível.
@@ -94,6 +109,7 @@ No aparelho, usar armazenamento local para conteúdo essencial, sessão e uma fi
 - `exercises`: instrução, tipo, resposta e mídia;
 - `attempts`: resposta, resultado, confiança, duração e versão do modelo;
 - `progress`: estado por lição;
+- `words`: metadados linguísticos e dificuldade de cada palavra do dataset (sílabas, acentuação, comprimento, frequência de uso, dificuldade_inicial, dificuldade_atual, versão do classificador que gerou a dificuldade_atual);
 - `sync_queue`: eventos locais aguardando envio.
 
 Não armazenar imagem bruta da escrita por padrão. Se a equipe precisar de amostras para pesquisa, separar esse consentimento do cadastro, anonimizar os dados e definir prazo de retenção.
@@ -142,6 +158,13 @@ Não armazenar imagem bruta da escrita por padrão. Se a equipe precisar de amos
 - tamanho do modelo;
 - desempenho em amostras diferentes das usadas no treinamento.
 
+### Classificadores tabulares (dificuldade de palavra e recomendação)
+
+- F1 macro da classificação de dificuldade (Classificador A);
+- precision e recall do risco de abandono / recomendação de atividade (Classificador B);
+- estabilidade entre ciclos de retreino: quantas palavras mudam de classe a cada reclassificação;
+- comparação entre a dificuldade prevista pelo modelo e a dificuldade definida pela regra pedagógica inicial (bootstrap).
+
 ### Usabilidade
 
 Testar com poucas pessoas representativas do público, com consentimento e acompanhamento do integrante capacitado do grupo. Observar onde a pessoa hesita, pede ajuda, repete o áudio ou abandona. Não medir sucesso apenas por quantidade de pontos.
@@ -169,12 +192,15 @@ Testar com poucas pessoas representativas do público, com consentimento e acomp
 - adicionar áudio e exercícios de reconhecimento;
 - registrar progresso localmente;
 - adicionar sílabas e poucas palavras;
+- prototipar o Classificador A (dificuldade de palavra) com a regra de bootstrap sobre as 4 a 8 palavras do MVP;
 - sincronizar com a API.
 
 ### Fase 3 — avaliação
 
 - testar com usuários representativos;
-- comparar modelos e analisar a matriz de confusão;
+- comparar modelos e analisar a matriz de confusão do classificador de escrita;
+- treinar o Classificador B (recomendação/risco de abandono) com dados reais coletados no teste com usuários;
+- avaliar o primeiro ciclo de retreino do Classificador A com dados de uso reais;
 - corrigir problemas de acessibilidade e linguagem;
 - documentar limitações, resultados e próximos passos.
 
