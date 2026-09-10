@@ -1,0 +1,1 @@
+export const colors = { background: "#F4F1E8", surface: "#FFFFFF", primary: "#173F5F", accent: "#D97706", success: "#237A57", text: "#17202A", muted: "#5E6B75", border: "#C9D2D8", danger: "#A33A2B" } as const;

@@ -1,0 +1,42 @@
+{
+  "name": "alfabetiza-mobile",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "main": "expo-router/entry",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5.102.8",
+    "expo": "^57.0.21",
+    "expo-asset": "^57.0.16",
+    "expo-constants": "^57.0.4",
+    "expo-router": "^57.0.20",
+    "expo-secure-store": "^57.0.3",
+    "expo-speech": "~57.0.2",
+    "expo-sqlite": "^57.0.2",
+    "onnxruntime-react-native": "^1.24.2",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "react-native": "0.86.3",
+    "react-native-safe-area-context": "~5.7.0",
+    "react-native-screens": "~4.26.0",
+    "react-native-svg": "15.15.4",
+    "zustand": "^5.0.15"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.1",
+    "@types/react": "~19.2.4",
+    "eslint": "^9.39.1",
+    "typescript": "~6.0.3",
+    "typescript-eslint": "^8.53.0",
+    "vitest": "^5.0.0"
+  }
+}

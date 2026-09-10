@@ -1,0 +1,14 @@
+{
+  "expo": {
+    "name": "Alfabetiza",
+    "slug": "alfabetiza",
+    "scheme": "alfabetiza",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "plugins": ["expo-router", "expo-secure-store", "expo-sqlite"],
+    "android": { "package": "br.edu.alfabetiza.mobile" },
+    "ios": { "bundleIdentifier": "br.edu.alfabetiza.mobile" },
+    "extra": { "apiUrl": "http://10.0.2.2:8000" }
+  }
+}
