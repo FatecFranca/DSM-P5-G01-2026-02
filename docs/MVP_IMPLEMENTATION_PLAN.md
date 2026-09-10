@@ -4,18 +4,18 @@
 
 ## Objetivo
 
-Levar o Alfabetiza do repositório vazio a um MVP mobile estruturado, seguindo o [documento-base do projeto](./PROJECT_FOUNDATION.md), com API própria em Python, funcionamento offline, sincronização online, classificação local da escrita e hospedagem na VPS Azure.
+Levar o Alfabetiza do repositório vazio a um MVP mobile estruturado, seguindo o [documento-base do projeto](./PROJECT_FOUNDATION.md), com API própria em Python, funcionamento offline, sincronização online, associação de letras a palavras e hospedagem na VPS Azure.
 
 ## Arquitetura definida
 
 - **Mobile:** React Native, TypeScript, Expo Router, Zustand e TanStack Query.
 - **Persistência local:** `expo-sqlite` para conteúdo, sessão, tentativas, progresso e fila de sincronização; `expo-secure-store` para tokens.
-- **Áudio:** `expo-audio` com arquivos pré-gravados incluídos no aplicativo e botão de repetição.
+- **Áudio:** `expo-speech` para ler dinamicamente o enunciado exibido, em português do Brasil, com botão de repetição.
 - **API:** Python 3.11+, FastAPI, Pydantic, SQLAlchemy 2 e Alembic.
 - **Autenticação:** JWT de curta duração, refresh token rotativo e senhas protegidas com Argon2id.
 - **Banco:** PostgreSQL.
 - **Machine Learning:** Python, pandas, NumPy, scikit-learn e ONNX Runtime.
-- **Inferência local:** modelo ONNX executado no dispositivo com `onnxruntime-react-native`.
+- **Atividade de palavras:** cartões com imagem, áudio por texto para fala e lacuna preenchida por toque.
 - **Infraestrutura:** Docker Compose, proxy HTTPS, API e PostgreSQL na VPS Azure.
 
 A API e o pipeline de ML serão projetos Python separados. A imagem de produção da API não deve carregar dependências pesadas de treinamento.
@@ -28,7 +28,7 @@ A API e o pipeline de ML serão projetos Python separados. A imagem de produçã
 - Fixar as 26 letras do alfabeto apresentadas progressivamente.
 - Definir letras maiúsculas de forma como primeiro formato.
 - Selecionar sílabas e 4 a 8 palavras contextualizadas.
-- Confirmar os três tipos de exercício: ouvir e escolher, reconhecer letra e escrever letra.
+- Confirmar os três tipos de exercício: ouvir e escolher, reconhecer letra e completar palavra.
 
 **Verificação:** escopo aprovado, catálogo inicial definido e critérios de sucesso registrados.
 
@@ -51,8 +51,8 @@ Configurar Expo, FastAPI, ambientes Python, TypeScript, lint, testes, variáveis
 ### 3. Preparar conteúdo pedagógico e áudio
 
 - Criar fixtures versionadas para letras, lições, exercícios, sílabas, palavras e instruções.
-- Produzir ou selecionar áudios com licença definida.
-- Incluir os arquivos essenciais no aplicativo para uso offline.
+- Revisar os enunciados que serão enviados ao TTS e validar pronúncia, ritmo e clareza em Android e iOS.
+- Orientar a instalação da voz em português do Brasil quando ela não estiver disponível no aparelho.
 - Adicionar repetição de todas as instruções.
 
 **Verificação:** validador confirma as 26 letras, exercícios completos, mídias existentes e reprodução local.
@@ -93,22 +93,9 @@ Cada tentativa deve possuir `client_attempt_id` único por usuário para impedir
 
 ### 6. Criar a primeira fatia vertical mobile
 
-Implementar sessão de estudo, instrução, áudio, exercício de escolha, área de escrita, inferência local, feedback de confiança e persistência local.
+Implementar sessão de estudo, instrução, áudio, exercício de escolha, cartões de palavras com lacunas, preenchimento por toque, feedback e persistência local.
 
-Contrato da inferência:
-
-```ts
-type InferenceResult = {
-  className: string;
-  confidence: number;
-  uncertain: boolean;
-  modelVersion: string;
-};
-```
-
-Baixa confiança deve gerar nova tentativa ou orientação, nunca uma mensagem constrangedora.
-
-**Verificação:** uma pessoa inicia uma lição, ouve, escreve, recebe feedback, fecha e reabre o aplicativo vendo o resultado salvo.
+**Verificação:** uma pessoa inicia uma lição, ouve as palavras, escolhe a lacuna correta, recebe feedback, fecha e reabre o aplicativo vendo o resultado salvo.
 
 ### 7. Implementar sincronização offline/online
 
@@ -116,7 +103,7 @@ Baixa confiança deve gerar nova tentativa ou orientação, nunca uma mensagem c
 - Implementar envio em lote, retry, backoff e cursor de sincronização.
 - Processar eventos no servidor de forma idempotente.
 - Definir resolução determinística para conflitos de progresso.
-- Não enviar nem armazenar imagem bruta da escrita por padrão.
+- Não coletar conteúdo de escrita manuscrita nesta etapa.
 
 **Verificação:** concluir atividades sem internet, reconectar e confirmar sincronização única, sem perda ou duplicação.
 
@@ -150,7 +137,7 @@ Baixa confiança deve gerar nova tentativa ou orientação, nunca uma mensagem c
 - Executar lint, typecheck, build, avaliação dos modelos e `git diff --check`.
 - Registrar limitações, métricas e evidências no relatório do projeto.
 
-**Critério final:** o MVP funciona offline, sincroniza com a API na VPS Azure, cobre as 26 letras progressivamente, classifica escrita localmente, registra progresso e apresenta métricas documentadas.
+**Critério final:** o MVP funciona offline, sincroniza com a API na VPS Azure, cobre as 26 letras progressivamente, registra progresso e apresenta métricas documentadas.
 
 ## Dependências críticas
 
@@ -173,7 +160,7 @@ O Classificador B e o retreino baseado em uso não devem bloquear a primeira fat
 ## Testes e critérios de aceite
 
 - **API:** autenticação, autorização, validação, migrations, isolamento e idempotência.
-- **Mobile:** navegação, áudio, escrita, inferência, persistência, modo offline e feedback de incerteza.
+- **Mobile:** navegação, áudio, cartões de palavras, preenchimento por toque, persistência e modo offline.
 - **Machine Learning:** F1 macro, matriz de confusão, latência, tamanho e teste por escritor.
 - **Sincronização:** reenvio seguro, perda de conexão, retry e ausência de duplicação.
 - **Infraestrutura:** HTTPS, reinício dos containers, backup e restauração.
@@ -184,6 +171,6 @@ O Classificador B e o retreino baseado em uso não devem bloquear a primeira fat
 - Android será o primeiro dispositivo de validação; a arquitetura continuará multiplataforma.
 - A VPS Azure terá aproximadamente 4 vCPU, 8 GB de RAM e 80 GB SSD.
 - O primeiro login ocorrerá online; depois disso, as sessões poderão continuar offline.
-- Imagens brutas de escrita não serão armazenadas por padrão.
+- A atividade atual não coleta imagens brutas de escrita.
 - Testes com usuários reais dependem de consentimento e autorização do grupo.
 - O plano não adiciona funcionalidades fora do escopo documentado em `PROJECT_FOUNDATION.md`.
