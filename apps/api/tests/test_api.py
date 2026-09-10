@@ -7,10 +7,15 @@ def test_health_and_seeded_content(client):
     content = client.get("/v1/content").json()
     letters = {lesson["letter"] for module in content["modules"] for lesson in module["lessons"]}
     assert letters == set("ABCDEFGHIJKLMNOPQRSTUVWXYZ")
+    ordered = [lesson["letter"] for module in content["modules"] for lesson in module["lessons"]]
+    assert "".join(ordered) == "AEIOUMLPSTRNDCGBFVHQJKZXWY"
+    assert next(lesson for module in content["modules"] for lesson in module["lessons"] if lesson["letter"] == "G")["phase"] == 2
     assert {exercise["type"] for module in content["modules"] for lesson in module["lessons"] for exercise in lesson["exercises"]} == {
-        "listen_choose", "recognize_letter", "write_letter"
+        "listen_choose", "recognize_letter", "find_in_word"
     }
-    assert 4 <= len(content["words"]) <= 8
+    assert 8 <= len(content["words"]) <= 12
+    assert all(set(word["required_letters"]).issubset(set(ordered)) for word in content["words"])
+    assert next(word for word in content["words"] if word["text"] == "ÔNIBUS")["required_letters"] == "IOUSNB"
     push_schema = client.get("/openapi.json").json()["components"]["schemas"]["SyncPushResult"]
     assert "accepted_ids" in push_schema["required"]
 

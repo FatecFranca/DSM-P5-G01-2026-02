@@ -1,16 +1,22 @@
-import type { ExerciseType, InferenceResult, LessonProgress } from "./types";
+import type { ExerciseType, LessonProgress } from "./types";
 
 export type Feedback = { kind: "success" | "try-again" | "incorrect"; title: string; message: string };
 
-export function feedbackFor(result: InferenceResult, expected: string): Feedback {
-  if (result.uncertain || result.confidence < 0.7) return { kind: "try-again", title: "Vamos tentar mais uma vez?", message: "Não consegui reconhecer o traço com segurança. Você pode apagar e escrever novamente, sem perder progresso." };
-  if (result.className === expected) return { kind: "success", title: "Muito bem!", message: `Reconheci a letra ${expected}. Continue no seu ritmo.` };
-  return { kind: "incorrect", title: "Vamos observar o formato", message: `O traço se pareceu com ${result.className}. Veja o modelo e tente novamente quando quiser.` };
-}
-
-export function nextProgress(current: LessonProgress | undefined, type: ExerciseType, correct: boolean): LessonProgress {
-  // Remove o tipo antigo de escrita caso exista progresso salvo de uma versão anterior.
+export function nextProgress(current: LessonProgress | undefined, type: ExerciseType, correct: boolean, requiredTypes: ExerciseType[] = ["listen_choose", "recognize", "find_in_word"]): LessonProgress {
   const completedTypes = (current?.completedTypes ?? []).filter((item) => item !== ("write" as ExerciseType));
   const updated = correct && !completedTypes.includes(type) ? [...completedTypes, type] : completedTypes;
-  return { lessonId: current?.lessonId ?? "current", completedTypes: updated, score: updated.length, completed: updated.length === 3, updatedAt: new Date().toISOString() };
+  const now = new Date();
+  const attempts = (current?.attempts ?? 0) + 1;
+  const correctAttempts = (current?.correctAttempts ?? 0) + (correct ? 1 : 0);
+  const completed = requiredTypes.every((item) => updated.includes(item));
+  const nextReviewAt = completed ? new Date(now.getTime() + 24 * 60 * 60 * 1000).toISOString() : current?.nextReviewAt;
+  return { lessonId: current?.lessonId ?? "current", completedTypes: updated, score: updated.length, completed, status: completed ? "mastered" : "learning", attempts, correctAttempts, reviewCount: current?.reviewCount ?? 0, accuracy: correctAttempts / attempts, lastPracticedAt: now.toISOString(), nextReviewAt, updatedAt: now.toISOString() };
+}
+
+export function isLessonUnlocked(lesson: { order: number; prerequisiteLetters: string[] }, progress: Record<string, { completed?: boolean } | undefined>): boolean {
+  return lesson.order === 1 || lesson.prerequisiteLetters.every((letter) => progress[`letter-${letter.toLowerCase()}`]?.completed === true);
+}
+
+export function lessonNeedsReview(progress: LessonProgress | undefined, now = new Date()): boolean {
+  return Boolean(progress?.completed && progress.nextReviewAt && Date.parse(progress.nextReviewAt) <= now.getTime());
 }

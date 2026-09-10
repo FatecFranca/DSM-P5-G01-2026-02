@@ -6,16 +6,14 @@ Data da rodada: 10 de setembro de 2026.
 
 | Área | Verificação | Resultado |
 |---|---|---|
-| Mobile | Vitest | 6 arquivos e 17 testes aprovados |
+| Mobile | Vitest | 5 arquivos e 15 testes aprovados |
 | Mobile | TypeScript e ESLint | aprovados |
 | Mobile | `expo install --check` | dependências compatíveis |
-| Mobile | export Android | aprovado; bundle inclui 26 WAVs e o modelo ONNX |
+| Mobile | export Android | aprovado; bundle inclui os áudios necessários à trilha |
 | API | Pytest | 4 testes aprovados |
 | API | Alembic | upgrade, downgrade e novo upgrade aprovados |
-| API | seed | 26 lições, 78 exercícios e 6 palavras |
+| API | seed | 26 lições progressivas, exercícios de reconhecimento/localização e 11 palavras com pré-requisitos |
 | API | OpenAPI | endpoints e resposta `accepted_ids` confirmados |
-| ML | Pytest | 5 testes aprovados |
-| ML | ONNX Runtime | classe e 26 probabilidades retornadas |
 | Infra | Docker Compose | configuração validada |
 | Infra | containers | API e PostgreSQL saudáveis; `/health` retornou 200 |
 | Infra | backup/restauração | dump e restauração em banco de teste aprovados |
@@ -24,24 +22,17 @@ Data da rodada: 10 de setembro de 2026.
 ## Cobertura funcional
 
 - cadastro, login, rotação de refresh token, logout e continuidade local da sessão;
-- 26 letras maiúsculas progressivas, três exercícios por letra e leitura dinâmica dos enunciados por TTS;
+- 26 letras maiúsculas progressivas em três fases, com `G` na segunda, exercícios de reconhecimento/localização e leitura dinâmica dos enunciados por TTS;
 - cartões com imagens, áudio das palavras e inserção da letra na lacuna por toque;
 - tentativas, progresso e fila persistidos em SQLite;
 - push/pull com cursor, retry exponencial, resolução determinística e idempotência;
 - isolamento de usuários e rejeição de imagem bruta no contrato da API;
-- Classificador A com bootstrap pedagógico e Classificador B com fallback por regras;
+- regras explícitas de pré-requisito, domínio e revisão;
 - stack de produção com API, PostgreSQL, proxy HTTPS, volumes, health checks e rotinas de backup.
 
-## Métricas do artefato demonstrativo
+## Métricas do conteúdo adaptativo
 
-- accuracy: 0,94444;
-- precision macro: 0,95330;
-- recall macro: 0,94444;
-- F1 macro: 0,94465;
-- tamanho ONNX: 33.934 bytes;
-- limiar de incerteza: 0,65.
-
-Essas métricas medem um dataset sintético separado por escritor e comprovam a integração técnica. O manifesto define `promotionAllowed=false`; os números não representam eficácia com estudantes ou escrita real.
+O catálogo atual usa regras explícitas de pré-requisito e dificuldade. Nenhum modelo adaptativo é promovido neste estágio, porque ainda não há dados de uso suficientes nem avaliação pedagógica separada.
 
 ## Evidências externas ainda necessárias
 

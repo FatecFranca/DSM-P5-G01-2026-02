@@ -16,6 +16,6 @@ Defina `expo.extra.apiUrl` em `app.json` para a API acessível pelo dispositivo.
 
 ## Limite conhecido
 
-A etapa atual não solicita escrita manuscrita nem executa o classificador ONNX durante as lições. O fluxo validado trabalha com imagens, áudio e inserção por toque da letra na palavra escolhida, reduzindo a complexidade da primeira validação pedagógica.
+A etapa atual não solicita escrita manuscrita, traçado ou classificação de escrita. O fluxo validado trabalha com imagens, áudio e inserção por toque da letra na palavra escolhida. Nenhum classificador é executado durante as lições.
 
 As instruções são lidas pelo mecanismo de texto para voz do dispositivo, em português do Brasil. O aplicativo envia ao TTS exatamente o enunciado exibido na atividade, evitando arquivos de áudio duplicados e mantendo texto e fala sincronizados. A disponibilidade e a voz podem variar conforme o sistema e os pacotes de voz instalados no aparelho.

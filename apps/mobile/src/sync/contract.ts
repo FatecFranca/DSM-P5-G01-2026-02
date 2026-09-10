@@ -7,7 +7,7 @@ export function toApiEvent(event: SyncEvent): ApiSyncEvent {
   const occurredAt = String(p.createdAt ?? p.updatedAt ?? new Date().toISOString());
   if (event.type === "attempt") return { client_event_id: event.id, type: "attempt", occurred_at: occurredAt, payload: { client_attempt_id: p.clientAttemptId, exercise_id: p.exerciseId, answer: p.answer, correct: p.correct, confidence: p.confidence ?? null, uncertain: p.uncertain ?? false, duration_ms: p.durationMs, model_version: p.modelVersion ?? null } };
   const completed = (p.completedTypes as string[] | undefined) ?? [];
-  return { client_event_id: event.id, type: "progress", occurred_at: occurredAt, payload: { lesson_id: p.lessonId, status: p.completed ? "completed" : completed.length ? "in_progress" : "not_started", completed_exercises: completed.length } };
+  return { client_event_id: event.id, type: "progress", occurred_at: occurredAt, payload: { lesson_id: p.lessonId, status: p.status === "mastered" ? "completed" : p.status === "review" || p.status === "needs_review" ? "in_progress" : p.completed ? "completed" : completed.length ? "in_progress" : "not_started", completed_exercises: completed.length, completed_types: completed, attempts: p.attempts ?? 0, correct_attempts: p.correctAttempts ?? 0, accuracy: p.accuracy ?? null, review_count: p.reviewCount ?? 0, last_practiced_at: p.lastPracticedAt ?? null, next_review_at: p.nextReviewAt ?? null } };
 }
 
 export function mergeProgress(local: LessonProgress | undefined, remote: LessonProgress): LessonProgress {

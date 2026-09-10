@@ -2,7 +2,7 @@
 
 ## 1. Parecer sobre a ideia
 
-A proposta é viável, relevante e adequada a um projeto acadêmico de desenvolvimento mobile com Machine Learning. O diferencial não é apenas “usar IA”, mas conectar a classificação de escrita a uma experiência de alfabetização funcional, com áudio e situações do cotidiano de jovens e adultos.
+A proposta é viável, relevante e adequada a um projeto acadêmico de desenvolvimento mobile. O diferencial é conectar uma progressão simples de alfabetização a áudio e situações do cotidiano de jovens e adultos.
 
 O conceito deve ser preservado, mas o primeiro ciclo precisa ser menor. Alfabetização completa é um objetivo de longo prazo; o MVP deve demonstrar um recorte funcional e mensurável.
 
@@ -11,23 +11,22 @@ O conceito deve ser preservado, mas o primeiro ciclo precisa ser menor. Alfabeti
 - problema social claro e público pouco atendido por interfaces não infantilizadas;
 - uso de áudio como parte central da navegação, não como recurso decorativo;
 - progressão pedagógica compreensível: letras, sílabas e palavras;
-- aplicação concreta de classificação de imagens manuscritas;
+- organização contextual do vocabulário em trilhas de situações reais;
 - possibilidade de funcionar parcialmente sem internet;
-- bons temas para avaliação: usabilidade, acessibilidade, desempenho e qualidade do modelo.
+- bons temas para avaliação: usabilidade, acessibilidade, desempenho e qualidade do conteúdo.
 
 ### Pontos que exigem cuidado
 
 1. **Pedagogia:** O aplicativo pode apoiar o ensino, mas não deve apresentar uma sequência como pedagogicamente comprovada sem essa revisão interna.
 2. **Escopo:** frases, compreensão, gamificação avançada e painel de educador devem ficar fora do primeiro incremento.
-3. **Classificação da escrita:** o modelo pode errar por causa de traços, tamanho, posição, iluminação simulada, letra cursiva ou diferenças entre o dataset e a escrita no celular. Baixa confiança deve gerar nova tentativa, nunca uma acusação de erro.
-4. **Público adulto:** textos, exemplos, cores, recompensas e linguagem devem respeitar autonomia e dignidade; a gamificação deve ser discreta e opcional.
-5. **Dados pessoais:** escrita, voz, progresso e perfil podem ser dados sensíveis no contexto educacional. Coletar somente o necessário, informar a finalidade e obter consentimento quando houver uso das amostras para treinamento.
+3. **Público adulto:** textos, exemplos, cores, recompensas e linguagem devem respeitar autonomia e dignidade; a gamificação deve ser discreta e opcional.
+4. **Dados pessoais:** conta, progresso e respostas podem ser dados sensíveis no contexto educacional. Coletar somente o necessário e informar a finalidade.
 
 ## 2. Visão do produto
 
-O Alfabetiza será um aplicativo mobile de apoio à alfabetização inicial de jovens e adultos. Ele oferecerá atividades curtas, guiadas por áudio, para reconhecer letras, associar letras a sons, praticar a escrita e formar sílabas e palavras úteis no cotidiano.
+O Alfabetiza será um aplicativo mobile de apoio à alfabetização inicial de jovens e adultos. Ele oferecerá atividades curtas, guiadas por áudio, para reconhecer letras, associar letras a sons e formar sílabas e palavras úteis no cotidiano.
 
-**Proposta de valor:** aprender com autonomia, em pequenas etapas, usando uma interface adulta, acessível e capaz de dar retorno imediato sobre a escrita sem depender de conexão permanente.
+**Proposta de valor:** aprender com autonomia, em pequenas etapas, usando uma interface adulta, acessível e capaz de dar retorno imediato sem depender de conexão permanente.
 
 **Hipótese do produto:** uma experiência simples, guiada por áudio e baseada em palavras do cotidiano pode aumentar a prática e a confiança do aluno quando comparada a uma interface textual e infantilizada.
 
@@ -37,63 +36,61 @@ O MVP deve comprovar este fluxo completo:
 
 1. usuário entra em uma sessão de estudo;
 2. ouve a instrução e pode repeti-la;
-3. reconhece uma letra em uma atividade objetiva;
-4. desenha a letra em uma área de escrita;
-5. o modelo classifica a imagem no dispositivo;
-6. o app apresenta feedback cuidadoso;
-7. resultado e progresso são salvos localmente e sincronizados quando possível.
+3. reconhece uma letra em atividades objetivas;
+4. localiza a letra em uma palavra contextualizada;
+5. o app apresenta feedback cuidadoso;
+6. resultado e progresso são salvos localmente e sincronizados quando possível.
 
 ### Conteúdo do MVP
 
 - as 26 letras do alfabeto, apresentadas progressivamente para que o usuário desenvolva familiaridade com todas elas antes de avançar para conteúdos mais complexos;
-- vogais e algumas consoantes que permitam formar palavras simples;
-- 3 tipos de exercício: ouvir e escolher, reconhecer letra e escrever letra;
-- 4 a 8 palavras contextualizadas, por exemplo: CASA, MESA, RUA e MALA;
+- vogais e consoantes introduzidas progressivamente na ordem `A, E, I, O, U, M, L, P, S, T, R, N, D, C, G, B, F, V, H, Q, J, K, Z, X, W, Y`, com `G` na segunda fase;
+- 3 tipos de exercício: ouvir e escolher, reconhecer letra e localizar a letra em uma palavra;
+- 8 a 12 palavras contextualizadas, liberadas conforme as letras necessárias, por exemplo: CASA, MESA, RUA, MALA e GATO;
+- trilhas de cotidiano planejadas para a expansão seguinte: `Tem em casa`, `Família`, `Esporte`, `Trabalho`, `Saúde`, `Transporte`, `Compras` e `Documentos`;
 - progresso por lição e histórico básico de tentativas;
 - áudio pré-gravado ou gerado de forma controlada, com botão para repetir.
+
+### Organização progressiva do conteúdo
+
+O produto seguirá uma progressão inspirada em apps de prática curta e revisão frequente, sem copiar sua gamificação: primeiro letras, depois sílabas e só então palavras e frases contextualizadas.
+
+Quando a base de decodificação estiver pronta, o vocabulário será organizado em trilhas de cotidiano, liberadas gradualmente:
+
+1. `Tem em casa`;
+2. `Família`;
+3. `Esporte`;
+4. `Trabalho`;
+5. `Saúde`;
+6. `Transporte`;
+7. `Compras`;
+8. `Documentos`.
+
+Cada trilha começará com aproximadamente 8 a 12 palavras e depois 4 a 6 frases muito curtas, usando somente letras, sílabas e padrões já apresentados. O conteúdo terá imagem, áudio, significado contextual e revisão cumulativa. Nenhuma trilha será liberada apenas por visualização: o desbloqueio dependerá do domínio configurável das unidades anteriores.
+
+O catálogo pedagógico será manualmente curado e versionado. Dados externos poderão apoiar a seleção, principalmente com frequência de uso e exemplos candidatos, mas não decidirão sozinhos a ordem, a adequação ao público adulto, a imagem, o áudio ou a frase final.
 
 ### Fora do MVP
 
 - alfabetização completa;
 - ranking social;
 - painel completo de professor;
-- treinamento contínuo do modelo de classificação de escrita (letra) com dados dos usuários — o mecanismo de aprendizado adotado pelo projeto é o de reclassificação adaptativa de palavras descrito na seção 4, que é tabular, independente do modelo de imagem e não requer amostras de escrita de usuários;
-- reconhecimento de palavras manuscritas inteiras.
+- produção livre de textos;
+- chatbot ou geração automática de conteúdo sem revisão pedagógica.
 
 ## 4. Decisões técnicas recomendadas
 
 ### Mobile
 
-Usar React Native com TypeScript e Expo no início. A área de escrita pode começar com um componente simples de traçado; só adotar React Native Skia se a experiência exigir maior controle de desenho ou desempenho.
+Usar React Native com TypeScript e Expo no início, com atividades curtas, áudio, imagens e escolhas por toque.
 
-### Machine Learning
+### Adaptação da dificuldade de palavras
 
-O primeiro modelo deve classificar letras isoladas, preferencialmente em letras de forma e no mesmo formato usado pelo exercício. O pipeline deve padronizar orientação, escala, centralização, espessura e fundo antes da inferência.
+### Adaptação de conteúdo
 
-O treinamento deve comparar:
+No primeiro incremento, a adaptação será feita por regras transparentes: pré-requisitos, domínio, revisão espaçada, mistura de conteúdo conhecido e novo e reforço após erros. O app registrará tentativas, acertos, duração, repetição de áudio e trilha para a equipe observar quais conteúdos precisam de revisão.
 
-- modelo treinado apenas com dataset público;
-- modelo ajustado com amostras coletadas pelo grupo;
-- desempenho em um conjunto de teste separado, que não seja usado no treinamento.
-
-Relatar accuracy, precision, recall, F1-score e matriz de confusão por classe. Também registrar latência e tamanho do modelo no dispositivo. Accuracy sozinha não é suficiente, especialmente se algumas letras forem mais fáceis que outras.
-
-O modelo deve retornar pelo menos a classe, a confiança e um estado de incerteza. O aplicativo não deve transformar automaticamente “modelo não reconheceu” em “aluno escreveu errado”.
-
-### Machine Learning — dificuldade adaptativa de palavras (classificação tabular)
-
-Além do classificador de escrita, o projeto usará um segundo mecanismo de machine learning, tabular e independente do modelo de imagem, para adaptar a dificuldade e a ordem das palavras apresentadas ao usuário. É este mecanismo que responde ao requisito de o sistema "ir aprendendo" ao longo do uso.
-
-**Classificador A — dificuldade da palavra.** Classificação multiclasse (fácil, médio, difícil) a partir de duas famílias de atributos:
-
-- linguísticos: número de sílabas, presença de acentuação, comprimento, encontros consonantais, frequência de uso da palavra em português;
-- comportamentais agregados: taxa de acerto, tempo médio de resposta e número de tentativas de todos os usuários para aquela palavra.
-
-O rótulo inicial de cada palavra vem de uma regra pedagógica simples (bootstrap), usada para treinar a primeira versão do classificador. O modelo é retreinado periodicamente, em lote, à medida que dados de uso se acumulam — nunca em tempo real a cada interação individual, e sempre avaliado contra um conjunto de teste antes de substituir a versão em produção.
-
-**Classificador B — recomendação de próxima atividade / risco de abandono.** Classificação que usa a saída do Classificador A (dificuldade atual da palavra) como um dos atributos de entrada, combinada com dados da sessão do usuário (tempo de resposta recente, taxa de erro na sessão, repetições de áudio), para recomendar o tipo de exercício mais adequado ou sinalizar risco de abandono.
-
-Ambos os classificadores operam sobre dados já previstos no schema (`attempts`, `progress`) e sobre metadados linguísticos das palavras — não requerem imagem, áudio bruto ou dado pessoal sensível adicional.
+Modelos estatísticos de dificuldade ou recomendação não fazem parte do produto atual. Só poderão ser considerados depois de dados suficientes, avaliação separada, revisão pedagógica e comparação explícita com as regras. Nenhum modelo de escrita, traçado ou reconhecimento manuscrito está previsto nesta fase.
 
 ### Backend e armazenamento
 
@@ -107,12 +104,15 @@ No aparelho, usar armazenamento local para conteúdo essencial, sessão e uma fi
 - `modules`: agrupamento de conteúdos;
 - `lessons`: sequência de aprendizagem;
 - `exercises`: instrução, tipo, resposta e mídia;
-- `attempts`: resposta, resultado, confiança, duração e versão do modelo;
+- `attempts`: resposta, resultado, duração e contexto da atividade;
 - `progress`: estado por lição;
-- `words`: metadados linguísticos e dificuldade de cada palavra do dataset (sílabas, acentuação, comprimento, frequência de uso, dificuldade_inicial, dificuldade_atual, versão do classificador que gerou a dificuldade_atual);
+- `tracks`: trilhas de cotidiano, pré-requisitos, ordem e status de revisão;
+- `words`: palavras aprovadas por trilha, com sílabas, padrões, letras exigidas, frequência de referência, dificuldade inicial e status pedagógico;
+- `sentences`: frases curtas aprovadas, palavras exigidas, trilha, dificuldade, áudio e imagem;
+- `content_reviews`: revisão, fonte, versão e aprovação pedagógica de cada item;
 - `sync_queue`: eventos locais aguardando envio.
 
-Não armazenar imagem bruta da escrita por padrão. Se a equipe precisar de amostras para pesquisa, separar esse consentimento do cadastro, anonimizar os dados e definir prazo de retenção.
+Não armazenar áudio ou imagem de usuários por padrão. Se a equipe precisar de dados adicionais para pesquisa, separar esse consentimento do cadastro, anonimizar os dados e definir prazo de retenção.
 
 ## 5. Requisitos essenciais
 
@@ -120,9 +120,7 @@ Não armazenar imagem bruta da escrita por padrão. Se a equipe precisar de amos
 
 - iniciar e encerrar uma sessão de estudo;
 - reproduzir e repetir instruções de áudio;
-- executar exercícios de seleção e escrita;
-- classificar letras no dispositivo;
-- indicar confiança e tratar incerteza;
+- executar exercícios de seleção e localização de letras em palavras;
 - registrar tentativas e progresso;
 - continuar uma sessão básica sem internet;
 - sincronizar resultados sem duplicação;
@@ -133,9 +131,9 @@ Não armazenar imagem bruta da escrita por padrão. Se a equipe precisar de amos
 - botões grandes, alto contraste e textos curtos;
 - toda ação crítica acompanhada por rótulo e/ou áudio;
 - suporte a leitor de tela quando aplicável;
-- resposta local do classificador em tempo aceitável;
+- resposta local das atividades em tempo aceitável;
 - armazenamento seguro de sessão e senhas somente via mecanismo apropriado do backend;
-- logs sem conteúdo de escrita ou dados pessoais desnecessários;
+- logs sem conteúdo pessoal desnecessário;
 - tratamento de erro compreensível e sem linguagem constrangedora.
 
 ## 6. Métricas para validar o projeto
@@ -149,21 +147,13 @@ Não armazenar imagem bruta da escrita por padrão. Se a equipe precisar de amos
 - taxa de retorno ao aplicativo;
 - avaliação de clareza e confiança feita pelos participantes.
 
-### Modelo
+### Conteúdo adaptativo
 
-- F1 macro e por letra;
-- matriz de confusão;
-- taxa de classificações abaixo do limiar de confiança;
-- latência de inferência;
-- tamanho do modelo;
-- desempenho em amostras diferentes das usadas no treinamento.
-
-### Classificadores tabulares (dificuldade de palavra e recomendação)
-
-- F1 macro da classificação de dificuldade (Classificador A);
-- precision e recall do risco de abandono / recomendação de atividade (Classificador B);
-- estabilidade entre ciclos de retreino: quantas palavras mudam de classe a cada reclassificação;
-- comparação entre a dificuldade prevista pelo modelo e a dificuldade definida pela regra pedagógica inicial (bootstrap).
+- taxa de acerto e tentativas por letra, sílaba, palavra e trilha;
+- conclusão e retenção por trilha de cotidiano;
+- palavras ou frases que geram mais repetição de áudio, erro ou abandono;
+- comparação entre a dificuldade definida pela equipe e o comportamento observado;
+- estabilidade das regras de revisão antes de qualquer modelo automático.
 
 ### Usabilidade
 
@@ -174,17 +164,15 @@ Testar com poucas pessoas representativas do público, com consentimento e acomp
 ### Fase 0 — definição e validação
 
 - revisar objetivos, sequência e linguagem com o integrante capacitado do grupo;
-- escolher letras, palavras e roteiro de áudio;
+- escolher letras, sílabas, palavras, trilhas de cotidiano e roteiro de áudio;
 - desenhar protótipo de baixa fidelidade;
 - definir critérios de sucesso e cuidados de privacidade.
 
 ### Fase 1 — prova técnica
 
-- criar tela de escrita;
-- preparar imagens no formato de entrada;
-- treinar classificador inicial;
-- executar inferência local;
-- demonstrar o fluxo escrever → classificar → feedback.
+- validar reconhecimento de letras e palavras contextualizadas;
+- demonstrar áudio, feedback e persistência local;
+- validar a progressão de letras, sílabas e palavras contextualizadas.
 
 ### Fase 2 — MVP pedagógico
 
@@ -192,15 +180,15 @@ Testar com poucas pessoas representativas do público, com consentimento e acomp
 - adicionar áudio e exercícios de reconhecimento;
 - registrar progresso localmente;
 - adicionar sílabas e poucas palavras;
-- prototipar o Classificador A (dificuldade de palavra) com a regra de bootstrap sobre as 4 a 8 palavras do MVP;
+- organizar as primeiras palavras na trilha `Tem em casa`;
+- validar a primeira trilha `Tem em casa` com 8 a 12 palavras e frases curtas;
 - sincronizar com a API.
 
 ### Fase 3 — avaliação
 
 - testar com usuários representativos;
-- comparar modelos e analisar a matriz de confusão do classificador de escrita;
-- treinar o Classificador B (recomendação/risco de abandono) com dados reais coletados no teste com usuários;
-- avaliar o primeiro ciclo de retreino do Classificador A com dados de uso reais;
+- avaliar clareza, progressão de letras e desempenho dos exercícios contextuais;
+- observar desempenho por trilha, palavra e tipo de atividade;
 - corrigir problemas de acessibilidade e linguagem;
 - documentar limitações, resultados e próximos passos.
 
@@ -209,14 +197,14 @@ Testar com poucas pessoas representativas do público, com consentimento e acomp
 1. mapa de telas e fluxo do MVP;
 2. catálogo inicial de letras, sílabas, palavras e áudios;
 3. protótipo navegável;
-4. modelo baseline com avaliação reproduzível;
+4. catálogo versionado com aprovação pedagógica registrada;
 5. aplicativo com uma lição completa;
 6. persistência de tentativa e progresso;
 7. teste com usuários e relatório de resultados.
 
 ## 9. Critério de sucesso do primeiro incremento
 
-O primeiro incremento estará concluído quando uma pessoa conseguir abrir uma lição, ouvir a instrução, escrever uma letra, receber uma resposta local em caso de alta ou baixa confiança e visualizar seu resultado depois de fechar e reabrir o aplicativo. Esse fluxo deve funcionar mesmo sem implementar ainda toda a trilha de alfabetização.
+O primeiro incremento estará concluído quando uma pessoa conseguir abrir uma lição, ouvir a instrução, reconhecer uma letra, localizá-la em uma palavra e visualizar seu resultado depois de fechar e reabrir o aplicativo. Esse fluxo deve funcionar mesmo sem implementar ainda toda a trilha de alfabetização.
 
 ## 10. Perguntas em aberto para a equipe
 

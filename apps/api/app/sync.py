@@ -15,7 +15,7 @@ router = APIRouter(prefix="/v1", tags=["learning"])
 @router.get("/progress")
 def progress(user: User = Depends(current_user), db: Session = Depends(get_db)):
     items = db.scalars(select(Progress).where(Progress.user_id == user.id).order_by(Progress.lesson_id)).all()
-    return {"items": [{"lesson_id": x.lesson_id, "status": x.status, "completed_exercises": x.completed_exercises, "updated_at": x.updated_at} for x in items]}
+    return {"items": [{"lesson_id": x.lesson_id, "status": x.status, "completed_exercises": x.completed_exercises, "attempts": x.attempts, "correct_attempts": x.correct_attempts, "accuracy": x.accuracy, "review_count": x.review_count, "last_practiced_at": x.last_practiced_at, "next_review_at": x.next_review_at, "updated_at": x.updated_at} for x in items]}
 
 @router.get("/attempts")
 def attempts(limit: int = Query(default=100, ge=1, le=500), user: User = Depends(current_user), db: Session = Depends(get_db)):
@@ -46,11 +46,13 @@ def push(body: SyncPush, user: User = Depends(current_user), db: Session = Depen
             db.add(Attempt(user_id=user.id, occurred_at=event.occurred_at, **event.payload.model_dump()))
         else:
             item = db.scalar(select(Progress).where(Progress.user_id == user.id, Progress.lesson_id == event.payload.lesson_id))
+            progress_data = event.payload.model_dump()
+            progress_data.pop("completed_types", None)
             # Last-write-wins by client timestamp, with completed as a monotonic state.
-            if not item: db.add(Progress(user_id=user.id, updated_at=event.occurred_at, **event.payload.model_dump()))
+            if not item: db.add(Progress(user_id=user.id, updated_at=event.occurred_at, **progress_data))
             elif comparable(event.occurred_at) >= comparable(item.updated_at):
                 item.status = "completed" if item.status == "completed" else event.payload.status
-                item.completed_exercises = max(item.completed_exercises, event.payload.completed_exercises); item.updated_at = event.occurred_at
+                item.completed_exercises = max(item.completed_exercises, event.payload.completed_exercises); item.attempts = max(item.attempts, event.payload.attempts); item.correct_attempts = max(item.correct_attempts, event.payload.correct_attempts); item.accuracy = event.payload.accuracy; item.review_count = max(item.review_count, event.payload.review_count); item.last_practiced_at = event.payload.last_practiced_at; item.next_review_at = event.payload.next_review_at; item.updated_at = event.occurred_at
         db.add(SyncEvent(user_id=user.id, client_event_id=event.client_event_id, type=event.type, payload=payload, occurred_at=event.occurred_at))
         accepted += 1
         accepted_ids.append(event.client_event_id)

@@ -10,6 +10,6 @@ router = APIRouter(prefix="/v1", tags=["content"])
 def content(db: Session = Depends(get_db)):
     modules = db.scalars(select(Module).options(selectinload(Module.lessons).selectinload(Lesson.exercises)).order_by(Module.position)).unique().all()
     words = db.scalars(select(Word).order_by(Word.text)).all()
-    return {"version": "2026.09.1", "modules": [{"id": m.id, "title": m.title, "position": m.position, "lessons": [{
-        "id": l.id, "letter": l.letter, "title": l.title, "position": l.position, "exercises": [{"id": e.id, "type": e.type, "instruction": e.instruction, "answer": e.answer, "audio_asset": e.audio_asset, "options": e.options, "position": e.position} for e in l.exercises]
-    } for l in m.lessons]} for m in modules], "words": [{"text": w.text, "syllables": w.syllables, "difficulty": w.current_difficulty} for w in words]}
+    return {"version": "2026.09.3", "learning_order": "AEIOUMLPSTRNDCGBFVHQJKZXWY", "modules": [{"id": m.id, "title": m.title, "position": m.position, "lessons": [{
+        "id": l.id, "letter": l.letter, "title": l.title, "position": l.position, "phase": l.phase, "phase_title": l.phase_title, "exercises": [{"id": e.id, "type": e.type, "instruction": e.instruction, "answer": e.answer, "audio_asset": e.audio_asset, "options": e.options, "context_word": e.context_word, "position": e.position} for e in l.exercises]
+    } for l in m.lessons]} for m in modules], "words": [{"text": w.text, "syllables": w.syllables, "required_letters": w.required_letters, "difficulty": w.current_difficulty} for w in words]}

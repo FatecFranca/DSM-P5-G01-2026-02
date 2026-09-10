@@ -18,12 +18,12 @@ Este projeto é desenvolvido pelo grupo formado por:
 
 ## MVP Alfabetiza
 
-O repositório contém uma implementação mobile offline-first para alfabetização inicial de jovens e adultos, uma API própria, o pipeline reproduzível de classificação e a infraestrutura de implantação:
+O repositório contém uma implementação mobile offline-first para alfabetização inicial de jovens e adultos, uma API própria, artefatos experimentais históricos e a infraestrutura de implantação:
 
 ```text
-apps/mobile/  Expo + React Native + SQLite + ONNX Runtime
+apps/mobile/  Expo + React Native + SQLite
 apps/api/     FastAPI + SQLAlchemy + Alembic + PostgreSQL
-ml/           treinamento, avaliação e exportação ONNX
+ml/           artefatos experimentais históricos, fora do app atual
 infra/        Docker Compose + PostgreSQL + Caddy HTTPS
 docs/         contratos, decisões e evidências
 ```
@@ -67,4 +67,4 @@ cd ..\..\ml
 python -m pytest
 ```
 
-O modelo incluído demonstra o fluxo técnico completo e não está liberado para avaliação pedagógica: foi treinado com dados sintéticos. Consulte o relatório de validação para as evidências e limites atuais.
+O diretório `ml/` não participa das lições atuais e não é requisito do MVP. A trilha usa conteúdo curado e regras explícitas de progressão e revisão. Consulte o relatório de validação para as evidências e limites atuais.

@@ -16,13 +16,11 @@
   "dependencies": {
     "@tanstack/react-query": "^5.102.8",
     "expo": "^57.0.21",
-    "expo-asset": "^57.0.16",
     "expo-constants": "^57.0.4",
     "expo-router": "^57.0.20",
     "expo-secure-store": "^57.0.3",
     "expo-speech": "~57.0.2",
     "expo-sqlite": "^57.0.2",
-    "onnxruntime-react-native": "^1.24.2",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-native": "0.86.3",

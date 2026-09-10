@@ -34,5 +34,5 @@ def recommend_activity(*, difficulty: str, recent_error_rate: float, response_se
     elif difficulty == "dificil" or recent_error_rate >= 0.35:
         exercise = "reconhecer_letra"
     else:
-        exercise = "escrever_letra"
+        exercise = "complete_word"
     return {"exercise": exercise, "abandonmentRisk": risk, "source": "rules-fallback", "trainingSamples": real_samples}

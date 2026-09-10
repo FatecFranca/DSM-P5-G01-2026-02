@@ -1,10 +1,10 @@
 import { router, useLocalSearchParams } from "expo-router";
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { AudioButton } from "../../src/components/AudioButton";
 import { Screen } from "../../src/components/Screen";
 import { LETTERS } from "../../src/domain/catalog";
-import { nextProgress, type Feedback } from "../../src/domain/learning";
+import { isLessonUnlocked, nextProgress, type Feedback } from "../../src/domain/learning";
 import { saveAttempt, saveProgress } from "../../src/storage/database";
 import { useStudyStore } from "../../src/store/study-store";
 import { colors } from "../../src/theme";
@@ -21,11 +21,16 @@ export default function Lesson() {
   const progress = useStudyStore((state) => state.progress[lesson.id]);
   const setProgress = useStudyStore((state) => state.setProgress);
   const exercise = lesson.exercises[step];
+  const allProgress = useStudyStore((state) => state.progress);
+
+  useEffect(() => {
+    if (!isLessonUnlocked(lesson, allProgress)) router.replace("/lessons");
+  }, [allProgress, lesson]);
 
   const submit = async (answer: string, correct: boolean) => {
     const attempt = { clientAttemptId: makeId(), lessonId: lesson.id, exerciseId: exercise.id, exerciseType: exercise.type, answer, correct, durationMs: Date.now() - startedAt.current, createdAt: new Date().toISOString() };
     await saveAttempt(attempt);
-    const updated = { ...nextProgress(progress, exercise.type, correct), lessonId: lesson.id };
+    const updated = { ...nextProgress(progress, exercise.type, correct, lesson.exercises.map((item) => item.type)), lessonId: lesson.id };
     await saveProgress(updated);
     setProgress(updated);
   };
@@ -58,7 +63,8 @@ export default function Lesson() {
     <Text style={styles.kicker}>{heading}</Text>
     <Text style={styles.instruction}>{exercise.instruction}</Text>
     <AudioButton label={exercise.type === "complete_word" ? "Ouvir enunciado" : "Repetir instrução"} text={exercise.instruction} />
-    {exercise.type === "complete_word" && <Text style={styles.helper}>Toque no quadrado ou na imagem da palavra que combina com a letra {lesson.letter}.</Text>}
+    {exercise.type === "complete_word" && <Text style={styles.helper}>Toque na palavra que combina com a letra {lesson.letter}.</Text>}
+    {exercise.type === "find_in_word" && <Text style={styles.contextWord}>{exercise.contextWord}</Text>}
     {exercise.type === "complete_word" ? <View style={styles.wordList}>{wordChoices.map((word) => {
       const selected = selectedChoiceId === word.id;
       return <Pressable key={word.id} accessibilityRole="button" accessibilityLabel={`Completar palavra ${word.imageLabel}`} onPress={() => choose(word.id)} style={[styles.wordCard, selected && (word.id === exercise.answer ? styles.correctCard : styles.selectedCard)]}>
@@ -67,7 +73,7 @@ export default function Lesson() {
         <View style={styles.wordRow}><Text style={styles.wordPart}>{word.before}</Text><View style={[styles.blank, selected && styles.filledBlank]}><Text style={styles.blankText}>{selected ? lesson.letter : "_"}</Text></View><Text style={styles.wordPart}>{word.after}</Text></View>
         {selected && <Text style={styles.completedWord}>{word.before}{lesson.letter}{word.after}</Text>}
       </Pressable>;
-    })}</View> : <View style={styles.options}>{exercise.options?.map((option) => <Pressable key={option} accessibilityRole="button" accessibilityLabel={`Escolher letra ${option}`} onPress={() => choose(option)} style={styles.option}><Text style={styles.optionText}>{option}</Text></Pressable>)}</View>}
+    })}</View> : <View style={styles.options}>{exercise.options?.map((option) => <Pressable key={option} accessibilityRole="button" accessibilityLabel={`Escolher ${option}`} onPress={() => choose(option)} style={styles.option}><Text style={styles.optionText}>{option}</Text></Pressable>)}</View>}
     {feedback && <View accessibilityRole="alert" style={[styles.feedback, feedback.kind === "success" ? styles.success : styles.care]}><Text style={styles.feedbackTitle}>{feedback.title}</Text><Text style={styles.feedbackText}>{feedback.message}</Text></View>}
     {feedback?.kind === "success" && <Pressable accessibilityRole="button" style={styles.next} onPress={next}><Text style={styles.nextText}>{isLast ? "Ver progresso" : "Próxima atividade"}</Text></Pressable>}
   </Screen>;
@@ -80,6 +86,7 @@ const styles = StyleSheet.create({
   options: { flexDirection: "row", flexWrap: "wrap", gap: 14, justifyContent: "center", marginVertical: 20 },
   option: { minWidth: 92, minHeight: 92, borderRadius: 18, backgroundColor: colors.surface, borderWidth: 3, borderColor: colors.primary, alignItems: "center", justifyContent: "center" },
   optionText: { fontSize: 42, color: colors.primary, fontWeight: "800" },
+  contextWord: { alignSelf: "center", color: colors.primary, fontSize: 42, fontWeight: "900", letterSpacing: 4, marginVertical: 18 },
   wordList: { gap: 14 },
   wordCard: { borderRadius: 20, padding: 10, backgroundColor: colors.surface, borderWidth: 2, borderColor: colors.border, alignItems: "center", gap: 4 },
   selectedCard: { borderColor: colors.accent, backgroundColor: "#FFF8EA" },

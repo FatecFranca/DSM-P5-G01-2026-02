@@ -14,21 +14,23 @@ Levar o Alfabetiza do repositório vazio a um MVP mobile estruturado, seguindo o
 - **API:** Python 3.11+, FastAPI, Pydantic, SQLAlchemy 2 e Alembic.
 - **Autenticação:** JWT de curta duração, refresh token rotativo e senhas protegidas com Argon2id.
 - **Banco:** PostgreSQL.
-- **Machine Learning:** Python, pandas, NumPy, scikit-learn e ONNX Runtime.
+- **Conteúdo adaptativo:** regras transparentes de pré-requisito, domínio e revisão; modelos estatísticos ficam fora do primeiro incremento.
 - **Atividade de palavras:** cartões com imagem, áudio por texto para fala e lacuna preenchida por toque.
 - **Infraestrutura:** Docker Compose, proxy HTTPS, API e PostgreSQL na VPS Azure.
 
-A API e o pipeline de ML serão projetos Python separados. A imagem de produção da API não deve carregar dependências pesadas de treinamento.
+A API e o catálogo pedagógico serão projetos Python separados. A imagem de produção da API não deve carregar ferramentas de análise que não sejam necessárias ao runtime.
 
 ## Etapas de implementação
 
 ### 1. Formalizar o contrato do MVP
 
 - Revisar objetivos, sequência, linguagem, privacidade e critérios com o integrante capacitado do grupo.
-- Fixar as 26 letras do alfabeto apresentadas progressivamente.
+- Fixar as 26 letras do alfabeto apresentadas progressivamente na ordem `A, E, I, O, U, M, L, P, S, T, R, N, D, C, G, B, F, V, H, Q, J, K, Z, X, W, Y`.
 - Definir letras maiúsculas de forma como primeiro formato.
-- Selecionar sílabas e 4 a 8 palavras contextualizadas.
-- Confirmar os três tipos de exercício: ouvir e escolher, reconhecer letra e completar palavra.
+- Selecionar sílabas e 8 a 12 palavras contextualizadas.
+- Organizar a sequência em três fases, com `G` na segunda fase e palavras liberadas apenas após seus pré-requisitos.
+- Confirmar o núcleo de exercícios: ouvir e escolher, reconhecer letra e localizar a letra em uma palavra; completar palavra entra quando os pré-requisitos estiverem disponíveis.
+- Definir a primeira trilha de cotidiano (`Tem em casa`) e reservar as seguintes (`Família`, `Esporte`, `Trabalho`, `Saúde`, `Transporte`, `Compras` e `Documentos`) para a expansão progressiva.
 
 **Verificação:** escopo aprovado, catálogo inicial definido e critérios de sucesso registrados.
 
@@ -57,15 +59,14 @@ Configurar Expo, FastAPI, ambientes Python, TypeScript, lint, testes, variáveis
 
 **Verificação:** validador confirma as 26 letras, exercícios completos, mídias existentes e reprodução local.
 
-### 4. Construir o pipeline de Machine Learning
+### 4. Preparar a adaptação de conteúdo
 
-- Preparar o dataset e o pré-processamento de orientação, escala, centralização, espessura e fundo.
-- Separar treinamento e teste por escritor, evitando vazamento de amostras.
-- Treinar modelo baseline e modelo ajustado com amostras do grupo.
-- Medir accuracy, precision, recall, F1 macro, matriz de confusão, latência e tamanho.
-- Exportar modelo ONNX com classe, confiança, estado de incerteza e versão.
+- Definir metadados linguísticos e contextuais das palavras e frases.
+- Começar com regras transparentes de dificuldade e pré-requisitos.
+- Registrar revisão pedagógica, fonte de frequência e versão de cada palavra e frase.
+- Não treinar nem incluir modelo de escrita, traçado ou reconhecimento manuscrito no produto atual.
 
-**Verificação:** treinamento reproduzível em Python e modelo pronto para inferência no dispositivo.
+**Verificação:** catálogo reproduzível, regras explicáveis e nenhuma recomendação automática sem dados suficientes.
 
 ### 5. Implementar a API própria
 
@@ -93,7 +94,7 @@ Cada tentativa deve possuir `client_attempt_id` único por usuário para impedir
 
 ### 6. Criar a primeira fatia vertical mobile
 
-Implementar sessão de estudo, instrução, áudio, exercício de escolha, cartões de palavras com lacunas, preenchimento por toque, feedback e persistência local.
+Implementar sessão de estudo, instrução, áudio, exercícios de escolha, cartões de palavras com lacunas, preenchimento por toque, feedback e persistência local.
 
 **Verificação:** uma pessoa inicia uma lição, ouve as palavras, escolhe a lacuna correta, recebe feedback, fecha e reabre o aplicativo vendo o resultado salvo.
 
@@ -103,7 +104,7 @@ Implementar sessão de estudo, instrução, áudio, exercício de escolha, cart�
 - Implementar envio em lote, retry, backoff e cursor de sincronização.
 - Processar eventos no servidor de forma idempotente.
 - Definir resolução determinística para conflitos de progresso.
-- Não coletar conteúdo de escrita manuscrita nesta etapa.
+- Não coletar áudio, imagem ou conteúdo pessoal adicional nesta etapa.
 
 **Verificação:** concluir atividades sem internet, reconectar e confirmar sincronização única, sem perda ou duplicação.
 
@@ -112,10 +113,9 @@ Implementar sessão de estudo, instrução, áudio, exercício de escolha, cart�
 - Adicionar as 26 letras progressivas.
 - Completar os três tipos de exercício.
 - Adicionar histórico de tentativas e progresso por lição.
-- Adicionar sílabas e 4 a 8 palavras.
-- Implementar o Classificador A para dificuldade das palavras, inicialmente com regra pedagógica de bootstrap.
-- Preparar o Classificador B para recomendação de atividade após coleta de dados reais.
-- Usar fallback baseado em regras enquanto não houver dados suficientes.
+- Adicionar sílabas e 8 a 12 palavras com pré-requisitos explícitos.
+- Organizar palavras e frases na primeira trilha de cotidiano, mantendo regras transparentes de desbloqueio e revisão.
+- Medir comportamento por atividade e trilha antes de considerar qualquer adaptação estatística.
 
 **Verificação:** conjunto de teste separado, F1 macro calculado e nenhuma versão promovida sem avaliação.
 
@@ -123,7 +123,7 @@ Implementar sessão de estudo, instrução, áudio, exercício de escolha, cart�
 
 - Provisionar VPS Ubuntu com Docker Compose, firewall e HTTPS.
 - Configurar volumes persistentes, backups e restauração testada.
-- Configurar logs sem dados pessoais ou conteúdo de escrita.
+- Configurar logs sem dados pessoais desnecessários.
 - Revisar contraste, tamanho dos botões, leitor de tela, rótulos, linguagem, consentimento e retenção.
 - Configurar health check e reinício seguro dos serviços.
 
@@ -131,10 +131,10 @@ Implementar sessão de estudo, instrução, áudio, exercício de escolha, cart�
 
 ### 10. Executar a verificação final
 
-- Executar testes unitários, integração, mobile, API e ML.
+- Executar testes unitários, integração, mobile e API.
 - Validar o fluxo em dispositivo físico Android.
 - Realizar smoke test iOS quando houver ambiente de build disponível.
-- Executar lint, typecheck, build, avaliação dos modelos e `git diff --check`.
+- Executar lint, typecheck, build, validação do catálogo e `git diff --check`.
 - Registrar limitações, métricas e evidências no relatório do projeto.
 
 **Critério final:** o MVP funciona offline, sincroniza com a API na VPS Azure, cobre as 26 letras progressivamente, registra progresso e apresenta métricas documentadas.
@@ -144,24 +144,24 @@ Implementar sessão de estudo, instrução, áudio, exercício de escolha, cart�
 ```text
 contrato pedagógico
         ↓
-prova de ML ───────────────┐
-        ↓                  │
-primeira fatia vertical   │
-        ↓                  │
-API + persistência + sync │
-        ↓                  │
-MVP pedagógico completo   │
-        ↓                  │
-avaliação e deploy ───────┘
+catálogo de letras e sílabas
+        ↓
+primeira fatia vertical
+        ↓
+API + persistência + sync
+        ↓
+trilhas de cotidiano
+        ↓
+avaliação e deploy
 ```
 
-O Classificador B e o retreino baseado em uso não devem bloquear a primeira fatia funcional.
+Qualquer adaptação estatística futura não deve bloquear a primeira fatia funcional.
 
 ## Testes e critérios de aceite
 
 - **API:** autenticação, autorização, validação, migrations, isolamento e idempotência.
 - **Mobile:** navegação, áudio, cartões de palavras, preenchimento por toque, persistência e modo offline.
-- **Machine Learning:** F1 macro, matriz de confusão, latência, tamanho e teste por escritor.
+- **Conteúdo adaptativo:** comparação entre dificuldade definida pela equipe e comportamento observado por palavra e trilha.
 - **Sincronização:** reenvio seguro, perda de conexão, retry e ausência de duplicação.
 - **Infraestrutura:** HTTPS, reinício dos containers, backup e restauração.
 - **Produto:** conclusão da primeira lição, evolução entre pré-teste e pós-teste e clareza percebida pelos participantes.
@@ -171,6 +171,6 @@ O Classificador B e o retreino baseado em uso não devem bloquear a primeira fat
 - Android será o primeiro dispositivo de validação; a arquitetura continuará multiplataforma.
 - A VPS Azure terá aproximadamente 4 vCPU, 8 GB de RAM e 80 GB SSD.
 - O primeiro login ocorrerá online; depois disso, as sessões poderão continuar offline.
-- A atividade atual não coleta imagens brutas de escrita.
+- A atividade atual não coleta áudio ou imagens brutas de usuários.
 - Testes com usuários reais dependem de consentimento e autorização do grupo.
-- O plano não adiciona funcionalidades fora do escopo documentado em `PROJECT_FOUNDATION.md`.
+- Traçado, escrita manuscrita e classificação de escrita não fazem parte do escopo atual; qualquer retorno dependerá de nova decisão explícita e revisão pedagógica.

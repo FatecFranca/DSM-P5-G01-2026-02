@@ -37,7 +37,7 @@ class Lesson(Base):
     __tablename__ = "lessons"
     id: Mapped[str] = mapped_column(String(64), primary_key=True)
     module_id: Mapped[str] = mapped_column(ForeignKey("modules.id"))
-    letter: Mapped[str] = mapped_column(String(1)); title: Mapped[str] = mapped_column(String(120)); position: Mapped[int] = mapped_column(Integer)
+    letter: Mapped[str] = mapped_column(String(1)); title: Mapped[str] = mapped_column(String(120)); position: Mapped[int] = mapped_column(Integer); phase: Mapped[int] = mapped_column(Integer, default=1); phase_title: Mapped[str] = mapped_column(String(120), default="Vogais")
     exercises: Mapped[list["Exercise"]] = relationship(order_by="Exercise.position", cascade="all, delete-orphan")
 
 
@@ -45,14 +45,14 @@ class Exercise(Base):
     __tablename__ = "exercises"
     id: Mapped[str] = mapped_column(String(80), primary_key=True)
     lesson_id: Mapped[str] = mapped_column(ForeignKey("lessons.id"))
-    type: Mapped[str] = mapped_column(String(32)); instruction: Mapped[str] = mapped_column(String(255)); answer: Mapped[str] = mapped_column(String(16))
+    type: Mapped[str] = mapped_column(String(32)); instruction: Mapped[str] = mapped_column(String(255)); answer: Mapped[str] = mapped_column(String(16)); context_word: Mapped[str | None] = mapped_column(String(40), nullable=True)
     audio_asset: Mapped[str] = mapped_column(String(255)); options: Mapped[list | None] = mapped_column(JSON); position: Mapped[int] = mapped_column(Integer)
 
 
 class Word(Base):
     __tablename__ = "words"
     id: Mapped[str] = mapped_column(String(36), primary_key=True, default=uid)
-    text: Mapped[str] = mapped_column(String(40), unique=True); syllables: Mapped[str] = mapped_column(String(80)); accented: Mapped[bool] = mapped_column(Boolean)
+    text: Mapped[str] = mapped_column(String(40), unique=True); syllables: Mapped[str] = mapped_column(String(80)); required_letters: Mapped[str] = mapped_column(String(26), default=""); accented: Mapped[bool] = mapped_column(Boolean)
     length: Mapped[int] = mapped_column(Integer); frequency: Mapped[float] = mapped_column(Float)
     initial_difficulty: Mapped[str] = mapped_column(String(16)); current_difficulty: Mapped[str] = mapped_column(String(16)); classifier_version: Mapped[str] = mapped_column(String(40))
 
@@ -69,6 +69,8 @@ class Progress(Base):
     __tablename__ = "progress"; __table_args__ = (UniqueConstraint("user_id", "lesson_id"),)
     id: Mapped[str] = mapped_column(String(36), primary_key=True, default=uid); user_id: Mapped[str] = mapped_column(ForeignKey("users.id"), index=True)
     lesson_id: Mapped[str] = mapped_column(String(64)); status: Mapped[str] = mapped_column(String(20)); completed_exercises: Mapped[int] = mapped_column(Integer)
+    attempts: Mapped[int] = mapped_column(Integer, default=0); correct_attempts: Mapped[int] = mapped_column(Integer, default=0); accuracy: Mapped[float | None] = mapped_column(Float, nullable=True)
+    review_count: Mapped[int] = mapped_column(Integer, default=0); last_practiced_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True); next_review_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
 
 

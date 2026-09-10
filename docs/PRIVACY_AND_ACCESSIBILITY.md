@@ -2,11 +2,11 @@
 
 ## Dados e consentimento
 
-O MVP coleta somente conta, progresso, respostas, duração, confiança e versão do modelo necessários à continuidade da aprendizagem. A imagem bruta do traçado não integra os eventos enviados à API nem o schema persistente.
+O MVP coleta somente conta, progresso, respostas e duração necessários à continuidade da aprendizagem. Áudio e imagens de usuários não integram os eventos enviados à API nem o schema persistente.
 
 Qualquer coleta futura de amostras para pesquisa exige consentimento separado do cadastro, finalidade explícita, anonimização, prazo de retenção e opção de retirada. Testes com participantes só podem começar após aprovação interna e registro do consentimento.
 
-Tokens ficam no armazenamento seguro do dispositivo; senhas são tratadas apenas pela API e armazenadas como hash Argon2id. Logs não devem conter senha, token, traçado, e-mail completo ou outro dado pessoal desnecessário.
+Tokens ficam no armazenamento seguro do dispositivo; senhas são tratadas apenas pela API e armazenadas como hash Argon2id. Logs não devem conter senha, token, áudio, e-mail completo ou outro dado pessoal desnecessário.
 
 ## Checklist de acessibilidade
 

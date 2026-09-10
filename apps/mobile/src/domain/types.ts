@@ -1,4 +1,5 @@
-export type ExerciseType = "listen_choose" | "recognize" | "complete_word";
+export type ExerciseType = "listen_choose" | "recognize" | "find_in_word" | "complete_word";
+export type LessonStatus = "locked" | "available" | "learning" | "review" | "mastered" | "needs_review";
 
 export type WordChoice = {
   id: string;
@@ -16,22 +17,19 @@ export type Exercise = {
   instruction: string;
   answer: string;
   options?: string[];
+  contextWord?: string;
   wordChoices?: WordChoice[];
 };
 
 export type LetterLesson = {
   id: string;
   order: number;
+  phase: 1 | 2 | 3;
+  phaseTitle: string;
   letter: string;
+  prerequisiteLetters: string[];
   syllables: string[];
   exercises: Exercise[];
-};
-
-export type InferenceResult = {
-  className: string;
-  confidence: number;
-  uncertain: boolean;
-  modelVersion: string;
 };
 
 export type LessonProgress = {
@@ -39,6 +37,13 @@ export type LessonProgress = {
   completedTypes: ExerciseType[];
   score: number;
   completed: boolean;
+  status?: LessonStatus;
+  attempts?: number;
+  correctAttempts?: number;
+  reviewCount?: number;
+  accuracy?: number;
+  lastPracticedAt?: string;
+  nextReviewAt?: string;
   updatedAt: string;
 };
 
