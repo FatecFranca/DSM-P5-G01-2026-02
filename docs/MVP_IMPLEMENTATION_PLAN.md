@@ -1,3 +1,5 @@
+<!-- markdownlint-disable MD013 -->
+
 # Alfabetiza — plano de implementação do MVP
 
 ## Objetivo
@@ -185,4 +187,3 @@ O Classificador B e o retreino baseado em uso não devem bloquear a primeira fat
 - Imagens brutas de escrita não serão armazenadas por padrão.
 - Testes com usuários reais dependem de consentimento e autorização do grupo.
 - O plano não adiciona funcionalidades fora do escopo documentado em `PROJECT_FOUNDATION.md`.
-
