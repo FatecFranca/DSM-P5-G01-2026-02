@@ -1,0 +1,40 @@
+# JavaScript / Expo
+node_modules/
+.expo/
+dist/
+dist-verification/
+coverage/
+htmlcov/
+*.coverage
+*.log
+*.tsbuildinfo
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.venv/
+venv/
+*.egg-info/
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Databases and local reports
+*.db
+*.sqlite
+*.sqlite3
+ml/reports/*.json
+
+# Editors / OS
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+/artifacts
