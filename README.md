@@ -23,9 +23,10 @@ O repositório contém uma implementação mobile offline-first para alfabetiza�
 ```text
 apps/mobile/  Expo + React Native + SQLite
 apps/api/     FastAPI + SQLAlchemy + Alembic + PostgreSQL
+contracts/    tipos de exercício e invariantes pedagógicas compartilhados por API e mobile
 ml/           artefatos experimentais históricos, fora do app atual
 infra/        Docker Compose + PostgreSQL + Caddy HTTPS
-docs/         contratos, decisões e evidências
+docs/         contratos, decisões (docs/adr) e evidências
 ```
 
 ### Execução local
@@ -65,6 +66,13 @@ npm run lint
 
 cd ..\..\ml
 python -m pytest
+```
+
+O catálogo vive na API e é servido por `GET /v1/content`; o app embarca `apps/mobile/assets/content/seed-bundle.json` para o primeiro boot offline. Depois de alterar `apps/api/app/seed.py`, regenere o bundle:
+
+```powershell
+cd apps/api
+.\.venv\Scripts\python scripts\export_content_bundle.py
 ```
 
 O diretório `ml/` não participa das lições atuais e não é requisito do MVP. A trilha usa conteúdo curado e regras explícitas de progressão e revisão. Consulte o relatório de validação para as evidências e limites atuais.

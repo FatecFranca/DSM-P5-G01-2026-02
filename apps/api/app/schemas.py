@@ -11,9 +11,13 @@ class Tokens(BaseModel): access_token: str; refresh_token: str; token_type: str 
 
 class AttemptPayload(BaseModel):
     model_config = ConfigDict(extra="forbid")
-    client_attempt_id: str = Field(min_length=1, max_length=100); exercise_id: str
-    answer: str = Field(max_length=500); correct: bool; confidence: float | None = Field(default=None, ge=0, le=1)
-    uncertain: bool; duration_ms: int = Field(ge=0, le=3_600_000); model_version: str | None = Field(default=None, max_length=80)
+    client_attempt_id: str = Field(min_length=1, max_length=100); exercise_id: str = Field(max_length=80)
+    lesson_id: str | None = Field(default=None, max_length=64); exercise_type: str | None = Field(default=None, max_length=32)
+    answer: str = Field(max_length=500); correct: bool; duration_ms: int = Field(ge=0, le=3_600_000)
+    served_model_version: str | None = Field(default=None, max_length=80)
+    # Aceitos e ignorados por uma release: clientes antigos ainda enviam os campos do classificador removido.
+    confidence: float | None = Field(default=None, ge=0, le=1); uncertain: bool | None = None; model_version: str | None = Field(default=None, max_length=80)
+DEPRECATED_ATTEMPT_FIELDS = {"confidence", "uncertain", "model_version"}
 class ProgressPayload(BaseModel):
     model_config = ConfigDict(extra="forbid")
     lesson_id: str; status: Literal["not_started", "in_progress", "completed", "mastered", "review", "needs_review"]; completed_exercises: int = Field(ge=0); completed_types: list[str] = Field(default_factory=list, max_length=10)

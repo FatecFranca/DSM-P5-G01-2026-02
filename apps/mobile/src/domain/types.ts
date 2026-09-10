@@ -1,4 +1,6 @@
-export type ExerciseType = "listen_choose" | "recognize" | "find_in_word" | "complete_word";
+import type { ExerciseType } from "./exercise-types";
+
+export type { ExerciseType };
 export type LessonStatus = "locked" | "available" | "learning" | "review" | "mastered" | "needs_review";
 
 export type WordChoice = {
@@ -28,7 +30,6 @@ export type LetterLesson = {
   phaseTitle: string;
   letter: string;
   prerequisiteLetters: string[];
-  syllables: string[];
   exercises: Exercise[];
 };
 
@@ -54,9 +55,6 @@ export type Attempt = {
   exerciseType: ExerciseType;
   answer: string;
   correct: boolean;
-  confidence?: number;
-  uncertain?: boolean;
-  modelVersion?: string;
   durationMs: number;
   createdAt: string;
 };

@@ -1,6 +1,6 @@
 import * as SQLite from "expo-sqlite";
-import type { Attempt, LessonProgress, SyncEvent } from "../domain/types";
-import { mergeProgress } from "../sync/contract";
+import type { Attempt, ExerciseType, LessonProgress, SyncEvent } from "../domain/types";
+import { canonicalizeProgress, mergeProgress } from "../sync/contract";
 
 let database: Promise<SQLite.SQLiteDatabase> | undefined;
 const db = () => (database ??= SQLite.openDatabaseAsync("alfabetiza.db"));
@@ -11,7 +11,33 @@ export async function initializeDatabase(): Promise<void> {
     CREATE TABLE IF NOT EXISTS attempts (client_attempt_id TEXT PRIMARY KEY NOT NULL, payload TEXT NOT NULL, created_at TEXT NOT NULL);
     CREATE TABLE IF NOT EXISTS progress (lesson_id TEXT PRIMARY KEY NOT NULL, payload TEXT NOT NULL, updated_at TEXT NOT NULL);
     CREATE TABLE IF NOT EXISTS sync_queue (id TEXT PRIMARY KEY NOT NULL, type TEXT NOT NULL, payload TEXT NOT NULL, retries INTEGER NOT NULL DEFAULT 0, next_attempt_at TEXT);
-    CREATE TABLE IF NOT EXISTS settings (key TEXT PRIMARY KEY NOT NULL, value TEXT NOT NULL);`);
+    CREATE TABLE IF NOT EXISTS settings (key TEXT PRIMARY KEY NOT NULL, value TEXT NOT NULL);
+    CREATE TABLE IF NOT EXISTS content_bundle (id INTEGER PRIMARY KEY CHECK (id = 1), version TEXT NOT NULL, etag TEXT, payload TEXT NOT NULL, installed_at TEXT NOT NULL);`);
+  await canonicalizeLocalProgress(conn);
+}
+
+// Uma vez por aparelho: regrava o progresso salvo sob IDs legados (`letter-a`) no formato canônico.
+async function canonicalizeLocalProgress(conn: SQLite.SQLiteDatabase): Promise<void> {
+  const marker = await conn.getFirstAsync<{ value: string }>("SELECT value FROM settings WHERE key = 'content_ids'");
+  if (marker?.value === "1") return;
+  await conn.withTransactionAsync(async () => {
+    const rows = await conn.getAllAsync<{ payload: string }>("SELECT payload FROM progress");
+    await conn.runAsync("DELETE FROM progress");
+    for (const item of canonicalizeProgress(rows.map((row) => JSON.parse(row.payload) as LessonProgress))) await conn.runAsync("INSERT INTO progress VALUES (?, ?, ?)", item.lessonId, JSON.stringify(item), item.updatedAt);
+    await conn.runAsync("INSERT OR REPLACE INTO settings VALUES ('content_ids', '1')");
+  });
+}
+
+export async function getContentBundle(): Promise<{ version: string; etag: string | null; payload: unknown } | undefined> {
+  const conn = await db();
+  const row = await conn.getFirstAsync<{ version: string; etag: string | null; payload: string }>("SELECT version, etag, payload FROM content_bundle WHERE id = 1");
+  if (!row) return undefined;
+  try { return { version: row.version, etag: row.etag, payload: JSON.parse(row.payload) as unknown }; } catch { return undefined; }
+}
+
+export async function saveContentBundle(bundle: { version: string }, etag: string | null): Promise<void> {
+  const conn = await db();
+  await conn.runAsync("INSERT OR REPLACE INTO content_bundle (id, version, etag, payload, installed_at) VALUES (1, ?, ?, ?, ?)", bundle.version, etag, JSON.stringify(bundle), new Date().toISOString());
 }
 
 export async function saveAttempt(attempt: Attempt): Promise<void> {
@@ -54,10 +80,10 @@ export async function deferEvents(events: SyncEvent[]): Promise<void> {
 }
 
 export async function getSyncCursor(): Promise<string | null> { const conn = await db(); return (await conn.getFirstAsync<{ value: string }>("SELECT value FROM settings WHERE key = 'sync_cursor'"))?.value ?? null; }
-export async function applyPulledProgress(items: LessonProgress[], cursor: string): Promise<void> {
+export async function applyPulledProgress(items: LessonProgress[], cursor: string, requiredTypesOf: (lessonId: string) => readonly ExerciseType[] | undefined): Promise<void> {
   const conn = await db();
   await conn.withTransactionAsync(async () => {
-    for (const remote of items) { const row = await conn.getFirstAsync<{ payload: string }>("SELECT payload FROM progress WHERE lesson_id = ?", remote.lessonId); const merged = mergeProgress(row ? JSON.parse(row.payload) as LessonProgress : undefined, remote); await conn.runAsync("INSERT OR REPLACE INTO progress VALUES (?, ?, ?)", merged.lessonId, JSON.stringify(merged), merged.updatedAt); }
+    for (const remote of items) { const row = await conn.getFirstAsync<{ payload: string }>("SELECT payload FROM progress WHERE lesson_id = ?", remote.lessonId); const merged = mergeProgress(row ? JSON.parse(row.payload) as LessonProgress : undefined, remote, requiredTypesOf(remote.lessonId)); await conn.runAsync("INSERT OR REPLACE INTO progress VALUES (?, ?, ?)", merged.lessonId, JSON.stringify(merged), merged.updatedAt); }
     await conn.runAsync("INSERT OR REPLACE INTO settings VALUES ('sync_cursor', ?)", cursor);
   });
 }

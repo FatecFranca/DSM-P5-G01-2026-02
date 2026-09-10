@@ -11,11 +11,12 @@ def test_health_and_seeded_content(client):
     assert "".join(ordered) == "AEIOUMLPSTRNDCGBFVHQJKZXWY"
     assert next(lesson for module in content["modules"] for lesson in module["lessons"] if lesson["letter"] == "G")["phase"] == 2
     assert {exercise["type"] for module in content["modules"] for lesson in module["lessons"] for exercise in lesson["exercises"]} == {
-        "listen_choose", "recognize_letter", "find_in_word"
+        "listen_choose", "recognize_letter", "find_in_word", "complete_word"
     }
-    assert 8 <= len(content["words"]) <= 12
+    assert len(content["words"]) >= 1000
     assert all(set(word["required_letters"]).issubset(set(ordered)) for word in content["words"])
     assert next(word for word in content["words"] if word["text"] == "ÔNIBUS")["required_letters"] == "IOUSNB"
+    assert {word["text"] for word in content["words"]} >= {"CASA", "TRABALHO", "NÃO"}
     push_schema = client.get("/openapi.json").json()["components"]["schemas"]["SyncPushResult"]
     assert "accepted_ids" in push_schema["required"]
 
@@ -40,8 +41,7 @@ def test_sync_is_idempotent_and_isolated(client, auth):
     headers = bearer(auth)
     payload = {"events": [
         {"client_event_id": "evt-1", "type": "attempt", "occurred_at": "2026-09-10T12:00:00Z", "payload": {
-            "client_attempt_id": "attempt-1", "exercise_id": "exercise-A-write", "answer": "A", "correct": True,
-            "confidence": 0.91, "uncertain": False, "duration_ms": 1200, "model_version": "letters-1"
+            "client_attempt_id": "attempt-1", "exercise_id": "exercise-A-listen", "lesson_id": "lesson-A", "exercise_type": "listen_choose", "answer": "A", "correct": True, "duration_ms": 1200
         }},
         {"client_event_id": "evt-2", "type": "progress", "occurred_at": "2026-09-10T12:00:01Z", "payload": {
             "lesson_id": "lesson-A", "status": "completed", "completed_exercises": 3
@@ -72,8 +72,7 @@ def test_validation_and_attempt_id_uniqueness(client, auth):
     }]})
     assert invalid.status_code == 422
     event = {"client_event_id": "a", "type": "attempt", "occurred_at": "2026-09-10T12:00:00Z", "payload": {
-        "client_attempt_id": "same", "exercise_id": "exercise-A-write", "answer": "A", "correct": True,
-        "confidence": 0.5, "uncertain": True, "duration_ms": 500, "model_version": "v1"
+        "client_attempt_id": "same", "exercise_id": "exercise-A-listen", "answer": "A", "correct": True, "duration_ms": 500
     }}
     assert client.post("/v1/sync/push", headers=headers, json={"events": [event]}).status_code == 200
     event["client_event_id"] = "b"

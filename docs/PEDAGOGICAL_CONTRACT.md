@@ -14,11 +14,20 @@ As 26 letras maiúsculas de forma são apresentadas progressivamente nesta ordem
 
 A trilha é dividida em três fases: vogais (`A, E, I, O, U`), consoantes de alta utilidade (`M, L, P, S, T, R, N, D, C, G`) e ampliação do vocabulário (`B, F, V, H, Q, J, K, Z, X, W, Y`). A letra `G` pertence à segunda fase para permitir palavras comuns mais cedo.
 
-A ordem começa pelas vogais e adiciona consoantes úteis para formar as primeiras palavras. Cada lição oferece os três tipos de atividade:
+A ordem começa pelas vogais e adiciona consoantes úteis para formar as primeiras palavras. Cada lição oferece as atividades de letra:
 
 1. ouvir uma instrução e escolher a letra;
 2. reconhecer visualmente a letra solicitada;
-3. localizar a letra em uma palavra contextualizada, escolhendo a posição em que ela aparece.
+3. localizar a letra em uma palavra contextualizada, escolhendo a posição em que ela aparece;
+4. quando existe par de palavras válido, escolher em qual palavra a letra entra (`complete_word`).
+
+Regras verificadas automaticamente pelo content-lint da API e pelo validador do app:
+
+- a palavra de contexto de `localizar` e todas as palavras de `completar` usam somente letras já apresentadas;
+- em `completar`, exatamente uma opção é completada pela letra da lição; o distrator tem a lacuna em outra letra já aprendida e não contém a letra da lição;
+- a posição da resposta em `completar` alterna entre as lições, para não ficar sempre em primeiro.
+
+Exceção registrada em 15 de setembro de 2026: `A` e `E` não têm a atividade de localizar, porque não existe palavra real formada só por `A` ou por `A` e `E`. `I`, `O`, `U`, `M` e `P` tiveram a palavra de contexto trocada (`AI`, `OI`, `EU`, `MEU`, `MAPA`) pelo mesmo motivo, e os pares de `completar` foram definidos na mesma data. Todas essas palavras aguardam revisão pedagógica.
 
 As atividades de palavra são liberadas somente quando todas as letras da palavra já foram apresentadas. O estado de domínio registra tentativas, acertos, acurácia e próxima revisão.
 

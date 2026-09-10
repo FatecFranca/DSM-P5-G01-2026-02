@@ -46,6 +46,7 @@ class Exercise(Base):
     id: Mapped[str] = mapped_column(String(80), primary_key=True)
     lesson_id: Mapped[str] = mapped_column(ForeignKey("lessons.id"))
     type: Mapped[str] = mapped_column(String(32)); instruction: Mapped[str] = mapped_column(String(255)); answer: Mapped[str] = mapped_column(String(16)); context_word: Mapped[str | None] = mapped_column(String(40), nullable=True)
+    word_choices: Mapped[list | None] = mapped_column(JSON, nullable=True)
     audio_asset: Mapped[str] = mapped_column(String(255)); options: Mapped[list | None] = mapped_column(JSON); position: Mapped[int] = mapped_column(Integer)
 
 
@@ -61,14 +62,15 @@ class Attempt(Base):
     __tablename__ = "attempts"; __table_args__ = (UniqueConstraint("user_id", "client_attempt_id"),)
     id: Mapped[str] = mapped_column(String(36), primary_key=True, default=uid); user_id: Mapped[str] = mapped_column(ForeignKey("users.id"), index=True)
     client_attempt_id: Mapped[str] = mapped_column(String(100)); exercise_id: Mapped[str] = mapped_column(String(80))
-    answer: Mapped[str] = mapped_column(Text); correct: Mapped[bool] = mapped_column(Boolean); confidence: Mapped[float | None] = mapped_column(Float)
-    uncertain: Mapped[bool] = mapped_column(Boolean); duration_ms: Mapped[int] = mapped_column(Integer); model_version: Mapped[str | None] = mapped_column(String(80)); occurred_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    lesson_id: Mapped[str | None] = mapped_column(String(64), nullable=True); exercise_type: Mapped[str | None] = mapped_column(String(32), nullable=True)
+    answer: Mapped[str] = mapped_column(Text); correct: Mapped[bool] = mapped_column(Boolean); duration_ms: Mapped[int] = mapped_column(Integer)
+    served_model_version: Mapped[str | None] = mapped_column(String(80), nullable=True); occurred_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
 
 
 class Progress(Base):
     __tablename__ = "progress"; __table_args__ = (UniqueConstraint("user_id", "lesson_id"),)
     id: Mapped[str] = mapped_column(String(36), primary_key=True, default=uid); user_id: Mapped[str] = mapped_column(ForeignKey("users.id"), index=True)
-    lesson_id: Mapped[str] = mapped_column(String(64)); status: Mapped[str] = mapped_column(String(20)); completed_exercises: Mapped[int] = mapped_column(Integer)
+    lesson_id: Mapped[str] = mapped_column(String(64)); status: Mapped[str] = mapped_column(String(20)); completed_exercises: Mapped[int] = mapped_column(Integer); completed_types: Mapped[list | None] = mapped_column(JSON, nullable=True)
     attempts: Mapped[int] = mapped_column(Integer, default=0); correct_attempts: Mapped[int] = mapped_column(Integer, default=0); accuracy: Mapped[float | None] = mapped_column(Float, nullable=True)
     review_count: Mapped[int] = mapped_column(Integer, default=0); last_practiced_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True); next_review_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))

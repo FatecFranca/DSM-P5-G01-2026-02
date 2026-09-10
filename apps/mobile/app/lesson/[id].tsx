@@ -3,7 +3,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { AudioButton } from "../../src/components/AudioButton";
 import { Screen } from "../../src/components/Screen";
-import { LETTERS } from "../../src/domain/catalog";
+import { useContentStore } from "../../src/content/store";
+import { canonicalLessonId } from "../../src/domain/content-ids";
 import { isLessonUnlocked, nextProgress, type Feedback } from "../../src/domain/learning";
 import { saveAttempt, saveProgress } from "../../src/storage/database";
 import { useStudyStore } from "../../src/store/study-store";
@@ -13,7 +14,8 @@ const makeId = () => `${Date.now()}-${Math.random().toString(36).slice(2)}`;
 
 export default function Lesson() {
   const { id } = useLocalSearchParams<{ id: string }>();
-  const lesson = LETTERS.find((item) => item.id === id) ?? LETTERS[0];
+  const lessons = useContentStore((state) => state.lessons);
+  const lesson = lessons.find((item) => item.id === canonicalLessonId(String(id))) ?? lessons[0];
   const [step, setStep] = useState(0);
   const [feedback, setFeedback] = useState<Feedback>();
   const [selectedChoiceId, setSelectedChoiceId] = useState<string>();

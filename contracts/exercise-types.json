@@ -1,0 +1,13 @@
+{
+  "$comment": "Fonte única dos tipos de exercício. API (app/content_types.py) e mobile (src/domain/exercise-types.ts) declaram as mesmas constantes; os testes de cada lado falham se divergirem deste arquivo. id_suffix compõe o ID canônico: exercise-<LETRA>-<id_suffix>.",
+  "version": 1,
+  "types": [
+    { "id": "listen_choose", "target": "letter", "id_suffix": "listen", "description": "Ouvir o som e escolher a letra." },
+    { "id": "recognize_letter", "target": "letter", "id_suffix": "recognize", "description": "Encontrar a letra entre opções visuais." },
+    { "id": "find_in_word", "target": "letter", "id_suffix": "find", "description": "Localizar a posição da letra em uma palavra." },
+    { "id": "complete_word", "target": "word", "id_suffix": "complete-word", "description": "Escolher a palavra em que a letra entra." }
+  ],
+  "legacy_aliases": {
+    "recognize": "recognize_letter"
+  }
+}
