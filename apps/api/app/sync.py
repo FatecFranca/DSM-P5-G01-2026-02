@@ -2,11 +2,12 @@ import logging
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy import select
 from sqlalchemy.orm import Session
+from .content import PUBLISHED
 from .content_ids import canonical_exercise_id, canonical_lesson_id
 from .content_types import normalize_exercise_type
 from .db import get_db
 from .deps import current_user
-from .models import Attempt, Item, Progress, SyncEvent, Unit, User
+from .models import Attempt, Item, ItemState, Progress, SyncEvent, Unit, User
 from .schemas import DEPRECATED_ATTEMPT_FIELDS, DEPRECATED_PROGRESS_FIELDS, SyncPush, SyncPushResult
 
 logger = logging.getLogger(__name__)
@@ -29,19 +30,51 @@ def require(db: Session, model, identifier: str, event_id: str):
     if db.get(model, identifier) is None:
         raise HTTPException(422, f"{event_id}: {model.__tablename__} {identifier} não existe no catálogo")
 
+def progress_dict(x: Progress) -> dict:
+    return {"unit_id": x.unit_id, "status": x.status, "completed_exercises": x.completed_exercises, "completed_types": x.completed_types or [], "attempts": x.attempts, "correct_attempts": x.correct_attempts, "accuracy": x.accuracy, "review_count": x.review_count, "last_practiced_at": x.last_practiced_at, "next_review_at": x.next_review_at, "updated_at": x.updated_at}
+
+def item_state_dict(x: ItemState) -> dict:
+    return {"item_id": x.item_id, "unit_id": x.unit_id, "strength": x.strength, "half_life_hours": x.half_life_hours, "due_at": x.due_at, "reps": x.reps, "lapses": x.lapses, "consecutive_correct": x.consecutive_correct, "last_result": x.last_result, "last_seen_at": x.last_seen_at, "updated_at": x.updated_at}
+
+def recompute_progress(db: Session, user_id: str, unit_id: str, occurred_at) -> None:
+    """O progresso da unidade é um resumo dos item_states (docs/adr/0003); espelha deriveProgress do app."""
+    items = [item for item in db.scalars(select(Item).where(Item.unit_id == unit_id)).all() if item.review_status in PUBLISHED]
+    states = {state.item_id: state for state in db.scalars(select(ItemState).where(ItemState.user_id == user_id, ItemState.unit_id == unit_id)).all()}
+    known = [(item, states[item.id]) for item in items if item.id in states]
+    mastered = [(item, state) for item, state in known if state.consecutive_correct >= 1]
+    completed = bool(items) and len(mastered) == len(items)
+    due = any(comparable(state.due_at) <= comparable(occurred_at) for _, state in mastered)
+    progress = db.scalar(select(Progress).where(Progress.user_id == user_id, Progress.unit_id == unit_id))
+    if not progress:
+        progress = Progress(user_id=user_id, unit_id=unit_id, status="not_started", completed_exercises=0, updated_at=occurred_at); db.add(progress)
+    attempts = sum(state.reps for _, state in known)
+    progress.status = "needs_review" if completed and due else "completed" if completed else "in_progress" if known else "not_started"
+    progress.completed_exercises = len(mastered); progress.completed_types = list(dict.fromkeys(item.type for item, _ in mastered))
+    progress.attempts = attempts; progress.correct_attempts = sum(state.reps - state.lapses for _, state in known); progress.accuracy = progress.correct_attempts / attempts if attempts else None
+    progress.last_practiced_at = max((state.last_seen_at for _, state in known), default=None, key=comparable)
+    progress.next_review_at = min((state.due_at for _, state in mastered), default=None, key=comparable)
+    if comparable(occurred_at) >= comparable(progress.updated_at): progress.updated_at = occurred_at
+
 router = APIRouter(prefix="/v1", tags=["learning"])
 
 @router.get("/progress")
 def progress(user: User = Depends(current_user), db: Session = Depends(get_db)):
     items = db.scalars(select(Progress).where(Progress.user_id == user.id).order_by(Progress.unit_id)).all()
-    return {"items": [{"unit_id": x.unit_id, "status": x.status, "completed_exercises": x.completed_exercises, "completed_types": x.completed_types or [], "attempts": x.attempts, "correct_attempts": x.correct_attempts, "accuracy": x.accuracy, "review_count": x.review_count, "last_practiced_at": x.last_practiced_at, "next_review_at": x.next_review_at, "updated_at": x.updated_at} for x in items]}
+    return {"items": [progress_dict(x) for x in items]}
+
+@router.get("/item-states")
+def item_states(user: User = Depends(current_user), db: Session = Depends(get_db)):
+    items = db.scalars(select(ItemState).where(ItemState.user_id == user.id).order_by(ItemState.item_id)).all()
+    return {"items": [item_state_dict(x) for x in items]}
 
 @router.get("/attempts")
 def attempts(limit: int = Query(default=100, ge=1, le=500), user: User = Depends(current_user), db: Session = Depends(get_db)):
     items = db.scalars(select(Attempt).where(Attempt.user_id == user.id).order_by(Attempt.occurred_at.desc()).limit(limit)).all()
     return {"items": [{
         "client_attempt_id": x.client_attempt_id, "item_id": x.item_id, "unit_id": x.unit_id, "exercise_type": x.exercise_type,
-        "answer": x.answer, "correct": x.correct, "duration_ms": x.duration_ms, "served_model_version": x.served_model_version, "occurred_at": x.occurred_at,
+        "answer": x.answer, "correct": x.correct, "duration_ms": x.duration_ms, "occurred_at": x.occurred_at,
+        "session_id": x.session_id, "position_in_session": x.position_in_session, "attempt_index_in_item": x.attempt_index_in_item, "audio_repeats": x.audio_repeats,
+        "time_to_first_interaction_ms": x.time_to_first_interaction_ms, "served_by": x.served_by, "served_policy_version": x.served_policy_version, "served_model_version": x.served_model_version,
     } for x in items]}
 
 @router.post("/sync/push", response_model=SyncPushResult)
@@ -68,6 +101,23 @@ def push(body: SyncPush, user: User = Depends(current_user), db: Session = Depen
                 accepted_ids.append(event.client_event_id)
                 continue
             db.add(Attempt(user_id=user.id, occurred_at=event.occurred_at, **event.payload.model_dump(exclude=DEPRECATED_ATTEMPT_FIELDS)))
+        elif event.type == "item_state":
+            event.payload.item_id = canonicalized(event.payload.item_id, canonical_exercise_id)
+            event.payload.unit_id = canonicalized(event.payload.unit_id, canonical_lesson_id) if event.payload.unit_id else None
+            require(db, Item, event.payload.item_id, event.client_event_id)
+            if event.payload.unit_id: require(db, Unit, event.payload.unit_id, event.client_event_id)
+            payload = event.payload.model_dump(mode="json")
+            state = db.scalar(select(ItemState).where(ItemState.user_id == user.id, ItemState.item_id == event.payload.item_id))
+            if not state:
+                state = ItemState(user_id=user.id, updated_at=event.occurred_at, **event.payload.model_dump()); db.add(state)
+            else:
+                # Último registro vence; repetições e lapsos só crescem — o mesmo padrão do progresso e do app.
+                if comparable(event.occurred_at) >= comparable(state.updated_at):
+                    for name, value in event.payload.model_dump(exclude={"reps", "lapses"}).items(): setattr(state, name, value)
+                    state.updated_at = event.occurred_at
+                state.reps = max(state.reps, event.payload.reps); state.lapses = max(state.lapses, event.payload.lapses)
+            db.flush()
+            if state.unit_id: recompute_progress(db, user.id, state.unit_id, event.occurred_at)
         else:
             event.payload.unit_id = canonicalized(event.payload.unit_id, canonical_lesson_id)
             event.payload.completed_types = normalized_types(event.payload.completed_types)

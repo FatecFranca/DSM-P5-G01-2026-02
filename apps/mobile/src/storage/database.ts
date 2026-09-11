@@ -1,6 +1,6 @@
 import * as SQLite from "expo-sqlite";
-import type { Attempt, ExerciseType, LessonProgress, SyncEvent } from "../domain/types";
-import { canonicalizeProgress, mergeProgress } from "../sync/contract";
+import type { Attempt, ExerciseType, ItemState, LessonProgress, SyncEvent } from "../domain/types";
+import { canonicalizeProgress, mergeItemState, mergeProgress } from "../sync/contract";
 
 let database: Promise<SQLite.SQLiteDatabase> | undefined;
 const db = () => (database ??= SQLite.openDatabaseAsync("alfabetiza.db"));
@@ -10,6 +10,7 @@ export async function initializeDatabase(): Promise<void> {
   await conn.execAsync(`PRAGMA journal_mode = WAL;
     CREATE TABLE IF NOT EXISTS attempts (client_attempt_id TEXT PRIMARY KEY NOT NULL, payload TEXT NOT NULL, created_at TEXT NOT NULL);
     CREATE TABLE IF NOT EXISTS progress (lesson_id TEXT PRIMARY KEY NOT NULL, payload TEXT NOT NULL, updated_at TEXT NOT NULL);
+    CREATE TABLE IF NOT EXISTS item_states (item_id TEXT PRIMARY KEY NOT NULL, unit_id TEXT NOT NULL, payload TEXT NOT NULL, updated_at TEXT NOT NULL);
     CREATE TABLE IF NOT EXISTS sync_queue (id TEXT PRIMARY KEY NOT NULL, type TEXT NOT NULL, payload TEXT NOT NULL, retries INTEGER NOT NULL DEFAULT 0, next_attempt_at TEXT);
     CREATE TABLE IF NOT EXISTS settings (key TEXT PRIMARY KEY NOT NULL, value TEXT NOT NULL);
     CREATE TABLE IF NOT EXISTS content_bundle (id INTEGER PRIMARY KEY CHECK (id = 1), version TEXT NOT NULL, etag TEXT, payload TEXT NOT NULL, installed_at TEXT NOT NULL);`);
@@ -48,6 +49,17 @@ export async function saveAttempt(attempt: Attempt): Promise<void> {
   });
 }
 
+/** Estado por item e progresso da unidade são gravados juntos; na fila, cada um é coalescido pelo id (só o último vai). */
+export async function saveItemState(state: ItemState, progress: LessonProgress): Promise<void> {
+  const conn = await db();
+  await conn.withTransactionAsync(async () => {
+    await conn.runAsync("INSERT OR REPLACE INTO item_states VALUES (?, ?, ?, ?)", state.itemId, state.unitId, JSON.stringify(state), state.updatedAt);
+    await conn.runAsync("INSERT OR REPLACE INTO sync_queue (id, type, payload) VALUES (?, 'item_state', ?)", `item_state:${state.itemId}`, JSON.stringify(state));
+    await conn.runAsync("INSERT OR REPLACE INTO progress VALUES (?, ?, ?)", progress.lessonId, JSON.stringify(progress), progress.updatedAt);
+    await conn.runAsync("INSERT OR REPLACE INTO sync_queue (id, type, payload) VALUES (?, 'progress', ?)", `progress:${progress.lessonId}`, JSON.stringify(progress));
+  });
+}
+
 export async function saveProgress(progress: LessonProgress): Promise<void> {
   const conn = await db();
   await conn.withTransactionAsync(async () => {
@@ -62,9 +74,15 @@ export async function getProgress(): Promise<LessonProgress[]> {
   return rows.map((row) => JSON.parse(row.payload) as LessonProgress);
 }
 
+export async function getItemStates(): Promise<ItemState[]> {
+  const conn = await db();
+  const rows = await conn.getAllAsync<{ payload: string }>("SELECT payload FROM item_states");
+  return rows.map((row) => JSON.parse(row.payload) as ItemState);
+}
+
 export async function getQueue(): Promise<SyncEvent[]> {
   const conn = await db();
-  const rows = await conn.getAllAsync<{ id: string; type: SyncEvent["type"]; payload: string; retries: number }>("SELECT id, type, payload, retries FROM sync_queue WHERE next_attempt_at IS NULL OR next_attempt_at <= datetime('now') ORDER BY rowid LIMIT 50");
+  const rows = await conn.getAllAsync<{ id: string; type: SyncEvent["type"]; payload: string; retries: number }>("SELECT id, type, payload, retries FROM sync_queue WHERE next_attempt_at IS NULL OR next_attempt_at <= datetime('now') ORDER BY rowid LIMIT 200");
   return rows.map((row) => ({ ...row, payload: JSON.parse(row.payload) as Record<string, unknown> }));
 }
 
@@ -80,10 +98,24 @@ export async function deferEvents(events: SyncEvent[]): Promise<void> {
 }
 
 export async function getSyncCursor(): Promise<string | null> { const conn = await db(); return (await conn.getFirstAsync<{ value: string }>("SELECT value FROM settings WHERE key = 'sync_cursor'"))?.value ?? null; }
-export async function applyPulledProgress(items: LessonProgress[], cursor: string, requiredTypesOf: (lessonId: string) => readonly ExerciseType[] | undefined): Promise<void> {
+
+export async function applyPulled(incoming: { progress: LessonProgress[]; itemStates: ItemState[]; cursor: string }, requiredTypesOf: (lessonId: string) => readonly ExerciseType[] | undefined): Promise<{ progress: LessonProgress[]; itemStates: ItemState[] }> {
   const conn = await db();
+  const progress: LessonProgress[] = []; const itemStates: ItemState[] = [];
   await conn.withTransactionAsync(async () => {
-    for (const remote of items) { const row = await conn.getFirstAsync<{ payload: string }>("SELECT payload FROM progress WHERE lesson_id = ?", remote.lessonId); const merged = mergeProgress(row ? JSON.parse(row.payload) as LessonProgress : undefined, remote, requiredTypesOf(remote.lessonId)); await conn.runAsync("INSERT OR REPLACE INTO progress VALUES (?, ?, ?)", merged.lessonId, JSON.stringify(merged), merged.updatedAt); }
-    await conn.runAsync("INSERT OR REPLACE INTO settings VALUES ('sync_cursor', ?)", cursor);
+    for (const remote of incoming.itemStates) {
+      const row = await conn.getFirstAsync<{ payload: string }>("SELECT payload FROM item_states WHERE item_id = ?", remote.itemId);
+      const merged = mergeItemState(row ? JSON.parse(row.payload) as ItemState : undefined, remote);
+      await conn.runAsync("INSERT OR REPLACE INTO item_states VALUES (?, ?, ?, ?)", merged.itemId, merged.unitId, JSON.stringify(merged), merged.updatedAt);
+      itemStates.push(merged);
+    }
+    for (const remote of incoming.progress) {
+      const row = await conn.getFirstAsync<{ payload: string }>("SELECT payload FROM progress WHERE lesson_id = ?", remote.lessonId);
+      const merged = mergeProgress(row ? JSON.parse(row.payload) as LessonProgress : undefined, remote, requiredTypesOf(remote.lessonId));
+      await conn.runAsync("INSERT OR REPLACE INTO progress VALUES (?, ?, ?)", merged.lessonId, JSON.stringify(merged), merged.updatedAt);
+      progress.push(merged);
+    }
+    await conn.runAsync("INSERT OR REPLACE INTO settings VALUES ('sync_cursor', ?)", incoming.cursor);
   });
+  return { progress, itemStates };
 }

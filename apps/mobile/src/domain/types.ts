@@ -1,6 +1,7 @@
 import type { ExerciseType, ItemKind } from "./exercise-types";
+import type { ItemState } from "./scheduler";
 
-export type { ExerciseType, ItemKind };
+export type { ExerciseType, ItemKind, ItemState };
 export type LessonStatus = "locked" | "available" | "learning" | "review" | "mastered" | "needs_review";
 
 export type WordChoice = {
@@ -59,6 +60,7 @@ export type Track = {
   units: Unit[];
 };
 
+/** Visão por unidade, derivada dos estados por item (docs/adr/0003). `lessonId` é o id da unidade. */
 export type LessonProgress = {
   lessonId: string;
   completedTypes: ExerciseType[];
@@ -74,6 +76,7 @@ export type LessonProgress = {
   updatedAt: string;
 };
 
+/** `lessonId`/`exerciseId` são a unidade e o item; no fio viram `unit_id`/`item_id`. */
 export type Attempt = {
   clientAttemptId: string;
   lessonId: string;
@@ -83,11 +86,20 @@ export type Attempt = {
   correct: boolean;
   durationMs: number;
   createdAt: string;
+  sessionId?: string;
+  positionInSession?: number;
+  /** 1 na primeira vez que o item aparece na sessão, 2 na reapresentação após erro, e assim por diante. */
+  attemptIndexInItem?: number;
+  audioRepeats?: number;
+  timeToFirstInteractionMs?: number;
+  servedBy?: "rules" | "model";
+  servedPolicyVersion?: string;
+  servedModelVersion?: string;
 };
 
 export type SyncEvent = {
   id: string;
-  type: "attempt" | "progress";
+  type: "attempt" | "progress" | "item_state";
   payload: Record<string, unknown>;
   retries?: number;
 };

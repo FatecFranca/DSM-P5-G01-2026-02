@@ -1,18 +1,19 @@
 # Relatório de validação do MVP
 
-Data da rodada: 16 de setembro de 2026.
+Data da rodada: 18 de setembro de 2026.
 
 ## Resultado automatizado
 
 | Área | Verificação | Resultado |
 |---|---|---|
-| Mobile | Vitest | 7 arquivos e 26 testes aprovados |
+| Mobile | Vitest | 9 arquivos e 35 testes aprovados |
 | Mobile | TypeScript e ESLint | aprovados |
 | Mobile | `expo install --check` | dependências compatíveis |
 | Mobile | export Android | aprovado na rodada de 10 de setembro; o app não embarca áudio, todo som vem do TTS do aparelho |
 | Mobile | bundle semente | `seed-bundle.json` idêntico ao seed da API e aprovado pelo validador do app |
-| API | Pytest | 24 testes aprovados |
-| API | Alembic | upgrade, downgrade e novo upgrade aprovados, incluindo a migração de IDs legados com mesclagem de progresso duplicado e a migração do modelo de conteúdo (renomes, chaves estrangeiras e sílabas em lista) com dados legados |
+| API | Pytest | 33 testes aprovados |
+| ML | Pytest | 9 testes aprovados (replay sem vazamento, treino sintético promovido pelo gate, gate reprovando modelos pequenos/mal calibrados/perdedores, classificador legado) |
+| API | Alembic | upgrade, downgrade e novo upgrade aprovados, incluindo a migração de IDs legados com mesclagem de progresso duplicado e a migração do modelo de conteúdo (renomes, chaves estrangeiras e sílabas em lista) com dados legados; `item_states`, contexto de sessão nas tentativas, `ranking_logs` e consentimento de pesquisa |
 | API | seed | 29 unidades (26 letras + trilha «Tem em casa»), 134 itens em 9 tipos, 18 palavras curadas e 1187 candidatas do corpus fora do bundle; seed idempotente; content-lint sem erros |
 | API | `/v1/content` | `ETag` derivado do conteúdo e resposta `304` confirmados |
 | Contratos | `contracts/*.json` | API e mobile espelham os mesmos tipos, ordem, fases e exceções |
@@ -33,12 +34,15 @@ Data da rodada: 16 de setembro de 2026.
 - push/pull com cursor, retry exponencial, resolução determinística e idempotência;
 - isolamento de usuários e rejeição de imagem bruta no contrato da API;
 - IDs canônicos compartilhados entre app e API, com tradução de IDs legados na sincronização;
-- regras explícitas de pré-requisito, domínio e revisão;
+- repetição espaçada por item (meia-vida 4 h × 2^força, limites 4 h–90 d), fila de sessão determinística e reapresentação do item errado na mesma sessão;
+- progresso por unidade derivado dos itens, com estado de revisão quando um item dominado vence;
+- tentativas com contexto de sessão (posição, índice de reapresentação, repetições de áudio, tempo até a primeira interação, política que serviu o item);
+- `POST /v1/ranking/next` com regras como piso, fallback por item, shadow mode, ε-exploração e registro em `ranking_logs`; consentimento de pesquisa por usuário;
 - stack de produção com API, PostgreSQL, proxy HTTPS, volumes, health checks e rotinas de backup.
 
 ## Métricas do conteúdo adaptativo
 
-O catálogo atual usa regras explícitas de pré-requisito e dificuldade. Nenhum modelo adaptativo é promovido neste estágio, porque ainda não há dados de uso suficientes nem avaliação pedagógica separada.
+A adaptação atual é por regras explícitas (ADR 0003): pré-requisito por letras, repetição espaçada por item e reapresentação de erros. O ranking por modelo (ADR 0004) existe, está desligado em produção e só será promovido por manifesto que passe no gate de replay (log-loss abaixo de regras, taxa histórica e constante nos cortes temporal e por usuário; ECE ≤ 0,05; ≥ 200 linhas) sobre tentativas de usuários com consentimento. Em dados sintéticos o pipeline promove; com dados reais ainda não há volume, e a reprovação do gate é o resultado esperado.
 
 ## Evidências externas ainda necessárias
 

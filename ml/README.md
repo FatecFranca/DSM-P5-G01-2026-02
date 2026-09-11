@@ -1,20 +1,34 @@
-# Artefatos experimentais de análise
+# Aprendizado de máquina: ranking de itens e artefatos históricos
 
-Este diretório está fora do produto atual. Ele preserva uma prova técnica histórica para referência e CI, mas não é importado pelo mobile, não participa do desbloqueio das lições e não deve ser tratado como requisito do MVP.
-
-Pipeline reproduzível para a prova técnica. O dataset gerado é **sintético e exclusivo para demo/CI**; o manifesto impede sua promoção como modelo avaliado com pessoas reais.
+Este diretório treina e avalia o **modelo de ranking** servido pela API (`docs/adr/0004`). Ele não roda no aplicativo: o servidor aplica um manifesto JSON com coeficientes em Python puro, e as regras continuam como piso quando o modelo não pode responder.
 
 ```powershell
 cd ml
-python -m pip install -e ".[test,onnx]"
-pytest
-python -m alfabetiza_ml.train --output artifacts
+python -m venv .venv
+.\.venv\Scripts\python -m pip install -e ".[test]" -e "../apps/api[dev]"
+.\.venv\Scripts\python -m pytest
 ```
 
-O split usa `GroupShuffleSplit` com o escritor como grupo, impedindo que amostras da mesma pessoa apareçam em treino e teste. `metrics.json` registra accuracy, precision/recall/F1 macro, matriz de confusão e latência Python. `manifest.json` registra versão, hash, tamanho, classes, limiar de incerteza e escritores de cada partição.
+## O que o modelo faz e o que não faz
 
-Com `skl2onnx`, o artefato é `letter_classifier.onnx`. Sem a dependência opcional, é produzido `joblib` somente para diagnóstico Python, e o manifesto declara que ONNX não está disponível; esse fallback **não é compatível com o app mobile**.
+- Alvo: probabilidade de o aprendiz acertar um item no próximo encontro (`p_recall`).
+- Só **reordena** itens que já estão elegíveis pelo portão de letras. Nunca libera conteúdo, nunca altera dificuldade, nunca decide conteúdo sem curadoria.
+- Features, regras e scheduler são os mesmos do servidor (`apps/api/app/ranking`), importados daqui. O replay reconstrói o estado do item e do aprendiz como estavam antes de cada tentativa, sem vazamento de futuro.
 
-`inference.py` fornece um smoke test do contrato `{className, confidence, uncertain, modelVersion}`. Imagens PIL têm sua orientação EXIF aplicada antes do recorte; o canvas mobile, que não possui EXIF, deve ser exportado na orientação canônica da tela.
+## Treinar e avaliar
 
-`tabular.py` é um experimento histórico de regras de dificuldade e recomendação. A trilha atual usa regras explícitas no catálogo e não inclui escrita, traçado, reconhecimento manuscrito ou modelo adaptativo.
+```powershell
+.\.venv\Scripts\python -m alfabetiza_ml.train_ranking --database-url "postgresql+psycopg://..." --out artifacts\ranking_manifest.json --report reports\ranking_eval.json
+```
+
+Só tentativas de usuários com `research_consent` entram (`PUT /v1/me/research-consent`). Dois cortes obrigatórios: temporal (passado → futuro) e por usuário (usuários inéditos, mede cold start). Métricas: log-loss, Brier, ECE com diagrama de confiabilidade e AUC. Baselines obrigatórias: regras do servidor, taxa histórica por item e constante 0,85.
+
+O manifesto só recebe `promotion_allowed: true` se o modelo bater todas as baselines em log-loss nos dois cortes, tiver ECE ≤ 0,05 e ao menos 200 linhas por corte. O servidor recusa manifestos não promovidos. Com uma turma de validação o gate provavelmente reprova; esse é o resultado esperado, não uma falha.
+
+## Servir
+
+Na API: `RANKING_MODEL_ENABLED=true`, `RANKING_MODEL_PATH=/caminho/ranking_manifest.json`. Comece com `RANKING_SHADOW_MODE=true` (o modelo é calculado e registrado em `ranking_logs`, mas as regras são servidas) por 2–4 semanas antes de inverter. `RANKING_EPSILON` (5% por padrão) reserva parte das posições para exploração, sem a qual a avaliação off-policy fica inválida. Desligar é o kill switch.
+
+## Artefatos históricos
+
+`src/alfabetiza_ml/legacy/handwriting` e `artifacts/legacy` guardam o classificador de letra manuscrita da prova técnica (dataset sintético, `promotionAllowed: false`). Ele está fora do produto: não é importado pelo app e não participa das lições. `tabular.py` são as regras de dificuldade e recomendação do bootstrap, hoje superadas por `apps/api/app/ranking/rules.py`.

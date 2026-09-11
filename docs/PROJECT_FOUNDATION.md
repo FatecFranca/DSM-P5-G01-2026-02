@@ -92,6 +92,8 @@ No primeiro incremento, a adaptação será feita por regras transparentes: pré
 
 Modelos estatísticos de dificuldade ou recomendação não fazem parte do produto atual. Só poderão ser considerados depois de dados suficientes, avaliação separada, revisão pedagógica e comparação explícita com as regras. Nenhum modelo de escrita, traçado ou reconhecimento manuscrito está previsto nesta fase.
 
+> **Emenda de 18 de setembro de 2026 (ADR 0004).** A decisão explícita que este parágrafo exige foi tomada: um modelo de ranking no servidor, que só reordena itens já elegíveis, com regras como piso, shadow mode, ε-exploração, consentimento de pesquisa separado e um gate de promoção que compara com as regras em replay. Ele fica desligado em produção até a assinatura pedagógica registrada no ADR. Escrita, traçado e reconhecimento manuscrito continuam fora.
+
 ### Backend e armazenamento
 
 Recomenda-se iniciar com uma API simples e PostgreSQL, mas evitar criar um backend grande antes de validar o fluxo pedagógico. O servidor deve armazenar conteúdo, conta, progresso e tentativas; a inferência da letra deve ocorrer localmente quando possível.

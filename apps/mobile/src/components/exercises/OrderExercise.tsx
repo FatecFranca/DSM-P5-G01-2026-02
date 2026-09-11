@@ -7,12 +7,13 @@ import type { ExerciseRendererProps } from "./ChoiceExercise";
 export const joinTokens = (type: string, picked: string[]) => picked.join(type === "word_from_syllables" ? "-" : " ");
 
 /** Montagem por toque: o aprendiz toca as peças na ordem; ao usar todas, a resposta é avaliada. */
-export function OrderExercise({ exercise, selected, onChoose }: ExerciseRendererProps) {
+export function OrderExercise({ exercise, selected, onChoose, onInteract }: ExerciseRendererProps) {
   const tokens = exercise.tokens ?? [];
   const [picked, setPicked] = useState<number[]>([]);
   useEffect(() => { if (selected === undefined) setPicked([]); }, [selected, exercise.id]);
   const assembled = joinTokens(exercise.type, picked.map((index) => tokens[index]));
   const pick = (index: number) => {
+    onInteract?.();
     const next = [...picked, index];
     setPicked(next);
     if (next.length === tokens.length) { const answer = joinTokens(exercise.type, next.map((position) => tokens[position])); onChoose(answer, answer === exercise.answer); }

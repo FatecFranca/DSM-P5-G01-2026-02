@@ -24,7 +24,7 @@ O repositório contém uma implementação mobile offline-first para alfabetiza�
 apps/mobile/  Expo + React Native + SQLite
 apps/api/     FastAPI + SQLAlchemy + Alembic + PostgreSQL
 contracts/    tipos de exercício e invariantes pedagógicas compartilhados por API e mobile
-ml/           artefatos experimentais históricos, fora do app atual
+ml/           replay, treino e gate do modelo de ranking; classificador legado em ml/legacy
 infra/        Docker Compose + PostgreSQL + Caddy HTTPS
 docs/         contratos, decisões (docs/adr) e evidências
 ```
@@ -75,4 +75,4 @@ cd apps/api
 .\.venv\Scripts\python scripts\export_content_bundle.py
 ```
 
-O diretório `ml/` não participa das lições atuais e não é requisito do MVP. A trilha usa conteúdo curado e regras explícitas de progressão e revisão. Consulte o relatório de validação para as evidências e limites atuais.
+A trilha usa conteúdo curado e regras explícitas de progressão e revisão. O modelo de ranking (`ml/`, ADR 0004) só reordena itens já elegíveis e fica desligado até passar no gate de avaliação. Consulte o relatório de validação para as evidências e limites atuais.

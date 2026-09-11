@@ -14,7 +14,10 @@ class AttemptPayload(BaseModel):
     client_attempt_id: str = Field(min_length=1, max_length=100)
     item_id: str | None = Field(default=None, max_length=80); unit_id: str | None = Field(default=None, max_length=64); exercise_type: str | None = Field(default=None, max_length=32)
     answer: str = Field(max_length=500); correct: bool; duration_ms: int = Field(ge=0, le=3_600_000)
-    served_model_version: str | None = Field(default=None, max_length=80)
+    # Contexto de sessão (docs/adr/0003), todo opcional para não quebrar clientes anteriores.
+    session_id: str | None = Field(default=None, max_length=64); position_in_session: int | None = Field(default=None, ge=1); attempt_index_in_item: int | None = Field(default=None, ge=1)
+    audio_repeats: int | None = Field(default=None, ge=0); time_to_first_interaction_ms: int | None = Field(default=None, ge=0, le=3_600_000)
+    served_by: Literal["rules", "model"] | None = None; served_policy_version: str | None = Field(default=None, max_length=32); served_model_version: str | None = Field(default=None, max_length=80)
     # Aceitos por uma release: nomes antigos (exercise_id/lesson_id) e campos do classificador removido (ignorados).
     exercise_id: str | None = Field(default=None, max_length=80); lesson_id: str | None = Field(default=None, max_length=64)
     confidence: float | None = Field(default=None, ge=0, le=1); uncertain: bool | None = None; model_version: str | None = Field(default=None, max_length=80)
@@ -41,11 +44,20 @@ class ProgressPayload(BaseModel):
 
 DEPRECATED_PROGRESS_FIELDS = {"lesson_id"}
 
+class ItemStatePayload(BaseModel):
+    """Espelha apps/mobile/src/domain/scheduler.ts::ItemState."""
+    model_config = ConfigDict(extra="forbid")
+    item_id: str = Field(min_length=1, max_length=80); unit_id: str | None = Field(default=None, max_length=64)
+    strength: int = Field(ge=0); half_life_hours: float = Field(gt=0); due_at: datetime
+    reps: int = Field(ge=0); lapses: int = Field(ge=0); consecutive_correct: int = Field(ge=0); last_result: bool; last_seen_at: datetime
+
 class AttemptEvent(BaseModel):
     client_event_id: str = Field(min_length=1, max_length=100); type: Literal["attempt"]; occurred_at: datetime; payload: AttemptPayload
 class ProgressEvent(BaseModel):
     client_event_id: str = Field(min_length=1, max_length=100); type: Literal["progress"]; occurred_at: datetime; payload: ProgressPayload
-SyncEventIn = Annotated[Union[AttemptEvent, ProgressEvent], Field(discriminator="type")]
+class ItemStateEvent(BaseModel):
+    client_event_id: str = Field(min_length=1, max_length=100); type: Literal["item_state"]; occurred_at: datetime; payload: ItemStatePayload
+SyncEventIn = Annotated[Union[AttemptEvent, ProgressEvent, ItemStateEvent], Field(discriminator="type")]
 class SyncPush(BaseModel): events: list[SyncEventIn] = Field(max_length=500)
 class SyncPushResult(BaseModel):
     accepted: int

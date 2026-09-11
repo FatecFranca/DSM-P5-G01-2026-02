@@ -6,6 +6,8 @@ O MVP coleta somente conta, progresso, respostas e duração necessários à con
 
 Qualquer coleta futura de amostras para pesquisa exige consentimento separado do cadastro, finalidade explícita, anonimização, prazo de retenção e opção de retirada. Testes com participantes só podem começar após aprovação interna e registro do consentimento.
 
+O consentimento de pesquisa é registrado por `PUT /v1/me/research-consent` (`users.research_consent`, com data), pode ser retirado a qualquer momento e é a única porta de entrada de tentativas no treino do ranking (ADR 0004). Tentativas de quem não consentiu continuam servindo ao próprio progresso, nunca ao modelo. A tentativa registra contexto de sessão (posição, repetições de áudio, tempo até a primeira interação), nunca áudio ou imagem.
+
 Tokens ficam no armazenamento seguro do dispositivo; senhas são tratadas apenas pela API e armazenadas como hash Argon2id. Logs não devem conter senha, token, áudio, e-mail completo ou outro dado pessoal desnecessário.
 
 ## Checklist de acessibilidade

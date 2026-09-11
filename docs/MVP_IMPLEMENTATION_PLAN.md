@@ -68,6 +68,8 @@ Configurar Expo, FastAPI, ambientes Python, TypeScript, lint, testes, variáveis
 
 **Verificação:** catálogo reproduzível, regras explicáveis e nenhuma recomendação automática sem dados suficientes.
 
+> **Emenda de 18 de setembro de 2026 (ADR 0004).** "Recomendação automática" passa a existir como ranking no servidor, condicionada ao gate de avaliação por replay (log-loss, Brier, ECE contra regras, taxa histórica e constante), a consentimento de pesquisa e a shadow mode antes de servir. O item sobre escrita manuscrita permanece.
+
 ### 5. Implementar a API própria
 
 Criar módulos independentes para autenticação, conteúdo, progresso, tentativas e sincronização.
@@ -174,3 +176,4 @@ Qualquer adaptação estatística futura não deve bloquear a primeira fatia fun
 - A atividade atual não coleta áudio ou imagens brutas de usuários.
 - Testes com usuários reais dependem de consentimento e autorização do grupo.
 - Traçado, escrita manuscrita e classificação de escrita não fazem parte do escopo atual; qualquer retorno dependerá de nova decisão explícita e revisão pedagógica.
+- Adaptação estatística: reaberta em 18 de setembro de 2026 como ranking no servidor (ADR 0004), desligada em produção até assinatura pedagógica; nunca substitui as regras de pré-requisito e revisão.

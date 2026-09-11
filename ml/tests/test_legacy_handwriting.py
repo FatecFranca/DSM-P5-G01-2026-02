@@ -1,10 +1,10 @@
 import numpy as np
 
-from alfabetiza_ml.demo_data import make_demo_dataset
-from alfabetiza_ml.preprocessing import preprocess_image
-from alfabetiza_ml.inference import infer_onnx
+from alfabetiza_ml.legacy.handwriting.demo_data import make_demo_dataset
+from alfabetiza_ml.legacy.handwriting.preprocessing import preprocess_image
+from alfabetiza_ml.legacy.handwriting.inference import infer_onnx
 from alfabetiza_ml.tabular import WordFeatures, classify_word_difficulty, recommend_activity
-from alfabetiza_ml.train import train, writer_split
+from alfabetiza_ml.legacy.handwriting.train import train, writer_split
 
 
 def test_writer_split_has_no_leakage():

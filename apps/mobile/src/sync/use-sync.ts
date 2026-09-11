@@ -1,10 +1,12 @@
 import { useMutation } from "@tanstack/react-query";
 import { pullEvents, pushEvents } from "../api/client";
 import { requiredTypesOf } from "../content/store";
-import { acknowledgeEvents, applyPulledProgress, deferEvents, getQueue, getSyncCursor } from "../storage/database";
+import { acknowledgeEvents, applyPulled, deferEvents, getQueue, getSyncCursor } from "../storage/database";
 import { sessionStorage } from "../storage/session";
+import { useStudyStore } from "../store/study-store";
 
 export function useSync() {
+  const applyRemote = useStudyStore((state) => state.applyRemote);
   return useMutation({ mutationFn: async () => {
     const events = await getQueue();
     try {
@@ -13,7 +15,7 @@ export function useSync() {
       const result = events.length ? await pushEvents(events, session.accessToken) : { acceptedIds: [] };
       await acknowledgeEvents(result.acceptedIds);
       const incoming = await pullEvents(await getSyncCursor(), session.accessToken);
-      await applyPulledProgress(incoming.progress, incoming.cursor, requiredTypesOf);
+      applyRemote(await applyPulled(incoming, requiredTypesOf));
       return result.acceptedIds.length;
     } catch (error) { await deferEvents(events); throw error; }
   } });

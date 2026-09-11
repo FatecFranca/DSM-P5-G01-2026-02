@@ -15,6 +15,10 @@
 5. Subir os serviços, executar as migrations e o seed documentados pela API.
 6. Confirmar o health check por HTTPS antes de apontar o aplicativo para a API.
 
+## Ranking no servidor
+
+Variáveis em `infra/.env` (ADR 0004): `RANKING_MODEL_ENABLED` (kill switch; `false` = só regras), `RANKING_MODEL_PATH` (manifesto JSON gerado por `ml/`), `RANKING_SHADOW_MODE` (`true` = calcula e registra, serve regras), `RANKING_EPSILON` (exploração, 0,05). Rollback de modelo = apontar `RANKING_MODEL_PATH` para o manifesto anterior e reiniciar a API. O servidor recusa manifestos sem `promotion_allowed` ou com features diferentes das suas. `ranking_logs` cresce uma linha por sessão iniciada online; incluir no backup.
+
 ## Backup e restauração
 
 O diretório `infra/scripts` contém comandos versionados de backup e restauração. O backup deve ser armazenado fora da VPS, criptografado e submetido periodicamente a um teste real de restauração em banco descartável.

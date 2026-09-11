@@ -8,6 +8,8 @@ export type ExerciseRendererProps = {
   letter?: string;
   selected?: string;
   onChoose: (answer: string, correct: boolean) => void;
+  /** Primeiro toque útil no exercício, para medir o tempo até a primeira interação. */
+  onInteract?: () => void;
 };
 
 /** Grade de opções: letras, sílabas, palavras ou posições. Palavras longas ganham botões largos. */

@@ -42,7 +42,7 @@ As trilhas temáticas usam estes tipos, todos registrados em `contracts/exercise
 
 Uma unidade temática só abre quando todas as letras de todas as suas palavras e frases já foram dominadas (`required_letters`). A trilha organiza e sugere ordem, mas nunca libera conteúdo. A primeira trilha, `Tem em casa`, tem duas unidades de palavras (`CASA, MESA, CAMA, SALA` e `COPO, PRATO, PORTA, PANELA, TAPETE`) e uma de frases (`EU DURMO NA CAMA`, `O COPO ESTÁ NA MESA`, `EU COMO NO PRATO`, `A SALA É GRANDE`, `A CASA TEM UMA PORTA`), todas restritas às letras das fases 1 e 2 e com status `pending` até a revisão pedagógica.
 
-As atividades de palavra são liberadas somente quando todas as letras da palavra já foram apresentadas. O estado de domínio registra tentativas, acertos, acurácia e próxima revisão.
+As atividades de palavra são liberadas somente quando todas as letras da palavra já foram apresentadas. O domínio é registrado por atividade: cada acerto dobra o intervalo até a próxima revisão (a partir de 4 horas, no máximo 90 dias) e cada erro encurta esse intervalo e devolve a atividade à sessão em até três posições. Uma unidade conta como concluída quando todas as suas atividades foram acertadas no último encontro, e pede revisão quando alguma delas vence.
 
 Depois da base de letras e sílabas, o vocabulário será organizado em trilhas de cotidiano. A primeira proposta é `Tem em casa`, seguida por `Família`, `Esporte`, `Trabalho`, `Saúde`, `Transporte`, `Compras` e `Documentos`. Cada trilha deve reunir palavras, frases curtas, imagens e áudio coerentes com o contexto, sem introduzir letras ou padrões ainda não trabalhados.
 

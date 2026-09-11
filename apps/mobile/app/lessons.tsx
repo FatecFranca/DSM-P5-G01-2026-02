@@ -2,27 +2,30 @@ import { Link } from "expo-router";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { Screen } from "../src/components/Screen";
 import { useContentStore } from "../src/content/store";
-import { isLessonUnlocked } from "../src/domain/learning";
+import { isLessonUnlocked, lessonNeedsReview } from "../src/domain/learning";
 import type { Unit } from "../src/domain/types";
 import { useStudyStore } from "../src/store/study-store";
 import { colors } from "../src/theme";
 
 export default function Lessons() {
   const progress = useStudyStore((state) => state.progress);
+  const itemStates = useStudyStore((state) => state.itemStates);
   const tracks = useContentStore((state) => state.tracks);
-  const stateOf = (unit: Unit) => { const done = progress[unit.id]?.completed === true; return { done, unlocked: done || isLessonUnlocked(unit, progress) }; };
+  const now = new Date();
+  const stateOf = (unit: Unit) => { const done = progress[unit.id]?.completed === true; return { done, unlocked: done || isLessonUnlocked(unit, progress), review: lessonNeedsReview(unit, itemStates, now) }; };
   const tile = (unit: Unit, label: string, big: string) => {
-    const { done, unlocked } = stateOf(unit);
+    const { done, unlocked, review } = stateOf(unit);
+    const state = review ? "Revisar" : done ? "Concluída" : unlocked ? label : "Bloqueada";
     return <Link key={unit.id} href={{ pathname: "/lesson/[id]", params: { id: unit.id } }} asChild>
-      <Pressable disabled={!unlocked} accessibilityRole="button" accessibilityLabel={`${label}${done ? ", concluída" : !unlocked ? ", bloqueada" : ""}`} style={StyleSheet.flatten([styles.tile, unit.kind !== "letter" && styles.wideTile, done && styles.done, !unlocked && styles.locked])}>
-        <Text style={[unit.kind === "letter" ? styles.letter : styles.unitTitle, done && styles.doneText]}>{unlocked ? big : "•"}</Text>
-        <Text style={[styles.state, done && styles.doneText]}>{done ? "Concluída" : unlocked ? label : "Bloqueada"}</Text>
+      <Pressable disabled={!unlocked} accessibilityRole="button" accessibilityLabel={`${label}${review ? ", para revisar" : done ? ", concluída" : !unlocked ? ", bloqueada" : ""}`} style={StyleSheet.flatten([styles.tile, unit.kind !== "letter" && styles.wideTile, done && !review && styles.done, review && styles.review, !unlocked && styles.locked])}>
+        <Text style={[unit.kind === "letter" ? styles.letter : styles.unitTitle, done && !review && styles.doneText]}>{unlocked ? big : "•"}</Text>
+        <Text style={[styles.state, done && !review && styles.doneText]}>{state}</Text>
       </Pressable>
     </Link>;
   };
   return <Screen>
     <Text style={styles.title}>Trilha de aprendizagem</Text>
-    <Text style={styles.intro}>Aprenda em pequenas etapas. Você pode revisar uma letra já praticada.</Text>
+    <Text style={styles.intro}>Aprenda em pequenas etapas. As atividades que você errou voltam na mesma sessão, e as já dominadas pedem revisão de tempos em tempos.</Text>
     {tracks.map((track) => track.kind === "phonics"
       ? [1, 2, 3].map((phase) => {
         const items = track.units.filter((unit) => unit.phase === phase);
@@ -47,6 +50,7 @@ const styles = StyleSheet.create({
   tile: { width: "30%", minWidth: 88, minHeight: 100, borderRadius: 16, borderWidth: 2, borderColor: colors.border, backgroundColor: colors.surface, alignItems: "center", justifyContent: "center", padding: 8 },
   wideTile: { width: "100%" },
   done: { backgroundColor: colors.success, borderColor: colors.success },
+  review: { borderColor: colors.accent, backgroundColor: "#FFF8EA" },
   locked: { opacity: 0.5 },
   letter: { fontSize: 38, fontWeight: "800", color: colors.primary },
   unitTitle: { fontSize: 22, fontWeight: "800", color: colors.primary, textAlign: "center" },

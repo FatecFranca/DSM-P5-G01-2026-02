@@ -15,6 +15,8 @@ class User(Base):
     email: Mapped[str] = mapped_column(String(320), unique=True, index=True)
     password_hash: Mapped[str] = mapped_column(String(255))
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now)
+    # Consentimento de pesquisa separado do cadastro: só tentativas de quem consentiu entram no treino do ranking.
+    research_consent: Mapped[bool] = mapped_column(Boolean, default=False); research_consent_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
 
 
 class AuthSession(Base):
@@ -132,16 +134,42 @@ class Attempt(Base):
     client_attempt_id: Mapped[str] = mapped_column(String(100)); item_id: Mapped[str] = mapped_column(ForeignKey("items.id"), index=True)
     unit_id: Mapped[str | None] = mapped_column(ForeignKey("units.id"), nullable=True); exercise_type: Mapped[str | None] = mapped_column(String(32), nullable=True)
     answer: Mapped[str] = mapped_column(Text); correct: Mapped[bool] = mapped_column(Boolean); duration_ms: Mapped[int] = mapped_column(Integer)
+    # Contexto de sessão (docs/adr/0003): sem ele o replay não distingue "acertou de primeira" de "acertou na terceira".
+    session_id: Mapped[str | None] = mapped_column(String(64), nullable=True); position_in_session: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    attempt_index_in_item: Mapped[int | None] = mapped_column(Integer, nullable=True); audio_repeats: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    time_to_first_interaction_ms: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    served_by: Mapped[str | None] = mapped_column(String(16), nullable=True); served_policy_version: Mapped[str | None] = mapped_column(String(32), nullable=True)
     served_model_version: Mapped[str | None] = mapped_column(String(80), nullable=True); occurred_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
 
 
+class ItemState(Base):
+    """Repetição espaçada por item; espelha apps/mobile/src/domain/scheduler.ts. A meia-vida é o que o ranking vai prever."""
+    __tablename__ = "item_states"; __table_args__ = (UniqueConstraint("user_id", "item_id", name="uq_item_states_user_item"),)
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=uid); user_id: Mapped[str] = mapped_column(ForeignKey("users.id"), index=True)
+    item_id: Mapped[str] = mapped_column(ForeignKey("items.id")); unit_id: Mapped[str | None] = mapped_column(ForeignKey("units.id"), nullable=True)
+    strength: Mapped[int] = mapped_column(Integer, default=0); half_life_hours: Mapped[float] = mapped_column(Float, default=4); due_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+    reps: Mapped[int] = mapped_column(Integer, default=0); lapses: Mapped[int] = mapped_column(Integer, default=0); consecutive_correct: Mapped[int] = mapped_column(Integer, default=0)
+    last_result: Mapped[bool] = mapped_column(Boolean, default=False); last_seen_at: Mapped[datetime] = mapped_column(DateTime(timezone=True)); updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+
+
 class Progress(Base):
+    """Resumo por unidade, derivado dos item_states quando eles existem; o evento `progress` do app continua aceito."""
     __tablename__ = "progress"; __table_args__ = (UniqueConstraint("user_id", "unit_id"),)
     id: Mapped[str] = mapped_column(String(36), primary_key=True, default=uid); user_id: Mapped[str] = mapped_column(ForeignKey("users.id"), index=True)
     unit_id: Mapped[str] = mapped_column(ForeignKey("units.id")); status: Mapped[str] = mapped_column(String(20)); completed_exercises: Mapped[int] = mapped_column(Integer); completed_types: Mapped[list | None] = mapped_column(JSON, nullable=True)
     attempts: Mapped[int] = mapped_column(Integer, default=0); correct_attempts: Mapped[int] = mapped_column(Integer, default=0); accuracy: Mapped[float | None] = mapped_column(Float, nullable=True)
     review_count: Mapped[int] = mapped_column(Integer, default=0); last_practiced_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True); next_review_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
     updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
+
+
+class RankingLog(Base):
+    """Toda resposta de /v1/ranking/next; sem este registro não há análise off-policy (docs/adr/0004)."""
+    __tablename__ = "ranking_logs"
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=uid); user_id: Mapped[str] = mapped_column(ForeignKey("users.id"), index=True)
+    session_id: Mapped[str] = mapped_column(String(64)); unit_id: Mapped[str | None] = mapped_column(String(64), nullable=True)
+    candidate_item_ids: Mapped[list] = mapped_column(JSON); scores: Mapped[list] = mapped_column(JSON)
+    source: Mapped[str] = mapped_column(String(16)); model_version: Mapped[str | None] = mapped_column(String(80), nullable=True); policy_version: Mapped[str] = mapped_column(String(32))
+    served_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now)
 
 
 class SyncEvent(Base):

@@ -1,9 +1,8 @@
 import Constants from "expo-constants";
-import type { SyncEvent } from "../domain/types";
-import type { LessonProgress } from "../domain/types";
+import type { ItemState, LessonProgress, SyncEvent } from "../domain/types";
 import { canonicalLessonId } from "../domain/content-ids";
 import { normalizeExerciseTypes } from "../domain/exercise-types";
-import { parseAcceptedIds, toApiEvent } from "../sync/contract";
+import { parseAcceptedIds, parsePulledItemState, toApiEvent } from "../sync/contract";
 
 const apiUrl = String(Constants.expoConfig?.extra?.apiUrl ?? "http://10.0.2.2:8000");
 export type AuthTokens = { accessToken: string; refreshToken: string };
@@ -27,16 +26,31 @@ export async function pushEvents(events: SyncEvent[], accessToken?: string | nul
   return { acceptedIds: parseAcceptedIds(await response.json() as { accepted_ids?: string[]; acceptedIds?: string[] }) };
 }
 const pulledStatus = (value: unknown): LessonProgress["status"] => value === "completed" || value === "mastered" ? "mastered" : value === "review" || value === "needs_review" ? value : "learning";
-export async function pullEvents(cursor: string | null, accessToken: string): Promise<{ cursor: string; progress: LessonProgress[] }> {
+export type PulledEvents = { cursor: string; progress: LessonProgress[]; itemStates: ItemState[] };
+export async function pullEvents(cursor: string | null, accessToken: string): Promise<PulledEvents> {
   const response = await fetch(`${apiUrl}/v1/sync/pull${cursor ? `?cursor=${encodeURIComponent(cursor)}` : ""}`, { headers: { Authorization: `Bearer ${accessToken}` } });
   if (!response.ok) throw new Error(`Falha ao receber atualizações (${response.status})`);
   const data = await response.json() as { next_cursor: string | number; events?: Array<{ type: string; occurred_at: string; payload: Record<string, unknown> }> };
-  const progress = (data.events ?? []).filter((event) => event.type === "progress").map(({ payload: p, occurred_at }) => { const count = Number(p.completed_exercises ?? 0); const completedTypes = normalizeExerciseTypes(p.completed_types); return { lessonId: canonicalLessonId(String(p.unit_id ?? p.lesson_id)), completedTypes, score: count, completed: p.status === "completed" || p.status === "mastered", status: pulledStatus(p.status), attempts: Number(p.attempts ?? 0), correctAttempts: Number(p.correct_attempts ?? 0), accuracy: typeof p.accuracy === "number" ? p.accuracy : undefined, reviewCount: Number(p.review_count ?? 0), lastPracticedAt: typeof p.last_practiced_at === "string" ? p.last_practiced_at : undefined, nextReviewAt: typeof p.next_review_at === "string" ? p.next_review_at : undefined, updatedAt: occurred_at }; });
-  return { cursor: String(data.next_cursor), progress };
+  const events = data.events ?? [];
+  const progress = events.filter((event) => event.type === "progress").map(({ payload: p, occurred_at }) => { const count = Number(p.completed_exercises ?? 0); const completedTypes = normalizeExerciseTypes(p.completed_types); return { lessonId: canonicalLessonId(String(p.unit_id ?? p.lesson_id)), completedTypes, score: count, completed: p.status === "completed" || p.status === "mastered", status: pulledStatus(p.status), attempts: Number(p.attempts ?? 0), correctAttempts: Number(p.correct_attempts ?? 0), accuracy: typeof p.accuracy === "number" ? p.accuracy : undefined, reviewCount: Number(p.review_count ?? 0), lastPracticedAt: typeof p.last_practiced_at === "string" ? p.last_practiced_at : undefined, nextReviewAt: typeof p.next_review_at === "string" ? p.next_review_at : undefined, updatedAt: occurred_at }; });
+  const itemStates = events.filter((event) => event.type === "item_state").map(({ payload, occurred_at }) => parsePulledItemState(payload, occurred_at)).filter((state): state is ItemState => state !== undefined);
+  return { cursor: String(data.next_cursor), progress, itemStates };
 }
 export async function fetchContent(etag: string | null): Promise<{ notModified: true } | { notModified: false; bundle: unknown; etag: string | null }> {
   const response = await fetch(`${apiUrl}/v1/content`, { headers: etag ? { "If-None-Match": etag } : {} });
   if (response.status === 304) return { notModified: true };
   if (!response.ok) throw new Error(`Falha ao baixar conteúdo (${response.status})`);
   return { notModified: false, bundle: await response.json() as unknown, etag: response.headers.get("etag") };
+}
+
+/** Resposta de POST /v1/ranking/next (docs/adr/0004). O ranking só reordena; a sessão local continua válida sem ele. */
+export type RankingResponse = { request_id: string; source: "model" | "rules-fallback"; model_version: string | null; policy_version: string; items: Array<{ item_id: string; rank: number; source: string; reason: string }> };
+export async function rankNext(body: { session_id: string; unit_id: string; candidate_item_ids: string[]; session_size: number }, accessToken: string, timeoutMs = 1500): Promise<RankingResponse> {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  try {
+    const response = await fetch(`${apiUrl}/v1/ranking/next`, { method: "POST", headers: { "Content-Type": "application/json", Authorization: `Bearer ${accessToken}` }, body: JSON.stringify(body), signal: controller.signal });
+    if (!response.ok) throw new Error(`Falha ao ordenar a sessão (${response.status})`);
+    return await response.json() as RankingResponse;
+  } finally { clearTimeout(timer); }
 }

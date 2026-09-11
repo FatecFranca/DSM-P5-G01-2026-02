@@ -15,7 +15,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, confusion_matrix, precision_recall_fscore_support
 from sklearn.model_selection import GroupShuffleSplit
 
-from . import __version__
+from ... import __version__
 from .demo_data import LETTERS, make_demo_dataset
 from .preprocessing import flatten_images
 

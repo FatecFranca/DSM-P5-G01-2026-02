@@ -1,21 +1,34 @@
 import { lessonIdFor } from "./content-ids";
-import { REQUIRED_LETTER_EXERCISE_TYPES, normalizeExerciseTypes } from "./exercise-types";
-import type { ExerciseType, LessonProgress } from "./types";
+import { isDue, isMastered, type ItemState } from "./scheduler";
+import type { LessonProgress, Unit } from "./types";
 
 export type Feedback = { kind: "success" | "try-again" | "incorrect"; title: string; message: string };
 
-export function nextProgress(current: LessonProgress | undefined, type: ExerciseType, correct: boolean, requiredTypes: readonly ExerciseType[] = REQUIRED_LETTER_EXERCISE_TYPES): LessonProgress {
-  const completedTypes = normalizeExerciseTypes(current?.completedTypes);
-  const updated = correct && !completedTypes.includes(type) ? [...completedTypes, type] : completedTypes;
-  const now = new Date();
-  const attempts = (current?.attempts ?? 0) + 1;
-  const correctAttempts = (current?.correctAttempts ?? 0) + (correct ? 1 : 0);
-  const completed = requiredTypes.every((item) => updated.includes(item));
-  const nextReviewAt = completed ? new Date(now.getTime() + 24 * 60 * 60 * 1000).toISOString() : current?.nextReviewAt;
-  return { lessonId: current?.lessonId ?? "current", completedTypes: updated, score: updated.length, completed, status: completed ? "mastered" : "learning", attempts, correctAttempts, reviewCount: current?.reviewCount ?? 0, accuracy: correctAttempts / attempts, lastPracticedAt: now.toISOString(), nextReviewAt, updatedAt: now.toISOString() };
-}
-
 type ProgressMap = Record<string, { completed?: boolean } | undefined>;
+type StateMap = Record<string, ItemState | undefined>;
+
+/**
+ * O progresso da unidade é um resumo derivado dos estados por item: concluída quando todo item foi acertado no
+ * último encontro; `needs_review` quando concluída e algum item venceu. `reviewCount` é herdado e incrementado
+ * pelo chamador ao fechar uma sessão de revisão.
+ */
+export function deriveProgress(unit: Unit, states: StateMap, now: Date, current?: LessonProgress): LessonProgress {
+  const known = unit.exercises.map((exercise) => ({ exercise, state: states[exercise.id] })).filter((entry): entry is { exercise: Unit["exercises"][number]; state: ItemState } => entry.state !== undefined);
+  const mastered = known.filter(({ state }) => isMastered(state));
+  const completed = unit.exercises.length > 0 && mastered.length === unit.exercises.length;
+  const due = mastered.some(({ state }) => isDue(state, now));
+  const attempts = known.reduce((total, { state }) => total + state.reps, 0);
+  const correctAttempts = known.reduce((total, { state }) => total + state.reps - state.lapses, 0);
+  const completedTypes = [...new Set(mastered.map(({ exercise }) => exercise.type))];
+  const lastPracticedAt = known.map(({ state }) => state.lastSeenAt).sort().at(-1);
+  const nextReviewAt = mastered.map(({ state }) => state.dueAt).sort()[0];
+  return {
+    lessonId: unit.id, completedTypes, score: completedTypes.length, completed,
+    status: completed ? (due ? "needs_review" : "mastered") : known.length ? "learning" : "available",
+    attempts, correctAttempts, accuracy: attempts ? correctAttempts / attempts : undefined,
+    reviewCount: current?.reviewCount ?? 0, lastPracticedAt, nextReviewAt, updatedAt: now.toISOString(),
+  };
+}
 
 /** Uma letra conta como apresentada quando sua unidade foi concluída. */
 export const isLetterPresented = (letter: string, progress: ProgressMap): boolean => progress[lessonIdFor(letter)]?.completed === true;
@@ -28,6 +41,7 @@ export function isLessonUnlocked(lesson: { prerequisiteLetters: string[] }, prog
   return lesson.prerequisiteLetters.every((letter) => isLetterPresented(letter, progress));
 }
 
-export function lessonNeedsReview(progress: LessonProgress | undefined, now = new Date()): boolean {
-  return Boolean(progress?.completed && progress.nextReviewAt && Date.parse(progress.nextReviewAt) <= now.getTime());
-}
+/** Itens da unidade já vistos e vencidos: o que a sessão de revisão precisa cobrir. */
+export const dueItems = (unit: Unit, states: StateMap, now: Date) => unit.exercises.filter((exercise) => { const state = states[exercise.id]; return state !== undefined && isDue(state, now); });
+
+export const lessonNeedsReview = (unit: Unit, states: StateMap, now: Date): boolean => dueItems(unit, states, now).length > 0;

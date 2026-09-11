@@ -6,10 +6,13 @@ type AudioButtonProps = {
   label?: string;
   text: string;
   compact?: boolean;
+  /** Chamado a cada reprodução; a lição conta repetições de áudio por item. */
+  onPlay?: () => void;
 };
 
-export function AudioButton({ label = "Ouvir instrução", text, compact = false }: AudioButtonProps) {
+export function AudioButton({ label = "Ouvir instrução", text, compact = false, onPlay }: AudioButtonProps) {
   const speak = async () => {
+    onPlay?.();
     await Speech.stop();
     Speech.speak(text, { language: "pt-BR", rate: 0.85, pitch: 1 });
   };
