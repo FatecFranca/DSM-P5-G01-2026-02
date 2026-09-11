@@ -1,19 +1,19 @@
 # Relatório de validação do MVP
 
-Data da rodada: 15 de setembro de 2026.
+Data da rodada: 16 de setembro de 2026.
 
 ## Resultado automatizado
 
 | Área | Verificação | Resultado |
 |---|---|---|
-| Mobile | Vitest | 7 arquivos e 24 testes aprovados |
+| Mobile | Vitest | 7 arquivos e 26 testes aprovados |
 | Mobile | TypeScript e ESLint | aprovados |
 | Mobile | `expo install --check` | dependências compatíveis |
 | Mobile | export Android | aprovado na rodada de 10 de setembro; o app não embarca áudio, todo som vem do TTS do aparelho |
 | Mobile | bundle semente | `seed-bundle.json` idêntico ao seed da API e aprovado pelo validador do app |
-| API | Pytest | 21 testes aprovados |
-| API | Alembic | upgrade, downgrade e novo upgrade aprovados, incluindo a migração de IDs legados com mesclagem de progresso duplicado |
-| API | seed | 26 lições progressivas, 96 exercícios (ouvir, reconhecer, localizar e completar) e 11 palavras com pré-requisitos; content-lint sem erros |
+| API | Pytest | 24 testes aprovados |
+| API | Alembic | upgrade, downgrade e novo upgrade aprovados, incluindo a migração de IDs legados com mesclagem de progresso duplicado e a migração do modelo de conteúdo (renomes, chaves estrangeiras e sílabas em lista) com dados legados |
+| API | seed | 29 unidades (26 letras + trilha «Tem em casa»), 134 itens em 9 tipos, 18 palavras curadas e 1187 candidatas do corpus fora do bundle; seed idempotente; content-lint sem erros |
 | API | `/v1/content` | `ETag` derivado do conteúdo e resposta `304` confirmados |
 | Contratos | `contracts/*.json` | API e mobile espelham os mesmos tipos, ordem, fases e exceções |
 | API | OpenAPI | endpoints e resposta `accepted_ids` confirmados |
@@ -27,6 +27,7 @@ Data da rodada: 15 de setembro de 2026.
 - cadastro, login, rotação de refresh token, logout e continuidade local da sessão;
 - 26 letras maiúsculas progressivas em três fases, com `G` na segunda, exercícios de reconhecimento/localização/completar e leitura dinâmica dos enunciados por TTS;
 - catálogo servido pela API com cache local e bundle semente para o primeiro boot offline;
+- trilha temática «Tem em casa» com exercícios de sílaba, palavra e frase, liberada pelas letras dominadas e nunca pela trilha;
 - cartões com imagens, áudio das palavras e inserção da letra na lacuna por toque;
 - tentativas, progresso e fila persistidos em SQLite;
 - push/pull com cursor, retry exponencial, resolução determinística e idempotência;

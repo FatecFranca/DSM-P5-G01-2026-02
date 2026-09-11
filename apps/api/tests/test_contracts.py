@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 
-from app.content_types import FIND_IN_WORD_EXEMPT_LETTERS, LEARNING_ORDER, LEGACY_ALIASES, PHASE_SPECS, REQUIRED_LETTER_EXERCISE_TYPES, ExerciseType, normalize_exercise_type, required_types_for
+from app.content_types import FIND_IN_WORD_EXEMPT_LETTERS, LEARNING_ORDER, LEGACY_ALIASES, PHASE_SPECS, RENDERER_OF, REQUIRED_LETTER_EXERCISE_TYPES, TARGET_OF, ExerciseType, normalize_exercise_type, required_types_for
 
 CONTRACTS = Path(__file__).resolve().parents[3] / "contracts"
 
@@ -14,6 +14,9 @@ def test_exercise_types_match_contract():
     contract = load("exercise-types.json")
     assert [item["id"] for item in contract["types"]] == [item.value for item in ExerciseType]
     assert contract["legacy_aliases"] == {key: value.value for key, value in LEGACY_ALIASES.items()}
+    assert {item["id"]: item["target"] for item in contract["types"]} == {key.value: value.value for key, value in TARGET_OF.items()}
+    assert {item["id"]: item["renderer"] for item in contract["types"]} == {key.value: value.value for key, value in RENDERER_OF.items()}
+    assert set(contract["renderers"]) == {value.value for value in RENDERER_OF.values()}
 
 
 def test_pedagogy_matches_contract():
@@ -32,10 +35,10 @@ def test_legacy_type_normalization():
 
 def test_seed_only_emits_contract_types(client):
     content = client.get("/v1/content").json()
-    lessons = [lesson for module in content["modules"] for lesson in module["lessons"]]
-    assert {exercise["type"] for lesson in lessons for exercise in lesson["exercises"]} <= {item.value for item in ExerciseType}
-    for lesson in lessons:
-        assert {item.value for item in required_types_for(lesson["letter"])} <= {exercise["type"] for exercise in lesson["exercises"]}, lesson["letter"]
+    units = [unit for track in content["tracks"] for unit in track["units"]]
+    assert {item["type"] for unit in units for item in unit["items"]} <= {item.value for item in ExerciseType}
+    for unit in (unit for unit in units if unit["kind"] == "letter"):
+        assert {item.value for item in required_types_for(unit["focus_letter"])} <= {item["type"] for item in unit["items"]}, unit["focus_letter"]
 
 
 def test_exercise_id_suffixes_match_contract():

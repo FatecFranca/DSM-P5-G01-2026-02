@@ -1,12 +1,18 @@
 {
-  "$comment": "Fonte única dos tipos de exercício. API (app/content_types.py) e mobile (src/domain/exercise-types.ts) declaram as mesmas constantes; os testes de cada lado falham se divergirem deste arquivo. id_suffix compõe o ID canônico: exercise-<LETRA>-<id_suffix>.",
-  "version": 1,
+  "$comment": "Fonte única dos tipos de exercício. API (app/content_types.py) e mobile (src/domain/exercise-types.ts) declaram as mesmas constantes; os testes de cada lado falham se divergirem deste arquivo. id_suffix compõe o ID canônico dos itens de letra: exercise-<LETRA>-<id_suffix>. renderer é o componente do app que apresenta o tipo.",
+  "version": 2,
   "types": [
-    { "id": "listen_choose", "target": "letter", "id_suffix": "listen", "description": "Ouvir o som e escolher a letra." },
-    { "id": "recognize_letter", "target": "letter", "id_suffix": "recognize", "description": "Encontrar a letra entre opções visuais." },
-    { "id": "find_in_word", "target": "letter", "id_suffix": "find", "description": "Localizar a posição da letra em uma palavra." },
-    { "id": "complete_word", "target": "word", "id_suffix": "complete-word", "description": "Escolher a palavra em que a letra entra." }
+    { "id": "listen_choose", "target": "letter", "id_suffix": "listen", "renderer": "choice", "description": "Ouvir o nome da letra e escolhê-la." },
+    { "id": "recognize_letter", "target": "letter", "id_suffix": "recognize", "renderer": "choice", "description": "Encontrar a letra entre opções visuais." },
+    { "id": "find_in_word", "target": "letter", "id_suffix": "find", "renderer": "choice", "description": "Localizar a posição da letra em uma palavra." },
+    { "id": "syllable_listen_choose", "target": "syllable", "id_suffix": "syllable", "renderer": "choice", "description": "Ouvir a sílaba e escolhê-la; a sílaba é a unidade audível, nunca a consoante isolada." },
+    { "id": "complete_word", "target": "word", "id_suffix": "complete-word", "renderer": "word_choices", "description": "Escolher a palavra em que a letra entra." },
+    { "id": "word_listen_choose", "target": "word", "id_suffix": "word", "renderer": "choice", "description": "Ouvir a palavra e escolhê-la entre outras." },
+    { "id": "word_from_syllables", "target": "word", "id_suffix": "build", "renderer": "order", "description": "Montar a palavra tocando as sílabas na ordem." },
+    { "id": "sentence_fill_word", "target": "sentence", "id_suffix": "fill", "renderer": "choice", "description": "Completar a lacuna da frase com a palavra certa." },
+    { "id": "sentence_order", "target": "sentence", "id_suffix": "order", "renderer": "order", "description": "Ordenar as palavras para formar a frase." }
   ],
+  "renderers": ["choice", "word_choices", "order"],
   "legacy_aliases": {
     "recognize": "recognize_letter"
   }

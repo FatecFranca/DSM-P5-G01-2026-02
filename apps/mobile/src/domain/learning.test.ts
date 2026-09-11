@@ -29,9 +29,17 @@ describe("aprendizagem respeitosa", () => {
   });
 
   it("libera uma letra somente quando todos os pré-requisitos foram dominados", () => {
-    const lesson = { order: 6, prerequisiteLetters: ["A", "E", "I", "O", "U"] };
+    const lesson = { prerequisiteLetters: ["A", "E", "I", "O", "U"] };
     const complete = Object.fromEntries(lesson.prerequisiteLetters.map((letter) => [lessonIdFor(letter), { completed: true }]));
+    expect(isLessonUnlocked({ prerequisiteLetters: [] }, {})).toBe(true);
     expect(isLessonUnlocked(lesson, complete)).toBe(true);
     expect(isLessonUnlocked(lesson, { ...complete, [lessonIdFor("U")]: { completed: false } })).toBe(false);
+  });
+
+  it("libera uma unidade temática pelas letras, nunca pela trilha", () => {
+    const casa = { prerequisiteLetters: ["A", "E", "M", "L", "S", "C"] };
+    const letters = (list: string) => Object.fromEntries([...list].map((letter) => [lessonIdFor(letter), { completed: true }]));
+    expect(isLessonUnlocked(casa, letters("AEIOUML"))).toBe(false);
+    expect(isLessonUnlocked(casa, letters("AEIOUMLPSTRNDC"))).toBe(true);
   });
 });

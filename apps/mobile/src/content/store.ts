@@ -1,23 +1,23 @@
 import { create } from "zustand";
 import seed from "../../assets/content/seed-bundle.json";
 import { fetchContent } from "../api/client";
-import type { LetterLesson } from "../domain/types";
+import type { Track, Unit } from "../domain/types";
 import { getContentBundle, saveContentBundle } from "../storage/database";
-import { toLessons, validateBundle, type ContentBundle } from "./schema";
+import { toTracks, validateBundle, type ContentBundle } from "./schema";
 
 export type ContentSource = "seed" | "cache" | "server";
-type ContentState = { version: string; source: ContentSource; lessons: LetterLesson[]; setBundle: (bundle: ContentBundle, source: ContentSource) => void };
+type ContentState = { version: string; source: ContentSource; tracks: Track[]; units: Unit[]; setBundle: (bundle: ContentBundle, source: ContentSource) => void };
 
 export const useContentStore = create<ContentState>((set) => ({
-  version: "", source: "seed", lessons: [],
-  setBundle: (bundle, source) => set({ version: bundle.version, source, lessons: toLessons(bundle) }),
+  version: "", source: "seed", tracks: [], units: [],
+  setBundle: (bundle, source) => { const tracks = toTracks(bundle); set({ version: bundle.version, source, tracks, units: tracks.flatMap((track) => track.units) }); },
 }));
 
 /** Bundle embarcado no app; um erro aqui é erro de build, não de runtime. */
 export function seedBundle(): ContentBundle {
   const errors = validateBundle(seed);
   if (errors.length) throw new Error(`Conteúdo embarcado inválido: ${errors.join(" ")}`);
-  return seed as ContentBundle;
+  return seed as unknown as ContentBundle;
 }
 
 /** Primeiro boot funciona sem rede: usa o cache local se válido, senão o bundle embarcado. */
@@ -42,4 +42,4 @@ export async function refreshContent(): Promise<"updated" | "unchanged" | "rejec
   return "updated";
 }
 
-export const requiredTypesOf = (lessonId: string) => useContentStore.getState().lessons.find((lesson) => lesson.id === lessonId)?.exercises.map((exercise) => exercise.type);
+export const requiredTypesOf = (unitId: string) => useContentStore.getState().units.find((unit) => unit.id === unitId)?.exercises.map((exercise) => exercise.type);

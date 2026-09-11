@@ -6,16 +6,19 @@ const client = vi.hoisted(() => ({ fetchContent: vi.fn() }));
 vi.mock("../storage/database", () => database);
 vi.mock("../api/client", () => client);
 
-const { loadContent, refreshContent, useContentStore } = await import("./store");
+const { loadContent, refreshContent, requiredTypesOf, useContentStore } = await import("./store");
 
 describe("carregamento de conteúdo", () => {
-  beforeEach(() => { vi.clearAllMocks(); useContentStore.setState({ version: "", source: "seed", lessons: [] }); });
+  beforeEach(() => { vi.clearAllMocks(); useContentStore.setState({ version: "", source: "seed", tracks: [], units: [] }); });
 
   it("usa o bundle embarcado quando não há cache válido", async () => {
     database.getContentBundle.mockResolvedValue({ version: "x", etag: "\"x\"", payload: { version: "x" } });
     expect(await loadContent()).toBe("seed");
-    expect(useContentStore.getState().lessons).toHaveLength(26);
+    expect(useContentStore.getState().tracks).toHaveLength(2);
+    expect(useContentStore.getState().units).toHaveLength(29);
     expect(useContentStore.getState().version).toBe(seed.version);
+    expect(requiredTypesOf("lesson-A")).toEqual(["listen_choose", "recognize_letter"]);
+    expect(requiredTypesOf("inexistente")).toBeUndefined();
   });
 
   it("prefere o cache local válido e envia seu ETag ao atualizar", async () => {
@@ -30,7 +33,7 @@ describe("carregamento de conteúdo", () => {
     database.getContentBundle.mockResolvedValue(undefined);
     await loadContent();
     const warn = vi.spyOn(console, "warn").mockImplementation(() => undefined);
-    client.fetchContent.mockResolvedValue({ notModified: false, bundle: { version: "v2", learning_order: "ABC", modules: [] }, etag: "\"v2\"" });
+    client.fetchContent.mockResolvedValue({ notModified: false, bundle: { version: "v2", learning_order: "ABC", tracks: [] }, etag: "\"v2\"" });
     expect(await refreshContent()).toBe("rejected");
     expect(database.saveContentBundle).not.toHaveBeenCalled();
     expect(useContentStore.getState().source).toBe("seed");

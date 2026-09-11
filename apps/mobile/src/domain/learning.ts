@@ -15,8 +15,17 @@ export function nextProgress(current: LessonProgress | undefined, type: Exercise
   return { lessonId: current?.lessonId ?? "current", completedTypes: updated, score: updated.length, completed, status: completed ? "mastered" : "learning", attempts, correctAttempts, reviewCount: current?.reviewCount ?? 0, accuracy: correctAttempts / attempts, lastPracticedAt: now.toISOString(), nextReviewAt, updatedAt: now.toISOString() };
 }
 
-export function isLessonUnlocked(lesson: { order: number; prerequisiteLetters: string[] }, progress: Record<string, { completed?: boolean } | undefined>): boolean {
-  return lesson.order === 1 || lesson.prerequisiteLetters.every((letter) => progress[lessonIdFor(letter)]?.completed === true);
+type ProgressMap = Record<string, { completed?: boolean } | undefined>;
+
+/** Uma letra conta como apresentada quando sua unidade foi concluída. */
+export const isLetterPresented = (letter: string, progress: ProgressMap): boolean => progress[lessonIdFor(letter)]?.completed === true;
+
+/**
+ * Portão pedagógico único para letras e trilhas temáticas: toda letra pré-requisito precisa estar dominada.
+ * A unidade sem pré-requisitos (a letra A) está sempre liberada; a trilha temática nunca libera nada por si.
+ */
+export function isLessonUnlocked(lesson: { prerequisiteLetters: string[] }, progress: ProgressMap): boolean {
+  return lesson.prerequisiteLetters.every((letter) => isLetterPresented(letter, progress));
 }
 
 export function lessonNeedsReview(progress: LessonProgress | undefined, now = new Date()): boolean {

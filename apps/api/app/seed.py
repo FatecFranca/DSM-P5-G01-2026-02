@@ -1,120 +1,175 @@
-import unicodedata
+"""Sincroniza o banco com o catálogo curado de content_data.py. Idempotente: cria, atualiza e aposenta.
+
+Itens que saem do catálogo viram `retired` em vez de apagados, porque tentativas e progresso os referenciam.
+Palavras do banco de candidatos (app/data/word_bank.json) entram como `candidate` e nunca geram exercício sozinhas.
+"""
+import json
+import uuid
 from sqlalchemy import select
-from .content_ids import exercise_id_for, lesson_id_for
-from .content_types import EXERCISE_ID_SUFFIX, LEARNING_ORDER, PHASE_SPECS, ExerciseType
+from .content import content_body, content_checksum
+from .content_data import ACCENTS, CONTEXT_WORDS, SENTENCES, TRACKS, WORDS, WORD_CHOICES, deterministic_shuffle, required_letters, syllable_exercise, syllable_pattern
+from .content_ids import exercise_id_for, item_id_for, lesson_id_for
+from .content_types import LEARNING_ORDER, PHASE_SPECS, TARGET_OF, ExerciseType
 from .db import SessionLocal
-from .models import Exercise, Lesson, Module, Word
-from .word_bank import load_word_bank
+from .models import ContentVersion, Item, Sentence, Syllable, Track, Unit, Word, WordTrack
+from .word_bank import WORD_BANK_PATH
 
 LETTERS = LEARNING_ORDER
 PHASES = {letter: (phase, title) for phase, title, letters in PHASE_SPECS for letter in letters}
-# Núcleo pedagógico curado; prevalece sobre o corpus quando houver conflito.
-CURATED_WORDS = [
-    ("MALA", "MA-LA", "facil"), ("MAMA", "MA-MA", "facil"), ("MESA", "ME-SA", "facil"), ("SALA", "SA-LA", "facil"),
-    ("PATO", "PA-TO", "facil"), ("RUA", "RU-A", "facil"), ("NOME", "NO-ME", "facil"), ("GATO", "GA-TO", "facil"),
-    ("CASA", "CA-SA", "facil"), ("PIPA", "PI-PA", "facil"), ("DADO", "DA-DO", "facil"), ("DATA", "DA-TA", "facil"),
-    ("CAMA", "CA-MA", "facil"), ("LATA", "LA-TA", "facil"), ("SAPO", "SA-PO", "facil"), ("RATO", "RA-TO", "facil"),
-    ("BOLA", "BO-LA", "facil"), ("BALA", "BA-LA", "facil"), ("FACA", "FA-CA", "facil"), ("VACA", "VA-CA", "facil"),
-    ("FILA", "FI-LA", "facil"), ("HORA", "HO-RA", "facil"), ("JOGO", "JO-GO", "facil"), ("ZERO", "ZE-RO", "facil"),
-    ("XALE", "XA-LE", "facil"), ("YOGA", "YO-GA", "facil"), ("QUILO", "QUI-LO", "medio"), ("KARATE", "KA-RA-TE", "medio"),
-    ("WIFI", "WI-FI", "medio"), ("ÔNIBUS", "Ô-NI-BUS", "medio"), ("SAÚDE", "SA-Ú-DE", "medio"), ("ÁGUA", "Á-GUA", "medio"),
-    ("PAÍS", "PA-ÍS", "medio"), ("TRABALHO", "TRA-BA-LHO", "dificil"),
-]
-WORDS = CURATED_WORDS
-# find_in_word: a palavra de contexto só usa letras já apresentadas (PEDAGOGICAL_CONTRACT.md:23).
-# I, O, U, M e P foram trocadas em 2026-09-15 por violarem essa regra; revisão pedagógica pendente.
-CONTEXT_WORDS = {"I": "AI", "O": "OI", "U": "EU", "M": "MEU", "L": "MALA", "P": "MAPA", "S": "SALA", "T": "PATO", "R": "RUA", "N": "NOME", "D": "DADO", "C": "CASA", "G": "GATO", "B": "BOLA", "F": "FACA", "V": "VACA", "H": "HORA", "Q": "QUILO", "J": "JOGO", "K": "KARATE", "Z": "ZERO", "X": "XALE", "W": "WIFI", "Y": "YOGA"}
-# complete_word: (palavra correta, índice da lacuna) e (distrator, índice da lacuna). A lacuna do distrator é de outra letra
-# já aprendida e o distrator não contém a letra-alvo. Vogais e M não têm par válido. Revisão pedagógica pendente.
-WORD_CHOICES = {
-    "L": (("MALA", 2), ("UMA", 0)), "P": (("PIPA", 0), ("LAMA", 0)), "S": (("SAPO", 0), ("PIPA", 0)), "T": (("TATU", 0), ("LAMA", 0)),
-    "R": (("RATO", 0), ("TATU", 0)), "N": (("NOME", 0), ("MOLA", 0)), "D": (("DADO", 0), ("NOME", 0)), "C": (("CASA", 0), ("DADO", 0)),
-    "G": (("GATO", 0), ("SAPO", 0)), "B": (("BOLA", 0), ("CASA", 0)), "F": (("FACA", 0), ("BOLA", 0)), "V": (("VACA", 0), ("GATO", 0)),
-    "H": (("HORA", 0), ("TATU", 0)), "Q": (("QUILO", 0), ("BOLA", 0)), "J": (("JOGO", 0), ("DADO", 0)), "K": (("KARATE", 0), ("GATO", 0)),
-    "Z": (("ZERO", 0), ("NOME", 0)), "X": (("XALE", 0), ("SALA", 0)), "W": (("WIFI", 0), ("PIPA", 0)), "Y": (("YOGA", 0), ("JOGO", 0)),
-}
+CURATED_STATUSES = ("pending", "approved")
 
-def required_letters(text: str) -> str:
-    normalized = "".join(character for character in unicodedata.normalize("NFD", text.upper()) if unicodedata.category(character) != "Mn")
-    return "".join(letter for letter in LETTERS if letter in normalized)
 
 def word_choice(word: str, blank: int) -> dict:
     return {"id": word.lower(), "word": word, "before": word[:blank], "after": word[blank + 1:]}
 
-def catalog_words() -> list[tuple[str, str, str, float, str]]:
-    """Corpus filtrado + núcleo curado (curado vence em sílabas/dificuldade)."""
-    merged: dict[str, tuple[str, str, str, float, str]] = {}
-    for item in load_word_bank():
-        merged[item["text"]] = (item["text"], item["syllables"], item["difficulty"], float(item["frequency"]), "corpus-bootstrap-1")
-    for text, syllables, difficulty in CURATED_WORDS:
-        frequency = merged.get(text, (None, None, None, 0.85, None))[3]
-        merged[text] = (text, syllables, difficulty, frequency, "bootstrap-1")
-    return list(merged.values())
 
-def exercise_specs(letter: str):
-    """(tipo, enunciado, resposta, opções, palavra de contexto, opções de palavra) de cada exercício da lição."""
+def letter_item_specs(letter: str) -> list[dict]:
+    """Itens de uma unidade de letra, na ordem de apresentação."""
     index = LETTERS.index(letter)
     options = [letter, LETTERS[(index + 1) % 26], LETTERS[(index + 2) % 26]]
-    specs = [(ExerciseType.LISTEN_CHOOSE, f"Ouça e escolha a letra {letter}.", letter, options, None, None),
-             (ExerciseType.RECOGNIZE_LETTER, f"Encontre a letra {letter}.", letter, options[::-1], None, None)]
+    specs = [dict(type=ExerciseType.LISTEN_CHOOSE, instruction=f"Ouça e escolha a letra {letter}.", answer=letter, options=options, tts=f"Ouça e escolha a letra {letter}."),
+             dict(type=ExerciseType.RECOGNIZE_LETTER, instruction=f"Encontre a letra {letter}.", answer=letter, options=options[::-1], tts=f"Encontre a letra {letter}.")]
     if word := CONTEXT_WORDS.get(letter):
-        specs.append((ExerciseType.FIND_IN_WORD, f"Onde aparece primeiro a letra {letter} na palavra {word}?", f"{word.index(letter) + 1}ª posição", [f"{item + 1}ª posição" for item in range(len(word))], word, None))
+        specs.append(dict(type=ExerciseType.FIND_IN_WORD, instruction=f"Onde aparece primeiro a letra {letter} na palavra {word}?", answer=f"{word.index(letter) + 1}ª posição",
+                          options=[f"{item + 1}ª posição" for item in range(len(word))], context_word=word, tts=f"Onde aparece primeiro a letra {letter} na palavra {word}?"))
+    if syllable := syllable_exercise(letter):
+        target, options = syllable
+        specs.append(dict(type=ExerciseType.SYLLABLE_LISTEN_CHOOSE, instruction="Ouça e escolha a sílaba.", answer=target, options=options, target_id=target, tts=target))
     if letter in WORD_CHOICES:
         (correct, correct_blank), (distractor, distractor_blank) = WORD_CHOICES[letter]
         choices = [word_choice(correct, correct_blank), word_choice(distractor, distractor_blank)]
         # Alterna a posição da resposta para que ela não fique sempre em primeiro.
-        specs.append((ExerciseType.COMPLETE_WORD, f"Em qual palavra entra a letra {letter}?", correct.lower(), None, None, choices[::-1] if index % 2 else choices))
+        specs.append(dict(type=ExerciseType.COMPLETE_WORD, instruction=f"Em qual palavra entra a letra {letter}?", answer=correct.lower(), word_choices=choices[::-1] if index % 2 else choices, target_id=correct, tts=f"Em qual palavra entra a letra {letter}?"))
     return specs
 
+
+def word_unit_item_specs(words: list[str], syllables_of: dict[str, list[str]]) -> list[dict]:
+    specs = []
+    for position, word in enumerate(words):
+        others = [other for other in words if other != word]
+        distractors = (others[position:] + others[:position])[:2]
+        options = sorted([word, *distractors])
+        specs.append(dict(type=ExerciseType.WORD_LISTEN_CHOOSE, instruction="Ouça e escolha a palavra.", answer=word, options=options, target_id=word, tts=word, required=word))
+        parts = syllables_of[word]
+        specs.append(dict(type=ExerciseType.WORD_FROM_SYLLABLES, instruction=f"Monte a palavra {word} tocando as sílabas na ordem.", answer="-".join(parts), payload={"tokens": deterministic_shuffle(parts)}, target_id=word, tts=word, required=word))
+    return specs
+
+
+def sentence_unit_item_specs(sentence_ids: list[str], sentences: dict[str, dict]) -> list[dict]:
+    specs = []
+    for sentence_id in sentence_ids:
+        sentence = sentences[sentence_id]
+        text = sentence["text"]
+        if blank := sentence.get("blank"):
+            gapped = text.replace(blank, "___", 1)
+            specs.append(dict(type=ExerciseType.SENTENCE_FILL_WORD, instruction=f"Complete a frase: {gapped}.", answer=blank, options=sorted([blank, *sentence["distractors"]]), payload={"sentence": gapped, "blank": blank}, target_id=sentence_id, tts=text, required=text))
+        if sentence.get("order"):
+            tokens = text.split(" ")
+            specs.append(dict(type=ExerciseType.SENTENCE_ORDER, instruction="Toque nas palavras na ordem para formar a frase.", answer=text, payload={"tokens": deterministic_shuffle(tokens)}, target_id=sentence_id, tts=text, required=text))
+    return specs
+
+
+def upsert_items(db, unit: Unit, specs: list[dict], id_of, required_default: str) -> None:
+    wanted = set()
+    for position, spec in enumerate(specs, 1):
+        item_id = id_of(spec, position)
+        item = db.get(Item, item_id) or Item(id=item_id)
+        kind = spec["type"]
+        item.unit_id, item.type, item.item_kind, item.position = unit.id, kind.value, TARGET_OF[kind].value, position
+        item.instruction, item.answer, item.options, item.context_word, item.word_choices, item.payload = spec["instruction"], spec["answer"], spec.get("options"), spec.get("context_word"), spec.get("word_choices"), spec.get("payload")
+        item.target_id, item.tts_fallback_text, item.audio_asset = spec.get("target_id"), spec["tts"], None
+        item.required_letters = required_letters(spec["required"]) if "required" in spec else required_default
+        if item.review_status == "retired": item.review_status = "pending"
+        db.add(item); wanted.add(item_id)
+    for stale in db.scalars(select(Item).where(Item.unit_id == unit.id, Item.id.not_in(wanted))).all():
+        stale.review_status = "retired"
+
+
+def upsert_word(db, words: dict[str, Word], text: str, **fields) -> Word:
+    word = words.get(text)
+    if not word:
+        # ID determinístico: o bundle exportado e o ETag não podem mudar a cada seed.
+        word = words[text] = Word(id=str(uuid.uuid5(uuid.NAMESPACE_URL, f"alfabetiza:word:{text}")), text=text); db.add(word)
+    for name, value in fields.items():
+        if value is not None: setattr(word, name, value)
+    word.required_letters, word.accented, word.length = required_letters(text), any(c in ACCENTS for c in text), len(text)
+    return word
+
+
+def upsert_syllable(db, text: str) -> None:
+    syllable = db.get(Syllable, text) or Syllable(id=text)
+    letters = required_letters(text)
+    syllable.text, syllable.pattern, syllable.required_letters = text, syllable_pattern(text), letters
+    syllable.position = max((LETTERS.index(letter) for letter in letters), default=0)
+    db.add(syllable)
+
+
 def seed_content():
-    """Sincroniza o banco com o catálogo declarado aqui: cria, atualiza e remove exercícios obsoletos. Idempotente."""
     with SessionLocal() as db:
-        module = db.get(Module, "alphabet") or Module(id="alphabet")
-        module.title, module.position = "Alfabeto", 1
-        db.add(module)
-        for position, letter in enumerate(LETTERS, 1):
-            lesson = db.get(Lesson, lesson_id_for(letter)) or Lesson(id=lesson_id_for(letter))
-            lesson.module_id, lesson.letter, lesson.title, lesson.position = module.id, letter, f"Letra {letter}", position
-            lesson.phase, lesson.phase_title = PHASES[letter]
-            db.add(lesson)
-            wanted = set()
-            for order, (kind, instruction, answer, options, context_word, word_choices) in enumerate(exercise_specs(letter), 1):
-                exercise = db.get(Exercise, exercise_id_for(letter, kind)) or Exercise(id=exercise_id_for(letter, kind))
-                exercise.lesson_id, exercise.type, exercise.instruction, exercise.answer, exercise.position = lesson.id, kind.value, instruction, answer, order
-                exercise.options, exercise.context_word, exercise.word_choices = options, context_word, word_choices
-                exercise.audio_asset = f"audio/letters/{letter.lower()}-{EXERCISE_ID_SUFFIX[kind]}.mp3"
-                db.add(exercise)
-                wanted.add(exercise.id)
-            for stale in db.scalars(select(Exercise).where(Exercise.lesson_id == lesson.id, Exercise.id.not_in(wanted))).all():
-                db.delete(stale)
         words = {word.text: word for word in db.scalars(select(Word)).all()}
-        wanted_texts = set()
-        for text, syllables, difficulty, frequency, classifier_version in catalog_words():
-            wanted_texts.add(text)
-            if text not in words:
-                words[text] = Word(
-                    text=text,
-                    syllables=syllables,
-                    frequency=frequency,
-                    initial_difficulty=difficulty,
-                    current_difficulty=difficulty,
-                    classifier_version=classifier_version,
-                    accented=any(c in "ÁÉÍÓÚÂÊÔÃÕÇ" for c in text),
-                    length=len(text),
-                    required_letters=required_letters(text),
-                )
-                db.add(words[text])
-            words[text].syllables = syllables
-            words[text].frequency = frequency
-            words[text].initial_difficulty = difficulty
-            words[text].current_difficulty = difficulty
-            words[text].classifier_version = classifier_version
-        for stale in [word for text, word in list(words.items()) if text not in wanted_texts]:
-            db.delete(stale)
-        for word in db.scalars(select(Word)).all():
-            word.required_letters = required_letters(word.text)
-            word.accented = any(c in "ÁÉÍÓÚÂÊÔÃÕÇ" for c in word.text)
-            word.length = len(word.text)
+        for text, syllables, difficulty, rationale in WORDS:
+            word = upsert_word(db, words, text, syllables=syllables, initial_difficulty=difficulty, difficulty_rationale=rationale, source="curadoria")
+            if word.review_status not in CURATED_STATUSES: word.review_status, word.current_difficulty = "pending", difficulty
+        if WORD_BANK_PATH.exists():
+            for entry in json.loads(WORD_BANK_PATH.read_text(encoding="utf-8")):
+                curated = entry["text"] in words
+                word = upsert_word(db, words, entry["text"], frequency=entry.get("frequency"), raw_frequency=entry.get("raw_frequency"), frequency_source=entry.get("source"))
+                if not curated:
+                    word.syllables, word.initial_difficulty, word.current_difficulty, word.source = entry["syllables"].split("-"), entry["difficulty"], entry["difficulty"], entry.get("source")
+                    if word.review_status not in CURATED_STATUSES: word.review_status = "candidate"
+        db.flush()
+        syllables_of = {word.text: list(word.syllables or []) for word in words.values()}
+        for text, *_ in WORDS:
+            for part in syllables_of[text]: upsert_syllable(db, part)
+
+        alphabet = db.get(Track, "alphabet") or Track(id="alphabet")
+        alphabet.slug, alphabet.title, alphabet.kind, alphabet.position, alphabet.description = "alfabeto", "Alfabeto", "phonics", 1, "As 26 letras em ordem progressiva."
+        db.add(alphabet)
+        for position, letter in enumerate(LETTERS, 1):
+            unit = db.get(Unit, lesson_id_for(letter)) or Unit(id=lesson_id_for(letter))
+            unit.track_id, unit.kind, unit.focus_letter, unit.title, unit.position = alphabet.id, "letter", letter, f"Letra {letter}", position
+            unit.phase, unit.phase_title = PHASES[letter]
+            unit.required_letters = LETTERS[: position - 1]
+            db.add(unit)
+            specs = letter_item_specs(letter)
+            for spec in specs:
+                if spec["type"] is ExerciseType.SYLLABLE_LISTEN_CHOOSE:
+                    for option in spec["options"]: upsert_syllable(db, option)
+            upsert_items(db, unit, specs, lambda spec, _position: exercise_id_for(letter, spec["type"]), unit.required_letters)
+
+        sentences = {sentence["id"]: sentence for sentence in SENTENCES}
+        for spec in TRACKS:
+            track = db.get(Track, spec["id"]) or Track(id=spec["id"])
+            track.slug, track.title, track.kind, track.position, track.description = spec["slug"], spec["title"], spec["kind"], spec["position"], spec.get("description")
+            db.add(track)
+            for position, unit_spec in enumerate(spec["units"], 1):
+                unit = db.get(Unit, unit_spec["id"]) or Unit(id=unit_spec["id"])
+                unit.track_id, unit.kind, unit.title, unit.position, unit.focus_letter, unit.phase, unit.phase_title = track.id, unit_spec["kind"], unit_spec["title"], position, None, None, None
+                db.add(unit)
+                if unit_spec["kind"] == "word":
+                    for word_position, text in enumerate(unit_spec["words"], 1):
+                        link = db.get(WordTrack, (words[text].id, track.id)) or WordTrack(word_id=words[text].id, track_id=track.id)
+                        link.position = word_position; db.add(link)
+                    item_specs = word_unit_item_specs(unit_spec["words"], syllables_of)
+                    unit.required_letters = required_letters("".join(unit_spec["words"]))
+                else:
+                    for sentence_id in unit_spec["sentences"]:
+                        data = sentences[sentence_id]
+                        sentence = db.get(Sentence, sentence_id) or Sentence(id=sentence_id)
+                        tokens = data["text"].split(" ")
+                        sentence.text, sentence.track_id, sentence.word_count, sentence.required_letters = data["text"], track.id, len(tokens), required_letters(data["text"])
+                        sentence.required_word_ids = [words[token].id for token in tokens if token in words]
+                        db.add(sentence)
+                    item_specs = sentence_unit_item_specs(unit_spec["sentences"], sentences)
+                    unit.required_letters = required_letters("".join(sentences[sentence_id]["text"] for sentence_id in unit_spec["sentences"]))
+                upsert_items(db, unit, item_specs, lambda _spec, position, unit_id=unit.id: item_id_for(unit_id, position), unit.required_letters)
         db.commit()
+
+        body = content_body(db)
+        checksum = content_checksum(body)
+        latest = db.scalar(select(ContentVersion).order_by(ContentVersion.id.desc()))
+        if not latest or latest.checksum != checksum:
+            db.add(ContentVersion(version=checksum[:16], checksum=checksum, notes="seed")); db.commit()
+
 
 if __name__ == "__main__": seed_content()

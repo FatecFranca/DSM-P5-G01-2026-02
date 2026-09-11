@@ -29,6 +29,19 @@ Regras verificadas automaticamente pelo content-lint da API e pelo validador do 
 
 Exceção registrada em 15 de setembro de 2026: `A` e `E` não têm a atividade de localizar, porque não existe palavra real formada só por `A` ou por `A` e `E`. `I`, `O`, `U`, `M` e `P` tiveram a palavra de contexto trocada (`AI`, `OI`, `EU`, `MEU`, `MAPA`) pelo mesmo motivo, e os pares de `completar` foram definidos na mesma data. Todas essas palavras aguardam revisão pedagógica.
 
+## Sílabas, palavras e frases
+
+A sílaba é a unidade audível. O texto para fala nunca pede o som isolado de uma consoante: nos exercícios de sílaba, palavra e frase o áudio é o próprio alvo (`MA`, `CASA`, `EU DURMO NA CAMA`). Cada consoante com padrão consoante+vogal regular (`M, L, P, S, T, R, N, D, C, G, B, F, V, Z, J`) ganha na própria lição a atividade `ouvir e escolher a sílaba`, sempre com vogais já apresentadas.
+
+As trilhas temáticas usam estes tipos, todos registrados em `contracts/exercise-types.json`:
+
+- `ouvir e escolher a palavra` (`word_listen_choose`);
+- `montar a palavra com as sílabas` (`word_from_syllables`), com as sílabas embaralhadas de forma determinística e nunca na ordem certa;
+- `completar a frase` (`sentence_fill_word`), com distratores que não cabem no sentido da frase;
+- `ordenar a frase` (`sentence_order`).
+
+Uma unidade temática só abre quando todas as letras de todas as suas palavras e frases já foram dominadas (`required_letters`). A trilha organiza e sugere ordem, mas nunca libera conteúdo. A primeira trilha, `Tem em casa`, tem duas unidades de palavras (`CASA, MESA, CAMA, SALA` e `COPO, PRATO, PORTA, PANELA, TAPETE`) e uma de frases (`EU DURMO NA CAMA`, `O COPO ESTÁ NA MESA`, `EU COMO NO PRATO`, `A SALA É GRANDE`, `A CASA TEM UMA PORTA`), todas restritas às letras das fases 1 e 2 e com status `pending` até a revisão pedagógica.
+
 As atividades de palavra são liberadas somente quando todas as letras da palavra já foram apresentadas. O estado de domínio registra tentativas, acertos, acurácia e próxima revisão.
 
 Depois da base de letras e sílabas, o vocabulário será organizado em trilhas de cotidiano. A primeira proposta é `Tem em casa`, seguida por `Família`, `Esporte`, `Trabalho`, `Saúde`, `Transporte`, `Compras` e `Documentos`. Cada trilha deve reunir palavras, frases curtas, imagens e áudio coerentes com o contexto, sem introduzir letras ou padrões ainda não trabalhados.

@@ -54,6 +54,23 @@ Cada palavra ou frase aprovada deve registrar:
 - observações de regionalismo, acentuação ou ambiguidade;
 - licença e atribuição de qualquer recurso externo.
 
+Onde cada registro vive no esquema da API (`apps/api/app/models.py`):
+
+| Registro | Coluna |
+|---|---|
+| id, texto, versão | `words.id`, `words.text`, `words.content_version` (`sentences` idem) |
+| trilha e ordem | `word_tracks.track_id`, `word_tracks.position`; `sentences.track_id` |
+| sílabas e padrões | `words.syllables` (lista), `syllables.pattern` |
+| pré-requisitos | `words.required_letters`, `units.required_letters`, `items.required_letters` |
+| dificuldade e justificativa | `words.initial_difficulty`, `words.current_difficulty`, `words.difficulty_rationale` |
+| fonte de frequência | `words.frequency`, `words.raw_frequency`, `words.frequency_source` |
+| imagem, rótulo, áudio | `words.image_asset`, `words.image_alt`, `words.audio_asset`, tabela `assets` (`audio_kind`) |
+| status de revisão | `*.review_status` (`candidate`, `pending`, `approved`, `rejected`, `retired`) e `content_reviews` |
+| observações | `words.region_notes` |
+| licença e atribuição | `words.license`, `words.attribution`, `assets.license`, `assets.attribution` |
+
+O banco de candidatos `apps/api/app/data/word_bank.json` (Corpus SANTOS TONI, `scripts/build_word_bank.py`) alimenta `words` com `review_status = candidate` e `frequency_source = corpus-santos-toni`. Candidatas não saem no bundle nem geram exercício; só palavras declaradas em `apps/api/app/content_data.py` são publicadas.
+
 ## Regra prática para o primeiro catálogo
 
 Começar com aproximadamente 40 a 60 palavras distribuídas entre letras, sílabas e a primeira trilha. A equipe deve aprovar primeiro um conjunto pequeno e coerente, testar a sequência e só depois ampliar. É preferível ter poucas palavras reais, úteis e bem ilustradas a importar milhares de palavras sem controle pedagógico.
