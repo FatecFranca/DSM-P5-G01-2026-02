@@ -59,7 +59,16 @@ class ItemStateEvent(BaseModel):
     client_event_id: str = Field(min_length=1, max_length=100); type: Literal["item_state"]; occurred_at: datetime; payload: ItemStatePayload
 SyncEventIn = Annotated[Union[AttemptEvent, ProgressEvent, ItemStateEvent], Field(discriminator="type")]
 class SyncPush(BaseModel): events: list[SyncEventIn] = Field(max_length=500)
+class SyncRejection(BaseModel):
+    client_event_id: str
+    reason: str
+
 class SyncPushResult(BaseModel):
     accepted: int
     duplicates: int
     accepted_ids: list[str]
+    # Eventos que o catálogo atual não reconhece (ex.: exercício removido numa versão antiga do app).
+    # Vêm separados para o cliente tirá-los da fila: derrubar o lote inteiro travaria a sincronização para sempre.
+    rejected: int = 0
+    rejected_ids: list[str] = []
+    rejections: list[SyncRejection] = []

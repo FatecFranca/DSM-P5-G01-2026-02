@@ -1,17 +1,17 @@
 # Relatório de validação do MVP
 
-Data da rodada: 18 de setembro de 2026.
+Data da rodada: 11 de setembro de 2026 (fluxo completo em emulador Android).
 
 ## Resultado automatizado
 
 | Área | Verificação | Resultado |
 |---|---|---|
-| Mobile | Vitest | 9 arquivos e 35 testes aprovados |
+| Mobile | Vitest | 10 arquivos e 42 testes aprovados |
 | Mobile | TypeScript e ESLint | aprovados |
 | Mobile | `expo install --check` | dependências compatíveis |
 | Mobile | export Android | aprovado na rodada de 10 de setembro; o app não embarca áudio, todo som vem do TTS do aparelho |
 | Mobile | bundle semente | `seed-bundle.json` idêntico ao seed da API e aprovado pelo validador do app |
-| API | Pytest | 33 testes aprovados |
+| API | Pytest | 34 testes aprovados |
 | ML | Pytest | 9 testes aprovados (replay sem vazamento, treino sintético promovido pelo gate, gate reprovando modelos pequenos/mal calibrados/perdedores, classificador legado) |
 | API | Alembic | upgrade, downgrade e novo upgrade aprovados, incluindo a migração de IDs legados com mesclagem de progresso duplicado e a migração do modelo de conteúdo (renomes, chaves estrangeiras e sílabas em lista) com dados legados; `item_states`, contexto de sessão nas tentativas, `ranking_logs` e consentimento de pesquisa |
 | API | seed | 29 unidades (26 letras + trilha «Tem em casa»), 134 itens em 9 tipos, 18 palavras curadas e 1187 candidatas do corpus fora do bundle; seed idempotente; content-lint sem erros |
@@ -38,11 +38,26 @@ Data da rodada: 18 de setembro de 2026.
 - progresso por unidade derivado dos itens, com estado de revisão quando um item dominado vence;
 - tentativas com contexto de sessão (posição, índice de reapresentação, repetições de áudio, tempo até a primeira interação, política que serviu o item);
 - `POST /v1/ranking/next` com regras como piso, fallback por item, shadow mode, ε-exploração e registro em `ranking_logs`; consentimento de pesquisa por usuário;
+- renovação automática do access token na sincronização, com encerramento da sessão quando o refresh é recusado;
+- rejeição por evento no push: conteúdo desconhecido sai da fila com motivo, sem derrubar o lote;
 - stack de produção com API, PostgreSQL, proxy HTTPS, volumes, health checks e rotinas de backup.
 
 ## Métricas do conteúdo adaptativo
 
 A adaptação atual é por regras explícitas (ADR 0003): pré-requisito por letras, repetição espaçada por item e reapresentação de erros. O ranking por modelo (ADR 0004) existe, está desligado em produção e só será promovido por manifesto que passe no gate de replay (log-loss abaixo de regras, taxa histórica e constante nos cortes temporal e por usuário; ECE ≤ 0,05; ≥ 200 linhas) sobre tentativas de usuários com consentimento. Em dados sintéticos o pipeline promove; com dados reais ainda não há volume, e a reprovação do gate é o resultado esperado.
+
+## Fluxo completo em emulador (11 de setembro de 2026)
+
+Executado em emulador Android (Pixel 10, API 37) contra a API local e o PostgreSQL de desenvolvimento, com 26 verificações automatizadas de API mais a navegação manual pelo aplicativo:
+
+- trilha respeitando o portão de letras (vogais concluídas, `M` liberada, demais bloqueadas);
+- sessão da letra `M` com os quatro tipos, incluindo a sílaba `MA` falada pelo TTS;
+- erro reapresentado na mesma sessão e contagem de restantes correta;
+- `find_in_word` usando `MEU`, a palavra curada que respeita as letras já apresentadas;
+- sincronização de 61 eventos represados, com progresso e estados por item chegando ao servidor;
+- `POST /v1/ranking/next` registrado em `ranking_logs` com `rules-fallback` e motivo `model_disabled`, como esperado com o modelo desligado.
+
+Dois defeitos foram encontrados nesse fluxo e corrigidos: o aplicativo nunca renovava o access token (após 15 minutos a sincronização falhava exibindo "modo offline") e o push era tudo-ou-nada (um evento de exercício removido travava a fila para sempre). Ambos têm teste automatizado.
 
 ## Evidências externas ainda necessárias
 

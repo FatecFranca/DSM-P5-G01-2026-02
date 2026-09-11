@@ -1,5 +1,5 @@
 import logging
-from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, Query
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 from .content import PUBLISHED
@@ -8,7 +8,7 @@ from .content_types import normalize_exercise_type
 from .db import get_db
 from .deps import current_user
 from .models import Attempt, Item, ItemState, Progress, SyncEvent, Unit, User
-from .schemas import DEPRECATED_ATTEMPT_FIELDS, DEPRECATED_PROGRESS_FIELDS, SyncPush, SyncPushResult
+from .schemas import DEPRECATED_ATTEMPT_FIELDS, DEPRECATED_PROGRESS_FIELDS, SyncPush, SyncPushResult, SyncRejection
 
 logger = logging.getLogger(__name__)
 REVIEW_STATUSES = {"review", "needs_review"}
@@ -26,9 +26,13 @@ def normalized_types(values: list[str]) -> list[str]:
     kinds = (normalize_exercise_type(value) for value in values)
     return list(dict.fromkeys(kind.value for kind in kinds if kind))
 
-def require(db: Session, model, identifier: str, event_id: str):
-    if db.get(model, identifier) is None:
-        raise HTTPException(422, f"{event_id}: {model.__tablename__} {identifier} não existe no catálogo")
+LABELS = {"items": "item", "units": "unidade"}
+
+def missing(db: Session, model, identifier: str | None) -> str | None:
+    """Motivo da rejeição, ou None quando o conteúdo existe."""
+    if identifier is None or db.get(model, identifier) is not None:
+        return None
+    return f"{LABELS.get(model.__tablename__, model.__tablename__)} {identifier} não existe no catálogo"
 
 def progress_dict(x: Progress) -> dict:
     return {"unit_id": x.unit_id, "status": x.status, "completed_exercises": x.completed_exercises, "completed_types": x.completed_types or [], "attempts": x.attempts, "correct_attempts": x.correct_attempts, "accuracy": x.accuracy, "review_count": x.review_count, "last_practiced_at": x.last_practiced_at, "next_review_at": x.next_review_at, "updated_at": x.updated_at}
@@ -81,6 +85,7 @@ def attempts(limit: int = Query(default=100, ge=1, le=500), user: User = Depends
 def push(body: SyncPush, user: User = Depends(current_user), db: Session = Depends(get_db)):
     accepted = duplicates = 0
     accepted_ids: list[str] = []
+    rejections: list[SyncRejection] = []
     for event in body.events:
         existing = db.scalar(select(SyncEvent).where(SyncEvent.user_id == user.id, SyncEvent.client_event_id == event.client_event_id))
         if existing:
@@ -92,8 +97,9 @@ def push(body: SyncPush, user: User = Depends(current_user), db: Session = Depen
             event.payload.unit_id = canonicalized(event.payload.unit_id, canonical_lesson_id) if event.payload.unit_id else None
             kind = normalize_exercise_type(event.payload.exercise_type) if event.payload.exercise_type else None
             event.payload.exercise_type = kind.value if kind else None
-            require(db, Item, event.payload.item_id, event.client_event_id)
-            if event.payload.unit_id: require(db, Unit, event.payload.unit_id, event.client_event_id)
+            if reason := missing(db, Item, event.payload.item_id) or missing(db, Unit, event.payload.unit_id):
+                rejections.append(SyncRejection(client_event_id=event.client_event_id, reason=reason))
+                continue
             payload = event.payload.model_dump(mode="json", exclude=DEPRECATED_ATTEMPT_FIELDS)
             prior = db.scalar(select(Attempt).where(Attempt.user_id == user.id, Attempt.client_attempt_id == event.payload.client_attempt_id))
             if prior:
@@ -104,8 +110,9 @@ def push(body: SyncPush, user: User = Depends(current_user), db: Session = Depen
         elif event.type == "item_state":
             event.payload.item_id = canonicalized(event.payload.item_id, canonical_exercise_id)
             event.payload.unit_id = canonicalized(event.payload.unit_id, canonical_lesson_id) if event.payload.unit_id else None
-            require(db, Item, event.payload.item_id, event.client_event_id)
-            if event.payload.unit_id: require(db, Unit, event.payload.unit_id, event.client_event_id)
+            if reason := missing(db, Item, event.payload.item_id) or missing(db, Unit, event.payload.unit_id):
+                rejections.append(SyncRejection(client_event_id=event.client_event_id, reason=reason))
+                continue
             payload = event.payload.model_dump(mode="json")
             state = db.scalar(select(ItemState).where(ItemState.user_id == user.id, ItemState.item_id == event.payload.item_id))
             if not state:
@@ -121,7 +128,9 @@ def push(body: SyncPush, user: User = Depends(current_user), db: Session = Depen
         else:
             event.payload.unit_id = canonicalized(event.payload.unit_id, canonical_lesson_id)
             event.payload.completed_types = normalized_types(event.payload.completed_types)
-            require(db, Unit, event.payload.unit_id, event.client_event_id)
+            if reason := missing(db, Unit, event.payload.unit_id):
+                rejections.append(SyncRejection(client_event_id=event.client_event_id, reason=reason))
+                continue
             payload = event.payload.model_dump(mode="json", exclude=DEPRECATED_PROGRESS_FIELDS)
             item = db.scalar(select(Progress).where(Progress.user_id == user.id, Progress.unit_id == event.payload.unit_id))
             if not item:
@@ -138,7 +147,9 @@ def push(body: SyncPush, user: User = Depends(current_user), db: Session = Depen
         accepted += 1
         accepted_ids.append(event.client_event_id)
     db.commit()
-    return SyncPushResult(accepted=accepted, duplicates=duplicates, accepted_ids=accepted_ids)
+    for rejection in rejections: logger.info("rejected_event %s: %s", rejection.client_event_id, rejection.reason)
+    return SyncPushResult(accepted=accepted, duplicates=duplicates, accepted_ids=accepted_ids,
+                          rejected=len(rejections), rejected_ids=[item.client_event_id for item in rejections], rejections=rejections)
 
 @router.get("/sync/pull")
 def pull(cursor: int = Query(default=0, ge=0), limit: int = Query(default=200, ge=1, le=500), user: User = Depends(current_user), db: Session = Depends(get_db)):

@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { Pressable, StyleSheet, Text, View } from "react-native";
+import { isUnauthorized } from "../src/api/errors";
 import { Screen } from "../src/components/Screen";
 import { useContentStore } from "../src/content/store";
 import { getProgress } from "../src/storage/database";
@@ -30,7 +31,7 @@ export default function Progress() {
     </View>
     <Pressable disabled={sync.isPending} onPress={() => sync.mutate()} style={styles.button}><Text style={styles.buttonText}>{sync.isPending ? "Sincronizando..." : "Sincronizar agora"}</Text></Pressable>
     {sync.isSuccess && <Text accessibilityRole="alert" style={styles.success}>{sync.data ? `${sync.data} item(ns) sincronizado(s).` : "Tudo está atualizado."}</Text>}
-    {sync.isError && <Text accessibilityRole="alert" style={styles.warning}>Você continua no modo offline. Tentaremos novamente depois.</Text>}
+    {sync.isError && <Text accessibilityRole="alert" style={styles.warning}>{isUnauthorized(sync.error) ? "Sua sessão expirou. Entre novamente para sincronizar." : "Você continua no modo offline. Tentaremos novamente depois."}</Text>}
     <Text style={styles.note}>O progresso fica salvo neste aparelho e entra numa fila segura quando não há conexão.</Text>
   </Screen>;
 }

@@ -17,6 +17,12 @@ Qualquer trilha temática, exercício de sílaba ou ranking adaptativo depende d
 5. IDs canônicos são os do servidor (`lesson-A`, `exercise-A-listen`). A migration `20260915_canonical_content_ids` reescreve dados antigos e mescla duplicatas; `sync.py` traduz IDs legados e registra `deprecated_id` para medir quando remover o alias.
 6. `completed_types` passa a ser persistido; `confidence`/`uncertain` (resíduos do classificador manuscrito removido) saem do contrato, e `model_version` vira `served_model_version`, reservado ao ranking no servidor. Tentativas passam a carregar `lesson_id` e `exercise_type`.
 
+## Emenda de 11 de setembro de 2026 — rejeição por evento no push
+
+O push era tudo-ou-nada: um único evento que o catálogo atual não reconhece derrubava o lote inteiro com 422, e o cliente reenviava o mesmo lote para sempre. Um aparelho de teste ficou com a fila travada desde `9eea1d3` por causa de tentativas do exercício de escrita manuscrita (`A-write`), removido naquele commit: 61 eventos represados, nenhum progresso sincronizado.
+
+`POST /v1/sync/push` passa a responder 200 com `rejected`, `rejected_ids` e `rejections` (com motivo) para eventos cujo item ou unidade não existe; os demais eventos do lote são gravados normalmente. O app tira da fila os aceitos **e** os rejeitados, registrando o motivo. Payload malformado continua 422 — isso é erro de programação, não dado histórico.
+
 ## Consequências
 
 - Curadoria vira dado versionado no servidor, sem build do app.

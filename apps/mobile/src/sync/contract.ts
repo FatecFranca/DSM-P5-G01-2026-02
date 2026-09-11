@@ -4,6 +4,10 @@ import type { ExerciseType, ItemState, LessonProgress, SyncEvent } from "../doma
 
 export type ApiSyncEvent = { client_event_id: string; type: string; occurred_at: string; payload: Record<string, unknown> };
 export const parseAcceptedIds = (data: { accepted_ids?: string[]; acceptedIds?: string[] }) => data.accepted_ids ?? data.acceptedIds ?? [];
+/** Eventos que o catálogo atual não reconhece; saem da fila para não travá-la indefinidamente. */
+export const parseRejections = (data: { rejections?: Array<{ client_event_id?: string; reason?: string }>; rejected_ids?: string[] }) =>
+  (data.rejections ?? []).map((item) => ({ id: String(item.client_event_id ?? ""), reason: String(item.reason ?? "motivo desconhecido") })).filter((item) => item.id)
+    .concat((data.rejected_ids ?? []).filter((id) => !(data.rejections ?? []).some((item) => item.client_event_id === id)).map((id) => ({ id, reason: "motivo desconhecido" })));
 
 // No domínio do app a unidade é `lessonId` e o item é `exerciseId`; no fio são `unit_id` e `item_id`.
 export function toApiEvent(event: SyncEvent): ApiSyncEvent {

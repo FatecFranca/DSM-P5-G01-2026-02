@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { ItemState, LessonProgress, SyncEvent } from "../domain/types";
-import { canonicalizeProgress, mergeItemState, mergeProgress, parseAcceptedIds, parsePulledItemState, toApiEvent } from "./contract";
+import { canonicalizeProgress, mergeItemState, mergeProgress, parseAcceptedIds, parsePulledItemState, parseRejections, toApiEvent } from "./contract";
 describe("contrato da API de sync", () => {
   it("converte tentativa camelCase para envelope snake_case com IDs canônicos e contexto de sessão", () => {
     const event: SyncEvent = { id: "evt-1", type: "attempt", payload: { clientAttemptId: "try-1", lessonId: "letter-a", exerciseId: "A-complete-word", exerciseType: "complete_word", answer: "cachorro", correct: true, durationMs: 1200, createdAt: "2026-01-01T00:00:00Z", sessionId: "s1", positionInSession: 2, attemptIndexInItem: 1, audioRepeats: 3, timeToFirstInteractionMs: 800, servedBy: "rules", servedPolicyVersion: "session-v1" } };
@@ -40,5 +40,14 @@ describe("contrato da API de sync", () => {
     expect(merged.lessonId).toBe("lesson-A");
     expect(merged.completed).toBe(true);
     expect(merged.completedTypes).toEqual(["listen_choose", "recognize_letter", "find_in_word"]);
+  });
+});
+
+describe("rejeições do servidor", () => {
+  it("lê rejeições com motivo e tolera respostas antigas só com ids", () => {
+    expect(parseRejections({ rejections: [{ client_event_id: "a", reason: "item A-write não existe no catálogo" }], rejected_ids: ["a"] }))
+      .toEqual([{ id: "a", reason: "item A-write não existe no catálogo" }]);
+    expect(parseRejections({ rejected_ids: ["b"] })).toEqual([{ id: "b", reason: "motivo desconhecido" }]);
+    expect(parseRejections({})).toEqual([]);
   });
 });

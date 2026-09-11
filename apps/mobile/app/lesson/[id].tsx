@@ -9,7 +9,7 @@ import { canonicalLessonId } from "../../src/domain/content-ids";
 import { deriveProgress, isLessonUnlocked, type Feedback } from "../../src/domain/learning";
 import { applyResult } from "../../src/domain/scheduler";
 import { SESSION_POLICY_VERSION, buildSession, reinsert } from "../../src/domain/session";
-import type { Exercise } from "../../src/domain/types";
+import type { Exercise, Unit } from "../../src/domain/types";
 import { rankNext } from "../../src/api/client";
 import { saveAttempt, saveItemState } from "../../src/storage/database";
 import { useAuthStore } from "../../src/store/auth-store";
@@ -19,10 +19,26 @@ import { colors } from "../../src/theme";
 const makeId = () => `${Date.now()}-${Math.random().toString(36).slice(2)}`;
 const dayBucket = (now: Date) => now.toISOString().slice(0, 10);
 
+/**
+ * Resolve a unidade antes de montar a sessão. O conteúdo pode ainda não estar carregado (link direto, recarga de
+ * bundle), e a sessão depende da unidade já existir: por isso ela vive em LessonSession, montado só quando há unidade.
+ */
 export default function Lesson() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const units = useContentStore((state) => state.units);
-  const unit = units.find((item) => item.id === canonicalLessonId(String(id))) ?? units[0];
+  const progress = useStudyStore((state) => state.progress);
+  const unit = units.find((item) => item.id === canonicalLessonId(String(id)));
+
+  useEffect(() => {
+    if (!units.length) return;
+    if (!unit || !isLessonUnlocked(unit, progress)) router.replace("/lessons");
+  }, [progress, unit, units.length]);
+
+  if (!unit) return <Screen><Text style={styles.instruction}>{units.length ? "Atividade não encontrada." : "Preparando atividade…"}</Text></Screen>;
+  return <LessonSession unit={unit} />;
+}
+
+function LessonSession({ unit }: { unit: Unit }) {
   const allProgress = useStudyStore((state) => state.progress);
   const itemStates = useStudyStore((state) => state.itemStates);
   const setProgress = useStudyStore((state) => state.setProgress);
@@ -42,10 +58,6 @@ export default function Lesson() {
   const answered = useRef(false);
   const served = useRef<{ by: "rules" | "model"; policy: string; model?: string }>({ by: "rules", policy: SESSION_POLICY_VERSION });
   const exercise = queue[0];
-
-  useEffect(() => {
-    if (!isLessonUnlocked(unit, allProgress)) router.replace("/lessons");
-  }, [allProgress, unit]);
 
   // Ranking no servidor é opcional (docs/adr/0004): só reordena a fila local, e só antes da primeira resposta.
   useEffect(() => {

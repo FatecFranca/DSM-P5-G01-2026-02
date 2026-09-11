@@ -75,11 +75,13 @@ def test_validation_and_attempt_id_uniqueness(client, auth):
         "payload": {"raw_image": "must-not-be-sent"}
     }]})
     assert invalid.status_code == 422
+    # Conteúdo desconhecido é rejeitado evento a evento: derrubar o lote travaria a fila do cliente para sempre.
     unknown = client.post("/v1/sync/push", headers=headers, json={"events": [{
         "client_event_id": "unknown", "type": "attempt", "occurred_at": "2026-09-10T12:00:00Z",
         "payload": {"client_attempt_id": "u", "item_id": "item-inexistente", "answer": "A", "correct": True, "duration_ms": 1}
     }]})
-    assert unknown.status_code == 422 and "item-inexistente" in unknown.json()["detail"]
+    assert unknown.status_code == 200 and unknown.json()["rejected"] == 1
+    assert "item-inexistente" in unknown.json()["rejections"][0]["reason"]
     event = {"client_event_id": "a", "type": "attempt", "occurred_at": "2026-09-10T12:00:00Z", "payload": {
         "client_attempt_id": "same", "item_id": "exercise-A-listen", "answer": "A", "correct": True, "duration_ms": 500
     }}

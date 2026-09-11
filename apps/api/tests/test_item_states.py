@@ -27,7 +27,8 @@ def test_item_states_are_stored_merged_and_pulled(client, auth):
     assert state["strength"] == 2 and state["reps"] == 5 and state["lapses"] == 2
     pulled = [event for event in client.get("/v1/sync/pull?cursor=0", headers=headers).json()["events"] if event["type"] == "item_state"]
     assert len(pulled) == 3 and pulled[-1]["payload"]["half_life_hours"] == 16
-    assert client.post("/v1/sync/push", headers=headers, json={"events": [item_state("bad", "item-inexistente", "2026-09-16T12:00:00Z")]}).status_code == 422
+    recusado = push(client, headers, item_state("bad", "item-inexistente", "2026-09-16T12:00:00Z"))
+    assert recusado["rejected"] == 1 and recusado["accepted"] == 0
 
 
 def test_progress_is_derived_from_item_states(client, auth):
@@ -56,3 +57,23 @@ def test_attempts_carry_session_context(client, auth):
     assert {key: stored[key] for key in ("session_id", "position_in_session", "attempt_index_in_item", "audio_repeats", "time_to_first_interaction_ms", "served_by", "served_policy_version")} == {
         "session_id": "sess-1", "position_in_session": 3, "attempt_index_in_item": 2, "audio_repeats": 2, "time_to_first_interaction_ms": 400, "served_by": "rules", "served_policy_version": "session-v1"}
     assert client.post("/v1/sync/push", headers=headers, json={"events": [{"client_event_id": "a2", "type": "attempt", "occurred_at": "2026-09-16T10:00:00Z", "payload": {**attempt, "client_attempt_id": "t2", "served_by": "oracle"}}]}).status_code == 422
+
+
+def test_unknown_content_rejects_only_that_event_and_keeps_the_batch(client, auth):
+    """Um exercício removido numa versão antiga do app não pode travar a fila inteira do cliente."""
+    headers = bearer(auth)
+    result = push(client, headers,
+                  {"client_event_id": "legado", "type": "attempt", "occurred_at": "2026-09-16T10:00:00Z", "payload": {
+                      "client_attempt_id": "legado-1", "item_id": "A-write", "unit_id": "lesson-A", "answer": "A", "correct": True, "duration_ms": 900}},
+                  item_state("bom", "exercise-A-listen", "2026-09-16T10:01:00Z"),
+                  {"client_event_id": "unidade-sumida", "type": "progress", "occurred_at": "2026-09-16T10:02:00Z", "payload": {
+                      "unit_id": "lesson-ZZ", "status": "completed", "completed_exercises": 1}})
+    assert result["accepted"] == 1 and result["accepted_ids"] == ["bom"]
+    assert result["rejected"] == 2 and result["rejected_ids"] == ["legado", "unidade-sumida"]
+    assert [item["reason"] for item in result["rejections"]] == ["item A-write não existe no catálogo", "unidade lesson-ZZ não existe no catálogo"]
+    assert [item["item_id"] for item in client.get("/v1/item-states", headers=headers).json()["items"]] == ["exercise-A-listen"]
+    assert client.get("/v1/attempts", headers=headers).json()["items"] == []
+    # Rejeição não cria evento: reenviar continua rejeitando, sem virar duplicata silenciosa.
+    again = push(client, headers, {"client_event_id": "legado", "type": "attempt", "occurred_at": "2026-09-16T10:00:00Z", "payload": {
+        "client_attempt_id": "legado-1", "item_id": "A-write", "unit_id": "lesson-A", "answer": "A", "correct": True, "duration_ms": 900}})
+    assert again["rejected"] == 1 and again["accepted"] == 0
