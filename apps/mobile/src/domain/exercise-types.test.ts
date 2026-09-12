@@ -18,8 +18,8 @@ describe("contrato compartilhado com a API", () => {
     expect(PHASES).toEqual(pedagogyContract.phases);
     expect([...REQUIRED_LETTER_EXERCISE_TYPES]).toEqual(pedagogyContract.required_letter_exercise_types);
     expect(FIND_IN_WORD_EXEMPT_LETTERS).toBe(pedagogyContract.find_in_word_exempt_letters);
-    expect(requiredTypesFor("A")).toEqual(["listen_choose", "recognize_letter"]);
-    expect(requiredTypesFor("M")).toEqual(["listen_choose", "recognize_letter", "find_in_word"]);
+    expect(requiredTypesFor("A")).toEqual(pedagogyContract.required_letter_exercise_types);
+    expect(requiredTypesFor("M")).toEqual(pedagogyContract.required_letter_exercise_types);
   });
 
   it("traduz o tipo legado e descarta tipos removidos ou inválidos", () => {

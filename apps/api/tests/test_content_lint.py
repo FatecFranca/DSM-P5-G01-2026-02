@@ -18,13 +18,23 @@ def test_seeded_content_passes_lint(client):
 def test_letter_units_have_unambiguous_exercises(client):
     units = units_by_id(client.get("/v1/content").json())
     letter_units = {unit["focus_letter"]: unit for unit in units.values() if unit["kind"] == "letter"}
-    complete = [item(unit, "complete_word") for letter, unit in letter_units.items() if letter not in "AEIOUM"]
-    assert len(complete) == 20 and not any(entry["type"] == "complete_word" for letter in "AEIOUM" for entry in letter_units[letter]["items"])
-    assert {[choice["id"] for choice in entry["word_choices"]].index(entry["answer"]) for entry in complete} == {0, 1}
-    syllable = [item(unit, "syllable_listen_choose") for letter, unit in letter_units.items() if letter in "MLPSTRNDCGBFVZJ"]
-    assert len(syllable) == 15 and {entry["options"].index(entry["answer"]) for entry in syllable} == {0, 1}
-    assert all(entry["tts_fallback_text"] == entry["answer"] for entry in syllable)
-    assert not any(entry["type"] == "syllable_listen_choose" for letter in "AEIOUHQKWXY" for entry in letter_units[letter]["items"])
+    complete = [item(unit, "complete_word") for unit in letter_units.values()]
+    assert len(complete) == 26
+    assert all(entry["answer"] in entry["options"] and len(set(entry["options"])) == 3 and entry["word_choices"] is None for entry in complete)
+    expected = {"listen_choose", "recognize_letter", "initial_sound", "find_all_in_word", "compare_words", "complete_word", "mixed_review"}
+    assert all(len(unit["items"]) == 7 and {entry["type"] for entry in unit["items"]} == expected for unit in letter_units.values())
+    for unit in letter_units.values():
+        for entry in unit["items"]:
+            assert {"pedagogical_objective", "difficulty", "anti_elimination_rationale", "feedback", "review"} <= set(entry["payload"])
+            assert entry["payload"]["review"]["status"] == "pending_human_review"
+            assert entry["payload"]["feedback"]["correct"] and entry["payload"]["feedback"]["incorrect"]
+            assert entry["answer"] not in entry["instruction"].split()
+        for kind in ("listen_choose", "initial_sound", "complete_word", "mixed_review"):
+            entry = item(unit, kind)
+            context = entry["payload"]["context"]
+            assert context["hide_word"] is True and context["inline_audio"] is True
+            assert context["masked_word"].count("_") == 1
+            assert entry["context_word"] not in entry["instruction"]
 
 
 def test_theme_track_is_gated_by_letters_not_by_track(client):
@@ -48,17 +58,17 @@ def test_theme_track_is_gated_by_letters_not_by_track(client):
 def test_lint_rejects_future_letters_ambiguous_choices_and_broken_theme_items(client):
     body = copy.deepcopy(client.get("/v1/content").json())
     units = units_by_id(body)
-    find_i = item(units["lesson-I"], "find_in_word")
-    find_i.update(context_word="PIPA", options=["1ª posição", "2ª posição", "3ª posição", "4ª posição"], answer="2ª posição")
-    item(units["lesson-L"], "complete_word")["word_choices"].append({"id": "lama", "word": "LAMA", "before": "", "after": "AMA"})
-    item(units["lesson-M"], "syllable_listen_choose")["options"][0] = "BA"
+    find_i = item(units["lesson-I"], "find_all_in_word")
+    find_i["payload"]["target_indices"] = [2]
+    item(units["lesson-L"], "complete_word")["payload"]["context"]["masked_word"] = "LATA"
+    item(units["lesson-M"], "initial_sound")["options"] = ["M", "M", "N"]
     build = next(entry for entry in units["casa-1"]["items"] if entry["type"] == "word_from_syllables")
     build["payload"]["tokens"] = build["answer"].split("-")
     fill = next(entry for entry in units["casa-frases"]["items"] if entry["type"] == "sentence_fill_word")
     fill["options"].append("JANELA")
     errors = lint_content(body)
-    assert any("PIPA usa letra ainda não apresentada (P)" in error for error in errors)
-    assert any("exatamente uma opção deve ser completada por L" in error for error in errors)
-    assert any("BA usa letra ainda não apresentada (B)" in error for error in errors)
+    assert any("deve marcar exatamente todas as ocorrências" in error for error in errors)
+    assert any("lacuna deve formar a palavra" in error for error in errors)
+    assert any("três letras distintas" in error for error in errors)
     assert any("tokens devem ser as sílabas da resposta em outra ordem" in error for error in errors)
     assert any("palavra JANELA não está no catálogo publicado" in error for error in errors)

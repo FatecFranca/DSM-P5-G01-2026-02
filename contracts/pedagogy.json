@@ -1,13 +1,15 @@
 {
   "$comment": "Invariantes pedagógicas fixadas por docs/PEDAGOGICAL_CONTRACT.md. API e mobile validam contra este arquivo nos testes.",
-  "version": 1,
+  "version": 2,
   "learning_order": "AEIOUMLPSTRNDCGBFVHQJKZXWY",
   "phases": [
     { "phase": 1, "title": "Vogais", "letters": "AEIOU" },
     { "phase": 2, "title": "Consoantes de alta utilidade", "letters": "MLPSTRNDCG" },
     { "phase": 3, "title": "Ampliação do vocabulário", "letters": "BFVHQJKZXWY" }
   ],
-  "required_letter_exercise_types": ["listen_choose", "recognize_letter", "find_in_word"],
+  "required_letter_exercise_types": ["listen_choose", "recognize_letter", "initial_sound", "find_all_in_word", "compare_words", "complete_word", "mixed_review"],
+  "letter_exercises_per_lesson": {"minimum": 7, "maximum": 7},
+  "required_item_metadata": ["pedagogical_objective", "difficulty", "anti_elimination_rationale", "feedback", "review"],
   "$find_in_word_exempt_letters": "Sem palavra real formada só por letras já apresentadas, A e E não têm find_in_word. Exceção registrada em 2026-09-15.",
   "find_in_word_exempt_letters": "AE"
 }

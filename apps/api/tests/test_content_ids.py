@@ -6,7 +6,7 @@ def test_canonical_ids_translate_legacy_formats():
     assert canonical_lesson_id("lesson-A") == "lesson-A"
     assert canonical_exercise_id("A-listen") == "exercise-A-listen"
     assert canonical_exercise_id("M-complete-word") == "exercise-M-complete-word"
-    assert canonical_exercise_id("exercise-A-find_in_word") == "exercise-A-find"
+    assert canonical_exercise_id("exercise-A-find_in_word") == "exercise-A-find-all"
     assert canonical_exercise_id("exercise-A-recognize") == "exercise-A-recognize"
     assert canonical_exercise_id("sem-padrao") == "sem-padrao"
     assert canonical_exercise_id("M-syllable") == "exercise-M-syllable"

@@ -7,7 +7,7 @@ import type { ExerciseRendererProps } from "./ChoiceExercise";
 export const joinTokens = (type: string, picked: string[]) => picked.join(type === "word_from_syllables" ? "-" : " ");
 
 /** Montagem por toque: o aprendiz toca as peças na ordem; ao usar todas, a resposta é avaliada. */
-export function OrderExercise({ exercise, selected, onChoose, onInteract }: ExerciseRendererProps) {
+export function OrderExercise({ exercise, selected, disabled = false, onChoose, onInteract }: ExerciseRendererProps) {
   const tokens = exercise.tokens ?? [];
   const [picked, setPicked] = useState<number[]>([]);
   useEffect(() => { if (selected === undefined) setPicked([]); }, [selected, exercise.id]);
@@ -16,7 +16,7 @@ export function OrderExercise({ exercise, selected, onChoose, onInteract }: Exer
     onInteract?.();
     const next = [...picked, index];
     setPicked(next);
-    if (next.length === tokens.length) { const answer = joinTokens(exercise.type, next.map((position) => tokens[position])); onChoose(answer, answer === exercise.answer); }
+    if (!disabled && next.length === tokens.length) { const answer = joinTokens(exercise.type, next.map((position) => tokens[position])); onChoose(answer, answer === exercise.answer); }
   };
   const done = picked.length === tokens.length && tokens.length > 0;
   return <View style={styles.container}>
@@ -25,11 +25,11 @@ export function OrderExercise({ exercise, selected, onChoose, onInteract }: Exer
     </View>
     <View style={styles.tokens}>{tokens.map((token, index) => {
       const used = picked.includes(index);
-      return <Pressable key={`${token}-${index}`} disabled={used || done} accessibilityRole="button" accessibilityLabel={`Peça ${token}`} accessibilityState={{ disabled: used || done }} onPress={() => pick(index)} style={[styles.token, used && styles.usedToken]}>
+      return <Pressable key={`${token}-${index}`} disabled={disabled || used || done} accessibilityRole="button" accessibilityLabel={`Peça ${token}`} accessibilityState={{ disabled: disabled || used || done }} onPress={() => pick(index)} style={[styles.token, used && styles.usedToken]}>
         <Text style={[styles.tokenText, used && styles.usedText]}>{token}</Text>
       </Pressable>;
     })}</View>
-    {picked.length > 0 && <Pressable accessibilityRole="button" onPress={() => { setPicked([]); }} style={styles.reset}><Text style={styles.resetText}>Apagar e tentar de novo</Text></Pressable>}
+    {picked.length > 0 && <Pressable disabled={disabled} accessibilityRole="button" onPress={() => { setPicked([]); }} style={styles.reset}><Text style={styles.resetText}>Apagar e tentar de novo</Text></Pressable>}
   </View>;
 }
 

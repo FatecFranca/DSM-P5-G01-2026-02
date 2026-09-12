@@ -4,14 +4,14 @@ import { AudioButton } from "../AudioButton";
 import type { ExerciseRendererProps } from "./ChoiceExercise";
 
 /** Cartões de palavra com lacuna: a letra da unidade entra na lacuna de exatamente uma delas. */
-export function WordChoicesExercise({ exercise, letter = "", selected, onChoose }: ExerciseRendererProps) {
+export function WordChoicesExercise({ exercise, letter = "", selected, disabled = false, onChoose, onInteract, onAudioPlay }: ExerciseRendererProps) {
   return <View style={styles.list}>
     <Text style={styles.helper}>Toque na palavra que combina com a letra {letter}.</Text>
     {(exercise.wordChoices ?? []).map((word) => {
       const chosen = selected === word.id;
-      return <Pressable key={word.id} accessibilityRole="button" accessibilityLabel={`Completar palavra ${word.imageLabel}`} accessibilityState={{ selected: chosen }} onPress={() => onChoose(word.id, word.id === exercise.answer)} style={[styles.card, chosen && (word.id === exercise.answer ? styles.correct : styles.selected)]}>
+      return <Pressable key={word.id} disabled={disabled} accessibilityRole="button" accessibilityLabel={`Completar palavra ${word.imageLabel}`} accessibilityState={{ selected: chosen, disabled }} onPress={() => { onInteract?.(); onChoose(word.id, word.id === exercise.answer); }} style={[styles.card, disabled && styles.disabled, chosen && (word.id === exercise.answer ? styles.correct : styles.selected)]}>
         <Text accessibilityLabel={`Imagem de ${word.imageLabel}`} style={styles.image}>{word.image}</Text>
-        <AudioButton label={`Ouvir ${word.audioText}`} text={word.audioText} compact />
+        <AudioButton label={`Ouvir ${word.audioText}`} text={word.audioText} compact onPlay={() => { onInteract?.(); onAudioPlay?.(); }} />
         <View style={styles.row}><Text style={styles.part}>{word.before}</Text><View style={[styles.blank, chosen && styles.filledBlank]}><Text style={styles.blankText}>{chosen ? letter : "_"}</Text></View><Text style={styles.part}>{word.after}</Text></View>
         {chosen && <Text style={styles.completed}>{word.before}{letter}{word.after}</Text>}
       </Pressable>;
@@ -32,4 +32,5 @@ const styles = StyleSheet.create({
   filledBlank: { borderColor: colors.success, backgroundColor: "#DDF3E9" },
   blankText: { color: colors.primary, fontSize: 30, fontWeight: "900" },
   completed: { color: colors.success, fontSize: 18, fontWeight: "800", letterSpacing: 1 },
+  disabled: { opacity: 0.65 },
 });

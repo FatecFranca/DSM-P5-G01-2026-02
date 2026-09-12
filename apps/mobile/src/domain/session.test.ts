@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { applyResult, type ItemState } from "./scheduler";
-import { buildSession, hashSeed, mulberry32, reinsert } from "./session";
+import { buildSession, hashSeed, mulberry32, reinsert, selectedPositionsAnswer, sessionSummary } from "./session";
 
 const now = new Date("2026-09-16T10:00:00Z");
 const hours = (value: number) => new Date(now.getTime() + value * 60 * 60 * 1000);
@@ -8,6 +8,13 @@ const exercises = ["a", "b", "c", "d", "e", "f"].map((id) => ({ id }));
 const state = (itemId: string, results: boolean[], at = hours(-48)): ItemState => results.reduce<ItemState | undefined>((current, correct, index) => applyResult(current, { itemId, unitId: "u", correct, now: new Date(at.getTime() + index * 60_000) }), undefined)!;
 
 describe("fila de sessão", () => {
+  it("resume desempenho e não duplica erros recuperados", () => {
+    expect(sessionSummary({ correct: 5, errors: 2, recoveredItemIds: ["a", "a"], audioPlays: 3 })).toMatchObject({ attempts: 7, accuracy: 5 / 7, recovered: 1, audioPlays: 3 });
+  });
+
+  it("normaliza posições marcadas em CSV base um", () => {
+    expect(selectedPositionsAnswer([3, 1])).toBe("2,4");
+  });
   it("é determinística para a mesma semente e varia entre sementes", () => {
     const states = { a: state("a", [true]), b: state("b", [true, false]), c: state("c", [true], hours(-1)) };
     const first = buildSession({ exercises, states, now, seed: "user:unit:day-1" });

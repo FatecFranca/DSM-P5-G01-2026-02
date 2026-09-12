@@ -38,11 +38,11 @@ def test_progress_is_derived_from_item_states(client, auth):
     assert progress["unit_id"] == "lesson-A" and progress["status"] == "in_progress" and progress["completed_exercises"] == 1 and progress["completed_types"] == ["listen_choose"]
     push(client, headers, item_state("b", "exercise-A-recognize", "2026-09-16T10:05:00Z", reps=2, lapses=1))
     [progress] = client.get("/v1/progress", headers=headers).json()["items"]
-    assert progress["status"] == "completed" and progress["completed_exercises"] == 2 and progress["attempts"] == 3 and progress["correct_attempts"] == 2
+    assert progress["status"] == "in_progress" and progress["completed_exercises"] == 2 and progress["attempts"] == 3 and progress["correct_attempts"] == 2
     assert progress["accuracy"] == 2 / 3 and progress["next_review_at"].startswith("2026-09-16T18:00:00")
-    # Um item dominado que venceu leva a unidade para revisão; um erro tira a conclusão.
+    # Com sete habilidades, dominar apenas um item ainda não conclui a unidade.
     push(client, headers, item_state("c", "exercise-A-listen", "2026-09-17T10:00:00Z", due_at="2026-09-17T09:00:00Z", reps=2, consecutive_correct=2))
-    assert client.get("/v1/progress", headers=headers).json()["items"][0]["status"] == "needs_review"
+    assert client.get("/v1/progress", headers=headers).json()["items"][0]["status"] == "in_progress"
     push(client, headers, item_state("d", "exercise-A-listen", "2026-09-17T11:00:00Z", strength=0, reps=3, lapses=1, consecutive_correct=0, last_result=False, due_at="2026-09-17T15:00:00Z"))
     [progress] = client.get("/v1/progress", headers=headers).json()["items"]
     assert progress["status"] == "in_progress" and progress["completed_exercises"] == 1

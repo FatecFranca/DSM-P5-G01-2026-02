@@ -59,3 +59,11 @@ export function reinsert<T>(queue: readonly T[], item: T, distance = RETRY_DISTA
   const position = Math.min(distance, queue.length);
   return [...queue.slice(0, position), item, ...queue.slice(position)];
 }
+
+export type SessionOutcome = { correct: number; errors: number; recoveredItemIds: readonly string[]; audioPlays: number };
+export function sessionSummary(outcome: SessionOutcome) {
+  const attempts = outcome.correct + outcome.errors;
+  return { ...outcome, attempts, accuracy: attempts ? outcome.correct / attempts : 0, recovered: new Set(outcome.recoveredItemIds).size };
+}
+
+export const selectedPositionsAnswer = (positions: readonly number[]) => [...positions].sort((a, b) => a - b).map((value) => value + 1).join(",");

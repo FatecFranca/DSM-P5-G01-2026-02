@@ -1,5 +1,7 @@
 # Redesenho pedagógico das atividades iniciais
 
+> Status técnico: implementado em 12/09/2026 nas 26 lições da trilha fônica. Cada lição contém sete atividades variadas, metadados pedagógicos verificáveis, feedback específico, reapresentação após erro e revisão mista. A aprovação pedagógica com participantes continua sendo uma etapa humana de liberação, registrada como `pending_human_review` no catálogo.
+
 ## Resumo
 
 As três atividades iniciais avaliadas treinam principalmente reconhecimento superficial. O aluno pode acertar por eliminação, sem relacionar letra, som, palavra e significado.
@@ -58,6 +60,22 @@ Criar um catálogo revisado para as primeiras lições, contendo:
 - justificativa de por que o item não pode ser resolvido apenas por eliminação;
 - critério de revisão pedagógica pelo integrante capacitado do grupo.
 
+Esses dados agora fazem parte do `payload` de cada item e são validados tanto pela API quanto pelo app antes de o conteúdo ser aceito. O contrato compartilhado está em `contracts/exercise-types.json` e `contracts/pedagogy.json`.
+
+## Implementação entregue
+
+Cada letra segue uma sequência de sete habilidades:
+
+1. apresentação contextual com palavra cotidiana e áudio;
+2. reconhecimento entre formas visualmente próximas;
+3. associação ao som inicial;
+4. caça a todas as ocorrências na palavra;
+5. comparação de duas palavras;
+6. palavra contextual com lacuna;
+7. revisão mista em nova ordem de alternativas.
+
+O app também bloqueia respostas duplicadas durante o salvamento, reapresenta itens errados, contabiliza repetições de áudio, mostra progresso da sessão e encerra com resumo de acertos, erros e recuperações.
+
 ## Validação
 
 Antes de alterar todo o aplicativo, testar uma única lição revisada com:
@@ -70,6 +88,8 @@ Antes de alterar todo o aplicativo, testar uma única lição revisada com:
 - percepção de utilidade, clareza e interesse em continuar.
 
 A primeira versão deve ser comparada com a lição atual para verificar se o aumento de criatividade também produz melhor compreensão, e não apenas mais dificuldade.
+
+Essa comparação e a aprovação com adultos alfabetizandos não são substituídas pelos testes automatizados. Até sua execução, os itens permanecem explicitamente pendentes de revisão humana.
 
 ## Assumptions
 

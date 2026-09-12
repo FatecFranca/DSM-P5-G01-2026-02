@@ -31,6 +31,23 @@ export type Exercise = {
   tokens?: string[];
   /** Frase com a lacuna `___` nos exercícios de completar frase. */
   sentence?: string;
+  /** Metadados pedagógicos e visuais publicados junto do item. */
+  image?: string;
+  imageLabel?: string;
+  contextLabel?: string;
+  maskedWord?: string;
+  inlineAudio?: boolean;
+  skill?: string;
+  pedagogicalObjective?: string;
+  antiEliminationRationale?: string;
+  difficulty?: string;
+  successFeedback?: string;
+  errorFeedback?: string;
+  /** Índices (base zero) esperados por exercícios de múltipla seleção. */
+  targetPositions?: number[];
+  reviewStatus?: string;
+  reviewCriterion?: string;
+  compareWords?: string[];
 };
 
 export type UnitKind = "letter" | "word" | "sentence";

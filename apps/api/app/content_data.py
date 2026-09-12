@@ -31,6 +31,34 @@ def syllable_pattern(syllable: str) -> str:
 # possível e ficam sem esse exercício. I, O, U, M e P foram trocadas em 2026-09-15; revisão pedagógica pendente.
 CONTEXT_WORDS = {"I": "AI", "O": "OI", "U": "EU", "M": "MEU", "L": "MALA", "P": "MAPA", "S": "SALA", "T": "PATO", "R": "RUA", "N": "NOME", "D": "DADO", "C": "CASA", "G": "GATO", "B": "BOLA", "F": "FACA", "V": "VACA", "H": "HORA", "Q": "QUILO", "J": "JOGO", "K": "KARATE", "Z": "ZERO", "X": "XALE", "W": "WIFI", "Y": "YOGA"}
 
+# Catálogo explícito das 26 lições. Cada palavra é adulta, concreta e familiar; os pares
+# foram curados para que a resposta dependa da relação letra-som/palavra, não da posição.
+LESSON_CONTEXT = {
+    "A": ("ÁGUA", "MALA", "MALA", "E", "O"), "E": ("ENDEREÇO", "TELEFONE", "ENDEREÇO", "F", "I"),
+    "I": ("IDADE", "IDADE", "IDADE", "E", "U"), "O": ("ÔNIBUS", "COPO", "COPO", "Q", "U"),
+    "U": ("UNIDADE", "UNIDADE", "UNIDADE", "O", "V"), "M": ("MALA", "CAMA", "MALA", "N", "L"),
+    "L": ("LATA", "MALA", "LATA", "I", "T"), "P": ("PORTA", "PAPEL", "PORTA", "B", "R"),
+    "S": ("SALA", "SAÚDE", "SALA", "C", "Z"), "T": ("TAPETE", "TETO", "TAPETE", "D", "P"),
+    "R": ("RUA", "CARRO", "RUA", "P", "B"), "N": ("NOME", "ÔNIBUS", "NOME", "M", "H"),
+    "D": ("DADO", "IDADE", "DADO", "B", "T"), "C": ("CASA", "COPO", "CASA", "G", "S"),
+    "G": ("GATO", "ÁGUA", "GATO", "C", "J"), "B": ("BOLA", "ÔNIBUS", "BOLA", "D", "P"),
+    "F": ("FACA", "CAFÉ", "FACA", "V", "T"), "V": ("VACA", "CHAVE", "VACA", "F", "B"),
+    "H": ("HORA", "SENHA", "HORA", "N", "M"), "Q": ("QUILO", "QUEIJO", "QUILO", "C", "G"),
+    "J": ("JOGO", "LOJA", "JOGO", "G", "Z"), "K": ("KARATÊ", "KARATE", "KARATE", "Q", "C"),
+    "Z": ("ZERO", "AZUL", "ZERO", "S", "J"), "X": ("XALE", "CAIXA", "XALE", "CH", "Z"),
+    "W": ("WI-FI", "WHATSAPP", "WI-FI", "V", "U"), "Y": ("YOGA", "LAYOUT", "YOGA", "I", "J"),
+}
+
+VISUAL_DISTRACTORS = {
+    "A": ["A", "E", "O"], "E": ["F", "E", "I"], "I": ["L", "I", "T"], "O": ["Q", "O", "C"],
+    "U": ["V", "U", "O"], "M": ["N", "M", "W"], "L": ["I", "L", "T"], "P": ["B", "P", "R"],
+    "S": ["Z", "S", "C"], "T": ["I", "T", "F"], "R": ["P", "R", "B"], "N": ["M", "N", "H"],
+    "D": ["O", "D", "B"], "C": ["G", "C", "O"], "G": ["C", "G", "Q"], "B": ["D", "B", "P"],
+    "F": ["E", "F", "T"], "V": ["U", "V", "Y"], "H": ["N", "H", "M"], "Q": ["O", "Q", "G"],
+    "J": ["I", "J", "G"], "K": ["X", "K", "R"], "Z": ["S", "Z", "N"], "X": ["K", "X", "Z"],
+    "W": ["M", "W", "V"], "Y": ["V", "Y", "I"],
+}
+
 # complete_word: (palavra correta, índice da lacuna) e (distrator, índice da lacuna). A lacuna do distrator é de outra letra
 # já aprendida e o distrator não contém a letra-alvo. Vogais e M não têm par válido.
 WORD_CHOICES = {

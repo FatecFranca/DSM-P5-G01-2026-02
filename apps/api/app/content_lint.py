@@ -42,6 +42,8 @@ def lint_content(body: dict) -> list[str]:
             allowed = set(order[: index + 1])
             if missing := {kind.value for kind in required_types_for(letter)} - {item["type"] for item in unit["items"]}:
                 errors.append(f"{where_unit}: faltam exercícios obrigatórios ({', '.join(sorted(missing))}).")
+            if len(unit["items"]) != 7 or len({item["type"] for item in unit["items"]}) != 7:
+                errors.append(f"{where_unit}: a lição deve ter exatamente sete habilidades diferentes.")
         else:
             allowed = set(order)
             expected = "".join(dict.fromkeys(letter for item in unit["items"] for letter in item["required_letters"]))
@@ -55,6 +57,25 @@ def lint_content(body: dict) -> list[str]:
                 errors.append(f"{where}: item_kind deve ser {TARGET_OF[kind].value}.")
             if unit["kind"] == "letter" and item["required_letters"] != unit["required_letters"]:
                 errors.append(f"{where}: required_letters deve ser igual ao da unidade de letra.")
+            if unit["kind"] == "letter":
+                metadata = item.get("payload") or {}
+                required_metadata = {"pedagogical_objective", "difficulty", "anti_elimination_rationale", "feedback", "review"}
+                if missing_metadata := required_metadata - set(metadata):
+                    errors.append(f"{where}: metadados pedagógicos ausentes ({', '.join(sorted(missing_metadata))}).")
+                feedback, review = metadata.get("feedback") or {}, metadata.get("review") or {}
+                if not feedback.get("correct") or not feedback.get("incorrect"):
+                    errors.append(f"{where}: feedback correto e de nova tentativa são obrigatórios.")
+                if review.get("status") not in {"pending_human_review", "approved", "changes_requested"} or not review.get("criterion"):
+                    errors.append(f"{where}: status e critério de revisão pedagógica são obrigatórios.")
+                context = metadata.get("context") or {}
+                if answer and answer in item["instruction"].split():
+                    errors.append(f"{where}: o enunciado revela a resposta {answer}.")
+                if kind in {ExerciseType.LISTEN_CHOOSE, ExerciseType.INITIAL_SOUND, ExerciseType.COMPLETE_WORD, ExerciseType.MIXED_REVIEW}:
+                    masked = context.get("masked_word", "")
+                    if not context.get("hide_word") or not context.get("inline_audio") or "_" not in masked:
+                        errors.append(f"{where}: palavra deve aparecer lacunada, sem resposta visível, com áudio junto ao contexto.")
+                    if item.get("context_word") and item["context_word"] in item["instruction"]:
+                        errors.append(f"{where}: o enunciado não pode mostrar a palavra pronta.")
             if kind in (ExerciseType.LISTEN_CHOOSE, ExerciseType.RECOGNIZE_LETTER):
                 if answer != letter or letter not in options:
                     errors.append(f"{where}: a resposta deve ser {letter} e estar entre as opções.")
@@ -63,6 +84,24 @@ def lint_content(body: dict) -> list[str]:
                 check_letters(where, word, allowed)
                 if not letter or letter not in word or answer != f"{word.index(letter) + 1}ª posição" or answer not in options:
                     errors.append(f"{where}: a resposta deve ser a primeira posição de {letter} em {word} e estar entre as opções.")
+            elif kind is ExerciseType.INITIAL_SOUND:
+                if answer != letter or answer not in options or len(set(options)) != 3 or not item["context_word"]:
+                    errors.append(f"{where}: som inicial precisa de palavra e três letras distintas contendo {letter}.")
+            elif kind is ExerciseType.FIND_ALL_IN_WORD:
+                word = item["context_word"] or ""
+                expected = [index + 1 for index, character in enumerate(word) if character == letter]
+                payload = item.get("payload") or {}
+                if not expected or payload.get("characters") != list(word) or payload.get("target_indices") != expected or answer != ",".join(map(str, expected)):
+                    errors.append(f"{where}: deve marcar exatamente todas as ocorrências de {letter} em {word}.")
+                if options != [str(index + 1) for index in range(len(word))]:
+                    errors.append(f"{where}: opções devem representar todas as posições da palavra.")
+            elif kind is ExerciseType.COMPARE_WORDS:
+                pair = (item.get("payload") or {}).get("words") or []
+                if answer != letter or answer not in options or len(pair) != 2 or item["context_word"] not in pair:
+                    errors.append(f"{where}: comparação precisa de duas palavras e da letra-alvo entre as opções.")
+            elif kind is ExerciseType.MIXED_REVIEW:
+                if answer != letter or answer not in options or not item["context_word"] or letter not in item["context_word"]:
+                    errors.append(f"{where}: revisão precisa reapresentar a letra em uma palavra.")
             elif kind is ExerciseType.SYLLABLE_LISTEN_CHOOSE:
                 if answer not in options or item["target_id"] != answer or len(options) < 2:
                     errors.append(f"{where}: a sílaba-alvo deve ser a resposta e estar entre as opções.")
@@ -70,19 +109,14 @@ def lint_content(body: dict) -> list[str]:
                     check_letters(where, option, allowed)
                     if option not in syllables: errors.append(f"{where}: sílaba {option} não catalogada.")
             elif kind is ExerciseType.COMPLETE_WORD:
-                choices = item["word_choices"] or []
-                if len(choices) < 2:
-                    errors.append(f"{where}: precisa de ao menos um distrator.")
-                fits = [choice for choice in choices if choice["before"] + (letter or "") + choice["after"] == choice["word"]]
-                if len(fits) != 1 or fits[0]["id"] != answer:
-                    errors.append(f"{where}: exatamente uma opção deve ser completada por {letter}, e ela deve ser a resposta.")
-                for choice in choices:
-                    word = choice["word"]
-                    if len(choice["before"]) + 1 + len(choice["after"]) != len(word) or not word.startswith(choice["before"]) or not word.endswith(choice["after"]):
-                        errors.append(f"{where}: lacuna inválida em {word}.")
-                    check_letters(where, word, allowed)
-                    if choice["id"] != answer and letter in word:
-                        errors.append(f"{where}: o distrator {word} contém a letra {letter}.")
+                context = (item.get("payload") or {}).get("context") or {}
+                masked, word = context.get("masked_word", ""), item.get("context_word") or ""
+                if answer != letter or answer not in options or len(options) != 3 or len(set(options)) != 3:
+                    errors.append(f"{where}: deve oferecer três letras distintas e ter {letter} como resposta.")
+                if not word or masked.count("_") != 1 or masked.replace("_", letter, 1) != word:
+                    errors.append(f"{where}: a lacuna deve formar a palavra de contexto somente com {letter}.")
+                if item.get("word_choices"):
+                    errors.append(f"{where}: não deve mostrar cartões com palavras prontas.")
             elif kind is ExerciseType.WORD_LISTEN_CHOOSE:
                 if answer not in options or len(options) < 2 or item["target_id"] != answer:
                     errors.append(f"{where}: a palavra-alvo deve ser a resposta e estar entre as opções.")

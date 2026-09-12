@@ -1,5 +1,5 @@
 import { router, useLocalSearchParams } from "expo-router";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { AudioButton } from "../../src/components/AudioButton";
 import { rendererFor } from "../../src/components/exercises/registry";
@@ -8,7 +8,7 @@ import { useContentStore } from "../../src/content/store";
 import { canonicalLessonId } from "../../src/domain/content-ids";
 import { deriveProgress, isLessonUnlocked, type Feedback } from "../../src/domain/learning";
 import { applyResult } from "../../src/domain/scheduler";
-import { SESSION_POLICY_VERSION, buildSession, reinsert } from "../../src/domain/session";
+import { SESSION_POLICY_VERSION, buildSession, reinsert, sessionSummary } from "../../src/domain/session";
 import type { Exercise, Unit } from "../../src/domain/types";
 import { rankNext } from "../../src/api/client";
 import { saveAttempt, saveItemState } from "../../src/storage/database";
@@ -50,12 +50,17 @@ function LessonSession({ unit }: { unit: Unit }) {
   const [position, setPosition] = useState(0);
   const [feedback, setFeedback] = useState<Feedback>();
   const [selected, setSelected] = useState<string>();
+  const [saving, setSaving] = useState(false);
+  const [completed, setCompleted] = useState(false);
+  const [outcome, setOutcome] = useState({ correct: 0, errors: 0, recoveredItemIds: [] as string[], audioPlays: 0 });
   const seen = useRef<Record<string, number>>({});
   const shownAt = useRef(Date.now());
   const firstInteractionAt = useRef<number | undefined>(undefined);
   const audioRepeats = useRef(0);
   const accessToken = useAuthStore((state) => state.accessToken);
   const answered = useRef(false);
+  const submitting = useRef(false);
+  const failedItems = useRef(new Set<string>());
   const served = useRef<{ by: "rules" | "model"; policy: string; model?: string }>({ by: "rules", policy: SESSION_POLICY_VERSION });
   const exercise = queue[0];
 
@@ -106,37 +111,72 @@ function LessonSession({ unit }: { unit: Unit }) {
     setProgress(progress);
   };
 
-  const choose = (answer: string, correct: boolean) => {
-    if (!exercise) return;
+  const choose = async (answer: string, correct: boolean) => {
+    if (!exercise || submitting.current || feedback) return;
+    submitting.current = true;
+    setSaving(true);
     const word = exercise.wordChoices?.find((item) => item.id === answer);
-    const successMessage = exercise.type === "complete_word" ? `A letra ${unit.letter ?? ""} completa a palavra ${word?.word ?? ""}.` : exercise.itemKind === "letter" ? "Quando estiver pronto, siga para a próxima atividade." : `Isso mesmo: ${exercise.ttsText}.`;
-    const retryMessage = exercise.itemKind === "letter" ? `Ouça de novo e observe onde a letra ${unit.letter ?? ""} faz sentido. Esta atividade vai voltar daqui a pouco.` : "Ouça de novo com calma. Esta atividade vai voltar daqui a pouco.";
-    setFeedback(correct ? { kind: "success", title: "Muito bem!", message: successMessage } : { kind: "try-again", title: "Quase lá", message: retryMessage });
     setSelected(answer);
-    void submit(exercise, answer, correct);
+    try {
+      await submit(exercise, answer, correct);
+      const recovered = correct && failedItems.current.has(exercise.id);
+      if (!correct) failedItems.current.add(exercise.id);
+      setOutcome((current) => ({ correct: current.correct + (correct ? 1 : 0), errors: current.errors + (correct ? 0 : 1), recoveredItemIds: recovered ? [...current.recoveredItemIds, exercise.id] : current.recoveredItemIds, audioPlays: current.audioPlays }));
+      const successMessage = exercise.successFeedback ?? (exercise.type === "complete_word" ? `A letra ${unit.letter ?? ""} completa a palavra ${word?.word ?? ""}.` : exercise.itemKind === "letter" ? "Você relacionou a letra, o som e a palavra." : `Isso mesmo: ${exercise.ttsText}.`);
+      const retryMessage = exercise.errorFeedback ?? (exercise.itemKind === "letter" ? `Ouça a palavra de novo e procure a letra ${unit.letter ?? ""}. Você verá este desafio outra vez.` : "Observe o contexto e ouça de novo. Você verá este desafio outra vez.");
+      setFeedback(correct ? { kind: "success", title: "Muito bem!", message: successMessage } : { kind: "try-again", title: "Vamos aprender com esse erro", message: retryMessage });
+    } catch {
+      setSelected(undefined);
+      setFeedback({ kind: "incorrect", title: "Não foi possível salvar", message: "Sua resposta não foi registrada. Tente novamente." });
+    } finally {
+      submitting.current = false;
+      setSaving(false);
+    }
   };
 
   // Acerto sai da fila; erro volta até três posições adiante. A sessão só termina com a fila vazia.
   const next = () => {
     if (!exercise) return;
     const remaining = feedback?.kind === "success" ? queue.slice(1) : reinsert(queue.slice(1), exercise);
-    if (!remaining.length) { router.replace("/progress"); return; }
+    if (!remaining.length) { setCompleted(true); return; }
     setQueue(remaining);
     setPosition((value) => value + 1);
     setFeedback(undefined);
     setSelected(undefined);
   };
 
-  const heading = useMemo(() => `${Math.min(position + 1, session.queue.length + position)} · ${queue.length} restante${queue.length === 1 ? "" : "s"} · ${unit.title}`, [position, queue.length, session.queue.length, unit.title]);
+  const heading = `${position + 1} · ${queue.length} restante${queue.length === 1 ? "" : "s"} · ${unit.title}`;
+
+  if (completed) {
+    const summary = sessionSummary(outcome);
+    return <Screen>
+      <Text style={styles.celebration}>Lição concluída!</Text>
+      <Text style={styles.summaryLead}>Você praticou {unit.title.toLowerCase()} e terminou todos os desafios.</Text>
+      <View style={styles.summaryGrid}>
+        <View style={styles.summaryCard}><Text style={styles.summaryValue}>{summary.correct}</Text><Text style={styles.summaryLabel}>acertos</Text></View>
+        <View style={styles.summaryCard}><Text style={styles.summaryValue}>{summary.errors}</Text><Text style={styles.summaryLabel}>erros</Text></View>
+        <View style={styles.summaryCard}><Text style={styles.summaryValue}>{summary.recovered}</Text><Text style={styles.summaryLabel}>erros recuperados</Text></View>
+        <View style={styles.summaryCard}><Text style={styles.summaryValue}>{summary.audioPlays}</Text><Text style={styles.summaryLabel}>áudios ouvidos</Text></View>
+      </View>
+      <Text style={styles.encouragement}>{summary.errors === 0 ? "Excelente: você acertou sem precisar repetir." : summary.recovered === summary.recoveredItemIds.length && summary.recovered > 0 ? "Você voltou aos desafios e transformou erros em aprendizagem." : "Cada tentativa fortalece a leitura. Continue praticando."}</Text>
+      <Pressable accessibilityRole="button" style={styles.next} onPress={() => router.replace("/lessons")}><Text style={styles.nextText}>Continuar aprendendo</Text></Pressable>
+      <Pressable accessibilityRole="button" style={styles.continue} onPress={() => router.replace("/progress")}><Text style={styles.continueText}>Ver meu progresso</Text></Pressable>
+    </Screen>;
+  }
+
   if (!exercise) return <Screen><Text style={styles.instruction}>Sessão concluída.</Text></Screen>;
   const Renderer = rendererFor(exercise.type);
   const isLast = queue.length === 1 && feedback?.kind === "success";
 
   return <Screen>
+    <View accessibilityLabel={`Progresso da sessão: ${position + 1} de pelo menos ${session.queue.length}`} style={styles.progressTrack}><View style={[styles.progressFill, { width: `${Math.min(100, ((position + 1) / Math.max(1, position + queue.length)) * 100)}%` }]} /></View>
     <Text style={styles.kicker}>{heading}</Text>
+    {exercise.skill && <Text style={styles.skill}>{exercise.skill}{exercise.difficulty ? ` · ${exercise.difficulty}` : ""}</Text>}
     <Text style={styles.instruction}>{exercise.instruction}</Text>
-    <AudioButton label={exercise.itemKind === "letter" ? "Repetir instrução" : "Ouvir de novo"} text={exercise.ttsText} onPlay={() => { audioRepeats.current += 1; interact(); }} />
-    <Renderer key={`${exercise.id}-${position}`} exercise={exercise} letter={unit.letter} selected={selected} onChoose={choose} onInteract={interact} />
+    <AudioButton label="Ouvir enunciado" text={exercise.instruction} onPlay={() => { audioRepeats.current += 1; setOutcome((current) => ({ ...current, audioPlays: current.audioPlays + 1 })); interact(); }} />
+    {!exercise.inlineAudio && exercise.ttsText !== exercise.instruction && <AudioButton label={exercise.itemKind === "letter" ? "Ouvir pista" : "Ouvir conteúdo"} text={exercise.ttsText} onPlay={() => { audioRepeats.current += 1; setOutcome((current) => ({ ...current, audioPlays: current.audioPlays + 1 })); interact(); }} />}
+    <Renderer key={`${exercise.id}-${position}`} exercise={exercise} letter={unit.letter} selected={selected} disabled={saving || Boolean(feedback)} onChoose={(answer, correct) => { void choose(answer, correct); }} onInteract={interact} onAudioPlay={() => { audioRepeats.current += 1; setOutcome((current) => ({ ...current, audioPlays: current.audioPlays + 1 })); }} />
+    {saving && <Text accessibilityLiveRegion="polite" style={styles.saving}>Salvando resposta…</Text>}
     {feedback && <View accessibilityRole="alert" style={[styles.feedback, feedback.kind === "success" ? styles.success : styles.care]}><Text style={styles.feedbackTitle}>{feedback.title}</Text><Text style={styles.feedbackText}>{feedback.message}</Text></View>}
     {feedback && <Pressable accessibilityRole="button" style={feedback.kind === "success" ? styles.next : styles.continue} onPress={next}><Text style={feedback.kind === "success" ? styles.nextText : styles.continueText}>{isLast ? "Ver progresso" : feedback.kind === "success" ? "Próxima atividade" : "Continuar"}</Text></Pressable>}
   </Screen>;
@@ -144,6 +184,8 @@ function LessonSession({ unit }: { unit: Unit }) {
 
 const styles = StyleSheet.create({
   kicker: { color: colors.accent, fontWeight: "800", fontSize: 15 },
+  skill: { color: colors.muted, fontWeight: "700", fontSize: 15 },
+  progressTrack: { height: 12, borderRadius: 6, backgroundColor: colors.border, overflow: "hidden" }, progressFill: { height: "100%", borderRadius: 6, backgroundColor: colors.success },
   instruction: { color: colors.text, fontWeight: "800", fontSize: 29, lineHeight: 38 },
   feedback: { borderRadius: 16, padding: 18 },
   success: { backgroundColor: "#DDF3E9" },
@@ -154,4 +196,8 @@ const styles = StyleSheet.create({
   nextText: { color: "white", fontSize: 18, fontWeight: "800" },
   continue: { minHeight: 60, borderRadius: 15, borderWidth: 2, borderColor: colors.primary, alignItems: "center", justifyContent: "center" },
   continueText: { color: colors.primary, fontSize: 18, fontWeight: "800" },
+  saving: { color: colors.muted, fontSize: 16, fontWeight: "700", textAlign: "center" },
+  celebration: { color: colors.success, fontSize: 34, fontWeight: "900", textAlign: "center" }, summaryLead: { color: colors.text, fontSize: 20, lineHeight: 29, textAlign: "center" },
+  summaryGrid: { flexDirection: "row", flexWrap: "wrap", gap: 12 }, summaryCard: { width: "47%", padding: 16, borderRadius: 16, alignItems: "center", backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.border },
+  summaryValue: { color: colors.primary, fontSize: 32, fontWeight: "900" }, summaryLabel: { color: colors.muted, fontSize: 15, fontWeight: "700", textAlign: "center" }, encouragement: { padding: 16, borderRadius: 14, backgroundColor: "#DDF3E9", color: colors.text, fontSize: 18, lineHeight: 26, textAlign: "center" },
 });

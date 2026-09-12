@@ -7,7 +7,7 @@ import json
 import uuid
 from sqlalchemy import select
 from .content import content_body, content_checksum
-from .content_data import ACCENTS, CONTEXT_WORDS, SENTENCES, TRACKS, WORDS, WORD_CHOICES, deterministic_shuffle, required_letters, syllable_exercise, syllable_pattern
+from .content_data import ACCENTS, LESSON_CONTEXT, SENTENCES, TRACKS, VISUAL_DISTRACTORS, WORDS, deterministic_shuffle, required_letters, syllable_pattern
 from .content_ids import exercise_id_for, item_id_for, lesson_id_for
 from .content_types import LEARNING_ORDER, PHASE_SPECS, TARGET_OF, ExerciseType
 from .db import SessionLocal
@@ -24,22 +24,53 @@ def word_choice(word: str, blank: int) -> dict:
 
 
 def letter_item_specs(letter: str) -> list[dict]:
-    """Itens de uma unidade de letra, na ordem de apresentação."""
+    """Sete práticas curtas e complementares, curadas explicitamente para cada letra."""
     index = LETTERS.index(letter)
-    options = [letter, LETTERS[(index + 1) % 26], LETTERS[(index + 2) % 26]]
-    specs = [dict(type=ExerciseType.LISTEN_CHOOSE, instruction=f"Ouça e escolha a letra {letter}.", answer=letter, options=options, tts=f"Ouça e escolha a letra {letter}."),
-             dict(type=ExerciseType.RECOGNIZE_LETTER, instruction=f"Encontre a letra {letter}.", answer=letter, options=options[::-1], tts=f"Encontre a letra {letter}.")]
-    if word := CONTEXT_WORDS.get(letter):
-        specs.append(dict(type=ExerciseType.FIND_IN_WORD, instruction=f"Onde aparece primeiro a letra {letter} na palavra {word}?", answer=f"{word.index(letter) + 1}ª posição",
-                          options=[f"{item + 1}ª posição" for item in range(len(word))], context_word=word, tts=f"Onde aparece primeiro a letra {letter} na palavra {word}?"))
-    if syllable := syllable_exercise(letter):
-        target, options = syllable
-        specs.append(dict(type=ExerciseType.SYLLABLE_LISTEN_CHOOSE, instruction="Ouça e escolha a sílaba.", answer=target, options=options, target_id=target, tts=target))
-    if letter in WORD_CHOICES:
-        (correct, correct_blank), (distractor, distractor_blank) = WORD_CHOICES[letter]
-        choices = [word_choice(correct, correct_blank), word_choice(distractor, distractor_blank)]
-        # Alterna a posição da resposta para que ela não fique sempre em primeiro.
-        specs.append(dict(type=ExerciseType.COMPLETE_WORD, instruction=f"Em qual palavra entra a letra {letter}?", answer=correct.lower(), word_choices=choices[::-1] if index % 2 else choices, target_id=correct, tts=f"Em qual palavra entra a letra {letter}?"))
+    context, hunt_word, review_word, sound_distractor, other_distractor = LESSON_CONTEXT[letter]
+    visual = VISUAL_DISTRACTORS[letter]
+    positions = [i + 1 for i, char in enumerate(hunt_word) if char == letter]
+    blank = hunt_word.index(letter)
+    masked_hunt_word = f"{hunt_word[:blank]}_{hunt_word[blank + 1:]}"
+    review_blank = review_word.index(letter)
+    masked_review_word = f"{review_word[:review_blank]}_{review_word[review_blank + 1:]}"
+
+    def metadata(objective: str, difficulty: str, rationale: str, correct: str, retry: str) -> dict:
+        return {
+            "pedagogical_objective": objective,
+            "difficulty": difficulty,
+            "anti_elimination_rationale": rationale,
+            "feedback": {"correct": correct, "incorrect": retry},
+            "review": {
+                "status": "pending_human_review",
+                "criterion": "Aprovar após adulto alfabetizando compreender a instrução, justificar a resposta e não depender da posição das opções.",
+            },
+            "context": {"word": context, "audience": "adulto", "situation": "uso cotidiano"},
+        }
+
+    hidden_context = lambda word, masked: {"word": word, "masked_word": masked, "hide_word": True, "inline_audio": True, "audience": "adulto", "situation": "uso cotidiano"}
+    specs = [
+        dict(type=ExerciseType.LISTEN_CHOOSE, instruction="Qual letra completa esta palavra?", answer=letter,
+             options=visual[index % 3:] + visual[:index % 3], context_word=context, tts=context,
+             payload={**metadata("Associar o som da palavra à letra inicial ausente.", "introducao", "A resposta depende de ouvir a palavra e relacionar seu som inicial à lacuna.", f"Isso: {letter} completa a palavra.", "Ouça a palavra novamente e preste atenção ao primeiro som."), "context": hidden_context(context, f"_{context[1:]}")}),
+        dict(type=ExerciseType.RECOGNIZE_LETTER, instruction="Qual letra você ouviu?", answer=letter,
+             options=list(reversed(visual)), context_word=None, tts=letter,
+             payload=metadata("Discriminar visualmente a letra ouvida.", "facil", "Os distratores têm traços semelhantes; é preciso reconhecer a forma.", f"Você reconheceu a forma de {letter}.", "Ouça novamente e compare as formas.")),
+        dict(type=ExerciseType.INITIAL_SOUND, instruction="Ouça a palavra. Qual é a primeira letra?", answer=letter,
+             options=[sound_distractor, letter, other_distractor], context_word=context, tts=context,
+             payload={**metadata("Relacionar o som inicial à letra.", "medio", "As alternativas são letras de sons ou formas próximos.", f"Correto: a palavra começa com o som de {letter}.", "Ouça devagar e perceba o primeiro som."), "context": hidden_context(context, f"_{context[1:]}")}),
+        dict(type=ExerciseType.FIND_ALL_IN_WORD, instruction="Ouça a letra e toque em todas as ocorrências na palavra.", answer=",".join(map(str, positions)),
+             options=[str(i + 1) for i in range(len(hunt_word))], context_word=hunt_word, tts=letter,
+             payload={**metadata("Localizar todas as ocorrências da letra numa palavra.", "medio", "Há várias posições possíveis e todas precisam ser verificadas.", f"Você encontrou todas as letras {letter} em {hunt_word}.", f"Leia {hunt_word} da esquerda para a direita e tente novamente."), "characters": list(hunt_word), "target_indices": positions}),
+        dict(type=ExerciseType.COMPARE_WORDS, instruction="Compare as palavras. Qual letra inicia a primeira?", answer=letter,
+             options=[other_distractor, sound_distractor, letter], context_word=context, tts=f"{context}. {hunt_word}.",
+             payload={**metadata("Comparar palavras e identificar a letra inicial relevante.", "medio", "Duas palavras reais exigem atenção à palavra perguntada.", f"Certo: {context} inicia com {letter}.", "Observe o começo da primeira palavra e compare outra vez."), "words": [context, hunt_word], "changed_position": 1}),
+        dict(type=ExerciseType.COMPLETE_WORD, instruction="Qual letra completa esta palavra?", answer=letter,
+             options=visual[2:] + visual[:2], target_id=hunt_word, context_word=hunt_word, tts=hunt_word,
+             payload={**metadata("Completar uma palavra cotidiana a partir do áudio e da lacuna.", "medio", "Lacuna e distratores são plausíveis; o áudio determina a resposta sem exibir a palavra pronta.", f"Isso: {letter} completa a palavra.", "Ouça a palavra novamente e escolha a letra que falta."), "context": hidden_context(hunt_word, masked_hunt_word)}),
+        dict(type=ExerciseType.MIXED_REVIEW, instruction="Revisão: qual letra falta nesta palavra?", answer=letter,
+             options=visual[1:] + visual[:1], context_word=review_word, tts=review_word,
+             payload={**metadata("Recuperar a letra em outro contexto e outra ordem de opções.", "revisao", "A palavra aparece com lacuna e exige nova associação entre áudio e escrita.", f"Boa revisão: {letter} completa a palavra.", "Ouça novamente e observe a posição da lacuna."), "context": hidden_context(review_word, masked_review_word)}),
+    ]
     return specs
 
 
