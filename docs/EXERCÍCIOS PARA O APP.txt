@@ -1,0 +1,131 @@
+EXERCÍCIOS PARA O APP 
+
+Nível 1 - Letras:
+Primeiro as vogais
+A) Selecione a vogal inicial do nome do desenho.
+[Desenho de uma abelha] __BELHA
+[Desenho de uma igreja] __GREJA
+
+Depois consoantes
+* Quando já estivermos com as consoantes revisar as vogais tbm
+A) Selecione a consoante inicial do nome do desenho.
+[Desenho de um martelo] __ARTELO
+[Desenho de uma ponte] __ONTE
+
+B) Ligue o objeto a letra inicial do seu nome.
+[Desenho de um Relógio]   [B]
+[Desenho de um Sapato]    [O]
+[Desenho de uma Bolsa]    [R]
+[Desenho de um Óculos]    [S]
+
+C) Escreva as letras do alfabeto que vê antes e depois da letra indicada
+_E_
+_I_
+_O_
+_U_ 
+
+Resposta esperada: D,E,F | H,I,J | N,O,P | T,U,V 
+
+D) Leia a palavra e escreva a letra inicial e a letra final do nome do desenho.
+[Desenho de um anjo]
+ANJO
+__ caixinha para colocar a letra inicial
+
+__ caixinha para colocar a letra final  
+
+E) Clique no microfone e selecione a letra que escutar. (MAIS BÁSICO E ESSENCIAL)
+-Aqui ele diz, por exemplo, A.
+
+Opções para o usuário:
+
+A E M O P
+
+Nível 2 - Sílabas:
+* Nos primeiros dias incluir algumas revisões no nível anterior
+A) Complete as palavras com as sílabas abaixo:
+[DA] [CA] [BO]
+
+[Desenho de uma casa] __SA
+[Desenho de um dado] __DO
+[Desenho de um bolo] __LO
+
+B) Complete com a sílaba inicial. (aqui tbm pode ser sílabas finais)
+[Desenho de um sorvete] ___ VE TE
+
+C) Selecione a sílaba inicial de cada desenho 
+[Desenho de navio]
+VI VA PE NA RA
+
+D) Separe as sílabas da palavra
+CAMELO
+
+__
+__
+__
+
+obj: que o usuário DIGITE ca me lo nos quadrantes de forma certa
+
+E) Forme as palavras a partir das sílabas:
+ BA + NA + NA = objetivo que o usuário digite banana
+
+F) Clique no microfone e selecione a sílaba que escutar. (MAIS BÁSICO E ESSENCIAL)
+-Aqui ele diz, por exemplo, MA.
+
+Opções para o usuário:
+
+BA NE MA PU 
+
+Nível 3 - Palavras:
+* Nos primeiros dias incluir algumas revisões no nível anterior
+
+A) Selecione a letra inicial do nome do desenho.
+[Desenho de uma abelha] __BELHA
+[Desenho de um martelo] __ARTELO
+
+B) Ligue cada imagem à palavra correspondente.
+Escada         [Desenhos]
+Batedeira
+Copo
+Sol 
+
+C) Selecione o desenho que corresponde à palavra escrita no quadro.
+[FOLHA]
+[Desenho de uma folha]
+[Desenho de uma chama]
+[Desenho de uma foca]
+
+D) Selecione a palavra que corresponde ao desenho.
+[Desenho de uma maçã]
+
+Opções:
+[banana] [mãos] [meia] [maçã] [pera]
+
+E) Agora vamos completar as palavras com a letra U. (FARIAMOS SEQUENCIA ASSIM PARA TODAS AS LETRAS)
+
+[Desenho de uva]
+__VA
+
+[Desenho de urso]
+__RSO 
+Objetivo ele associar letras à palavras.
+
+Nível 4 - Frases:
+* Nos primeiros dias incluir algumas revisões no nível anterior
+* Escalar para trechos de texto
+
+A) Reescreva as frases abaixo colocando o nome das figuras.
+A [DESENHO DE LARANJA] É UMA FRUTA.
+obj: ele escreva a frase -> a laranja é uma fruta.
+essa escrita seria por meio de palavras embaraçadas, ele colocaria em ordem, clicando nas palavras.
+
+B) Observe a ilustração e selecione a frase que corresponde a ela.
+[Desenho de uma menina brincando no balanço]
+
+Opções de frases:
+A menina gosta de chocolate
+A menina nada
+A menina brinca no balanço
+
+Nível 5 - Nível máximo, aluno já sabendo o essencial de leitura e escrita, utiliza do app para praticar e aprender curiosidades.
+
+
