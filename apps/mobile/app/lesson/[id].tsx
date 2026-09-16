@@ -1,6 +1,7 @@
 import { router, useLocalSearchParams } from "expo-router";
 import { useEffect, useRef, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
+import * as Speech from "expo-speech";
 import { AudioButton } from "../../src/components/AudioButton";
 import { rendererFor } from "../../src/components/exercises/registry";
 import { Screen } from "../../src/components/Screen";
@@ -52,6 +53,7 @@ function LessonSession({ unit }: { unit: Unit }) {
   const [selected, setSelected] = useState<string>();
   const [saving, setSaving] = useState(false);
   const [completed, setCompleted] = useState(false);
+  const [resetVersion, setResetVersion] = useState(0);
   const [outcome, setOutcome] = useState({ correct: 0, errors: 0, recoveredItemIds: [] as string[], audioPlays: 0 });
   const seen = useRef<Record<string, number>>({});
   const shownAt = useRef(Date.now());
@@ -134,6 +136,24 @@ function LessonSession({ unit }: { unit: Unit }) {
     }
   };
 
+  // O erro é acolhido com a repetição automática do conteúdo, sem exigir outro toque.
+  useEffect(() => {
+    if (feedback?.kind !== "try-again" || !exercise) return;
+    audioRepeats.current += 1;
+    setOutcome((current) => ({ ...current, audioPlays: current.audioPlays + 1 }));
+    void Speech.stop().then(() => Speech.speak(exercise.ttsText, { language: "pt-BR", rate: 0.85, pitch: 1 }));
+  }, [exercise, feedback?.kind]);
+
+  const retryNow = () => {
+    setFeedback(undefined);
+    setSelected(undefined);
+    setResetVersion((value) => value + 1);
+    shownAt.current = Date.now();
+    firstInteractionAt.current = undefined;
+    audioRepeats.current = 0;
+    submitting.current = false;
+  };
+
   // Acerto sai da fila; erro volta até três posições adiante. A sessão só termina com a fila vazia.
   const next = () => {
     if (!exercise) return;
@@ -175,10 +195,12 @@ function LessonSession({ unit }: { unit: Unit }) {
     <Text style={styles.instruction}>{exercise.instruction}</Text>
     <AudioButton label="Ouvir enunciado" text={exercise.instruction} onPlay={() => { audioRepeats.current += 1; setOutcome((current) => ({ ...current, audioPlays: current.audioPlays + 1 })); interact(); }} />
     {!exercise.inlineAudio && exercise.ttsText !== exercise.instruction && <AudioButton label={exercise.itemKind === "letter" ? "Ouvir pista" : "Ouvir conteúdo"} text={exercise.ttsText} onPlay={() => { audioRepeats.current += 1; setOutcome((current) => ({ ...current, audioPlays: current.audioPlays + 1 })); interact(); }} />}
-    <Renderer key={`${exercise.id}-${position}`} exercise={exercise} letter={unit.letter} selected={selected} disabled={saving || Boolean(feedback)} onChoose={(answer, correct) => { void choose(answer, correct); }} onInteract={interact} onAudioPlay={() => { audioRepeats.current += 1; setOutcome((current) => ({ ...current, audioPlays: current.audioPlays + 1 })); }} />
+    <Renderer key={`${exercise.id}-${position}-${resetVersion}`} exercise={exercise} letter={unit.letter} selected={selected} disabled={saving || Boolean(feedback)} onChoose={(answer, correct) => { void choose(answer, correct); }} onInteract={interact} onAudioPlay={() => { audioRepeats.current += 1; setOutcome((current) => ({ ...current, audioPlays: current.audioPlays + 1 })); }} />
+    {!feedback && !saving && <Pressable accessibilityRole="button" accessibilityLabel="Reiniciar esta atividade" style={styles.restart} onPress={retryNow}><Text style={styles.restartText}>Reiniciar atividade</Text></Pressable>}
     {saving && <Text accessibilityLiveRegion="polite" style={styles.saving}>Salvando resposta…</Text>}
     {feedback && <View accessibilityRole="alert" style={[styles.feedback, feedback.kind === "success" ? styles.success : styles.care]}><Text style={styles.feedbackTitle}>{feedback.title}</Text><Text style={styles.feedbackText}>{feedback.message}</Text></View>}
-    {feedback && <Pressable accessibilityRole="button" style={feedback.kind === "success" ? styles.next : styles.continue} onPress={next}><Text style={feedback.kind === "success" ? styles.nextText : styles.continueText}>{isLast ? "Ver progresso" : feedback.kind === "success" ? "Próxima atividade" : "Continuar"}</Text></Pressable>}
+    {feedback?.kind === "try-again" && <Pressable accessibilityRole="button" style={styles.continue} onPress={retryNow}><Text style={styles.continueText}>Tentar novamente agora</Text></Pressable>}
+    {feedback && feedback.kind !== "try-again" && <Pressable accessibilityRole="button" style={feedback.kind === "success" ? styles.next : styles.continue} onPress={next}><Text style={feedback.kind === "success" ? styles.nextText : styles.continueText}>{isLast ? "Ver progresso" : feedback.kind === "success" ? "Próxima atividade" : "Tentar novamente"}</Text></Pressable>}
   </Screen>;
 }
 
@@ -197,6 +219,8 @@ const styles = StyleSheet.create({
   continue: { minHeight: 60, borderRadius: 15, borderWidth: 2, borderColor: colors.primary, alignItems: "center", justifyContent: "center" },
   continueText: { color: colors.primary, fontSize: 18, fontWeight: "800" },
   saving: { color: colors.muted, fontSize: 16, fontWeight: "700", textAlign: "center" },
+  restart: { alignSelf: "center", minHeight: 48, justifyContent: "center", paddingHorizontal: 16 },
+  restartText: { color: colors.primary, fontSize: 16, fontWeight: "700", textDecorationLine: "underline" },
   celebration: { color: colors.success, fontSize: 34, fontWeight: "900", textAlign: "center" }, summaryLead: { color: colors.text, fontSize: 20, lineHeight: 29, textAlign: "center" },
   summaryGrid: { flexDirection: "row", flexWrap: "wrap", gap: 12 }, summaryCard: { width: "47%", padding: 16, borderRadius: 16, alignItems: "center", backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.border },
   summaryValue: { color: colors.primary, fontSize: 32, fontWeight: "900" }, summaryLabel: { color: colors.muted, fontSize: 15, fontWeight: "700", textAlign: "center" }, encouragement: { padding: 16, borderRadius: 14, backgroundColor: "#DDF3E9", color: colors.text, fontSize: 18, lineHeight: 26, textAlign: "center" },

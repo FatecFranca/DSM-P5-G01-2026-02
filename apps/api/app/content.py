@@ -5,7 +5,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session, selectinload
 from .content_types import LEARNING_ORDER
 from .db import get_db
-from .models import Sentence, Syllable, Track, Unit, Word
+from .models import Asset, Sentence, Syllable, Track, Unit, Word
 
 router = APIRouter(prefix="/v1", tags=["content"])
 PUBLISHED = ("pending", "approved")  # candidate, retired e rejected ficam fora do bundle.
@@ -15,6 +15,7 @@ def content_body(db: Session) -> dict:
     words = db.scalars(select(Word).where(Word.review_status.in_(PUBLISHED)).order_by(Word.text)).all()
     sentences = db.scalars(select(Sentence).where(Sentence.review_status.in_(PUBLISHED)).order_by(Sentence.id)).all()
     syllables = db.scalars(select(Syllable).where(Syllable.review_status.in_(PUBLISHED)).order_by(Syllable.position, Syllable.text)).all()
+    assets = db.scalars(select(Asset).order_by(Asset.id)).all()
     return {
         "learning_order": LEARNING_ORDER,
         "tracks": [{"id": t.id, "slug": t.slug, "title": t.title, "kind": t.kind, "description": t.description, "position": t.position, "units": [{
@@ -23,9 +24,12 @@ def content_body(db: Session) -> dict:
                        "word_choices": i.word_choices, "payload": i.payload, "required_letters": i.required_letters, "audio_asset": i.audio_asset, "tts_fallback_text": i.tts_fallback_text, "position": i.position}
                       for i in u.items if i.review_status in PUBLISHED],
         } for u in t.units if u.review_status in PUBLISHED]} for t in tracks if t.review_status in PUBLISHED],
-        "words": [{"id": w.id, "text": w.text, "syllables": w.syllables, "required_letters": w.required_letters, "difficulty": w.current_difficulty, "frequency": w.frequency, "review_status": w.review_status} for w in words],
-        "sentences": [{"id": s.id, "text": s.text, "required_letters": s.required_letters, "required_word_ids": s.required_word_ids, "difficulty": s.difficulty, "review_status": s.review_status} for s in sentences],
+        "words": [{"id": w.id, "text": w.text, "syllables": w.syllables, "required_letters": w.required_letters, "difficulty": w.current_difficulty, "frequency": w.frequency, "review_status": w.review_status,
+                   "image_asset": w.image_asset, "image_alt": w.image_alt, "license": w.license, "attribution": w.attribution} for w in words],
+        "sentences": [{"id": s.id, "text": s.text, "required_letters": s.required_letters, "required_word_ids": s.required_word_ids, "difficulty": s.difficulty, "review_status": s.review_status,
+                       "image_asset": s.image_asset, "image_alt": s.image_alt, "license": s.license, "attribution": s.attribution} for s in sentences],
         "syllables": [{"id": s.id, "text": s.text, "pattern": s.pattern, "required_letters": s.required_letters, "position": s.position} for s in syllables],
+        "assets": [{"id": a.id, "kind": a.kind, "license": a.license, "attribution": a.attribution} for a in assets],
     }
 
 def content_checksum(body: dict) -> str:

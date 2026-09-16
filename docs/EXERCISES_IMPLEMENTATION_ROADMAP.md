@@ -95,19 +95,19 @@ unidades e IDs novos não alteram conclusões existentes nem exigem migração.
 
 ## Passo a passo de execução
 
-- [ ] Criar os 14 SVGs próprios e o manifesto de ilustrações no mobile.
-- [ ] Publicar image_asset e image_alt de palavras/frases no bundle e registrar
+- [x] Criar os 14 SVGs próprios e o manifesto de ilustrações no mobile.
+- [x] Publicar image_asset e image_alt de palavras/frases no bundle e registrar
       ativos e metadados no seed da API.
-- [ ] Adicionar os três tipos, sufixos de ID, alvos e renderizadores aos
+- [x] Adicionar os três tipos, sufixos de ID, alvos e renderizadores aos
       contratos compartilhados, API e mobile.
-- [ ] Estender os validadores para rejeitar sílaba fora da posição pedida,
+- [x] Estender os validadores para rejeitar sílaba fora da posição pedida,
       entidade não publicada, opção duplicada, ativo sem rótulo ou ID desconhecido.
-- [ ] Apresentar imagem contextual no componente de escolha e adaptar a montagem
+- [x] Apresentar imagem contextual no componente de escolha e adaptar a montagem
       de sílabas para usar áudio/ilustração sem mostrar a resposta.
-- [ ] Curar casa-silabas, casa-imagens e casa-cenas com instruções, áudio,
+- [x] Curar casa-silabas, casa-imagens e casa-cenas com instruções, áudio,
       alternativas, feedback e revisão pendente.
-- [ ] Gerar o bundle e confirmar que seed e API fornecem conteúdo válido igual.
-- [ ] Executar testes API/mobile, validação de tipo/build aplicável e corrigir
+- [x] Gerar o bundle e confirmar que seed e API fornecem conteúdo válido igual.
+- [x] Executar testes API/mobile, validação de tipo/build aplicável e corrigir
       falhas antes de marcar a etapa como concluída.
 - [ ] Registrar a revisão do integrante de pedagogia: clareza, repetições de
       áudio, erros por distrator e observações antes de promover itens aprovados.
@@ -126,4 +126,4 @@ unidades e IDs novos não alteram conclusões existentes nem exigem migração.
 | Data | Etapa | Resultado | Evidência |
 | --- | --- | --- | --- |
 | 15/09/2026 | Criação deste roteiro | Concluída | docs/EXERCISES_IMPLEMENTATION_ROADMAP.md |
-
+| 15/09/2026 | Ativos offline, novos contratos e conteúdo-piloto | Concluída tecnicamente | 14 SVGs locais; 23 itens novos; testes API/mobile, typecheck e lint |

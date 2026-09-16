@@ -14,12 +14,14 @@ As 26 letras maiúsculas de forma são apresentadas progressivamente nesta ordem
 
 A trilha é dividida em três fases: vogais (`A, E, I, O, U`), consoantes de alta utilidade (`M, L, P, S, T, R, N, D, C, G`) e ampliação do vocabulário (`B, F, V, H, Q, J, K, Z, X, W, Y`). A letra `G` pertence à segunda fase para permitir palavras comuns mais cedo.
 
-A ordem começa pelas vogais e adiciona consoantes úteis para formar as primeiras palavras. Cada lição oferece as atividades de letra:
+A ordem começa pelas vogais e adiciona consoantes úteis para formar as primeiras palavras. Cada lição oferece sete atividades-base de letra; as 15 consoantes com padrão CV regular recebem ainda uma oitava prática de sílaba:
 
 1. ouvir uma instrução e escolher a letra;
 2. reconhecer visualmente a letra solicitada;
 3. localizar a letra em uma palavra contextualizada, escolhendo a posição em que ela aparece;
 4. quando existe par de palavras válido, escolher em qual palavra a letra entra (`complete_word`).
+
+O catálogo implementado amplia essa base com som inicial, caça a todas as ocorrências, comparação de palavras e revisão mista. Os IDs das sete atividades-base permanecem estáveis; a prática `syllable_listen_choose` é adicional e não invalida progresso anterior.
 
 Regras verificadas automaticamente pelo content-lint da API e pelo validador do app:
 

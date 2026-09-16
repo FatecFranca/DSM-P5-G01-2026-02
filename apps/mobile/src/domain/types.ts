@@ -33,6 +33,8 @@ export type Exercise = {
   sentence?: string;
   /** Metadados pedagógicos e visuais publicados junto do item. */
   image?: string;
+  /** ID estável resolvido exclusivamente pelo manifesto de ilustrações embarcadas. */
+  imageAsset?: string;
   imageLabel?: string;
   contextLabel?: string;
   maskedWord?: string;
@@ -50,7 +52,7 @@ export type Exercise = {
   compareWords?: string[];
 };
 
-export type UnitKind = "letter" | "word" | "sentence";
+export type UnitKind = "letter" | "word" | "sentence" | "syllable" | "word_image" | "sentence_image";
 
 /** Unidade de estudo: uma letra da trilha fônica ou um grupo de palavras/frases de uma trilha temática. */
 export type Unit = {

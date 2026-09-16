@@ -14,10 +14,10 @@ def test_health_and_seeded_content(client):
     assert "".join(letters) == "AEIOUMLPSTRNDCGBFVHQJKZXWY"
     assert next(unit for unit in units_of(content, "letter") if unit["focus_letter"] == "G")["phase"] == 2
     assert {item["type"] for unit in units_of(content, "letter") for item in unit["items"]} == {
-        "listen_choose", "recognize_letter", "initial_sound", "find_all_in_word", "compare_words", "complete_word", "mixed_review"
+        "listen_choose", "recognize_letter", "initial_sound", "find_all_in_word", "compare_words", "complete_word", "mixed_review", "syllable_listen_choose"
     }
     assert [track["kind"] for track in content["tracks"]] == ["phonics", "theme"]
-    assert {unit["kind"] for unit in units_of(content)} == {"letter", "word", "sentence"}
+    assert {unit["kind"] for unit in units_of(content)} == {"letter", "word", "sentence", "syllable", "word_image", "sentence_image"}
     assert len(content["words"]) >= 8 and all(word["review_status"] != "candidate" for word in content["words"])
     assert all(set(word["required_letters"]).issubset(set(letters)) for word in content["words"])
     assert next(word for word in content["words"] if word["text"] == "ÔNIBUS")["required_letters"] == "IOUSNB"

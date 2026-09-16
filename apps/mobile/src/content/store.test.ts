@@ -15,7 +15,8 @@ describe("carregamento de conteúdo", () => {
     database.getContentBundle.mockResolvedValue({ version: "x", etag: "\"x\"", payload: { version: "x" } });
     expect(await loadContent()).toBe("seed");
     expect(useContentStore.getState().tracks).toHaveLength(2);
-    expect(useContentStore.getState().units).toHaveLength(29);
+    expect(useContentStore.getState().units).toHaveLength(32);
+    expect(useContentStore.getState().units.slice(-3).map((unit) => unit.id)).toEqual(["casa-silabas", "casa-imagens", "casa-cenas"]);
     expect(useContentStore.getState().version).toBe(seed.version);
     expect(requiredTypesOf("lesson-A")).toEqual(["listen_choose", "recognize_letter", "initial_sound", "find_all_in_word", "compare_words", "complete_word", "mixed_review"]);
     expect(requiredTypesOf("inexistente")).toBeUndefined();

@@ -16,6 +16,14 @@ def lint_content(body: dict) -> list[str]:
     words = {word["text"]: word for word in body.get("words", [])}
     sentences = {sentence["id"]: sentence for sentence in body.get("sentences", [])}
     syllables = {syllable["id"] for syllable in body.get("syllables", [])}
+    asset_entries = body.get("assets", [])
+    asset_ids = {asset["id"] for asset in asset_entries}
+    image_assets = {asset["id"] for asset in asset_entries if asset.get("kind") == "image"}
+    if len(asset_ids) != len(asset_entries):
+        errors.append("IDs de ativo duplicados.")
+    for asset in asset_entries:
+        if asset.get("kind") == "image" and (not asset.get("license") or not asset.get("attribution")):
+            errors.append(f"ativo {asset.get('id')}: licença e autoria são obrigatórias para imagens.")
     units = [(track, unit) for track in body["tracks"] for unit in track["units"]]
     letter_units = sorted((unit for track, unit in units if unit["kind"] == "letter"), key=lambda unit: unit["position"])
     if "".join(unit["focus_letter"] or "" for unit in letter_units) != LEARNING_ORDER:
@@ -42,8 +50,9 @@ def lint_content(body: dict) -> list[str]:
             allowed = set(order[: index + 1])
             if missing := {kind.value for kind in required_types_for(letter)} - {item["type"] for item in unit["items"]}:
                 errors.append(f"{where_unit}: faltam exercícios obrigatórios ({', '.join(sorted(missing))}).")
-            if len(unit["items"]) != 7 or len({item["type"] for item in unit["items"]}) != 7:
-                errors.append(f"{where_unit}: a lição deve ter exatamente sete habilidades diferentes.")
+            expected_count = 8 if any(item["type"] == ExerciseType.SYLLABLE_LISTEN_CHOOSE.value for item in unit["items"]) else 7
+            if len(unit["items"]) != expected_count or len({item["type"] for item in unit["items"]}) != expected_count:
+                errors.append(f"{where_unit}: a lição deve ter sete habilidades-base e, quando aplicável, uma prática silábica.")
         else:
             allowed = set(order)
             expected = "".join(dict.fromkeys(letter for item in unit["items"] for letter in item["required_letters"]))
@@ -57,7 +66,7 @@ def lint_content(body: dict) -> list[str]:
                 errors.append(f"{where}: item_kind deve ser {TARGET_OF[kind].value}.")
             if unit["kind"] == "letter" and item["required_letters"] != unit["required_letters"]:
                 errors.append(f"{where}: required_letters deve ser igual ao da unidade de letra.")
-            if unit["kind"] == "letter":
+            if unit["kind"] == "letter" or kind in {ExerciseType.SYLLABLE_POSITION_CHOOSE, ExerciseType.WORD_IMAGE_CHOOSE, ExerciseType.SENTENCE_IMAGE_CHOOSE}:
                 metadata = item.get("payload") or {}
                 required_metadata = {"pedagogical_objective", "difficulty", "anti_elimination_rationale", "feedback", "review"}
                 if missing_metadata := required_metadata - set(metadata):
@@ -133,6 +142,8 @@ def lint_content(body: dict) -> list[str]:
                     errors.append(f"{where}: tokens devem ser as sílabas da resposta em outra ordem.")
                 if item["required_letters"] != required_letters("".join(parts)):
                     errors.append(f"{where}: required_letters deve ser as letras da palavra.")
+                if word and word["text"] in item["instruction"]:
+                    errors.append(f"{where}: o enunciado de montagem não pode revelar a palavra pronta.")
             elif kind is ExerciseType.SENTENCE_FILL_WORD:
                 payload, sentence = item["payload"] or {}, sentences.get(item["target_id"] or "")
                 gapped = payload.get("sentence", "")
@@ -152,7 +163,47 @@ def lint_content(body: dict) -> list[str]:
                     errors.append(f"{where}: tokens devem ser as palavras da frase em outra ordem.")
                 if sentence and item["required_letters"] != sentence["required_letters"]:
                     errors.append(f"{where}: required_letters deve ser as letras da frase.")
+            elif kind is ExerciseType.SYLLABLE_POSITION_CHOOSE:
+                payload = item.get("payload") or {}
+                word = words.get(payload.get("word", ""))
+                parts, position = payload.get("syllables") or [], payload.get("position")
+                expected = parts[0] if parts and position == "initial" else parts[-1] if parts and position == "final" else None
+                if not word or parts != word["syllables"] or answer != expected or item["target_id"] != answer:
+                    errors.append(f"{where}: a resposta deve ser a sílaba catalogada na posição pedida.")
+                if answer not in options or len(options) != 3 or len(set(options)) != 3 or any(option not in syllables for option in options):
+                    errors.append(f"{where}: deve oferecer três sílabas catalogadas e distintas, incluindo a resposta.")
+                _lint_image(errors, where, payload, image_assets)
+            elif kind is ExerciseType.WORD_IMAGE_CHOOSE:
+                payload = item.get("payload") or {}
+                if item["target_id"] != answer or answer not in words or answer not in options or len(options) != 3 or len(set(options)) != 3:
+                    errors.append(f"{where}: deve oferecer três palavras distintas publicadas, incluindo a palavra-alvo.")
+                if any(option not in words for option in options):
+                    errors.append(f"{where}: todas as opções devem ser palavras publicadas.")
+                _lint_image(errors, where, payload, image_assets)
+            elif kind is ExerciseType.SENTENCE_IMAGE_CHOOSE:
+                payload, sentence = item.get("payload") or {}, sentences.get(item["target_id"] or "")
+                published_texts = {entry["text"] for entry in sentences.values()}
+                if not sentence or answer != sentence["text"] or answer not in options or len(options) != 3 or len(set(options)) != 3:
+                    errors.append(f"{where}: deve oferecer três frases distintas, incluindo a cena-alvo.")
+                if any(option not in published_texts for option in options):
+                    errors.append(f"{where}: todas as opções devem ser frases publicadas.")
+                _lint_image(errors, where, payload, image_assets)
     for word in words.values():
         if word["required_letters"] != required_letters(word["text"]) or not word["syllables"]:
             errors.append(f"palavra {word['text']}: required_letters ou sílabas inconsistentes.")
+        if word.get("image_asset"):
+            _lint_image(errors, f"palavra {word['text']}", word, image_assets)
+    for sentence in sentences.values():
+        if sentence.get("image_asset"):
+            _lint_image(errors, f"frase {sentence['id']}", sentence, image_assets)
     return errors
+
+
+def _lint_image(errors: list[str], where: str, payload: dict, assets: set[str]) -> None:
+    asset = payload.get("image_asset")
+    if not asset or asset not in assets:
+        errors.append(f"{where}: image_asset deve referenciar um ativo conhecido.")
+    if not payload.get("image_alt"):
+        errors.append(f"{where}: image_alt é obrigatório.")
+    if not payload.get("license") or not payload.get("attribution"):
+        errors.append(f"{where}: licença e autoria do ativo são obrigatórias.")

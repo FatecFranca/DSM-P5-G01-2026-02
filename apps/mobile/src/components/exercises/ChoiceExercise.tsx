@@ -2,6 +2,7 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 import type { Exercise } from "../../domain/types";
 import { colors } from "../../theme";
 import { AudioButton } from "../AudioButton";
+import { ContextIllustration } from "../../assets/illustrations";
 
 export type ExerciseRendererProps = {
   exercise: Exercise;
@@ -20,7 +21,8 @@ export type ExerciseRendererProps = {
 export function ChoiceExercise({ exercise, selected, disabled = false, onChoose, onInteract, onAudioPlay }: ExerciseRendererProps) {
   const wide = (exercise.options ?? []).some((option) => option.length > 3);
   return <View>
-    {(exercise.image || exercise.contextLabel) && <View style={styles.contextCard} accessibilityLabel={exercise.imageLabel ?? exercise.contextLabel ?? "Contexto da atividade"}>
+    {(exercise.imageAsset || exercise.image || exercise.contextLabel) && <View style={styles.contextCard}>
+      {exercise.imageAsset && <ContextIllustration assetId={exercise.imageAsset} accessibilityLabel={exercise.imageLabel ?? "Ilustração contextual"} />}
       {exercise.image && <Text accessible={false} style={styles.image}>{exercise.image}</Text>}
       {exercise.contextLabel && <Text accessibilityLabel={exercise.maskedWord ? `Palavra com uma letra faltando: ${exercise.contextLabel.replace("_", "espaço")}` : undefined} style={exercise.maskedWord ? styles.maskedWord : styles.contextLabel}>{exercise.contextLabel}</Text>}
       {exercise.inlineAudio && <AudioButton label="Ouvir a palavra" text={exercise.ttsText} compact onPlay={() => { onInteract?.(); onAudioPlay?.(); }} />}

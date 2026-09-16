@@ -2,11 +2,12 @@ import { useEffect, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { colors } from "../../theme";
 import type { ExerciseRendererProps } from "./ChoiceExercise";
+import { ContextIllustration } from "../../assets/illustrations";
+import { joinTokens } from "./order";
 
-/** Separador entre as peças na resposta: sílabas formam "CA-SA", palavras formam "A SALA É GRANDE". */
-export const joinTokens = (type: string, picked: string[]) => picked.join(type === "word_from_syllables" ? "-" : " ");
+export { joinTokens } from "./order";
 
-/** Montagem por toque: o aprendiz toca as peças na ordem; ao usar todas, a resposta é avaliada. */
+/** Montagem por toque com confirmação explícita: permite corrigir a sequência antes de avaliá-la. */
 export function OrderExercise({ exercise, selected, disabled = false, onChoose, onInteract }: ExerciseRendererProps) {
   const tokens = exercise.tokens ?? [];
   const [picked, setPicked] = useState<number[]>([]);
@@ -16,10 +17,10 @@ export function OrderExercise({ exercise, selected, disabled = false, onChoose, 
     onInteract?.();
     const next = [...picked, index];
     setPicked(next);
-    if (!disabled && next.length === tokens.length) { const answer = joinTokens(exercise.type, next.map((position) => tokens[position])); onChoose(answer, answer === exercise.answer); }
   };
   const done = picked.length === tokens.length && tokens.length > 0;
   return <View style={styles.container}>
+    {exercise.imageAsset && <View style={styles.context}><ContextIllustration assetId={exercise.imageAsset} accessibilityLabel={exercise.imageLabel ?? "Ilustração contextual"} /></View>}
     <View accessibilityLiveRegion="polite" style={[styles.assembly, done && (assembled === exercise.answer ? styles.correct : styles.wrong)]}>
       <Text style={styles.assembled}>{assembled || "…"}</Text>
     </View>
@@ -29,12 +30,14 @@ export function OrderExercise({ exercise, selected, disabled = false, onChoose, 
         <Text style={[styles.tokenText, used && styles.usedText]}>{token}</Text>
       </Pressable>;
     })}</View>
-    {picked.length > 0 && <Pressable disabled={disabled} accessibilityRole="button" onPress={() => { setPicked([]); }} style={styles.reset}><Text style={styles.resetText}>Apagar e tentar de novo</Text></Pressable>}
+    {done && <Pressable disabled={disabled} accessibilityRole="button" accessibilityLabel="Confirmar resposta montada" onPress={() => { onInteract?.(); onChoose(assembled, assembled === exercise.answer); }} style={styles.confirm}><Text style={styles.confirmText}>Confirmar resposta</Text></Pressable>}
+    {picked.length > 0 && <View style={styles.actions}><Pressable disabled={disabled} accessibilityRole="button" accessibilityLabel="Desfazer última peça" onPress={() => setPicked((current) => current.slice(0, -1))} style={styles.reset}><Text style={styles.resetText}>Desfazer</Text></Pressable><Pressable disabled={disabled} accessibilityRole="button" onPress={() => setPicked([])} style={styles.reset}><Text style={styles.resetText}>Limpar</Text></Pressable></View>}
   </View>;
 }
 
 const styles = StyleSheet.create({
   container: { gap: 16, marginVertical: 12 },
+  context: { alignItems: "center" },
   assembly: { minHeight: 72, borderRadius: 16, borderWidth: 2, borderStyle: "dashed", borderColor: colors.border, backgroundColor: colors.surface, alignItems: "center", justifyContent: "center", paddingHorizontal: 12 },
   correct: { borderStyle: "solid", borderColor: colors.success, backgroundColor: "#DDF3E9" },
   wrong: { borderStyle: "solid", borderColor: colors.accent, backgroundColor: "#FFF8EA" },
@@ -46,4 +49,7 @@ const styles = StyleSheet.create({
   usedText: { color: colors.muted },
   reset: { alignSelf: "center", minHeight: 48, justifyContent: "center", paddingHorizontal: 16 },
   resetText: { color: colors.primary, fontSize: 17, fontWeight: "700" },
+  actions: { flexDirection: "row", justifyContent: "center", gap: 18 },
+  confirm: { minHeight: 56, borderRadius: 15, backgroundColor: colors.primary, alignItems: "center", justifyContent: "center", paddingHorizontal: 20 },
+  confirmText: { color: "white", fontSize: 18, fontWeight: "800" },
 });

@@ -22,7 +22,11 @@ def test_letter_units_have_unambiguous_exercises(client):
     assert len(complete) == 26
     assert all(entry["answer"] in entry["options"] and len(set(entry["options"])) == 3 and entry["word_choices"] is None for entry in complete)
     expected = {"listen_choose", "recognize_letter", "initial_sound", "find_all_in_word", "compare_words", "complete_word", "mixed_review"}
-    assert all(len(unit["items"]) == 7 and {entry["type"] for entry in unit["items"]} == expected for unit in letter_units.values())
+    syllable_letters = set("MLPSTRNDCGBFVZJ")
+    for letter, unit in letter_units.items():
+        expected_types = expected | ({"syllable_listen_choose"} if letter in syllable_letters else set())
+        assert len(unit["items"]) == len(expected_types)
+        assert {entry["type"] for entry in unit["items"]} == expected_types
     for unit in letter_units.values():
         for entry in unit["items"]:
             assert {"pedagogical_objective", "difficulty", "anti_elimination_rationale", "feedback", "review"} <= set(entry["payload"])
@@ -53,6 +57,32 @@ def test_theme_track_is_gated_by_letters_not_by_track(client):
     assert set(frases["required_letters"]) >= set("EUDRMNAC")
     assert {sentence["id"] for sentence in body["sentences"]} == {"casa-frase-1", "casa-frase-2", "casa-frase-3", "casa-frase-4", "casa-frase-5"}
     assert {"MA", "CA", "SA", "PRA", "POR"} <= {syllable["id"] for syllable in body["syllables"]}
+    assert "CASA" not in build["instruction"]
+    assert len(units["casa-silabas"]["items"]) == 9
+    assert len(units["casa-imagens"]["items"]) == 9
+    assert len(units["casa-cenas"]["items"]) == 5
+    assert {entry["type"] for entry in units["casa-silabas"]["items"]} == {"syllable_position_choose"}
+    assert {entry["type"] for entry in units["casa-imagens"]["items"]} == {"word_image_choose"}
+    assert {entry["type"] for entry in units["casa-cenas"]["items"]} == {"sentence_image_choose"}
+    for unit_id in ("casa-silabas", "casa-imagens", "casa-cenas"):
+        for entry in units[unit_id]["items"]:
+            assert {"pedagogical_objective", "difficulty", "anti_elimination_rationale", "feedback", "review", "image_asset", "image_alt", "license", "attribution"} <= set(entry["payload"])
+            assert entry["answer"] not in entry["instruction"]
+
+
+def test_lint_rejects_invalid_image_exercises(client):
+    body = copy.deepcopy(client.get("/v1/content").json())
+    units = units_by_id(body)
+    syllable = units["casa-silabas"]["items"][0]
+    syllable["answer"] = syllable["payload"]["syllables"][-1]
+    word = units["casa-imagens"]["items"][0]
+    word["options"][1] = word["options"][0]
+    scene = units["casa-cenas"]["items"][0]
+    scene["payload"]["image_asset"] = "images/unknown.svg"
+    errors = lint_content(body)
+    assert any("posição pedida" in error for error in errors)
+    assert any("três palavras distintas" in error for error in errors)
+    assert any("ativo conhecido" in error for error in errors)
 
 
 def test_lint_rejects_future_letters_ambiguous_choices_and_broken_theme_items(client):

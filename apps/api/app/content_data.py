@@ -99,15 +99,30 @@ WORDS = [
     ("ÔNIBUS", ["Ô", "NI", "BUS"], "medio", "acento e sílaba CVC"), ("SAÚDE", ["SA", "Ú", "DE"], "medio", "hiato com acento"),
 ]
 
+ASSET_LICENSE = "Projeto Alfabetiza"
+ASSET_ATTRIBUTION = "Equipe Projeto Alfabetiza"
+HOME_WORDS = ["CASA", "MESA", "CAMA", "SALA", "COPO", "PRATO", "PORTA", "PANELA", "TAPETE"]
+WORD_ILLUSTRATIONS = {
+    word: {
+        "image_asset": f"images/words/{strip_marks(word).lower()}.svg",
+        "image_alt": f"Ilustração de {word.lower()}.",
+        "license": ASSET_LICENSE,
+        "attribution": ASSET_ATTRIBUTION,
+    }
+    for word in HOME_WORDS
+}
+
 # --- Trilhas temáticas -----------------------------------------------------------------------------------------------
 # A trilha agrupa; o portão é `required_letters` de cada unidade (letras de todas as palavras/frases da unidade).
 SENTENCES = [
-    {"id": "casa-frase-1", "text": "EU DURMO NA CAMA", "blank": "CAMA", "distractors": ["COPO", "PORTA"]},
-    {"id": "casa-frase-2", "text": "O COPO ESTÁ NA MESA", "blank": "COPO", "distractors": ["CAMA", "PORTA"]},
-    {"id": "casa-frase-3", "text": "EU COMO NO PRATO", "blank": "PRATO", "distractors": ["CAMA", "PORTA"]},
-    {"id": "casa-frase-4", "text": "A SALA É GRANDE", "order": True},
-    {"id": "casa-frase-5", "text": "A CASA TEM UMA PORTA", "order": True},
+    {"id": "casa-frase-1", "text": "EU DURMO NA CAMA", "blank": "CAMA", "distractors": ["COPO", "PORTA"], "image_alt": "Pessoa dormindo em uma cama."},
+    {"id": "casa-frase-2", "text": "O COPO ESTÁ NA MESA", "blank": "COPO", "distractors": ["CAMA", "PORTA"], "image_alt": "Copo sobre uma mesa."},
+    {"id": "casa-frase-3", "text": "EU COMO NO PRATO", "blank": "PRATO", "distractors": ["CAMA", "PORTA"], "image_alt": "Pessoa comendo uma refeição no prato."},
+    {"id": "casa-frase-4", "text": "A SALA É GRANDE", "order": True, "image_alt": "Sala grande com sofá e espaço livre."},
+    {"id": "casa-frase-5", "text": "A CASA TEM UMA PORTA", "order": True, "image_alt": "Casa com uma porta visível na entrada."},
 ]
+for _sentence in SENTENCES:
+    _sentence.update(image_asset=f"images/sentences/{_sentence['id']}.svg", license=ASSET_LICENSE, attribution=ASSET_ATTRIBUTION)
 TRACKS = [
     {"id": "casa", "slug": "tem-em-casa", "title": "Tem em casa", "kind": "theme", "position": 2,
      "description": "Palavras e frases das coisas que existem em casa.",
@@ -115,6 +130,9 @@ TRACKS = [
          {"id": "casa-1", "kind": "word", "title": "Coisas da casa", "words": ["CASA", "MESA", "CAMA", "SALA"]},
          {"id": "casa-2", "kind": "word", "title": "Mais coisas da casa", "words": ["COPO", "PRATO", "PORTA", "PANELA", "TAPETE"]},
          {"id": "casa-frases", "kind": "sentence", "title": "Frases da casa", "sentences": ["casa-frase-1", "casa-frase-2", "casa-frase-3", "casa-frase-4", "casa-frase-5"]},
+         {"id": "casa-silabas", "kind": "syllable", "title": "Sílabas da casa", "words": HOME_WORDS},
+         {"id": "casa-imagens", "kind": "word_image", "title": "Palavras e imagens", "words": HOME_WORDS},
+         {"id": "casa-cenas", "kind": "sentence_image", "title": "Frases e cenas", "sentences": ["casa-frase-1", "casa-frase-2", "casa-frase-3", "casa-frase-4", "casa-frase-5"]},
      ]},
 ]
 

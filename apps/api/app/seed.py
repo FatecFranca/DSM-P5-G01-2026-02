@@ -7,11 +7,11 @@ import json
 import uuid
 from sqlalchemy import select
 from .content import content_body, content_checksum
-from .content_data import ACCENTS, LESSON_CONTEXT, SENTENCES, TRACKS, VISUAL_DISTRACTORS, WORDS, deterministic_shuffle, required_letters, syllable_pattern
+from .content_data import ACCENTS, ASSET_ATTRIBUTION, ASSET_LICENSE, LESSON_CONTEXT, SENTENCES, TRACKS, VISUAL_DISTRACTORS, WORDS, WORD_ILLUSTRATIONS, deterministic_shuffle, required_letters, syllable_exercise, syllable_pattern
 from .content_ids import exercise_id_for, item_id_for, lesson_id_for
 from .content_types import LEARNING_ORDER, PHASE_SPECS, TARGET_OF, ExerciseType
 from .db import SessionLocal
-from .models import ContentVersion, Item, Sentence, Syllable, Track, Unit, Word, WordTrack
+from .models import Asset, ContentVersion, Item, Sentence, Syllable, Track, Unit, Word, WordTrack
 from .word_bank import WORD_BANK_PATH
 
 LETTERS = LEARNING_ORDER
@@ -71,7 +71,26 @@ def letter_item_specs(letter: str) -> list[dict]:
              options=visual[1:] + visual[:1], context_word=review_word, tts=review_word,
              payload={**metadata("Recuperar a letra em outro contexto e outra ordem de opções.", "revisao", "A palavra aparece com lacuna e exige nova associação entre áudio e escrita.", f"Boa revisão: {letter} completa a palavra.", "Ouça novamente e observe a posição da lacuna."), "context": hidden_context(review_word, masked_review_word)}),
     ]
+    if syllable := syllable_exercise(letter):
+        target, options = syllable
+        specs.append(dict(type=ExerciseType.SYLLABLE_LISTEN_CHOOSE, instruction="Ouça e escolha a sílaba.", answer=target,
+                          options=options, target_id=target, tts=target,
+                          payload=metadata("Associar a sílaba ouvida à sua forma escrita.", "medio", "As alternativas compartilham a mesma consoante e diferem apenas na vogal.", f"Isso: você reconheceu a sílaba {target}.", "Ouça novamente e compare o som da vogal.")))
     return specs
+
+
+def thematic_metadata(objective: str, difficulty: str, rationale: str, correct: str, retry: str, **extra) -> dict:
+    return {
+        "pedagogical_objective": objective,
+        "difficulty": difficulty,
+        "anti_elimination_rationale": rationale,
+        "feedback": {"correct": correct, "incorrect": retry},
+        "review": {
+            "status": "pending_human_review",
+            "criterion": "Aprovar após adulto alfabetizando compreender a instrução, distinguir os distratores e justificar a resposta sem depender da posição.",
+        },
+        **extra,
+    }
 
 
 def word_unit_item_specs(words: list[str], syllables_of: dict[str, list[str]]) -> list[dict]:
@@ -82,7 +101,60 @@ def word_unit_item_specs(words: list[str], syllables_of: dict[str, list[str]]) -
         options = sorted([word, *distractors])
         specs.append(dict(type=ExerciseType.WORD_LISTEN_CHOOSE, instruction="Ouça e escolha a palavra.", answer=word, options=options, target_id=word, tts=word, required=word))
         parts = syllables_of[word]
-        specs.append(dict(type=ExerciseType.WORD_FROM_SYLLABLES, instruction=f"Monte a palavra {word} tocando as sílabas na ordem.", answer="-".join(parts), payload={"tokens": deterministic_shuffle(parts)}, target_id=word, tts=word, required=word))
+        illustration = WORD_ILLUSTRATIONS.get(word, {})
+        specs.append(dict(type=ExerciseType.WORD_FROM_SYLLABLES, instruction="Ouça e monte a palavra tocando as sílabas na ordem.", answer="-".join(parts),
+                          payload={"tokens": deterministic_shuffle(parts), **illustration}, target_id=word, tts=word, required=word))
+    return specs
+
+
+def syllable_position_item_specs(words: list[str], syllables_of: dict[str, list[str]]) -> list[dict]:
+    specs = []
+    for index, word in enumerate(words):
+        parts = syllables_of[word]
+        position = "initial" if index % 2 == 0 else "final"
+        answer = parts[0] if position == "initial" else parts[-1]
+        distractors = []
+        for other in words[index + 1:] + words[:index]:
+            candidate = syllables_of[other][0 if position == "initial" else -1]
+            if candidate != answer and candidate not in distractors:
+                distractors.append(candidate)
+            if len(distractors) == 2:
+                break
+        payload = thematic_metadata(
+            f"Identificar a sílaba {('inicial' if position == 'initial' else 'final')} de uma palavra cotidiana.", "medio",
+            "As três sílabas pertencem a palavras da mesma trilha; imagem e áudio determinam a resposta.",
+            f"Correto: {answer} é a sílaba {('inicial' if position == 'initial' else 'final')}.",
+            "Ouça a palavra novamente e perceba a parte pedida.", word=word, syllables=parts, position=position, **WORD_ILLUSTRATIONS[word])
+        specs.append(dict(type=ExerciseType.SYLLABLE_POSITION_CHOOSE,
+                          instruction=f"Qual é a sílaba {('inicial' if position == 'initial' else 'final')} da palavra da imagem?",
+                          answer=answer, options=deterministic_shuffle([answer, *distractors]), target_id=answer, tts=word, required=word, payload=payload))
+    return specs
+
+
+def word_image_item_specs(words: list[str]) -> list[dict]:
+    specs = []
+    for index, word in enumerate(words):
+        distractors = (words[index + 1:] + words[:index])[:2]
+        payload = thematic_metadata("Relacionar uma ilustração à palavra escrita.", "medio",
+                                    "Todas as alternativas são palavras concretas da mesma trilha.",
+                                    f"Correto: a imagem representa {word}.", "Observe a imagem e compare cada palavra novamente.", **WORD_ILLUSTRATIONS[word])
+        specs.append(dict(type=ExerciseType.WORD_IMAGE_CHOOSE, instruction="Qual palavra corresponde à imagem?", answer=word,
+                          options=deterministic_shuffle([word, *distractors]), target_id=word, tts=word, required=word, payload=payload))
+    return specs
+
+
+def sentence_image_item_specs(sentence_ids: list[str], sentences: dict[str, dict]) -> list[dict]:
+    specs = []
+    for index, sentence_id in enumerate(sentence_ids):
+        sentence = sentences[sentence_id]
+        distractor_ids = (sentence_ids[index + 1:] + sentence_ids[:index])[:2]
+        options = [sentence["text"], *(sentences[value]["text"] for value in distractor_ids)]
+        visual = {key: sentence[key] for key in ("image_asset", "image_alt", "license", "attribution")}
+        payload = thematic_metadata("Relacionar uma cena cotidiana à frase que a descreve.", "desafio",
+                                    "As alternativas são frases completas da mesma situação temática.",
+                                    "Correto: a frase descreve a cena.", "Observe quem, o objeto e a ação da cena antes de tentar novamente.", **visual)
+        specs.append(dict(type=ExerciseType.SENTENCE_IMAGE_CHOOSE, instruction="Qual frase descreve a cena?", answer=sentence["text"],
+                          options=deterministic_shuffle(options), target_id=sentence_id, tts=sentence["text"], required=sentence["text"], payload=payload))
     return specs
 
 
@@ -139,7 +211,7 @@ def seed_content():
     with SessionLocal() as db:
         words = {word.text: word for word in db.scalars(select(Word)).all()}
         for text, syllables, difficulty, rationale in WORDS:
-            word = upsert_word(db, words, text, syllables=syllables, initial_difficulty=difficulty, difficulty_rationale=rationale, source="curadoria")
+            word = upsert_word(db, words, text, syllables=syllables, initial_difficulty=difficulty, difficulty_rationale=rationale, source="curadoria", **WORD_ILLUSTRATIONS.get(text, {}))
             if word.review_status not in CURATED_STATUSES: word.review_status, word.current_difficulty = "pending", difficulty
         if WORD_BANK_PATH.exists():
             for entry in json.loads(WORD_BANK_PATH.read_text(encoding="utf-8")):
@@ -152,6 +224,14 @@ def seed_content():
         syllables_of = {word.text: list(word.syllables or []) for word in words.values()}
         for text, *_ in WORDS:
             for part in syllables_of[text]: upsert_syllable(db, part)
+        for metadata in WORD_ILLUSTRATIONS.values():
+            asset = db.get(Asset, metadata["image_asset"]) or Asset(id=metadata["image_asset"])
+            asset.kind, asset.license, asset.attribution = "image", metadata["license"], metadata["attribution"]
+            db.add(asset)
+        for data in SENTENCES:
+            asset = db.get(Asset, data["image_asset"]) or Asset(id=data["image_asset"])
+            asset.kind, asset.license, asset.attribution = "image", data["license"], data["attribution"]
+            db.add(asset)
 
         alphabet = db.get(Track, "alphabet") or Track(id="alphabet")
         alphabet.slug, alphabet.title, alphabet.kind, alphabet.position, alphabet.description = "alfabeto", "Alfabeto", "phonics", 1, "As 26 letras em ordem progressiva."
@@ -177,11 +257,16 @@ def seed_content():
                 unit = db.get(Unit, unit_spec["id"]) or Unit(id=unit_spec["id"])
                 unit.track_id, unit.kind, unit.title, unit.position, unit.focus_letter, unit.phase, unit.phase_title = track.id, unit_spec["kind"], unit_spec["title"], position, None, None, None
                 db.add(unit)
-                if unit_spec["kind"] == "word":
+                if unit_spec["kind"] in {"word", "syllable", "word_image"}:
                     for word_position, text in enumerate(unit_spec["words"], 1):
                         link = db.get(WordTrack, (words[text].id, track.id)) or WordTrack(word_id=words[text].id, track_id=track.id)
                         link.position = word_position; db.add(link)
-                    item_specs = word_unit_item_specs(unit_spec["words"], syllables_of)
+                    if unit_spec["kind"] == "word":
+                        item_specs = word_unit_item_specs(unit_spec["words"], syllables_of)
+                    elif unit_spec["kind"] == "syllable":
+                        item_specs = syllable_position_item_specs(unit_spec["words"], syllables_of)
+                    else:
+                        item_specs = word_image_item_specs(unit_spec["words"])
                     unit.required_letters = required_letters("".join(unit_spec["words"]))
                 else:
                     for sentence_id in unit_spec["sentences"]:
@@ -190,8 +275,11 @@ def seed_content():
                         tokens = data["text"].split(" ")
                         sentence.text, sentence.track_id, sentence.word_count, sentence.required_letters = data["text"], track.id, len(tokens), required_letters(data["text"])
                         sentence.required_word_ids = [words[token].id for token in tokens if token in words]
+                        sentence.image_asset, sentence.image_alt = data["image_asset"], data["image_alt"]
+                        sentence.license, sentence.attribution = data["license"], data["attribution"]
                         db.add(sentence)
-                    item_specs = sentence_unit_item_specs(unit_spec["sentences"], sentences)
+                    item_specs = (sentence_image_item_specs(unit_spec["sentences"], sentences)
+                                  if unit_spec["kind"] == "sentence_image" else sentence_unit_item_specs(unit_spec["sentences"], sentences))
                     unit.required_letters = required_letters("".join(sentences[sentence_id]["text"] for sentence_id in unit_spec["sentences"]))
                 upsert_items(db, unit, item_specs, lambda _spec, position, unit_id=unit.id: item_id_for(unit_id, position), unit.required_letters)
         db.commit()
