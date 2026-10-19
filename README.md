@@ -16,9 +16,9 @@ Este projeto é desenvolvido pelo grupo formado por:
 - [Operação e implantação](docs/OPERATIONS.md)
 - [Relatório de validação](docs/VALIDATION_REPORT.md)
 
-## MVP Alfabetiza
+## MVP Prosa
 
-O repositório contém uma implementação mobile offline-first para alfabetização inicial de jovens e adultos, uma API própria, artefatos experimentais históricos e a infraestrutura de implantação:
+O repositório contém o **Prosa**, aplicativo mobile offline-first de apoio à alfabetização inicial de jovens e adultos, com API própria, artefatos experimentais históricos e infraestrutura de implantação:
 
 ```text
 apps/mobile/  Expo + React Native + SQLite
@@ -42,6 +42,11 @@ Copy-Item .env.example .env
 .\.venv\Scripts\python -m app.seed
 .\.venv\Scripts\uvicorn app.main:app --reload
 ```
+
+Com a API em execução, abra `http://127.0.0.1:8000/admin/` para configurar a
+única conta local do Estúdio de conteúdo. O painel permite editar o rascunho,
+importar imagens, validar, publicar e restaurar versões. Depois da primeira
+configuração, o seed não sobrescreve a curadoria publicada pelo painel.
 
 Mobile, em outro terminal:
 
@@ -68,7 +73,7 @@ cd ..\..\ml
 python -m pytest
 ```
 
-O catálogo vive na API e é servido por `GET /v1/content`; o app embarca `apps/mobile/assets/content/seed-bundle.json` para o primeiro boot offline. Depois de alterar `apps/api/app/seed.py`, regenere o bundle:
+O catálogo vive na API e é servido por `GET /v1/content`; o app embarca `apps/mobile/assets/content/seed-bundle.json` para o primeiro boot offline. `content_data.py` continua sendo o catálogo-base do bootstrap; após configurar o Estúdio, a versão publicada localmente é a autoridade. Depois de alterar o catálogo-base/seed, regenere o bundle:
 
 ```powershell
 cd apps/api
