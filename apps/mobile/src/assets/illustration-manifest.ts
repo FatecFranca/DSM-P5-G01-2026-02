@@ -1,5 +1,5 @@
-export const ILLUSTRATION_LICENSE = "Projeto Alfabetiza";
-export const ILLUSTRATION_ATTRIBUTION = "Equipe Projeto Alfabetiza";
+export const ILLUSTRATION_LICENSE = "Projeto Prosa";
+export const ILLUSTRATION_ATTRIBUTION = "Equipe Projeto Prosa";
 
 const WORD_IDS = ["casa", "mesa", "cama", "sala", "copo", "prato", "porta", "panela", "tapete"] as const;
 const SENTENCE_IDS = ["casa-frase-1", "casa-frase-2", "casa-frase-3", "casa-frase-4", "casa-frase-5"] as const;

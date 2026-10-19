@@ -13,7 +13,8 @@ describe("bundle de conteúdo", () => {
 
   it("projeta trilhas e unidades com pré-requisitos e exercícios por tipo de unidade", () => {
     const tracks = toTracks(bundle());
-    expect(tracks.map((track) => track.kind)).toEqual(["phonics", "theme"]);
+    expect(tracks.map((track) => track.kind)).toEqual(["phonics", "theme", "theme"]);
+    expect(tracks.map((track) => track.title)).toEqual(["Alfabeto", "Tem em casa", "Família"]);
     const letters = tracks[0].units;
     expect(letters.map((unit) => unit.letter).join("")).toBe("AEIOUMLPSTRNDCGBFVHQJKZXWY");
     expect(letters.every((unit, index) => unit.order === index + 1 && unit.prerequisiteLetters.length === index)).toBe(true);
@@ -42,6 +43,8 @@ describe("bundle de conteúdo", () => {
     expect(imageWord).toMatchObject({ type: "word_image_choose", answer: "CASA", imageAsset: "images/words/casa.svg" });
     const imageSentence = tracks[1].units.find((unit) => unit.id === "casa-cenas")!.exercises[0];
     expect(imageSentence).toMatchObject({ type: "sentence_image_choose", answer: "EU DURMO NA CAMA", imageAsset: "images/sentences/casa-frase-1.svg" });
+    const familia = tracks[2].units.find((unit) => unit.id === "familia-1")!;
+    expect(familia.exercises.some((exercise) => exercise.type === "word_listen_choose" && exercise.answer === "PAI")).toBe(true);
   });
 
   it("rejeita estrutura inválida sem lançar exceção", () => {
@@ -78,9 +81,35 @@ describe("bundle de conteúdo", () => {
   it("rejeita ativo visual ausente e rótulo acessível vazio", () => {
     const unknown = bundle();
     itemOf(unknown, "casa-imagens", "word_image_choose").payload!.image_asset = "images/words/janela.svg";
-    expect(validateBundle(unknown)).toContain("item-casa-imagens-1: image_asset deve referenciar um ativo local conhecido.");
+    expect(validateBundle(unknown)).toContain("item-casa-imagens-1: image_asset deve referenciar uma ilustração local ou mídia administrada conhecida.");
     const unlabeled = bundle();
     itemOf(unlabeled, "casa-cenas", "sentence_image_choose").payload!.image_alt = "";
     expect(validateBundle(unlabeled)).toContain("item-casa-cenas-1: image_alt é obrigatório.");
+  });
+
+  it("aceita mídia administrada publicada pela API e a projeta para o renderer", () => {
+    const managed = bundle();
+    const assetId = "media/4e90e53a-70d6-4bd3-a6f7-a2fedca7a7b0";
+    managed.assets ??= [];
+    managed.assets.push({ id: assetId, kind: "image", license: "CC BY 4.0", attribution: "Autoria informada", url: "/v1/media/4e90e53a-70d6-4bd3-a6f7-a2fedca7a7b0" });
+    const item = itemOf(managed, "casa-imagens", "word_image_choose");
+    item.payload!.image_asset = assetId;
+    item.payload!.license = "CC BY 4.0";
+    item.payload!.attribution = "Autoria informada";
+    expect(validateBundle(managed)).toEqual([]);
+    const exercise = toTracks(managed).flatMap((track) => track.units).find((unit) => unit.id === "casa-imagens")!.exercises[0];
+    expect(exercise).toMatchObject({ imageAsset: assetId, imageUri: "/v1/media/4e90e53a-70d6-4bd3-a6f7-a2fedca7a7b0" });
+  });
+
+  it("recusa URL de mídia que não seja HTTP(S)", () => {
+    const managed = bundle();
+    const assetId = "media/imagem-segura";
+    managed.assets ??= [];
+    managed.assets.push({ id: assetId, kind: "image", license: "CC BY 4.0", attribution: "Autoria informada", url: "file:///tmp/imagem.png" });
+    const item = itemOf(managed, "casa-imagens", "word_image_choose");
+    item.payload!.image_asset = assetId;
+    item.payload!.license = "CC BY 4.0";
+    item.payload!.attribution = "Autoria informada";
+    expect(validateBundle(managed)).toContain("item-casa-imagens-1: URL de mídia inválida.");
   });
 });

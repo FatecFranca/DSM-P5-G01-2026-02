@@ -1,5 +1,5 @@
 {
-  "version": "c57db96c8738f355",
+  "version": "f8fa53af667dacf0",
   "learning_order": "AEIOUMLPSTRNDCGBFVHQJKZXWY",
   "tracks": [
     {
@@ -1238,7 +1238,7 @@
                 "O",
                 "V"
               ],
-              "context_word": "UNIDADE",
+              "context_word": "UAU",
               "word_choices": null,
               "payload": {
                 "pedagogical_objective": "Associar o som da palavra à letra inicial ausente.",
@@ -1253,8 +1253,8 @@
                   "criterion": "Aprovar após adulto alfabetizando compreender a instrução, justificar a resposta e não depender da posição das opções."
                 },
                 "context": {
-                  "word": "UNIDADE",
-                  "masked_word": "_NIDADE",
+                  "word": "UAU",
+                  "masked_word": "_AU",
                   "hide_word": true,
                   "inline_audio": true,
                   "audience": "adulto",
@@ -1263,7 +1263,7 @@
               },
               "required_letters": "AEIO",
               "audio_asset": null,
-              "tts_fallback_text": "UNIDADE",
+              "tts_fallback_text": "UAU",
               "position": 1
             },
             {
@@ -1293,7 +1293,7 @@
                   "criterion": "Aprovar após adulto alfabetizando compreender a instrução, justificar a resposta e não depender da posição das opções."
                 },
                 "context": {
-                  "word": "UNIDADE",
+                  "word": "UAU",
                   "audience": "adulto",
                   "situation": "uso cotidiano"
                 }
@@ -1313,9 +1313,9 @@
               "options": [
                 "O",
                 "U",
-                "V"
+                "I"
               ],
-              "context_word": "UNIDADE",
+              "context_word": "UAU",
               "word_choices": null,
               "payload": {
                 "pedagogical_objective": "Relacionar o som inicial à letra.",
@@ -1330,8 +1330,8 @@
                   "criterion": "Aprovar após adulto alfabetizando compreender a instrução, justificar a resposta e não depender da posição das opções."
                 },
                 "context": {
-                  "word": "UNIDADE",
-                  "masked_word": "_NIDADE",
+                  "word": "UAU",
+                  "masked_word": "_AU",
                   "hide_word": true,
                   "inline_audio": true,
                   "audience": "adulto",
@@ -1340,7 +1340,7 @@
               },
               "required_letters": "AEIO",
               "audio_asset": null,
-              "tts_fallback_text": "UNIDADE",
+              "tts_fallback_text": "UAU",
               "position": 3
             },
             {
@@ -1349,46 +1349,39 @@
               "item_kind": "letter",
               "target_id": null,
               "instruction": "Ouça a letra e toque em todas as ocorrências na palavra.",
-              "answer": "1",
+              "answer": "1,3",
               "options": [
                 "1",
                 "2",
-                "3",
-                "4",
-                "5",
-                "6",
-                "7"
+                "3"
               ],
-              "context_word": "UNIDADE",
+              "context_word": "UAU",
               "word_choices": null,
               "payload": {
                 "pedagogical_objective": "Localizar todas as ocorrências da letra numa palavra.",
                 "difficulty": "medio",
                 "anti_elimination_rationale": "Há várias posições possíveis e todas precisam ser verificadas.",
                 "feedback": {
-                  "correct": "Você encontrou todas as letras U em UNIDADE.",
-                  "incorrect": "Leia UNIDADE da esquerda para a direita e tente novamente."
+                  "correct": "Você encontrou todas as letras U em UAU.",
+                  "incorrect": "Leia UAU da esquerda para a direita e tente novamente."
                 },
                 "review": {
                   "status": "pending_human_review",
                   "criterion": "Aprovar após adulto alfabetizando compreender a instrução, justificar a resposta e não depender da posição das opções."
                 },
                 "context": {
-                  "word": "UNIDADE",
+                  "word": "UAU",
                   "audience": "adulto",
                   "situation": "uso cotidiano"
                 },
                 "characters": [
                   "U",
-                  "N",
-                  "I",
-                  "D",
                   "A",
-                  "D",
-                  "E"
+                  "U"
                 ],
                 "target_indices": [
-                  1
+                  1,
+                  3
                 ]
               },
               "required_letters": "AEIO",
@@ -1404,18 +1397,18 @@
               "instruction": "Compare as palavras. Qual letra inicia a primeira?",
               "answer": "U",
               "options": [
-                "V",
+                "I",
                 "O",
                 "U"
               ],
-              "context_word": "UNIDADE",
+              "context_word": "UAU",
               "word_choices": null,
               "payload": {
                 "pedagogical_objective": "Comparar palavras e identificar a letra inicial relevante.",
                 "difficulty": "medio",
                 "anti_elimination_rationale": "Duas palavras reais exigem atenção à palavra perguntada.",
                 "feedback": {
-                  "correct": "Certo: UNIDADE inicia com U.",
+                  "correct": "Certo: UAU inicia com U.",
                   "incorrect": "Observe o começo da primeira palavra e compare outra vez."
                 },
                 "review": {
@@ -1423,26 +1416,26 @@
                   "criterion": "Aprovar após adulto alfabetizando compreender a instrução, justificar a resposta e não depender da posição das opções."
                 },
                 "context": {
-                  "word": "UNIDADE",
+                  "word": "UAU",
                   "audience": "adulto",
                   "situation": "uso cotidiano"
                 },
                 "words": [
-                  "UNIDADE",
-                  "UNIDADE"
+                  "UAU",
+                  "AU"
                 ],
                 "changed_position": 1
               },
               "required_letters": "AEIO",
               "audio_asset": null,
-              "tts_fallback_text": "UNIDADE. UNIDADE.",
+              "tts_fallback_text": "UAU. AU.",
               "position": 5
             },
             {
               "id": "exercise-U-complete-word",
               "type": "complete_word",
               "item_kind": "letter",
-              "target_id": "UNIDADE",
+              "target_id": "UAU",
               "instruction": "Qual letra completa esta palavra?",
               "answer": "U",
               "options": [
@@ -1450,7 +1443,7 @@
                 "V",
                 "U"
               ],
-              "context_word": "UNIDADE",
+              "context_word": "UAU",
               "word_choices": null,
               "payload": {
                 "pedagogical_objective": "Completar uma palavra cotidiana a partir do áudio e da lacuna.",
@@ -1465,8 +1458,8 @@
                   "criterion": "Aprovar após adulto alfabetizando compreender a instrução, justificar a resposta e não depender da posição das opções."
                 },
                 "context": {
-                  "word": "UNIDADE",
-                  "masked_word": "_NIDADE",
+                  "word": "UAU",
+                  "masked_word": "_AU",
                   "hide_word": true,
                   "inline_audio": true,
                   "audience": "adulto",
@@ -1475,7 +1468,7 @@
               },
               "required_letters": "AEIO",
               "audio_asset": null,
-              "tts_fallback_text": "UNIDADE",
+              "tts_fallback_text": "UAU",
               "position": 6
             },
             {
@@ -1490,7 +1483,7 @@
                 "O",
                 "V"
               ],
-              "context_word": "UNIDADE",
+              "context_word": "UAU",
               "word_choices": null,
               "payload": {
                 "pedagogical_objective": "Recuperar a letra em outro contexto e outra ordem de opções.",
@@ -1505,8 +1498,8 @@
                   "criterion": "Aprovar após adulto alfabetizando compreender a instrução, justificar a resposta e não depender da posição das opções."
                 },
                 "context": {
-                  "word": "UNIDADE",
-                  "masked_word": "_NIDADE",
+                  "word": "UAU",
+                  "masked_word": "_AU",
                   "hide_word": true,
                   "inline_audio": true,
                   "audience": "adulto",
@@ -1515,7 +1508,7 @@
               },
               "required_letters": "AEIO",
               "audio_asset": null,
-              "tts_fallback_text": "UNIDADE",
+              "tts_fallback_text": "UAU",
               "position": 7
             }
           ]
@@ -8436,8 +8429,8 @@
                 ],
                 "image_asset": "images/words/casa.svg",
                 "image_alt": "Ilustração de casa.",
-                "license": "Projeto Alfabetiza",
-                "attribution": "Equipe Projeto Alfabetiza"
+                "license": "Projeto Prosa",
+                "attribution": "Equipe Projeto Prosa"
               },
               "required_letters": "ASC",
               "audio_asset": null,
@@ -8481,8 +8474,8 @@
                 ],
                 "image_asset": "images/words/mesa.svg",
                 "image_alt": "Ilustração de mesa.",
-                "license": "Projeto Alfabetiza",
-                "attribution": "Equipe Projeto Alfabetiza"
+                "license": "Projeto Prosa",
+                "attribution": "Equipe Projeto Prosa"
               },
               "required_letters": "AEMS",
               "audio_asset": null,
@@ -8526,8 +8519,8 @@
                 ],
                 "image_asset": "images/words/cama.svg",
                 "image_alt": "Ilustração de cama.",
-                "license": "Projeto Alfabetiza",
-                "attribution": "Equipe Projeto Alfabetiza"
+                "license": "Projeto Prosa",
+                "attribution": "Equipe Projeto Prosa"
               },
               "required_letters": "AMC",
               "audio_asset": null,
@@ -8571,8 +8564,8 @@
                 ],
                 "image_asset": "images/words/sala.svg",
                 "image_alt": "Ilustração de sala.",
-                "license": "Projeto Alfabetiza",
-                "attribution": "Equipe Projeto Alfabetiza"
+                "license": "Projeto Prosa",
+                "attribution": "Equipe Projeto Prosa"
               },
               "required_letters": "ALS",
               "audio_asset": null,
@@ -8628,8 +8621,8 @@
                 ],
                 "image_asset": "images/words/copo.svg",
                 "image_alt": "Ilustração de copo.",
-                "license": "Projeto Alfabetiza",
-                "attribution": "Equipe Projeto Alfabetiza"
+                "license": "Projeto Prosa",
+                "attribution": "Equipe Projeto Prosa"
               },
               "required_letters": "OPC",
               "audio_asset": null,
@@ -8673,8 +8666,8 @@
                 ],
                 "image_asset": "images/words/prato.svg",
                 "image_alt": "Ilustração de prato.",
-                "license": "Projeto Alfabetiza",
-                "attribution": "Equipe Projeto Alfabetiza"
+                "license": "Projeto Prosa",
+                "attribution": "Equipe Projeto Prosa"
               },
               "required_letters": "AOPTR",
               "audio_asset": null,
@@ -8718,8 +8711,8 @@
                 ],
                 "image_asset": "images/words/porta.svg",
                 "image_alt": "Ilustração de porta.",
-                "license": "Projeto Alfabetiza",
-                "attribution": "Equipe Projeto Alfabetiza"
+                "license": "Projeto Prosa",
+                "attribution": "Equipe Projeto Prosa"
               },
               "required_letters": "AOPTR",
               "audio_asset": null,
@@ -8764,8 +8757,8 @@
                 ],
                 "image_asset": "images/words/panela.svg",
                 "image_alt": "Ilustração de panela.",
-                "license": "Projeto Alfabetiza",
-                "attribution": "Equipe Projeto Alfabetiza"
+                "license": "Projeto Prosa",
+                "attribution": "Equipe Projeto Prosa"
               },
               "required_letters": "AELPN",
               "audio_asset": null,
@@ -8810,8 +8803,8 @@
                 ],
                 "image_asset": "images/words/tapete.svg",
                 "image_alt": "Ilustração de tapete.",
-                "license": "Projeto Alfabetiza",
-                "attribution": "Equipe Projeto Alfabetiza"
+                "license": "Projeto Prosa",
+                "attribution": "Equipe Projeto Prosa"
               },
               "required_letters": "AEPT",
               "audio_asset": null,
@@ -8992,8 +8985,8 @@
                 "position": "initial",
                 "image_asset": "images/words/casa.svg",
                 "image_alt": "Ilustração de casa.",
-                "license": "Projeto Alfabetiza",
-                "attribution": "Equipe Projeto Alfabetiza"
+                "license": "Projeto Prosa",
+                "attribution": "Equipe Projeto Prosa"
               },
               "required_letters": "ASC",
               "audio_asset": null,
@@ -9034,8 +9027,8 @@
                 "position": "final",
                 "image_asset": "images/words/mesa.svg",
                 "image_alt": "Ilustração de mesa.",
-                "license": "Projeto Alfabetiza",
-                "attribution": "Equipe Projeto Alfabetiza"
+                "license": "Projeto Prosa",
+                "attribution": "Equipe Projeto Prosa"
               },
               "required_letters": "AEMS",
               "audio_asset": null,
@@ -9076,8 +9069,8 @@
                 "position": "initial",
                 "image_asset": "images/words/cama.svg",
                 "image_alt": "Ilustração de cama.",
-                "license": "Projeto Alfabetiza",
-                "attribution": "Equipe Projeto Alfabetiza"
+                "license": "Projeto Prosa",
+                "attribution": "Equipe Projeto Prosa"
               },
               "required_letters": "AMC",
               "audio_asset": null,
@@ -9118,8 +9111,8 @@
                 "position": "final",
                 "image_asset": "images/words/sala.svg",
                 "image_alt": "Ilustração de sala.",
-                "license": "Projeto Alfabetiza",
-                "attribution": "Equipe Projeto Alfabetiza"
+                "license": "Projeto Prosa",
+                "attribution": "Equipe Projeto Prosa"
               },
               "required_letters": "ALS",
               "audio_asset": null,
@@ -9160,8 +9153,8 @@
                 "position": "initial",
                 "image_asset": "images/words/copo.svg",
                 "image_alt": "Ilustração de copo.",
-                "license": "Projeto Alfabetiza",
-                "attribution": "Equipe Projeto Alfabetiza"
+                "license": "Projeto Prosa",
+                "attribution": "Equipe Projeto Prosa"
               },
               "required_letters": "OPC",
               "audio_asset": null,
@@ -9202,8 +9195,8 @@
                 "position": "final",
                 "image_asset": "images/words/prato.svg",
                 "image_alt": "Ilustração de prato.",
-                "license": "Projeto Alfabetiza",
-                "attribution": "Equipe Projeto Alfabetiza"
+                "license": "Projeto Prosa",
+                "attribution": "Equipe Projeto Prosa"
               },
               "required_letters": "AOPTR",
               "audio_asset": null,
@@ -9244,8 +9237,8 @@
                 "position": "initial",
                 "image_asset": "images/words/porta.svg",
                 "image_alt": "Ilustração de porta.",
-                "license": "Projeto Alfabetiza",
-                "attribution": "Equipe Projeto Alfabetiza"
+                "license": "Projeto Prosa",
+                "attribution": "Equipe Projeto Prosa"
               },
               "required_letters": "AOPTR",
               "audio_asset": null,
@@ -9287,8 +9280,8 @@
                 "position": "final",
                 "image_asset": "images/words/panela.svg",
                 "image_alt": "Ilustração de panela.",
-                "license": "Projeto Alfabetiza",
-                "attribution": "Equipe Projeto Alfabetiza"
+                "license": "Projeto Prosa",
+                "attribution": "Equipe Projeto Prosa"
               },
               "required_letters": "AELPN",
               "audio_asset": null,
@@ -9330,8 +9323,8 @@
                 "position": "initial",
                 "image_asset": "images/words/tapete.svg",
                 "image_alt": "Ilustração de tapete.",
-                "license": "Projeto Alfabetiza",
-                "attribution": "Equipe Projeto Alfabetiza"
+                "license": "Projeto Prosa",
+                "attribution": "Equipe Projeto Prosa"
               },
               "required_letters": "AEPT",
               "audio_asset": null,
@@ -9378,8 +9371,8 @@
                 },
                 "image_asset": "images/words/casa.svg",
                 "image_alt": "Ilustração de casa.",
-                "license": "Projeto Alfabetiza",
-                "attribution": "Equipe Projeto Alfabetiza"
+                "license": "Projeto Prosa",
+                "attribution": "Equipe Projeto Prosa"
               },
               "required_letters": "ASC",
               "audio_asset": null,
@@ -9414,8 +9407,8 @@
                 },
                 "image_asset": "images/words/mesa.svg",
                 "image_alt": "Ilustração de mesa.",
-                "license": "Projeto Alfabetiza",
-                "attribution": "Equipe Projeto Alfabetiza"
+                "license": "Projeto Prosa",
+                "attribution": "Equipe Projeto Prosa"
               },
               "required_letters": "AEMS",
               "audio_asset": null,
@@ -9450,8 +9443,8 @@
                 },
                 "image_asset": "images/words/cama.svg",
                 "image_alt": "Ilustração de cama.",
-                "license": "Projeto Alfabetiza",
-                "attribution": "Equipe Projeto Alfabetiza"
+                "license": "Projeto Prosa",
+                "attribution": "Equipe Projeto Prosa"
               },
               "required_letters": "AMC",
               "audio_asset": null,
@@ -9486,8 +9479,8 @@
                 },
                 "image_asset": "images/words/sala.svg",
                 "image_alt": "Ilustração de sala.",
-                "license": "Projeto Alfabetiza",
-                "attribution": "Equipe Projeto Alfabetiza"
+                "license": "Projeto Prosa",
+                "attribution": "Equipe Projeto Prosa"
               },
               "required_letters": "ALS",
               "audio_asset": null,
@@ -9522,8 +9515,8 @@
                 },
                 "image_asset": "images/words/copo.svg",
                 "image_alt": "Ilustração de copo.",
-                "license": "Projeto Alfabetiza",
-                "attribution": "Equipe Projeto Alfabetiza"
+                "license": "Projeto Prosa",
+                "attribution": "Equipe Projeto Prosa"
               },
               "required_letters": "OPC",
               "audio_asset": null,
@@ -9558,8 +9551,8 @@
                 },
                 "image_asset": "images/words/prato.svg",
                 "image_alt": "Ilustração de prato.",
-                "license": "Projeto Alfabetiza",
-                "attribution": "Equipe Projeto Alfabetiza"
+                "license": "Projeto Prosa",
+                "attribution": "Equipe Projeto Prosa"
               },
               "required_letters": "AOPTR",
               "audio_asset": null,
@@ -9594,8 +9587,8 @@
                 },
                 "image_asset": "images/words/porta.svg",
                 "image_alt": "Ilustração de porta.",
-                "license": "Projeto Alfabetiza",
-                "attribution": "Equipe Projeto Alfabetiza"
+                "license": "Projeto Prosa",
+                "attribution": "Equipe Projeto Prosa"
               },
               "required_letters": "AOPTR",
               "audio_asset": null,
@@ -9630,8 +9623,8 @@
                 },
                 "image_asset": "images/words/panela.svg",
                 "image_alt": "Ilustração de panela.",
-                "license": "Projeto Alfabetiza",
-                "attribution": "Equipe Projeto Alfabetiza"
+                "license": "Projeto Prosa",
+                "attribution": "Equipe Projeto Prosa"
               },
               "required_letters": "AELPN",
               "audio_asset": null,
@@ -9666,8 +9659,8 @@
                 },
                 "image_asset": "images/words/tapete.svg",
                 "image_alt": "Ilustração de tapete.",
-                "license": "Projeto Alfabetiza",
-                "attribution": "Equipe Projeto Alfabetiza"
+                "license": "Projeto Prosa",
+                "attribution": "Equipe Projeto Prosa"
               },
               "required_letters": "AEPT",
               "audio_asset": null,
@@ -9714,8 +9707,8 @@
                 },
                 "image_asset": "images/sentences/casa-frase-1.svg",
                 "image_alt": "Pessoa dormindo em uma cama.",
-                "license": "Projeto Alfabetiza",
-                "attribution": "Equipe Projeto Alfabetiza"
+                "license": "Projeto Prosa",
+                "attribution": "Equipe Projeto Prosa"
               },
               "required_letters": "AEOUMRNDC",
               "audio_asset": null,
@@ -9750,8 +9743,8 @@
                 },
                 "image_asset": "images/sentences/casa-frase-2.svg",
                 "image_alt": "Copo sobre uma mesa.",
-                "license": "Projeto Alfabetiza",
-                "attribution": "Equipe Projeto Alfabetiza"
+                "license": "Projeto Prosa",
+                "attribution": "Equipe Projeto Prosa"
               },
               "required_letters": "AEOMPSTNC",
               "audio_asset": null,
@@ -9786,8 +9779,8 @@
                 },
                 "image_asset": "images/sentences/casa-frase-3.svg",
                 "image_alt": "Pessoa comendo uma refeição no prato.",
-                "license": "Projeto Alfabetiza",
-                "attribution": "Equipe Projeto Alfabetiza"
+                "license": "Projeto Prosa",
+                "attribution": "Equipe Projeto Prosa"
               },
               "required_letters": "AEOUMPTRNC",
               "audio_asset": null,
@@ -9822,8 +9815,8 @@
                 },
                 "image_asset": "images/sentences/casa-frase-4.svg",
                 "image_alt": "Sala grande com sofá e espaço livre.",
-                "license": "Projeto Alfabetiza",
-                "attribution": "Equipe Projeto Alfabetiza"
+                "license": "Projeto Prosa",
+                "attribution": "Equipe Projeto Prosa"
               },
               "required_letters": "AELSRNDG",
               "audio_asset": null,
@@ -9858,13 +9851,332 @@
                 },
                 "image_asset": "images/sentences/casa-frase-5.svg",
                 "image_alt": "Casa com uma porta visível na entrada.",
-                "license": "Projeto Alfabetiza",
-                "attribution": "Equipe Projeto Alfabetiza"
+                "license": "Projeto Prosa",
+                "attribution": "Equipe Projeto Prosa"
               },
               "required_letters": "AEOUMPSTRC",
               "audio_asset": null,
               "tts_fallback_text": "A CASA TEM UMA PORTA",
               "position": 5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "familia",
+      "slug": "familia",
+      "title": "Família",
+      "kind": "theme",
+      "description": "Palavras do cotidiano familiar, liberadas pelas letras já dominadas.",
+      "position": 3,
+      "units": [
+        {
+          "id": "familia-1",
+          "kind": "word",
+          "title": "Pessoas da família",
+          "position": 1,
+          "phase": null,
+          "phase_title": null,
+          "focus_letter": null,
+          "required_letters": "AEIOMPT",
+          "items": [
+            {
+              "id": "item-familia-1-1",
+              "type": "word_listen_choose",
+              "item_kind": "word",
+              "target_id": "PAI",
+              "instruction": "Ouça e escolha a palavra.",
+              "answer": "PAI",
+              "options": [
+                "MÃE",
+                "PAI",
+                "TIA"
+              ],
+              "context_word": null,
+              "word_choices": null,
+              "payload": null,
+              "required_letters": "AIP",
+              "audio_asset": null,
+              "tts_fallback_text": "PAI",
+              "position": 1
+            },
+            {
+              "id": "item-familia-1-2",
+              "type": "word_from_syllables",
+              "item_kind": "word",
+              "target_id": "PAI",
+              "instruction": "Ouça e monte a palavra tocando as sílabas na ordem.",
+              "answer": "PAI",
+              "options": null,
+              "context_word": null,
+              "word_choices": null,
+              "payload": {
+                "tokens": [
+                  "PAI"
+                ]
+              },
+              "required_letters": "AIP",
+              "audio_asset": null,
+              "tts_fallback_text": "PAI",
+              "position": 2
+            },
+            {
+              "id": "item-familia-1-3",
+              "type": "word_listen_choose",
+              "item_kind": "word",
+              "target_id": "MÃE",
+              "instruction": "Ouça e escolha a palavra.",
+              "answer": "MÃE",
+              "options": [
+                "MÃE",
+                "TIA",
+                "TIO"
+              ],
+              "context_word": null,
+              "word_choices": null,
+              "payload": null,
+              "required_letters": "AEM",
+              "audio_asset": null,
+              "tts_fallback_text": "MÃE",
+              "position": 3
+            },
+            {
+              "id": "item-familia-1-4",
+              "type": "word_from_syllables",
+              "item_kind": "word",
+              "target_id": "MÃE",
+              "instruction": "Ouça e monte a palavra tocando as sílabas na ordem.",
+              "answer": "MÃE",
+              "options": null,
+              "context_word": null,
+              "word_choices": null,
+              "payload": {
+                "tokens": [
+                  "MÃE"
+                ]
+              },
+              "required_letters": "AEM",
+              "audio_asset": null,
+              "tts_fallback_text": "MÃE",
+              "position": 4
+            },
+            {
+              "id": "item-familia-1-5",
+              "type": "word_listen_choose",
+              "item_kind": "word",
+              "target_id": "TIA",
+              "instruction": "Ouça e escolha a palavra.",
+              "answer": "TIA",
+              "options": [
+                "PAI",
+                "TIA",
+                "TIO"
+              ],
+              "context_word": null,
+              "word_choices": null,
+              "payload": null,
+              "required_letters": "AIT",
+              "audio_asset": null,
+              "tts_fallback_text": "TIA",
+              "position": 5
+            },
+            {
+              "id": "item-familia-1-6",
+              "type": "word_from_syllables",
+              "item_kind": "word",
+              "target_id": "TIA",
+              "instruction": "Ouça e monte a palavra tocando as sílabas na ordem.",
+              "answer": "TI-A",
+              "options": null,
+              "context_word": null,
+              "word_choices": null,
+              "payload": {
+                "tokens": [
+                  "A",
+                  "TI"
+                ]
+              },
+              "required_letters": "AIT",
+              "audio_asset": null,
+              "tts_fallback_text": "TIA",
+              "position": 6
+            },
+            {
+              "id": "item-familia-1-7",
+              "type": "word_listen_choose",
+              "item_kind": "word",
+              "target_id": "TIO",
+              "instruction": "Ouça e escolha a palavra.",
+              "answer": "TIO",
+              "options": [
+                "MÃE",
+                "PAI",
+                "TIO"
+              ],
+              "context_word": null,
+              "word_choices": null,
+              "payload": null,
+              "required_letters": "IOT",
+              "audio_asset": null,
+              "tts_fallback_text": "TIO",
+              "position": 7
+            },
+            {
+              "id": "item-familia-1-8",
+              "type": "word_from_syllables",
+              "item_kind": "word",
+              "target_id": "TIO",
+              "instruction": "Ouça e monte a palavra tocando as sílabas na ordem.",
+              "answer": "TI-O",
+              "options": null,
+              "context_word": null,
+              "word_choices": null,
+              "payload": {
+                "tokens": [
+                  "O",
+                  "TI"
+                ]
+              },
+              "required_letters": "IOT",
+              "audio_asset": null,
+              "tts_fallback_text": "TIO",
+              "position": 8
+            }
+          ]
+        },
+        {
+          "id": "familia-2",
+          "kind": "word",
+          "title": "Mais da família",
+          "position": 2,
+          "phase": null,
+          "phase_title": null,
+          "focus_letter": null,
+          "required_letters": "AEIOMRN",
+          "items": [
+            {
+              "id": "item-familia-2-1",
+              "type": "word_listen_choose",
+              "item_kind": "word",
+              "target_id": "IRMÃ",
+              "instruction": "Ouça e escolha a palavra.",
+              "answer": "IRMÃ",
+              "options": [
+                "IRMÃ",
+                "MAMA",
+                "NOME"
+              ],
+              "context_word": null,
+              "word_choices": null,
+              "payload": null,
+              "required_letters": "AIMR",
+              "audio_asset": null,
+              "tts_fallback_text": "IRMÃ",
+              "position": 1
+            },
+            {
+              "id": "item-familia-2-2",
+              "type": "word_from_syllables",
+              "item_kind": "word",
+              "target_id": "IRMÃ",
+              "instruction": "Ouça e monte a palavra tocando as sílabas na ordem.",
+              "answer": "IR-MÃ",
+              "options": null,
+              "context_word": null,
+              "word_choices": null,
+              "payload": {
+                "tokens": [
+                  "MÃ",
+                  "IR"
+                ]
+              },
+              "required_letters": "AIMR",
+              "audio_asset": null,
+              "tts_fallback_text": "IRMÃ",
+              "position": 2
+            },
+            {
+              "id": "item-familia-2-3",
+              "type": "word_listen_choose",
+              "item_kind": "word",
+              "target_id": "NOME",
+              "instruction": "Ouça e escolha a palavra.",
+              "answer": "NOME",
+              "options": [
+                "IRMÃ",
+                "MAMA",
+                "NOME"
+              ],
+              "context_word": null,
+              "word_choices": null,
+              "payload": null,
+              "required_letters": "EOMN",
+              "audio_asset": null,
+              "tts_fallback_text": "NOME",
+              "position": 3
+            },
+            {
+              "id": "item-familia-2-4",
+              "type": "word_from_syllables",
+              "item_kind": "word",
+              "target_id": "NOME",
+              "instruction": "Ouça e monte a palavra tocando as sílabas na ordem.",
+              "answer": "NO-ME",
+              "options": null,
+              "context_word": null,
+              "word_choices": null,
+              "payload": {
+                "tokens": [
+                  "ME",
+                  "NO"
+                ]
+              },
+              "required_letters": "EOMN",
+              "audio_asset": null,
+              "tts_fallback_text": "NOME",
+              "position": 4
+            },
+            {
+              "id": "item-familia-2-5",
+              "type": "word_listen_choose",
+              "item_kind": "word",
+              "target_id": "MAMA",
+              "instruction": "Ouça e escolha a palavra.",
+              "answer": "MAMA",
+              "options": [
+                "IRMÃ",
+                "MAMA",
+                "NOME"
+              ],
+              "context_word": null,
+              "word_choices": null,
+              "payload": null,
+              "required_letters": "AM",
+              "audio_asset": null,
+              "tts_fallback_text": "MAMA",
+              "position": 5
+            },
+            {
+              "id": "item-familia-2-6",
+              "type": "word_from_syllables",
+              "item_kind": "word",
+              "target_id": "MAMA",
+              "instruction": "Ouça e monte a palavra tocando as sílabas na ordem.",
+              "answer": "MA-MA",
+              "options": null,
+              "context_word": null,
+              "word_choices": null,
+              "payload": {
+                "tokens": [
+                  "MA",
+                  "MA"
+                ]
+              },
+              "required_letters": "AM",
+              "audio_asset": null,
+              "tts_fallback_text": "MAMA",
+              "position": 6
             }
           ]
         }
@@ -9885,8 +10197,8 @@
       "review_status": "pending",
       "image_asset": "images/words/cama.svg",
       "image_alt": "Ilustração de cama.",
-      "license": "Projeto Alfabetiza",
-      "attribution": "Equipe Projeto Alfabetiza"
+      "license": "Projeto Prosa",
+      "attribution": "Equipe Projeto Prosa"
     },
     {
       "id": "3bfdf567-a993-57e3-b466-6a956fe1026d",
@@ -9901,8 +10213,8 @@
       "review_status": "pending",
       "image_asset": "images/words/casa.svg",
       "image_alt": "Ilustração de casa.",
-      "license": "Projeto Alfabetiza",
-      "attribution": "Equipe Projeto Alfabetiza"
+      "license": "Projeto Prosa",
+      "attribution": "Equipe Projeto Prosa"
     },
     {
       "id": "4d718449-3d24-5102-bba1-a9c8c47be68c",
@@ -9917,8 +10229,8 @@
       "review_status": "pending",
       "image_asset": "images/words/copo.svg",
       "image_alt": "Ilustração de copo.",
-      "license": "Projeto Alfabetiza",
-      "attribution": "Equipe Projeto Alfabetiza"
+      "license": "Projeto Prosa",
+      "attribution": "Equipe Projeto Prosa"
     },
     {
       "id": "08179e64-1cd3-5e0e-989f-563a8e7a11c4",
@@ -9930,6 +10242,22 @@
       "required_letters": "AOTG",
       "difficulty": "facil",
       "frequency": 0.4977,
+      "review_status": "pending",
+      "image_asset": null,
+      "image_alt": null,
+      "license": null,
+      "attribution": null
+    },
+    {
+      "id": "21e1c88f-c719-5029-a8c1-6f489442ddfd",
+      "text": "IRMÃ",
+      "syllables": [
+        "IR",
+        "MÃ"
+      ],
+      "required_letters": "AIMR",
+      "difficulty": "medio",
+      "frequency": null,
       "review_status": "pending",
       "image_asset": null,
       "image_alt": null,
@@ -9997,8 +10325,23 @@
       "review_status": "pending",
       "image_asset": "images/words/mesa.svg",
       "image_alt": "Ilustração de mesa.",
-      "license": "Projeto Alfabetiza",
-      "attribution": "Equipe Projeto Alfabetiza"
+      "license": "Projeto Prosa",
+      "attribution": "Equipe Projeto Prosa"
+    },
+    {
+      "id": "0f3f4f49-1078-5c9a-89e0-9292d68837ea",
+      "text": "MÃE",
+      "syllables": [
+        "MÃE"
+      ],
+      "required_letters": "AEM",
+      "difficulty": "facil",
+      "frequency": 0.5572,
+      "review_status": "pending",
+      "image_asset": null,
+      "image_alt": null,
+      "license": null,
+      "attribution": null
     },
     {
       "id": "f2d499d4-4d4c-59d5-89d9-c183fa06eb67",
@@ -10010,6 +10353,21 @@
       "required_letters": "EOMN",
       "difficulty": "facil",
       "frequency": 0.5702,
+      "review_status": "pending",
+      "image_asset": null,
+      "image_alt": null,
+      "license": null,
+      "attribution": null
+    },
+    {
+      "id": "0f3388d6-434b-5af7-ad93-13ab02eedb8a",
+      "text": "PAI",
+      "syllables": [
+        "PAI"
+      ],
+      "required_letters": "AIP",
+      "difficulty": "facil",
+      "frequency": 0.4562,
       "review_status": "pending",
       "image_asset": null,
       "image_alt": null,
@@ -10030,8 +10388,8 @@
       "review_status": "pending",
       "image_asset": "images/words/panela.svg",
       "image_alt": "Ilustração de panela.",
-      "license": "Projeto Alfabetiza",
-      "attribution": "Equipe Projeto Alfabetiza"
+      "license": "Projeto Prosa",
+      "attribution": "Equipe Projeto Prosa"
     },
     {
       "id": "4cab7836-3428-5aaa-b3d5-4a07a0eb42e5",
@@ -10062,8 +10420,8 @@
       "review_status": "pending",
       "image_asset": "images/words/porta.svg",
       "image_alt": "Ilustração de porta.",
-      "license": "Projeto Alfabetiza",
-      "attribution": "Equipe Projeto Alfabetiza"
+      "license": "Projeto Prosa",
+      "attribution": "Equipe Projeto Prosa"
     },
     {
       "id": "a0e94392-ba49-565c-874f-9c693c623649",
@@ -10078,8 +10436,8 @@
       "review_status": "pending",
       "image_asset": "images/words/prato.svg",
       "image_alt": "Ilustração de prato.",
-      "license": "Projeto Alfabetiza",
-      "attribution": "Equipe Projeto Alfabetiza"
+      "license": "Projeto Prosa",
+      "attribution": "Equipe Projeto Prosa"
     },
     {
       "id": "a2adf6cc-6f2b-554b-8956-cdccd10df54a",
@@ -10110,8 +10468,8 @@
       "review_status": "pending",
       "image_asset": "images/words/sala.svg",
       "image_alt": "Ilustração de sala.",
-      "license": "Projeto Alfabetiza",
-      "attribution": "Equipe Projeto Alfabetiza"
+      "license": "Projeto Prosa",
+      "attribution": "Equipe Projeto Prosa"
     },
     {
       "id": "76d3bb38-3741-5aa0-a3b5-dece1e4f0d30",
@@ -10144,8 +10502,40 @@
       "review_status": "pending",
       "image_asset": "images/words/tapete.svg",
       "image_alt": "Ilustração de tapete.",
-      "license": "Projeto Alfabetiza",
-      "attribution": "Equipe Projeto Alfabetiza"
+      "license": "Projeto Prosa",
+      "attribution": "Equipe Projeto Prosa"
+    },
+    {
+      "id": "b86b2b0f-d878-59a3-9ce4-31b69b573496",
+      "text": "TIA",
+      "syllables": [
+        "TI",
+        "A"
+      ],
+      "required_letters": "AIT",
+      "difficulty": "facil",
+      "frequency": 0.5859,
+      "review_status": "pending",
+      "image_asset": null,
+      "image_alt": null,
+      "license": null,
+      "attribution": null
+    },
+    {
+      "id": "7ea56efc-4730-5dec-92a2-1407bbc8058e",
+      "text": "TIO",
+      "syllables": [
+        "TI",
+        "O"
+      ],
+      "required_letters": "IOT",
+      "difficulty": "facil",
+      "frequency": 0.5911,
+      "review_status": "pending",
+      "image_asset": null,
+      "image_alt": null,
+      "license": null,
+      "attribution": null
     },
     {
       "id": "d5d087a4-2b35-5c18-8a7a-6ede759b7958",
@@ -10177,8 +10567,8 @@
       "review_status": "pending",
       "image_asset": "images/sentences/casa-frase-1.svg",
       "image_alt": "Pessoa dormindo em uma cama.",
-      "license": "Projeto Alfabetiza",
-      "attribution": "Equipe Projeto Alfabetiza"
+      "license": "Projeto Prosa",
+      "attribution": "Equipe Projeto Prosa"
     },
     {
       "id": "casa-frase-2",
@@ -10193,8 +10583,8 @@
       "review_status": "pending",
       "image_asset": "images/sentences/casa-frase-2.svg",
       "image_alt": "Copo sobre uma mesa.",
-      "license": "Projeto Alfabetiza",
-      "attribution": "Equipe Projeto Alfabetiza"
+      "license": "Projeto Prosa",
+      "attribution": "Equipe Projeto Prosa"
     },
     {
       "id": "casa-frase-3",
@@ -10208,8 +10598,8 @@
       "review_status": "pending",
       "image_asset": "images/sentences/casa-frase-3.svg",
       "image_alt": "Pessoa comendo uma refeição no prato.",
-      "license": "Projeto Alfabetiza",
-      "attribution": "Equipe Projeto Alfabetiza"
+      "license": "Projeto Prosa",
+      "attribution": "Equipe Projeto Prosa"
     },
     {
       "id": "casa-frase-4",
@@ -10223,8 +10613,8 @@
       "review_status": "pending",
       "image_asset": "images/sentences/casa-frase-4.svg",
       "image_alt": "Sala grande com sofá e espaço livre.",
-      "license": "Projeto Alfabetiza",
-      "attribution": "Equipe Projeto Alfabetiza"
+      "license": "Projeto Prosa",
+      "attribution": "Equipe Projeto Prosa"
     },
     {
       "id": "casa-frase-5",
@@ -10240,8 +10630,8 @@
       "review_status": "pending",
       "image_asset": "images/sentences/casa-frase-5.svg",
       "image_alt": "Casa com uma porta visível na entrada.",
-      "license": "Projeto Alfabetiza",
-      "attribution": "Equipe Projeto Alfabetiza"
+      "license": "Projeto Prosa",
+      "attribution": "Equipe Projeto Prosa"
     }
   ],
   "syllables": [
@@ -10251,6 +10641,13 @@
       "pattern": "V",
       "required_letters": "A",
       "position": 0
+    },
+    {
+      "id": "O",
+      "text": "O",
+      "pattern": "V",
+      "required_letters": "O",
+      "position": 3
     },
     {
       "id": "Ô",
@@ -10288,6 +10685,20 @@
       "position": 5
     },
     {
+      "id": "MÃ",
+      "text": "MÃ",
+      "pattern": "CV",
+      "required_letters": "AM",
+      "position": 5
+    },
+    {
+      "id": "MÃE",
+      "text": "MÃE",
+      "pattern": "CVV",
+      "required_letters": "AEM",
+      "position": 5
+    },
+    {
       "id": "LA",
       "text": "LA",
       "pattern": "CV",
@@ -10320,6 +10731,13 @@
       "text": "PA",
       "pattern": "CV",
       "required_letters": "AP",
+      "position": 7
+    },
+    {
+      "id": "PAI",
+      "text": "PAI",
+      "pattern": "CVV",
+      "required_letters": "AIP",
       "position": 7
     },
     {
@@ -10386,6 +10804,13 @@
       "position": 9
     },
     {
+      "id": "TI",
+      "text": "TI",
+      "pattern": "CV",
+      "required_letters": "IT",
+      "position": 9
+    },
+    {
       "id": "TO",
       "text": "TO",
       "pattern": "CV",
@@ -10398,6 +10823,13 @@
       "pattern": "CV",
       "required_letters": "UT",
       "position": 9
+    },
+    {
+      "id": "IR",
+      "text": "IR",
+      "pattern": "VC",
+      "required_letters": "IR",
+      "position": 10
     },
     {
       "id": "POR",
@@ -10649,86 +11081,86 @@
     {
       "id": "images/sentences/casa-frase-1.svg",
       "kind": "image",
-      "license": "Projeto Alfabetiza",
-      "attribution": "Equipe Projeto Alfabetiza"
+      "license": "Projeto Prosa",
+      "attribution": "Equipe Projeto Prosa"
     },
     {
       "id": "images/sentences/casa-frase-2.svg",
       "kind": "image",
-      "license": "Projeto Alfabetiza",
-      "attribution": "Equipe Projeto Alfabetiza"
+      "license": "Projeto Prosa",
+      "attribution": "Equipe Projeto Prosa"
     },
     {
       "id": "images/sentences/casa-frase-3.svg",
       "kind": "image",
-      "license": "Projeto Alfabetiza",
-      "attribution": "Equipe Projeto Alfabetiza"
+      "license": "Projeto Prosa",
+      "attribution": "Equipe Projeto Prosa"
     },
     {
       "id": "images/sentences/casa-frase-4.svg",
       "kind": "image",
-      "license": "Projeto Alfabetiza",
-      "attribution": "Equipe Projeto Alfabetiza"
+      "license": "Projeto Prosa",
+      "attribution": "Equipe Projeto Prosa"
     },
     {
       "id": "images/sentences/casa-frase-5.svg",
       "kind": "image",
-      "license": "Projeto Alfabetiza",
-      "attribution": "Equipe Projeto Alfabetiza"
+      "license": "Projeto Prosa",
+      "attribution": "Equipe Projeto Prosa"
     },
     {
       "id": "images/words/cama.svg",
       "kind": "image",
-      "license": "Projeto Alfabetiza",
-      "attribution": "Equipe Projeto Alfabetiza"
+      "license": "Projeto Prosa",
+      "attribution": "Equipe Projeto Prosa"
     },
     {
       "id": "images/words/casa.svg",
       "kind": "image",
-      "license": "Projeto Alfabetiza",
-      "attribution": "Equipe Projeto Alfabetiza"
+      "license": "Projeto Prosa",
+      "attribution": "Equipe Projeto Prosa"
     },
     {
       "id": "images/words/copo.svg",
       "kind": "image",
-      "license": "Projeto Alfabetiza",
-      "attribution": "Equipe Projeto Alfabetiza"
+      "license": "Projeto Prosa",
+      "attribution": "Equipe Projeto Prosa"
     },
     {
       "id": "images/words/mesa.svg",
       "kind": "image",
-      "license": "Projeto Alfabetiza",
-      "attribution": "Equipe Projeto Alfabetiza"
+      "license": "Projeto Prosa",
+      "attribution": "Equipe Projeto Prosa"
     },
     {
       "id": "images/words/panela.svg",
       "kind": "image",
-      "license": "Projeto Alfabetiza",
-      "attribution": "Equipe Projeto Alfabetiza"
+      "license": "Projeto Prosa",
+      "attribution": "Equipe Projeto Prosa"
     },
     {
       "id": "images/words/porta.svg",
       "kind": "image",
-      "license": "Projeto Alfabetiza",
-      "attribution": "Equipe Projeto Alfabetiza"
+      "license": "Projeto Prosa",
+      "attribution": "Equipe Projeto Prosa"
     },
     {
       "id": "images/words/prato.svg",
       "kind": "image",
-      "license": "Projeto Alfabetiza",
-      "attribution": "Equipe Projeto Alfabetiza"
+      "license": "Projeto Prosa",
+      "attribution": "Equipe Projeto Prosa"
     },
     {
       "id": "images/words/sala.svg",
       "kind": "image",
-      "license": "Projeto Alfabetiza",
-      "attribution": "Equipe Projeto Alfabetiza"
+      "license": "Projeto Prosa",
+      "attribution": "Equipe Projeto Prosa"
     },
     {
       "id": "images/words/tapete.svg",
       "kind": "image",
-      "license": "Projeto Alfabetiza",
-      "attribution": "Equipe Projeto Alfabetiza"
+      "license": "Projeto Prosa",
+      "attribution": "Equipe Projeto Prosa"
     }
   ]
 }

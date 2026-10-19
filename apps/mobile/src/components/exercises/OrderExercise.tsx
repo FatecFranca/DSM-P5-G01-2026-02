@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { colors } from "../../theme";
 import type { ExerciseRendererProps } from "./ChoiceExercise";
-import { ContextIllustration } from "../../assets/illustrations";
+import { ManagedIllustration } from "../../assets/ManagedIllustration";
 import { joinTokens } from "./order";
 
 export { joinTokens } from "./order";
@@ -20,7 +20,7 @@ export function OrderExercise({ exercise, selected, disabled = false, onChoose, 
   };
   const done = picked.length === tokens.length && tokens.length > 0;
   return <View style={styles.container}>
-    {exercise.imageAsset && <View style={styles.context}><ContextIllustration assetId={exercise.imageAsset} accessibilityLabel={exercise.imageLabel ?? "Ilustração contextual"} /></View>}
+    {exercise.imageAsset && <View style={styles.context}><ManagedIllustration assetId={exercise.imageAsset} sourceUri={exercise.imageUri} accessibilityLabel={exercise.imageLabel ?? "Ilustração contextual"} /></View>}
     <View accessibilityLiveRegion="polite" style={[styles.assembly, done && (assembled === exercise.answer ? styles.correct : styles.wrong)]}>
       <Text style={styles.assembled}>{assembled || "…"}</Text>
     </View>

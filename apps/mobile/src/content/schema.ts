@@ -2,6 +2,11 @@ import { LEARNING_ORDER, PHASES, TARGET_OF, normalizeExerciseType, requiredLette
 import type { Exercise, Track, Unit, WordChoice } from "../domain/types";
 import { ILLUSTRATION_ATTRIBUTION, ILLUSTRATION_LICENSE, isKnownIllustration } from "../assets/illustration-manifest";
 
+/** Aceita o nome atual (Prosa) e o legado (Alfabetiza) durante a transição de marca. */
+const ACCEPTED_ILLUSTRATION_LICENSES = new Set([ILLUSTRATION_LICENSE, "Projeto Alfabetiza"]);
+const ACCEPTED_ILLUSTRATION_ATTRIBUTIONS = new Set([ILLUSTRATION_ATTRIBUTION, "Equipe Projeto Alfabetiza"]);
+import { isManagedMediaId, isSafeApiMediaPath, isSafeApiMediaUrl } from "../assets/managed-media";
+
 // Formato de GET /v1/content e de assets/content/seed-bundle.json. As regras pedagógicas espelham apps/api/app/content_lint.py.
 export type BundleWordChoice = { id: string; word: string; before: string; after: string };
 export type BundleItem = { id: string; type: string; item_kind: string; target_id?: string | null; instruction: string; answer: string; options?: string[] | null; context_word?: string | null; word_choices?: BundleWordChoice[] | null; payload?: Record<string, unknown> | null; required_letters: string; audio_asset?: string | null; tts_fallback_text?: string | null; position: number };
@@ -10,7 +15,9 @@ export type BundleTrack = { id: string; slug: string; title: string; kind: strin
 export type BundleWord = { id: string; text: string; syllables: string[]; required_letters: string; difficulty: string; frequency?: number | null; review_status: string; image_asset?: string | null; image_alt?: string | null; license?: string | null; attribution?: string | null };
 export type BundleSentence = { id: string; text: string; required_letters: string; required_word_ids: string[]; difficulty: string; review_status: string; image_asset?: string | null; image_alt?: string | null; license?: string | null; attribution?: string | null };
 export type BundleSyllable = { id: string; text: string; pattern: string; required_letters: string; position: number };
-export type ContentBundle = { version: string; learning_order: string; tracks: BundleTrack[]; words: BundleWord[]; sentences: BundleSentence[]; syllables: BundleSyllable[] };
+/** `url` é uma URL da cópia local servida pela API, nunca a URL externa importada pelo administrador. */
+export type BundleAsset = { id: string; kind: string; license?: string | null; attribution?: string | null; url?: string | null };
+export type ContentBundle = { version: string; learning_order: string; tracks: BundleTrack[]; words: BundleWord[]; sentences: BundleSentence[]; syllables: BundleSyllable[]; assets?: BundleAsset[] };
 
 const isRecord = (value: unknown): value is Record<string, unknown> => typeof value === "object" && value !== null && !Array.isArray(value);
 const isStringArray = (value: unknown): value is string[] => Array.isArray(value) && value.every((item) => typeof item === "string");
@@ -30,6 +37,7 @@ function structuralErrors(value: unknown): string[] {
   for (const name of ["words", "sentences", "syllables"]) {
     if (!Array.isArray(value[name]) || !(value[name] as unknown[]).every((entry) => isRecord(entry) && typeof entry.id === "string" && typeof entry.text === "string" && typeof entry.required_letters === "string")) errors.push(`Bundle sem lista válida de ${name}.`);
   }
+  if (value.assets != null && (!Array.isArray(value.assets) || !value.assets.every((asset) => isRecord(asset) && typeof asset.id === "string" && typeof asset.kind === "string" && optionalString(asset.url) && optionalString(asset.license) && optionalString(asset.attribution)))) errors.push("Bundle sem lista válida de ativos.");
   if (Array.isArray(value.words) && !value.words.every((word) => isRecord(word) && isStringArray(word.syllables) && typeof word.review_status === "string")) errors.push("Palavra sem sílabas ou status.");
   for (const track of value.tracks) {
     if (!isRecord(track) || typeof track.id !== "string" || typeof track.slug !== "string" || typeof track.title !== "string" || typeof track.kind !== "string" || typeof track.position !== "number" || !Array.isArray(track.units)) { errors.push("Trilha inválida."); continue; }
@@ -53,11 +61,19 @@ function pedagogicalErrors(bundle: ContentBundle): string[] {
   const words = new Map(bundle.words.map((word) => [word.text, word]));
   const sentences = new Map(bundle.sentences.map((sentence) => [sentence.id, sentence]));
   const syllables = new Set(bundle.syllables.map((syllable) => syllable.id));
+  const assets = new Map((bundle.assets ?? []).map((asset) => [asset.id, asset]));
   const imageMetadataErrors = (where: string, payload: Record<string, unknown>) => {
     const asset = payload.image_asset;
-    if (!isKnownIllustration(asset)) errors.push(`${where}: image_asset deve referenciar um ativo local conhecido.`);
+    const registered = typeof asset === "string" ? assets.get(asset) : undefined;
+    const localIllustration = isKnownIllustration(asset);
+    const managedIllustration = isManagedMediaId(asset) && registered?.kind === "image";
+    if (!localIllustration && !managedIllustration) errors.push(`${where}: image_asset deve referenciar uma ilustração local ou mídia administrada conhecida.`);
+    if (registered?.url != null && !isSafeApiMediaUrl(registered.url) && !(managedIllustration && isSafeApiMediaPath(registered.url))) errors.push(`${where}: URL de mídia inválida.`);
     if (typeof payload.image_alt !== "string" || !payload.image_alt.trim()) errors.push(`${where}: image_alt é obrigatório.`);
-    if (payload.license !== ILLUSTRATION_LICENSE || payload.attribution !== ILLUSTRATION_ATTRIBUTION) errors.push(`${where}: licença e autoria do ativo não correspondem ao manifesto local.`);
+    if (!localIllustration && (!payload.license || !payload.attribution)) errors.push(`${where}: licença e autoria do ativo são obrigatórias.`);
+    if (localIllustration && (!ACCEPTED_ILLUSTRATION_LICENSES.has(String(payload.license ?? "")) || !ACCEPTED_ILLUSTRATION_ATTRIBUTIONS.has(String(payload.attribution ?? "")))) {
+      errors.push(`${where}: licença e autoria do ativo não correspondem ao manifesto local.`);
+    }
   };
   const units = bundle.tracks.flatMap((track) => track.units.map((unit) => ({ track, unit })));
   const letterUnits = byPosition(units.filter(({ unit }) => unit.kind === "letter").map(({ unit }) => unit));
@@ -200,7 +216,7 @@ export function validateBundle(value: unknown): string[] {
 
 const toWordChoice = (choice: BundleWordChoice): WordChoice => ({ id: choice.id, word: choice.word, before: choice.before, after: choice.after, image: contextualIllustration(choice.word) ?? "🔤", imageLabel: choice.word, audioText: choice.word });
 
-function toExercise(item: BundleItem, visual?: { image_asset?: string | null; image_alt?: string | null }): Exercise {
+function toExercise(item: BundleItem, visual?: { image_asset?: string | null; image_alt?: string | null }, assets = new Map<string, BundleAsset>()): Exercise {
   const type = normalizeExerciseType(item.type);
   if (!type) throw new Error(`Tipo de exercício desconhecido: ${item.type}`);
   const tokens = isStringArray(item.payload?.tokens) ? item.payload.tokens : undefined;
@@ -213,6 +229,7 @@ function toExercise(item: BundleItem, visual?: { image_asset?: string | null; im
   const compareWords = isStringArray(item.payload?.words) ? item.payload.words : undefined;
   const imageAsset = payloadText("image_asset") ?? visual?.image_asset ?? undefined;
   const imageAlt = payloadText("image_alt") ?? visual?.image_alt ?? undefined;
+  const imageUri = imageAsset ? assets.get(imageAsset)?.url : undefined;
   const contextWord = item.context_word ?? contextText("word") ?? undefined;
   const maskedWord = contextText("masked_word");
   const hideWord = context?.hide_word === true;
@@ -223,7 +240,8 @@ function toExercise(item: BundleItem, visual?: { image_asset?: string | null; im
     ttsText: item.tts_fallback_text ?? item.instruction,
     ...(item.target_id ? { targetId: item.target_id } : {}), ...(item.options ? { options: item.options } : {}), ...(item.context_word ? { contextWord: item.context_word } : {}),
     ...(item.word_choices ? { wordChoices: item.word_choices.map(toWordChoice) } : {}), ...(tokens ? { tokens } : {}), ...(sentence ? { sentence } : {}),
-    ...(imageAsset && isKnownIllustration(imageAsset) ? { imageAsset, imageLabel: imageAlt ?? "Ilustração contextual" } : {}),
+    ...(imageAsset ? { imageAsset, imageLabel: imageAlt ?? "Ilustração contextual" } : {}),
+    ...(imageUri && (isSafeApiMediaUrl(imageUri) || isSafeApiMediaPath(imageUri)) ? { imageUri } : {}),
     ...((contextText("image") ?? contextualIllustration(contextWord)) ? { image: contextText("image") ?? contextualIllustration(contextWord) } : {}),
     ...((contextText("image_label") ?? contextWord) ? { imageLabel: contextText("image_label") ?? (hideWord ? "Ilustração da palavra" : `Ilustração de ${contextWord}`) } : {}),
     ...(maskedWord ? { maskedWord, contextLabel: maskedWord } : (!hideWord && (contextText("label") ?? contextWord) ? { contextLabel: contextText("label") ?? contextWord } : {})),
@@ -238,6 +256,7 @@ function toExercise(item: BundleItem, visual?: { image_asset?: string | null; im
 
 /** Projeta um bundle já validado no modelo que as telas consomem. */
 export function toTracks(bundle: ContentBundle): Track[] {
+  const assets = new Map((bundle.assets ?? []).map((asset) => [asset.id, asset]));
   const visuals = new Map<string, { image_asset?: string | null; image_alt?: string | null }>([
     ...bundle.words.map((word) => [word.id, word] as const),
     ...bundle.sentences.map((sentence) => [sentence.id, sentence] as const),
@@ -248,7 +267,7 @@ export function toTracks(bundle: ContentBundle): Track[] {
       id: unit.id, trackId: track.id, kind: (["letter", "word", "sentence", "syllable", "word_image", "sentence_image"].includes(unit.kind) ? unit.kind : "word") as Unit["kind"], title: unit.title, order: unit.position,
       ...(unit.phase ? { phase: unit.phase as 1 | 2 | 3 } : {}), ...(unit.phase_title ? { phaseTitle: unit.phase_title } : {}), ...(unit.focus_letter ? { letter: unit.focus_letter } : {}),
       prerequisiteLetters: unit.required_letters.split("").filter(Boolean),
-      exercises: byPosition(unit.items).map((item) => toExercise(item, item.target_id ? visuals.get(item.target_id) : undefined)),
+      exercises: byPosition(unit.items).map((item) => toExercise(item, item.target_id ? visuals.get(item.target_id) : undefined, assets)),
     })),
   }));
 }

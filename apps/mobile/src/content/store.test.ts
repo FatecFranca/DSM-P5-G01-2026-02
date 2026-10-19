@@ -14,9 +14,9 @@ describe("carregamento de conteúdo", () => {
   it("usa o bundle embarcado quando não há cache válido", async () => {
     database.getContentBundle.mockResolvedValue({ version: "x", etag: "\"x\"", payload: { version: "x" } });
     expect(await loadContent()).toBe("seed");
-    expect(useContentStore.getState().tracks).toHaveLength(2);
-    expect(useContentStore.getState().units).toHaveLength(32);
-    expect(useContentStore.getState().units.slice(-3).map((unit) => unit.id)).toEqual(["casa-silabas", "casa-imagens", "casa-cenas"]);
+    expect(useContentStore.getState().tracks).toHaveLength(3);
+    expect(useContentStore.getState().units).toHaveLength(34);
+    expect(useContentStore.getState().units.slice(-5).map((unit) => unit.id)).toEqual(["casa-silabas", "casa-imagens", "casa-cenas", "familia-1", "familia-2"]);
     expect(useContentStore.getState().version).toBe(seed.version);
     expect(requiredTypesOf("lesson-A")).toEqual(["listen_choose", "recognize_letter", "initial_sound", "find_all_in_word", "compare_words", "complete_word", "mixed_review"]);
     expect(requiredTypesOf("inexistente")).toBeUndefined();

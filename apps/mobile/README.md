@@ -1,4 +1,4 @@
-# Alfabetiza Mobile
+# Prosa Mobile
 
 Aplicativo Expo/React Native do MVP. Inclui a trilha fônica de 26 letras, a trilha temática «Tem em casa», nove tipos de exercício de letra, sílaba, palavra e frase (três renderizadores em `src/components/exercises`), SQLite offline, fila idempotente de sincronização, áudio por texto para fala e tokens no SecureStore. A lição monta uma sessão por unidade (`src/domain/session.ts`): itens vencidos e fracos primeiro, novos na ordem do currículo, e o item errado volta na mesma sessão; o estado por item (`src/domain/scheduler.ts`) define quando cada atividade vence.
 
