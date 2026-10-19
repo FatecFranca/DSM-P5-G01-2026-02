@@ -33,8 +33,10 @@ export type Exercise = {
   sentence?: string;
   /** Metadados pedagógicos e visuais publicados junto do item. */
   image?: string;
-  /** ID estável resolvido exclusivamente pelo manifesto de ilustrações embarcadas. */
+  /** ID estável: ilustração embarcada ou `media/<id>` administrado pela API. */
   imageAsset?: string;
+  /** URL HTTP(S), ou caminho `/v1/media/...`, publicado pela API para a cópia local. */
+  imageUri?: string;
   imageLabel?: string;
   contextLabel?: string;
   maskedWord?: string;

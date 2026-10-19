@@ -99,6 +99,19 @@ export async function deferEvents(events: SyncEvent[]): Promise<void> {
 
 export async function getSyncCursor(): Promise<string | null> { const conn = await db(); return (await conn.getFirstAsync<{ value: string }>("SELECT value FROM settings WHERE key = 'sync_cursor'"))?.value ?? null; }
 
+export async function getSetting(key: string): Promise<string | null> {
+  const conn = await db();
+  return (await conn.getFirstAsync<{ value: string }>("SELECT value FROM settings WHERE key = ?", key))?.value ?? null;
+}
+
+export async function setSetting(key: string, value: string): Promise<void> {
+  const conn = await db();
+  await conn.runAsync("INSERT OR REPLACE INTO settings VALUES (?, ?)", key, value);
+}
+
+export const PLACEMENT_DONE_KEY = "placement_done";
+export const PLACEMENT_LEVEL_KEY = "placement_level";
+
 export async function applyPulled(incoming: { progress: LessonProgress[]; itemStates: ItemState[]; cursor: string }, requiredTypesOf: (lessonId: string) => readonly ExerciseType[] | undefined): Promise<{ progress: LessonProgress[]; itemStates: ItemState[] }> {
   const conn = await db();
   const progress: LessonProgress[] = []; const itemStates: ItemState[] = [];

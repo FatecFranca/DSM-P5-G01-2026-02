@@ -6,6 +6,14 @@ import { normalizeExerciseTypes } from "../domain/exercise-types";
 import { parseAcceptedIds, parsePulledItemState, parseRejections, toApiEvent } from "../sync/contract";
 
 const apiUrl = String(Constants.expoConfig?.extra?.apiUrl ?? "http://10.0.2.2:8000");
+/** A API resolve IDs administrados; o app nunca monta caminho de arquivo local. */
+export const mediaUrlForAsset = (assetId: string): string => `${apiUrl.replace(/\/$/, "")}/v1/media/${encodeURIComponent(assetId.startsWith("media/") ? assetId.slice("media/".length) : assetId)}`;
+/** Converte o caminho relativo publicado pela API em URL que o React Native pode baixar. */
+export const resolveMediaUrl = (url: string | undefined, assetId?: string): string | undefined => {
+  if (url?.startsWith("http://") || url?.startsWith("https://")) return url;
+  if (url?.startsWith("/v1/media/")) return `${apiUrl.replace(/\/$/, "")}${url}`;
+  return assetId?.startsWith("media/") ? mediaUrlForAsset(assetId) : undefined;
+};
 export { ApiError, isUnauthorized } from "./errors";
 export type AuthTokens = { accessToken: string; refreshToken: string };
 const tokens = (value: { access_token?: string; refresh_token?: string; accessToken?: string; refreshToken?: string }): AuthTokens => {

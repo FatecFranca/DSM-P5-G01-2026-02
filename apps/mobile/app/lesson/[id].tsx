@@ -7,6 +7,7 @@ import { rendererFor } from "../../src/components/exercises/registry";
 import { Screen } from "../../src/components/Screen";
 import { useContentStore } from "../../src/content/store";
 import { canonicalLessonId } from "../../src/domain/content-ids";
+import { sessionIncentiveMessage, successIncentiveTitle } from "../../src/domain/incentives";
 import { deriveProgress, isLessonUnlocked, type Feedback } from "../../src/domain/learning";
 import { applyResult } from "../../src/domain/scheduler";
 import { SESSION_POLICY_VERSION, buildSession, reinsert, sessionSummary } from "../../src/domain/session";
@@ -126,7 +127,7 @@ function LessonSession({ unit }: { unit: Unit }) {
       setOutcome((current) => ({ correct: current.correct + (correct ? 1 : 0), errors: current.errors + (correct ? 0 : 1), recoveredItemIds: recovered ? [...current.recoveredItemIds, exercise.id] : current.recoveredItemIds, audioPlays: current.audioPlays }));
       const successMessage = exercise.successFeedback ?? (exercise.type === "complete_word" ? `A letra ${unit.letter ?? ""} completa a palavra ${word?.word ?? ""}.` : exercise.itemKind === "letter" ? "Você relacionou a letra, o som e a palavra." : `Isso mesmo: ${exercise.ttsText}.`);
       const retryMessage = exercise.errorFeedback ?? (exercise.itemKind === "letter" ? `Ouça a palavra de novo e procure a letra ${unit.letter ?? ""}. Você verá este desafio outra vez.` : "Observe o contexto e ouça de novo. Você verá este desafio outra vez.");
-      setFeedback(correct ? { kind: "success", title: "Muito bem!", message: successMessage } : { kind: "try-again", title: "Vamos aprender com esse erro", message: retryMessage });
+      setFeedback(correct ? { kind: "success", title: successIncentiveTitle(exercise.id), message: successMessage } : { kind: "try-again", title: "Vamos aprender com esse erro", message: retryMessage });
     } catch {
       setSelected(undefined);
       setFeedback({ kind: "incorrect", title: "Não foi possível salvar", message: "Sua resposta não foi registrada. Tente novamente." });
@@ -178,7 +179,7 @@ function LessonSession({ unit }: { unit: Unit }) {
         <View style={styles.summaryCard}><Text style={styles.summaryValue}>{summary.recovered}</Text><Text style={styles.summaryLabel}>erros recuperados</Text></View>
         <View style={styles.summaryCard}><Text style={styles.summaryValue}>{summary.audioPlays}</Text><Text style={styles.summaryLabel}>áudios ouvidos</Text></View>
       </View>
-      <Text style={styles.encouragement}>{summary.errors === 0 ? "Excelente: você acertou sem precisar repetir." : summary.recovered === summary.recoveredItemIds.length && summary.recovered > 0 ? "Você voltou aos desafios e transformou erros em aprendizagem." : "Cada tentativa fortalece a leitura. Continue praticando."}</Text>
+      <Text style={styles.encouragement}>{sessionIncentiveMessage(unit.id, summary.errors === 0, summary.recovered > 0)}</Text>
       <Pressable accessibilityRole="button" style={styles.next} onPress={() => router.replace("/lessons")}><Text style={styles.nextText}>Continuar aprendendo</Text></Pressable>
       <Pressable accessibilityRole="button" style={styles.continue} onPress={() => router.replace("/progress")}><Text style={styles.continueText}>Ver meu progresso</Text></Pressable>
     </Screen>;
