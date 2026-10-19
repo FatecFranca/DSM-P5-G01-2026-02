@@ -2,7 +2,19 @@
 
 ## Público e abordagem
 
-O Alfabetiza apoia a alfabetização inicial de jovens e adultos com linguagem respeitosa, direta e não infantilizada. O aplicativo orienta e oferece novas tentativas; ele não substitui avaliação pedagógica nem transforma uma resposta em julgamento sobre a capacidade do estudante.
+O Prosa apoia a alfabetização inicial de jovens e adultos com linguagem respeitosa, direta e não infantilizada. O aplicativo orienta e oferece novas tentativas; ele não substitui avaliação pedagógica nem transforma uma resposta em julgamento sobre a capacidade do estudante.
+
+## Níveis do Prosa
+
+A experiência do estudante é apresentada em cinco níveis, mapeados sobre o catálogo já publicado:
+
+1. **Letras** — trilha fônica das 26 letras;
+2. **Sílabas** — unidades e práticas silábicas;
+3. **Palavras** — reconhecimento e composição de palavras;
+4. **Frases** — organização e compreensão de frases curtas;
+5. **Consolidação** — revisão espaçada e retomada do que já foi dominado.
+
+Um nivelamento inicial por toque orienta o ponto de partida sugerido, sem liberar conteúdo que ainda dependa de pré-requisitos.
 
 A revisão de objetivos, sequência, textos e observação dos testes é responsabilidade do integrante capacitado do grupo. A aprovação humana permanece registrada como pendência antes de qualquer pesquisa com participantes.
 
@@ -42,7 +54,7 @@ As trilhas temáticas usam estes tipos, todos registrados em `contracts/exercise
 - `completar a frase` (`sentence_fill_word`), com distratores que não cabem no sentido da frase;
 - `ordenar a frase` (`sentence_order`).
 
-Uma unidade temática só abre quando todas as letras de todas as suas palavras e frases já foram dominadas (`required_letters`). A trilha organiza e sugere ordem, mas nunca libera conteúdo. A primeira trilha, `Tem em casa`, tem duas unidades de palavras (`CASA, MESA, CAMA, SALA` e `COPO, PRATO, PORTA, PANELA, TAPETE`) e uma de frases (`EU DURMO NA CAMA`, `O COPO ESTÁ NA MESA`, `EU COMO NO PRATO`, `A SALA É GRANDE`, `A CASA TEM UMA PORTA`), todas restritas às letras das fases 1 e 2 e com status `pending` até a revisão pedagógica.
+Uma unidade temática só abre quando todas as letras de todas as suas palavras e frases já foram dominadas (`required_letters`). A trilha organiza e sugere ordem, mas nunca libera conteúdo. A primeira trilha, `Tem em casa`, tem duas unidades de palavras (`CASA, MESA, CAMA, SALA` e `COPO, PRATO, PORTA, PANELA, TAPETE`) e uma de frases (`EU DURMO NA CAMA`, `O COPO ESTÁ NA MESA`, `EU COMO NO PRATO`, `A SALA É GRANDE`, `A CASA TEM UMA PORTA`), todas restritas às letras das fases 1 e 2 e com status `pending` até a revisão pedagógica. A segunda trilha, `Família`, começa com palavras (`PAI, MÃE, TIA, TIO` e `IRMÃ, NOME, MAMA`), pendente de revisão pedagógica. Ilustrações e frases dessa trilha ficam para expansão seguinte.
 
 As atividades de palavra são liberadas somente quando todas as letras da palavra já foram apresentadas. O domínio é registrado por atividade: cada acerto dobra o intervalo até a próxima revisão (a partir de 4 horas, no máximo 90 dias) e cada erro encurta esse intervalo e devolve a atividade à sessão em até três posições. Uma unidade conta como concluída quando todas as suas atividades foram acertadas no último encontro, e pede revisão quando alguma delas vence.
 
@@ -61,7 +73,7 @@ Depois da base de letras e sílabas, o vocabulário será organizado em trilhas 
 | ÔNIBUS | Ô-NI-BUS | transporte | médio |
 | TRABALHO | TRA-BA-LHO | cotidiano adulto | difícil |
 
-As classificações são um bootstrap transparente, não uma afirmação pedagógica definitiva. A equipe poderá revisar a dificuldade somente com evidências de uso e nova revisão pedagógica; a regra do produto continua explícita e auditável.
+As classificações curadas acima são a referência pedagógica. Candidatos do corpus recebem dificuldade pelo classificador supervisionado (ADR 0005), com fallback de regras quando o manifesto não está promovido. A equipe pode revisar a dificuldade com evidências de uso; nenhuma palavra entra em exercício publicado só por inferência automática.
 
 ## Critérios de feedback
 
