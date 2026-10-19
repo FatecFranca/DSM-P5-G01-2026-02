@@ -1,4 +1,4 @@
-# Alfabetiza — documento-base do projeto
+# Prosa — documento-base do projeto
 
 ## 1. Parecer sobre a ideia
 
@@ -24,7 +24,7 @@ O conceito deve ser preservado, mas o primeiro ciclo precisa ser menor. Alfabeti
 
 ## 2. Visão do produto
 
-O Alfabetiza será um aplicativo mobile de apoio à alfabetização inicial de jovens e adultos. Ele oferecerá atividades curtas, guiadas por áudio, para reconhecer letras, associar letras a sons e formar sílabas e palavras úteis no cotidiano.
+O Prosa é um aplicativo mobile de apoio à alfabetização inicial de jovens e adultos. Ele oferece atividades curtas, guiadas por áudio, para reconhecer letras, associar letras a sons e formar sílabas e palavras úteis no cotidiano.
 
 **Proposta de valor:** aprender com autonomia, em pequenas etapas, usando uma interface adulta, acessível e capaz de dar retorno imediato sem depender de conexão permanente.
 

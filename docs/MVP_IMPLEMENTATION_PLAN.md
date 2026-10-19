@@ -1,10 +1,10 @@
 <!-- markdownlint-disable MD013 -->
 
-# Alfabetiza — plano de implementação do MVP
+# Prosa — plano de implementação do MVP
 
 ## Objetivo
 
-Levar o Alfabetiza do repositório vazio a um MVP mobile estruturado, seguindo o [documento-base do projeto](./PROJECT_FOUNDATION.md), com API própria em Python, funcionamento offline, sincronização online, associação de letras a palavras e hospedagem na VPS Azure.
+Levar o Prosa do repositório vazio a um MVP mobile estruturado, seguindo o [documento-base do projeto](./PROJECT_FOUNDATION.md), com API própria em Python, funcionamento offline, sincronização online, associação de letras a palavras e hospedagem na VPS Azure.
 
 ## Arquitetura definida
 

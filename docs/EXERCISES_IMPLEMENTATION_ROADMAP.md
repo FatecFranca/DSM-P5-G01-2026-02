@@ -63,7 +63,7 @@ CAMA, SALA, COPO, PRATO, PORTA, PANELA e TAPETE, além de cinco cenas das frases
 existentes da trilha.
 
 Cada ativo terá ID estável, caminho local, texto alternativo, licença
-Projeto Alfabetiza e autoria do projeto. Um manifesto estático do mobile
+Projeto Prosa e autoria do projeto. Um manifesto estático do mobile
 resolverá o ID para um arquivo local. Bundle que referenciar ativo ausente será
 rejeitado, preservando o conteúdo anterior.
 

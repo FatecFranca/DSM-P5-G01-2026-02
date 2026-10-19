@@ -46,6 +46,8 @@ Data da rodada: 11 de setembro de 2026 (fluxo completo em emulador Android).
 
 A adaptação atual é por regras explícitas (ADR 0003): pré-requisito por letras, repetição espaçada por item e reapresentação de erros. O ranking por modelo (ADR 0004) existe, está desligado em produção e só será promovido por manifesto que passe no gate de replay (log-loss abaixo de regras, taxa histórica e constante nos cortes temporal e por usuário; ECE ≤ 0,05; ≥ 200 linhas) sobre tentativas de usuários com consentimento. Em dados sintéticos o pipeline promove; com dados reais ainda não há volume, e a reprovação do gate é o resultado esperado.
 
+O classificador supervisionado de dificuldade lexical (ADR 0005) foi treinado em `ml/data/difficulty_labels.json` (macro-F1 ≈ 0,92 na validação cruzada), com manifesto promovido em `ml/artifacts/difficulty_manifest.json`. Candidatos do word bank foram reetiquetados; o catálogo curado permanece soberano.
+
 ## Fluxo completo em emulador (11 de setembro de 2026)
 
 Executado em emulador Android (Pixel 10, API 37) contra a API local e o PostgreSQL de desenvolvimento, com 26 verificações automatizadas de API mais a navegação manual pelo aplicativo:
