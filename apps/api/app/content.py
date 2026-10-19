@@ -5,12 +5,17 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session, selectinload
 from .content_types import LEARNING_ORDER
 from .db import get_db
-from .models import Asset, Sentence, Syllable, Track, Unit, Word
+from .models import Asset, ContentStudioState, Sentence, Syllable, Track, Unit, Word
 
 router = APIRouter(prefix="/v1", tags=["content"])
 PUBLISHED = ("pending", "approved")  # candidate, retired e rejected ficam fora do bundle.
 
 def content_body(db: Session) -> dict:
+    # Uma publicação do Estúdio é uma fotografia imutável. Isso impede que um
+    # seed posterior altere silenciosamente o que os alunos recebem.
+    state = db.get(ContentStudioState, 1)
+    if state and state.published:
+        return state.published
     tracks = db.scalars(select(Track).options(selectinload(Track.units).selectinload(Unit.items)).order_by(Track.position)).unique().all()
     words = db.scalars(select(Word).where(Word.review_status.in_(PUBLISHED)).order_by(Word.text)).all()
     sentences = db.scalars(select(Sentence).where(Sentence.review_status.in_(PUBLISHED)).order_by(Sentence.id)).all()

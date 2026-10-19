@@ -36,7 +36,10 @@ CONTEXT_WORDS = {"I": "AI", "O": "OI", "U": "EU", "M": "MEU", "L": "MALA", "P": 
 LESSON_CONTEXT = {
     "A": ("ÁGUA", "MALA", "MALA", "E", "O"), "E": ("ENDEREÇO", "TELEFONE", "ENDEREÇO", "F", "I"),
     "I": ("IDADE", "IDADE", "IDADE", "E", "U"), "O": ("ÔNIBUS", "COPO", "COPO", "Q", "U"),
-    "U": ("UNIDADE", "UNIDADE", "UNIDADE", "O", "V"), "M": ("MALA", "CAMA", "MALA", "N", "L"),
+    # "UAU" é uma expressão breve, conhecida e visual (surpresa), formada
+    # apenas por vogais já estudadas. Evita a abstração de "UNIDADE" e não
+    # antecipa o V de "UVA".
+    "U": ("UAU", "UAU", "UAU", "O", "I"), "M": ("MALA", "CAMA", "MALA", "N", "L"),
     "L": ("LATA", "MALA", "LATA", "I", "T"), "P": ("PORTA", "PAPEL", "PORTA", "B", "R"),
     "S": ("SALA", "SAÚDE", "SALA", "C", "Z"), "T": ("TAPETE", "TETO", "TAPETE", "D", "P"),
     "R": ("RUA", "CARRO", "RUA", "P", "B"), "N": ("NOME", "ÔNIBUS", "NOME", "M", "H"),
@@ -97,10 +100,15 @@ WORDS = [
     ("PRATO", ["PRA", "TO"], "medio", "encontro consonantal PR"), ("PORTA", ["POR", "TA"], "medio", "sílaba CVC"),
     ("PANELA", ["PA", "NE", "LA"], "medio", "três sílabas CV"), ("TAPETE", ["TA", "PE", "TE"], "medio", "três sílabas CV"),
     ("ÔNIBUS", ["Ô", "NI", "BUS"], "medio", "acento e sílaba CVC"), ("SAÚDE", ["SA", "Ú", "DE"], "medio", "hiato com acento"),
+    ("PAI", ["PAI"], "facil", "palavra monossílaba do cotidiano familiar"),
+    ("MÃE", ["MÃE"], "facil", "palavra monossílaba com til, contexto familiar"),
+    ("TIA", ["TI", "A"], "facil", "duas sílabas CV + vogal"),
+    ("TIO", ["TI", "O"], "facil", "duas sílabas CV + vogal"),
+    ("IRMÃ", ["IR", "MÃ"], "medio", "sílaba VC + sílaba com til"),
 ]
 
-ASSET_LICENSE = "Projeto Alfabetiza"
-ASSET_ATTRIBUTION = "Equipe Projeto Alfabetiza"
+ASSET_LICENSE = "Projeto Prosa"
+ASSET_ATTRIBUTION = "Equipe Projeto Prosa"
 HOME_WORDS = ["CASA", "MESA", "CAMA", "SALA", "COPO", "PRATO", "PORTA", "PANELA", "TAPETE"]
 WORD_ILLUSTRATIONS = {
     word: {
@@ -133,6 +141,12 @@ TRACKS = [
          {"id": "casa-silabas", "kind": "syllable", "title": "Sílabas da casa", "words": HOME_WORDS},
          {"id": "casa-imagens", "kind": "word_image", "title": "Palavras e imagens", "words": HOME_WORDS},
          {"id": "casa-cenas", "kind": "sentence_image", "title": "Frases e cenas", "sentences": ["casa-frase-1", "casa-frase-2", "casa-frase-3", "casa-frase-4", "casa-frase-5"]},
+     ]},
+    {"id": "familia", "slug": "familia", "title": "Família", "kind": "theme", "position": 3,
+     "description": "Palavras do cotidiano familiar, liberadas pelas letras já dominadas.",
+     "units": [
+         {"id": "familia-1", "kind": "word", "title": "Pessoas da família", "words": ["PAI", "MÃE", "TIA", "TIO"]},
+         {"id": "familia-2", "kind": "word", "title": "Mais da família", "words": ["IRMÃ", "NOME", "MAMA"]},
      ]},
 ]
 

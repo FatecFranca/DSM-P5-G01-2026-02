@@ -42,6 +42,8 @@ def lint_content(body: dict) -> list[str]:
         if unit["kind"] == "letter":
             if track["kind"] != "phonics" or not letter:
                 errors.append(f"{where_unit}: unidade de letra fora da trilha fônica."); continue
+            if letter not in order:
+                errors.append(f"{where_unit}: letra-alvo não pertence à ordem de aprendizagem."); continue
             index = order.index(letter)
             if PHASE_OF.get(letter) != (unit["phase"], unit["phase_title"]):
                 errors.append(f"{where_unit}: fase incorreta.")

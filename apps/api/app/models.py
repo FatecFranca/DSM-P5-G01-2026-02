@@ -17,6 +17,9 @@ class User(Base):
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now)
     # Consentimento de pesquisa separado do cadastro: só tentativas de quem consentiu entram no treino do ranking.
     research_consent: Mapped[bool] = mapped_column(Boolean, default=False); research_consent_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    # O Estúdio é exclusivamente local nesta fase. O campo evita que uma conta de
+    # aprendiz obtida pelo endpoint público de cadastro tenha acesso ao editor.
+    is_admin: Mapped[bool] = mapped_column(Boolean, default=False)
 
 
 class AuthSession(Base):
@@ -72,6 +75,11 @@ class Word(Base):
     accented: Mapped[bool] = mapped_column(Boolean, default=False); length: Mapped[int] = mapped_column(Integer, default=0)
     frequency: Mapped[float | None] = mapped_column(Float, nullable=True); raw_frequency: Mapped[int | None] = mapped_column(Integer, nullable=True); frequency_source: Mapped[str | None] = mapped_column(String(64), nullable=True)
     initial_difficulty: Mapped[str] = mapped_column(String(16), default="medio"); current_difficulty: Mapped[str] = mapped_column(String(16), default="medio"); difficulty_rationale: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    # Predição do classificador lexical (ADR 0005) e feedback humano para retreino.
+    model_difficulty: Mapped[str | None] = mapped_column(String(16), nullable=True)
+    label_feedback: Mapped[str | None] = mapped_column(String(16), nullable=True)  # pending | confirmed | corrected
+    labeled_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)
+    labeled_by: Mapped[str | None] = mapped_column(String(120), nullable=True)
     image_asset: Mapped[str | None] = mapped_column(String(255), nullable=True); image_alt: Mapped[str | None] = mapped_column(String(120), nullable=True); audio_asset: Mapped[str | None] = mapped_column(String(255), nullable=True)
     region_notes: Mapped[str | None] = mapped_column(String(255), nullable=True); license: Mapped[str | None] = mapped_column(String(120), nullable=True); attribution: Mapped[str | None] = mapped_column(String(255), nullable=True)
     source: Mapped[str | None] = mapped_column(String(64), nullable=True); review_status: Mapped[str] = mapped_column(String(16), default="candidate"); content_version: Mapped[int] = mapped_column(Integer, default=1)
@@ -117,6 +125,7 @@ class Asset(Base):
     kind: Mapped[str] = mapped_column(String(16)); audio_kind: Mapped[str | None] = mapped_column(String(16), nullable=True)  # phoneme | letter_name | syllable | word | sentence | instruction
     license: Mapped[str | None] = mapped_column(String(120), nullable=True); attribution: Mapped[str | None] = mapped_column(String(255), nullable=True)
     checksum: Mapped[str | None] = mapped_column(String(64), nullable=True); duration_ms: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    alt: Mapped[str | None] = mapped_column(String(120), nullable=True)
 
 
 class ContentVersion(Base):
@@ -124,6 +133,22 @@ class ContentVersion(Base):
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
     version: Mapped[str] = mapped_column(String(32)); checksum: Mapped[str] = mapped_column(String(64)); notes: Mapped[str | None] = mapped_column(String(255), nullable=True)
     published_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now)
+    snapshot: Mapped[dict | None] = mapped_column(JSON, nullable=True)
+    author_id: Mapped[str | None] = mapped_column(ForeignKey("users.id"), nullable=True)
+
+
+class ContentStudioState(Base):
+    """Rascunho e catálogo publicado do Estúdio.
+
+    Snapshots JSON tornam a publicação atômica e preservam os IDs que já são
+    referenciados por tentativas/progresso, sem o seed voltar a sobrescrever a
+    curadoria feita pela pessoa administradora.
+    """
+    __tablename__ = "content_studio_state"
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, default=1)
+    draft: Mapped[dict | None] = mapped_column(JSON, nullable=True)
+    published: Mapped[dict | None] = mapped_column(JSON, nullable=True)
+    updated_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now, onupdate=now)
 
 
 # --- Aprendizagem -------------------------------------------------------------------------------------------------

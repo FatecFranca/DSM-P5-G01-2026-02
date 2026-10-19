@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="light" />
+  <title>Prosa — Estúdio de conteúdo</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ctext y='24' font-size='24'%3Ea%3C/text%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="/admin/styles.css" />
+</head>
+<body>
+  <div id="toast-region" aria-live="polite" aria-atomic="true"></div>
+  <main id="auth-view" class="auth-shell" hidden>
+    <section class="auth-card">
+      <span class="eyebrow">PROSA</span><h1>Estúdio de conteúdo</h1>
+      <p id="auth-copy">Configure o acesso local para começar a editar as atividades.</p>
+      <form id="auth-form" class="stack" novalidate>
+        <label>E-mail<input name="email" type="email" autocomplete="username" required /></label>
+        <label>Senha<input name="password" type="password" autocomplete="current-password" minlength="8" required /></label>
+        <button class="primary" type="submit">Continuar</button>
+      </form>
+    </section>
+  </main>
+
+  <main id="studio-view" class="studio" hidden>
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="Prosa, início">a<span>β</span></a>
+      <div><strong>Estúdio de conteúdo</strong><small id="catalog-state">Catálogo local</small></div>
+      <div class="top-actions">
+        <button id="nav-curriculum-button" class="secondary" type="button" aria-pressed="true">Atividades</button>
+        <button id="nav-words-button" class="secondary" type="button" aria-pressed="false">Vocabulário ML</button>
+        <button id="validate-button" class="secondary">Validar catálogo</button>
+        <button id="publish-button" class="primary">Publicar</button>
+        <button id="versions-button" class="icon-button" title="Versões" aria-label="Abrir versões">◷</button>
+        <button id="logout-button" class="text-button">Sair</button>
+      </div>
+    </header>
+    <div id="curriculum-workspace" class="workspace">
+      <aside class="sidebar" aria-label="Trilhas e unidades">
+        <div class="sidebar-heading"><div><span class="eyebrow">CURRÍCULO</span><h2>Trilhas</h2></div><button id="reload-button" class="icon-button" title="Atualizar" aria-label="Atualizar conteúdo">↻</button></div>
+        <div id="trail-list" class="trail-list"><p class="muted">Carregando unidades…</p></div>
+      </aside>
+      <section class="editor-panel" aria-label="Editor de atividade">
+        <div id="empty-editor" class="empty-state"><div class="empty-art">✦</div><h1>Escolha uma atividade</h1><p>Selecione uma unidade na coluna à esquerda para editar o conteúdo.</p></div>
+        <form id="exercise-form" hidden novalidate>
+          <div class="editor-header"><div><span id="exercise-location" class="eyebrow"></span><h1 id="editor-title">Nova atividade</h1></div><div class="header-controls"><label class="toggle">Ativa <input id="retired-field" type="checkbox" /><span></span></label><button id="new-exercise-button" type="button" class="secondary">+ Atividade</button></div></div>
+          <div class="form-grid">
+            <label>Tipo de atividade<select name="kind" id="kind-field" required></select><small id="kind-help">O tipo define os campos necessários.</small></label>
+            <label>Identificador técnico<input name="id" id="id-field" readonly /><small>Gerado pelo sistema; não muda depois de publicado.</small></label>
+            <label class="full">Instrução para a pessoa estudante<textarea name="instruction" id="instruction-field" rows="3" required placeholder="Ex.: Ouça a palavra e escolha a letra que falta."></textarea></label>
+            <label class="full">Texto falado (TTS)<textarea name="ttsText" id="tts-field" rows="2" placeholder="Deixe vazio para usar a instrução."></textarea><small>Use uma frase natural; não revele a resposta antes da atividade.</small></label>
+          </div>
+          <fieldset id="word-fields" class="field-card"><legend>Palavra e resposta</legend><div class="form-grid"><label>Palavra contextual<input name="word" id="word-field" autocomplete="off" placeholder="Ex.: UVA" /></label><label>Resposta correta<input name="answer" id="answer-field" autocomplete="off" placeholder="Ex.: U" /></label><label id="masked-wrap" class="full">Como a palavra aparece<input name="maskedWord" id="masked-field" autocomplete="off" placeholder="Ex.: _VA" /><small>Deixe em branco para o aplicativo mascarar de forma segura.</small></label></div></fieldset>
+          <fieldset id="choices-fields" class="field-card"><legend>Alternativas</legend><div id="choices-list" class="choices-list"></div><button id="add-choice-button" type="button" class="text-button">+ Adicionar alternativa</button></fieldset>
+          <fieldset id="image-fields" class="field-card"><legend>Imagem</legend><div class="media-layout"><div><label>Descrição acessível<input id="image-alt-field" name="imageAlt" placeholder="Ex.: Uvas roxas em um cacho" /></label><div id="image-preview" class="media-preview"><span>Nenhuma imagem selecionada</span></div></div><div class="media-actions"><input id="image-file-field" type="file" accept="image/png,image/jpeg,image/webp,image/svg+xml" hidden /><button id="upload-button" class="secondary" type="button">Enviar arquivo</button><button id="paste-button" class="secondary" type="button">Colar imagem</button><label>Importar por URL<input id="image-url-field" type="url" placeholder="https://…" /></label><button id="import-url-button" class="secondary" type="button">Importar URL</button><button id="library-button" class="secondary" type="button">Abrir biblioteca</button></div></div></fieldset>
+          <fieldset id="metadata-fields" class="field-card"><legend>Metadados</legend><div class="form-grid"><label>Dificuldade<select id="difficulty-field" name="difficulty"><option value="1">Inicial</option><option value="2">Em prática</option><option value="3">Desafio</option></select></label><label>Feedback positivo<input id="positive-feedback-field" name="positiveFeedback" placeholder="Muito bem!" /></label><label class="full">Feedback de apoio<input id="support-feedback-field" name="supportFeedback" placeholder="Vamos tentar de novo com calma." /></label></div></fieldset>
+          <div class="editor-footer"><span id="save-status" class="muted"></span><button id="preview-button" type="button" class="secondary">Pré-visualizar</button><button class="primary" type="submit">Salvar atividade</button></div>
+        </form>
+      </section>
+      <aside id="preview-panel" class="preview-panel" aria-label="Prévia no celular"><div class="preview-heading"><span class="eyebrow">PRÉVIA</span><button id="close-preview-button" class="icon-button" aria-label="Fechar prévia">×</button></div><div id="phone-preview" class="phone"><div class="phone-speaker"></div><div id="phone-content"></div></div></aside>
+    </div>
+
+    <section id="words-workspace" class="words-workspace" hidden aria-label="Vocabulário e classificador">
+      <header class="words-header">
+        <div>
+          <span class="eyebrow">APRENDIZAGEM DE MÁQUINA</span>
+          <h1>Vocabulário e dificuldade lexical</h1>
+          <p class="muted">Liste palavras, veja a predição do modelo e confirme ou corrija o rótulo. Rótulos humanos entram no próximo treino.</p>
+        </div>
+        <div class="words-stats" id="words-stats"></div>
+      </header>
+      <div class="words-toolbar">
+        <label>Buscar<input id="words-search" type="search" placeholder="CASA, TRABALHO…" /></label>
+        <label>Feedback
+          <select id="words-feedback-filter">
+            <option value="">Todos</option>
+            <option value="pending">Pendentes</option>
+            <option value="confirmed">Confirmados</option>
+            <option value="corrected">Corrigidos</option>
+          </select>
+        </label>
+        <label>Status
+          <select id="words-status-filter">
+            <option value="">Todos</option>
+            <option value="candidate">Candidata</option>
+            <option value="pending">Pendente pedagógico</option>
+            <option value="approved">Aprovada</option>
+          </select>
+        </label>
+        <button id="words-reload-button" class="secondary" type="button">Atualizar</button>
+        <button id="words-export-button" class="secondary" type="button">Exportar rótulos</button>
+      </div>
+      <form id="words-add-form" class="words-add field-card">
+        <legend>Adicionar palavra para o modelo</legend>
+        <div class="form-grid">
+          <label>Palavra<input id="new-word-text" name="text" required placeholder="Ex.: TRABALHO" autocomplete="off" /></label>
+          <label>Sílabas (opcional)<input id="new-word-syllables" name="syllables" placeholder="Ex.: TRA-BA-LHO" autocomplete="off" /></label>
+          <label>Frequência (0–1)<input id="new-word-frequency" name="frequency" type="number" min="0" max="1" step="0.01" value="0.5" /></label>
+          <div class="words-add-actions"><button class="primary" type="submit">Classificar e salvar</button></div>
+        </div>
+        <small>Se omitir sílabas, o servidor tenta silabificar automaticamente. A palavra entra como candidata com a predição do modelo.</small>
+      </form>
+      <div id="words-table-wrap" class="words-table-wrap"><p class="muted">Carregando palavras…</p></div>
+    </section>
+  </main>
+
+  <dialog id="media-dialog"><form method="dialog" class="dialog-card"><div class="dialog-heading"><div><span class="eyebrow">BIBLIOTECA</span><h2>Imagens locais</h2></div><button class="icon-button" value="cancel" aria-label="Fechar">×</button></div><div id="media-library" class="media-library"></div></form></dialog>
+  <dialog id="versions-dialog"><form method="dialog" class="dialog-card"><div class="dialog-heading"><div><span class="eyebrow">HISTÓRICO</span><h2>Versões publicadas</h2></div><button class="icon-button" value="cancel" aria-label="Fechar">×</button></div><div id="versions-list" class="versions-list"></div></form></dialog>
+  <dialog id="publish-dialog"><form id="publish-form" class="dialog-card"><div class="dialog-heading"><div><span class="eyebrow">PUBLICAR</span><h2>Atualizar catálogo do aplicativo</h2></div><button type="button" data-close-dialog class="icon-button" aria-label="Fechar">×</button></div><p>As alterações salvas serão disponibilizadas para o aplicativo. Esta operação cria uma versão restaurável.</p><label>Nota desta versão<textarea id="publish-note" rows="3" maxlength="500" placeholder="Ex.: Troca de UNIDADE por UVA na letra U"></textarea></label><div class="dialog-actions"><button type="button" data-close-dialog class="secondary">Cancelar</button><button class="primary" type="submit">Publicar agora</button></div></form></dialog>
+  <script type="module" src="/admin/app.js"></script>
+</body></html>

@@ -7,6 +7,7 @@ coverage/
 htmlcov/
 *.coverage
 *.log
+apps/api/app/data/media/
 *.tsbuildinfo
 
 # Python

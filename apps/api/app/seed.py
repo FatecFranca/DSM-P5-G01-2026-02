@@ -11,7 +11,7 @@ from .content_data import ACCENTS, ASSET_ATTRIBUTION, ASSET_LICENSE, LESSON_CONT
 from .content_ids import exercise_id_for, item_id_for, lesson_id_for
 from .content_types import LEARNING_ORDER, PHASE_SPECS, TARGET_OF, ExerciseType
 from .db import SessionLocal
-from .models import Asset, ContentVersion, Item, Sentence, Syllable, Track, Unit, Word, WordTrack
+from .models import Asset, ContentStudioState, ContentVersion, Item, Sentence, Syllable, Track, Unit, Word, WordTrack
 from .word_bank import WORD_BANK_PATH
 
 LETTERS = LEARNING_ORDER
@@ -48,6 +48,9 @@ def letter_item_specs(letter: str) -> list[dict]:
         }
 
     hidden_context = lambda word, masked: {"word": word, "masked_word": masked, "hide_word": True, "inline_audio": True, "audience": "adulto", "situation": "uso cotidiano"}
+    # Para U, UAU × AU torna visível a presença inicial de U sem introduzir
+    # letras futuras. As demais lições usam a segunda palavra contextual.
+    comparison_word = "AU" if letter == "U" else hunt_word
     specs = [
         dict(type=ExerciseType.LISTEN_CHOOSE, instruction="Qual letra completa esta palavra?", answer=letter,
              options=visual[index % 3:] + visual[:index % 3], context_word=context, tts=context,
@@ -62,8 +65,8 @@ def letter_item_specs(letter: str) -> list[dict]:
              options=[str(i + 1) for i in range(len(hunt_word))], context_word=hunt_word, tts=letter,
              payload={**metadata("Localizar todas as ocorrências da letra numa palavra.", "medio", "Há várias posições possíveis e todas precisam ser verificadas.", f"Você encontrou todas as letras {letter} em {hunt_word}.", f"Leia {hunt_word} da esquerda para a direita e tente novamente."), "characters": list(hunt_word), "target_indices": positions}),
         dict(type=ExerciseType.COMPARE_WORDS, instruction="Compare as palavras. Qual letra inicia a primeira?", answer=letter,
-             options=[other_distractor, sound_distractor, letter], context_word=context, tts=f"{context}. {hunt_word}.",
-             payload={**metadata("Comparar palavras e identificar a letra inicial relevante.", "medio", "Duas palavras reais exigem atenção à palavra perguntada.", f"Certo: {context} inicia com {letter}.", "Observe o começo da primeira palavra e compare outra vez."), "words": [context, hunt_word], "changed_position": 1}),
+             options=[other_distractor, sound_distractor, letter], context_word=context, tts=f"{context}. {comparison_word}.",
+             payload={**metadata("Comparar palavras e identificar a letra inicial relevante.", "medio", "Duas palavras reais exigem atenção à palavra perguntada.", f"Certo: {context} inicia com {letter}.", "Observe o começo da primeira palavra e compare outra vez."), "words": [context, comparison_word], "changed_position": 1}),
         dict(type=ExerciseType.COMPLETE_WORD, instruction="Qual letra completa esta palavra?", answer=letter,
              options=visual[2:] + visual[:2], target_id=hunt_word, context_word=hunt_word, tts=hunt_word,
              payload={**metadata("Completar uma palavra cotidiana a partir do áudio e da lacuna.", "medio", "Lacuna e distratores são plausíveis; o áudio determina a resposta sem exibir a palavra pronta.", f"Isso: {letter} completa a palavra.", "Ouça a palavra novamente e escolha a letra que falta."), "context": hidden_context(hunt_word, masked_hunt_word)}),
@@ -209,6 +212,11 @@ def upsert_syllable(db, text: str) -> None:
 
 def seed_content():
     with SessionLocal() as db:
+        # Depois que o Estúdio é aberto, a curadoria humana é a fonte de
+        # verdade. Seeds seguintes continuam úteis em bancos novos/testes, mas
+        # jamais sobrescrevem o catálogo local administrado.
+        if db.get(ContentStudioState, 1):
+            return
         words = {word.text: word for word in db.scalars(select(Word)).all()}
         for text, syllables, difficulty, rationale in WORDS:
             word = upsert_word(db, words, text, syllables=syllables, initial_difficulty=difficulty, difficulty_rationale=rationale, source="curadoria", **WORD_ILLUSTRATIONS.get(text, {}))
