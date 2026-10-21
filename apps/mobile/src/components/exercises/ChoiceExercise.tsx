@@ -1,8 +1,10 @@
+import { useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import type { Exercise } from "../../domain/types";
 import { colors, fonts, radius, shadows } from "../../theme";
 import { AudioButton } from "../AudioButton";
-import { PictureCircle } from "../brand/Decor";
+import { CheckCircleIcon, PictureCircle } from "../brand/Decor";
+import { PrimaryButton } from "../ui/PrimaryButton";
 import { ManagedIllustration } from "../../assets/ManagedIllustration";
 
 export type ExerciseRendererProps = {
@@ -21,6 +23,7 @@ export type ExerciseRendererProps = {
 /** Grade de opções: letras, sílabas, palavras ou posições. Palavras longas ganham botões largos. */
 export function ChoiceExercise({ exercise, selected, disabled = false, onChoose, onInteract, onAudioPlay }: ExerciseRendererProps) {
   const wide = (exercise.options ?? []).some((option) => option.length > 3);
+  const [pending, setPending] = useState<string>();
   return <View>
     {(exercise.imageAsset || exercise.image || exercise.contextLabel) && <View style={styles.contextCard}>
       {exercise.imageAsset && <ManagedIllustration assetId={exercise.imageAsset} sourceUri={exercise.imageUri} accessibilityLabel={exercise.imageLabel ?? "Ilustração contextual"} />}
@@ -33,10 +36,17 @@ export function ChoiceExercise({ exercise, selected, disabled = false, onChoose,
     {exercise.type === "sentence_fill_word" && <Text style={styles.sentence}>{exercise.sentence}</Text>}
     <View style={styles.options}>{exercise.options?.map((option) => {
       const chosen = selected === option;
-      return <Pressable key={option} disabled={disabled} accessibilityRole="button" accessibilityLabel={`Escolher ${option}`} accessibilityState={{ selected: chosen, disabled }} onPress={() => { onInteract?.(); onChoose(option, option === exercise.answer); }} style={[styles.option, wide && styles.wideOption, disabled && !chosen && styles.disabled, chosen && (option === exercise.answer ? styles.correct : styles.selected)]}>
+      const marked = !selected && pending === option;
+      return <Pressable key={option} disabled={disabled} accessibilityRole="button" accessibilityLabel={`Escolher ${option}`} accessibilityState={{ selected: chosen || marked, disabled }} onPress={() => { onInteract?.(); setPending(option); }} style={[styles.option, wide && styles.wideOption, disabled && !chosen && styles.disabled, marked && styles.correct, chosen && (option === exercise.answer ? styles.correct : styles.selected)]}>
         <Text style={[styles.optionText, wide && styles.wideText]}>{option}</Text>
       </Pressable>;
     })}</View>
+    {/* Modelos de pergunta do Figma: tocar só marca a opção; CONFIRMAR envia (fica apagado até haver escolha). */}
+    {!selected && !disabled && <View style={styles.confirmRow}>
+      <AudioButton label="Ouvir: confirmar" text="Confirmar" compact />
+      <PrimaryButton style={styles.confirm} uppercase label="Confirmar" icon={<CheckCircleIcon size={26} />} disabled={!pending}
+        onPress={() => { if (pending) onChoose(pending, pending === exercise.answer); }} />
+    </View>}
   </View>;
 }
 
@@ -55,5 +65,7 @@ const styles = StyleSheet.create({
   contextCard: { flexDirection: "row", flexWrap: "wrap", alignItems: "center", justifyContent: "center", gap: 14, padding: 12, marginTop: 12 },
   picture: { width: 124, height: 124, alignItems: "center", justifyContent: "center" },
   image: { fontSize: 68 }, contextLabel: { color: colors.text, fontSize: 22, fontFamily: fonts.semibold, textAlign: "center" }, disabled: { opacity: 0.65 },
+  confirmRow: { flexDirection: "row", alignItems: "center", gap: 12 },
+  confirm: { flex: 1 },
   maskedWord: { color: colors.text, fontSize: 42, fontFamily: fonts.semibold, letterSpacing: 5, textAlign: "center" },
 });
