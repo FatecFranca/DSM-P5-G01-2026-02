@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { ApiError } from "../api/errors";
 
 const storage = vi.hoisted(() => ({ sessionStorage: { load: vi.fn(), save: vi.fn(), clear: vi.fn() } }));
-const auth = vi.hoisted(() => ({ refresh: vi.fn() }));
+const auth = vi.hoisted(() => ({ refresh: vi.fn(), logout: vi.fn().mockResolvedValue(undefined) }));
 vi.mock("../storage/session", () => storage);
 vi.mock("../store/auth-store", () => ({ useAuthStore: { getState: () => auth } }));
 
@@ -47,10 +47,11 @@ describe("renovação de sessão na sincronização", () => {
     expect(run).toHaveBeenCalledOnce();
   });
 
-  it("exige login quando não há sessão salva", async () => {
+  it("encerra a sessão (volta ao login) quando não há token salvo", async () => {
     storage.sessionStorage.load.mockResolvedValue({ accessToken: null, refreshToken: null });
     const run = vi.fn();
     await expect(withSession(run)).rejects.toThrow("Faça login");
     expect(run).not.toHaveBeenCalled();
+    expect(auth.logout).toHaveBeenCalledOnce();
   });
 });

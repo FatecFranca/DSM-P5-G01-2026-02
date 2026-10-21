@@ -48,6 +48,43 @@ export async function pullEvents(cursor: string | null, accessToken: string): Pr
   const itemStates = events.filter((event) => event.type === "item_state").map(({ payload, occurred_at }) => parsePulledItemState(payload, occurred_at)).filter((state): state is ItemState => state !== undefined);
   return { cursor: String(data.next_cursor), progress, itemStates };
 }
+export type Me = { name: string | null; email: string };
+export async function getMe(accessToken: string): Promise<Me> {
+  const response = await fetch(`${apiUrl}/v1/me`, { headers: { Authorization: `Bearer ${accessToken}` } });
+  if (!response.ok) throw new ApiError(`Falha ao carregar o perfil (${response.status})`, response.status);
+  const data = await response.json() as { name?: string | null; email?: string };
+  return { name: data.name ?? null, email: String(data.email ?? "") };
+}
+/** Placar entre alunos: pontos calculados no servidor a partir das tentativas sincronizadas, e o lugar. */
+export type Leaderboard = { points: number; position: number; learners: number };
+export async function getLeaderboard(accessToken: string): Promise<Leaderboard> {
+  const response = await fetch(`${apiUrl}/v1/leaderboard/me`, { headers: { Authorization: `Bearer ${accessToken}` } });
+  if (!response.ok) throw new ApiError(`Falha ao carregar o placar (${response.status})`, response.status);
+  const data = await response.json() as { points?: number; position?: number; learners?: number };
+  return { points: Number(data.points ?? 0), position: Number(data.position ?? 0), learners: Number(data.learners ?? 0) };
+}
+export type LeaderboardEntry = { position: number; name: string; points: number; me: boolean };
+export type LeaderboardTop = Leaderboard & { entries: LeaderboardEntry[]; me: LeaderboardEntry };
+/** Primeiros do placar e a linha de quem chama (tela "Minha pontuação"); os outros aparecem só pelo primeiro nome. */
+export async function getLeaderboardTop(accessToken: string, limit = 4): Promise<LeaderboardTop> {
+  const response = await fetch(`${apiUrl}/v1/leaderboard?limit=${limit}`, { headers: { Authorization: `Bearer ${accessToken}` } });
+  if (!response.ok) throw new ApiError(`Falha ao carregar o placar (${response.status})`, response.status);
+  const data = await response.json() as Partial<LeaderboardTop>;
+  const entry = (raw: Partial<LeaderboardEntry> | undefined): LeaderboardEntry => ({ position: Number(raw?.position ?? 0), name: String(raw?.name ?? ""), points: Number(raw?.points ?? 0), me: Boolean(raw?.me) });
+  return { points: Number(data.points ?? 0), position: Number(data.position ?? 0), learners: Number(data.learners ?? 0), entries: (data.entries ?? []).map(entry), me: entry(data.me) };
+}
+export type League = { id: string; name: string; minPoints: number };
+export type LeagueBoard = { league: League; next: League | null; totalPoints: number; endsAt: string; members: number; entries: LeaderboardEntry[]; me: LeaderboardEntry };
+export async function getLeagueBoard(accessToken: string, limit = 10): Promise<LeagueBoard> {
+  const response = await fetch(`${apiUrl}/v1/leaderboard/league?limit=${limit}`, { headers: { Authorization: `Bearer ${accessToken}` } });
+  if (!response.ok) throw new ApiError(`Falha ao carregar a liga (${response.status})`, response.status);
+  type Raw = { league?: { id?: string; name?: string; min_points?: number }; next?: Raw["league"] | null; total_points?: number; ends_at?: string; members?: number; entries?: Partial<LeaderboardEntry>[]; me?: Partial<LeaderboardEntry> };
+  const data = await response.json() as Raw;
+  const league = (raw: Raw["league"]): League => ({ id: String(raw?.id ?? ""), name: String(raw?.name ?? ""), minPoints: Number(raw?.min_points ?? 0) });
+  const entry = (raw: Partial<LeaderboardEntry> | undefined): LeaderboardEntry => ({ position: Number(raw?.position ?? 0), name: String(raw?.name ?? ""), points: Number(raw?.points ?? 0), me: Boolean(raw?.me) });
+  return { league: league(data.league), next: data.next ? league(data.next) : null, totalPoints: Number(data.total_points ?? 0), endsAt: String(data.ends_at ?? ""),
+    members: Number(data.members ?? 0), entries: (data.entries ?? []).map(entry), me: entry(data.me) };
+}
 export async function fetchContent(etag: string | null): Promise<{ notModified: true } | { notModified: false; bundle: unknown; etag: string | null }> {
   const response = await fetch(`${apiUrl}/v1/content`, { headers: etag ? { "If-None-Match": etag } : {} });
   if (response.status === 304) return { notModified: true };

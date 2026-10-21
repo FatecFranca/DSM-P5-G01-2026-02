@@ -7,9 +7,17 @@ import { useAuthStore } from "../store/auth-store";
  * silenciosamente depois do primeiro vencimento e parece estar offline.
  * Executa com o token atual e, em 401, renova a sessão uma única vez antes de repetir.
  */
+export class SessionMissingError extends Error {
+  constructor() { super("Faça login para sincronizar"); this.name = "SessionMissingError"; }
+}
+
 export async function withSession<T>(run: (accessToken: string) => Promise<T>): Promise<T> {
   const session = await sessionStorage.load();
-  if (!session.accessToken) throw new Error("Faça login para sincronizar");
+  if (!session.accessToken) {
+    // Token sumiu do aparelho: encerra a sessão para o app voltar ao login na hora, em vez de seguir "offline".
+    await useAuthStore.getState().logout().catch(() => undefined);
+    throw new SessionMissingError();
+  }
   try {
     return await run(session.accessToken);
   } catch (error) {

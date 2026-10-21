@@ -109,8 +109,21 @@ export async function setSetting(key: string, value: string): Promise<void> {
   await conn.runAsync("INSERT OR REPLACE INTO settings VALUES (?, ?)", key, value);
 }
 
+/** Todas as tentativas locais; base dos pontos e dos dias seguidos do perfil, que funcionam offline. */
+export async function getAttempts(): Promise<Attempt[]> {
+  const conn = await db();
+  const rows = await conn.getAllAsync<{ payload: string }>("SELECT payload FROM attempts ORDER BY created_at");
+  return rows.map((row) => JSON.parse(row.payload) as Attempt);
+}
+
 export const PLACEMENT_DONE_KEY = "placement_done";
+/** Pontos do último quiz de nivelamento (não viram tentativas: as perguntas do quiz não são itens do conteúdo). */
+export const PLACEMENT_POINTS_KEY = "placement_points";
+/** Nome vindo de GET /v1/me, guardado para o perfil abrir offline. */
+export const USER_NAME_KEY = "user_name";
 export const PLACEMENT_LEVEL_KEY = "placement_level";
+/** Conquistas registradas no aparelho (JSON `{ [id]: { at: ISO, celebrated: boolean } }`, ver domain/achievements). */
+export const ACHIEVEMENTS_KEY = "achievements";
 
 export async function applyPulled(incoming: { progress: LessonProgress[]; itemStates: ItemState[]; cursor: string }, requiredTypesOf: (lessonId: string) => readonly ExerciseType[] | undefined): Promise<{ progress: LessonProgress[]; itemStates: ItemState[] }> {
   const conn = await db();
