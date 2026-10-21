@@ -3,12 +3,21 @@ import { useEffect, useRef, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import * as Speech from "expo-speech";
 import { AudioButton } from "../../src/components/AudioButton";
+import { CheckCircleIcon } from "../../src/components/brand/Decor";
+import { PointsBadge } from "../../src/components/ui/PointsBadge";
+import { sessionPoints } from "../../src/domain/points";
+import { AchievementUnlockedCard } from "../../src/components/ui/AchievementUnlockedCard";
+import { CelebrationCard } from "../../src/components/ui/CelebrationCard";
+import type { AchievementStatus } from "../../src/domain/achievements";
+import { markCelebrated, syncAchievements } from "../../src/profile/achievements";
+import { PrimaryButton } from "../../src/components/ui/PrimaryButton";
+import { QuizLayout } from "../../src/components/ui/QuizLayout";
 import { rendererFor } from "../../src/components/exercises/registry";
 import { Screen } from "../../src/components/Screen";
 import { useContentStore } from "../../src/content/store";
 import { canonicalLessonId } from "../../src/domain/content-ids";
 import { sessionIncentiveMessage, successIncentiveTitle } from "../../src/domain/incentives";
-import { deriveProgress, isLessonUnlocked, type Feedback } from "../../src/domain/learning";
+import { deriveProgress, isLessonOpen, type Feedback } from "../../src/domain/learning";
 import { applyResult } from "../../src/domain/scheduler";
 import { SESSION_POLICY_VERSION, buildSession, reinsert, sessionSummary } from "../../src/domain/session";
 import type { Exercise, Unit } from "../../src/domain/types";
@@ -16,10 +25,13 @@ import { rankNext } from "../../src/api/client";
 import { saveAttempt, saveItemState } from "../../src/storage/database";
 import { useAuthStore } from "../../src/store/auth-store";
 import { useStudyStore } from "../../src/store/study-store";
-import { colors } from "../../src/theme";
+import { syncNow } from "../../src/sync/use-sync";
+import { colors, fonts, radius } from "../../src/theme";
 
 const makeId = () => `${Date.now()}-${Math.random().toString(36).slice(2)}`;
 const dayBucket = (now: Date) => now.toISOString().slice(0, 10);
+/** Volta para a tela de onde a lição foi aberta (a etapa da trilha); sem histórico, para a árvore da trilha. */
+const leaveLesson = () => (router.canGoBack() ? router.back() : router.replace("/lessons"));
 
 /**
  * Resolve a unidade antes de montar a sessão. O conteúdo pode ainda não estar carregado (link direto, recarga de
@@ -33,7 +45,7 @@ export default function Lesson() {
 
   useEffect(() => {
     if (!units.length) return;
-    if (!unit || !isLessonUnlocked(unit, progress)) router.replace("/lessons");
+    if (!unit || !isLessonOpen(unit, progress)) leaveLesson();
   }, [progress, unit, units.length]);
 
   if (!unit) return <Screen><Text style={styles.instruction}>{units.length ? "Atividade não encontrada." : "Preparando atividade…"}</Text></Screen>;
@@ -145,6 +157,20 @@ function LessonSession({ unit }: { unit: Unit }) {
     void Speech.stop().then(() => Speech.speak(exercise.ttsText, { language: "pt-BR", rate: 0.85, pitch: 1 }));
   }, [exercise, feedback?.kind]);
 
+  // Ao concluir, avalia as conquistas só com dados locais (sem esperar a rede) para mostrar o pop-up "Parabéns" depois do "Muito bem".
+  const [unlocks, setUnlocks] = useState<AchievementStatus[]>([]);
+  const [unlockIndex, setUnlockIndex] = useState<number | null>(null);
+  useEffect(() => {
+    if (!completed) return;
+    let cancelled = false;
+    // Manda as tentativas da lição ao servidor já agora: o ranking só conta o que foi sincronizado. Sem rede, fica na fila.
+    void syncNow().catch(() => undefined);
+    syncAchievements({ withRanking: false })
+      .then((result) => { if (!cancelled) setUnlocks(result.board.filter((item) => result.fresh.includes(item.id))); })
+      .catch(() => undefined);
+    return () => { cancelled = true; };
+  }, [completed]);
+
   const retryNow = () => {
     setFeedback(undefined);
     setSelected(undefined);
@@ -166,63 +192,55 @@ function LessonSession({ unit }: { unit: Unit }) {
     setSelected(undefined);
   };
 
-  const heading = `${position + 1} · ${queue.length} restante${queue.length === 1 ? "" : "s"} · ${unit.title}`;
+  const leave = leaveLesson;
+  if (completed && unlockIndex !== null && unlocks[unlockIndex]) {
+    const current = unlocks[unlockIndex];
+    const advance = () => { void markCelebrated([current.id]); if (unlockIndex + 1 < unlocks.length) setUnlockIndex(unlockIndex + 1); else leave(); };
+    return <AchievementUnlockedCard key={current.id} achievement={current} onContinue={advance} position={{ index: unlockIndex, total: unlocks.length }} />;
+  }
 
   if (completed) {
     const summary = sessionSummary(outcome);
-    return <Screen>
-      <Text style={styles.celebration}>Lição concluída!</Text>
-      <Text style={styles.summaryLead}>Você praticou {unit.title.toLowerCase()} e terminou todos os desafios.</Text>
-      <View style={styles.summaryGrid}>
-        <View style={styles.summaryCard}><Text style={styles.summaryValue}>{summary.correct}</Text><Text style={styles.summaryLabel}>acertos</Text></View>
-        <View style={styles.summaryCard}><Text style={styles.summaryValue}>{summary.errors}</Text><Text style={styles.summaryLabel}>erros</Text></View>
-        <View style={styles.summaryCard}><Text style={styles.summaryValue}>{summary.recovered}</Text><Text style={styles.summaryLabel}>erros recuperados</Text></View>
-        <View style={styles.summaryCard}><Text style={styles.summaryValue}>{summary.audioPlays}</Text><Text style={styles.summaryLabel}>áudios ouvidos</Text></View>
-      </View>
-      <Text style={styles.encouragement}>{sessionIncentiveMessage(unit.id, summary.errors === 0, summary.recovered > 0)}</Text>
-      <Pressable accessibilityRole="button" style={styles.next} onPress={() => router.replace("/lessons")}><Text style={styles.nextText}>Continuar aprendendo</Text></Pressable>
-      <Pressable accessibilityRole="button" style={styles.continue} onPress={() => router.replace("/progress")}><Text style={styles.continueText}>Ver meu progresso</Text></Pressable>
-    </Screen>;
+    const encouragement = sessionIncentiveMessage(unit.id, summary.errors === 0, summary.recovered > 0);
+    const points = sessionPoints(summary);
+    const lead = "Você completou os exercícios e ganhou:";
+    // Pop-up 1:690 do Figma: pontuação numa pata, sem lista de acertos e erros.
+    return <CelebrationCard title="Muito bem!" message={lead} audioText={`Muito bem! ${lead} ${points} pontos! ${encouragement}`}
+      primary={{ label: "Continuar", onPress: () => (unlocks.length ? setUnlockIndex(0) : leave()) }}>
+      <PointsBadge points={points} />
+    </CelebrationCard>;
   }
 
   if (!exercise) return <Screen><Text style={styles.instruction}>Sessão concluída.</Text></Screen>;
   const Renderer = rendererFor(exercise.type);
   const isLast = queue.length === 1 && feedback?.kind === "success";
 
-  return <Screen>
-    <View accessibilityLabel={`Progresso da sessão: ${position + 1} de pelo menos ${session.queue.length}`} style={styles.progressTrack}><View style={[styles.progressFill, { width: `${Math.min(100, ((position + 1) / Math.max(1, position + queue.length)) * 100)}%` }]} /></View>
-    <Text style={styles.kicker}>{heading}</Text>
-    {exercise.skill && <Text style={styles.skill}>{exercise.skill}{exercise.difficulty ? ` · ${exercise.difficulty}` : ""}</Text>}
-    <Text style={styles.instruction}>{exercise.instruction}</Text>
-    <AudioButton label="Ouvir enunciado" text={exercise.instruction} onPlay={() => { audioRepeats.current += 1; setOutcome((current) => ({ ...current, audioPlays: current.audioPlays + 1 })); interact(); }} />
-    {!exercise.inlineAudio && exercise.ttsText !== exercise.instruction && <AudioButton label={exercise.itemKind === "letter" ? "Ouvir pista" : "Ouvir conteúdo"} text={exercise.ttsText} onPlay={() => { audioRepeats.current += 1; setOutcome((current) => ({ ...current, audioPlays: current.audioPlays + 1 })); interact(); }} />}
-    <Renderer key={`${exercise.id}-${position}-${resetVersion}`} exercise={exercise} letter={unit.letter} selected={selected} disabled={saving || Boolean(feedback)} onChoose={(answer, correct) => { void choose(answer, correct); }} onInteract={interact} onAudioPlay={() => { audioRepeats.current += 1; setOutcome((current) => ({ ...current, audioPlays: current.audioPlays + 1 })); }} />
-    {!feedback && !saving && <Pressable accessibilityRole="button" accessibilityLabel="Reiniciar esta atividade" style={styles.restart} onPress={retryNow}><Text style={styles.restartText}>Reiniciar atividade</Text></Pressable>}
-    {saving && <Text accessibilityLiveRegion="polite" style={styles.saving}>Salvando resposta…</Text>}
-    {feedback && <View accessibilityRole="alert" style={[styles.feedback, feedback.kind === "success" ? styles.success : styles.care]}><Text style={styles.feedbackTitle}>{feedback.title}</Text><Text style={styles.feedbackText}>{feedback.message}</Text></View>}
-    {feedback?.kind === "try-again" && <Pressable accessibilityRole="button" style={styles.continue} onPress={retryNow}><Text style={styles.continueText}>Tentar novamente agora</Text></Pressable>}
-    {feedback && feedback.kind !== "try-again" && <Pressable accessibilityRole="button" style={feedback.kind === "success" ? styles.next : styles.continue} onPress={next}><Text style={feedback.kind === "success" ? styles.nextText : styles.continueText}>{isLast ? "Ver progresso" : feedback.kind === "success" ? "Próxima atividade" : "Tentar novamente"}</Text></Pressable>}
-  </Screen>;
+  const countAudio = () => { audioRepeats.current += 1; setOutcome((current) => ({ ...current, audioPlays: current.audioPlays + 1 })); interact(); };
+
+  return <QuizLayout prompt={exercise.instruction} onPromptAudio={countAudio} onClose={leaveLesson}
+    progress={{ current: position + 1, total: Math.max(1, position + queue.length), accessibilityLabel: `Progresso da sessão: ${position + 1} de pelo menos ${session.queue.length}` }}>
+        {!exercise.inlineAudio && exercise.ttsText !== exercise.instruction && <View style={styles.hintRow}><AudioButton label={exercise.itemKind === "letter" ? "Ouvir pista" : "Ouvir conteúdo"} text={exercise.ttsText} compact onPlay={countAudio} /><Text style={styles.hintText}>{exercise.itemKind === "letter" ? "Ouvir pista" : "Ouvir conteúdo"}</Text></View>}
+        <Renderer key={`${exercise.id}-${position}-${resetVersion}`} exercise={exercise} letter={unit.letter} selected={selected} disabled={saving || Boolean(feedback)} onChoose={(answer, correct) => { void choose(answer, correct); }} onInteract={interact} onAudioPlay={() => { audioRepeats.current += 1; setOutcome((current) => ({ ...current, audioPlays: current.audioPlays + 1 })); }} />
+        {saving && <Text accessibilityLiveRegion="polite" style={styles.saving}>Salvando resposta…</Text>}
+        {feedback && <View accessibilityRole="alert" style={[styles.feedback, feedback.kind === "success" ? styles.success : styles.care]}><Text style={styles.feedbackTitle}>{feedback.title}</Text><Text style={styles.feedbackText}>{feedback.message}</Text></View>}
+        {feedback?.kind === "try-again" && <PrimaryButton label="Tentar novamente agora" variant="outline" onPress={retryNow} />}
+        {feedback && feedback.kind !== "try-again" && <PrimaryButton label={isLast ? "Ver progresso" : feedback.kind === "success" ? "Próxima atividade" : "Tentar novamente"} variant={feedback.kind === "success" ? "solid" : "outline"} icon={feedback.kind === "success" ? <CheckCircleIcon size={26} /> : undefined} onPress={next} />}
+        {!feedback && !saving && <Pressable accessibilityRole="button" accessibilityLabel="Reiniciar esta atividade" style={styles.restart} onPress={retryNow}><Text style={styles.restartText}>Reiniciar atividade</Text></Pressable>}
+  </QuizLayout>;
 }
 
 const styles = StyleSheet.create({
-  kicker: { color: colors.accent, fontWeight: "800", fontSize: 15 },
-  skill: { color: colors.muted, fontWeight: "700", fontSize: 15 },
-  progressTrack: { height: 12, borderRadius: 6, backgroundColor: colors.border, overflow: "hidden" }, progressFill: { height: "100%", borderRadius: 6, backgroundColor: colors.success },
-  instruction: { color: colors.text, fontWeight: "800", fontSize: 29, lineHeight: 38 },
-  feedback: { borderRadius: 16, padding: 18 },
-  success: { backgroundColor: "#DDF3E9" },
+  kicker: { color: colors.muted, fontFamily: fonts.medium, fontSize: 14, textAlign: "center", marginTop: 8 },
+  skill: { color: colors.muted, fontFamily: fonts.regular, fontSize: 14, textAlign: "center" },
+  hintRow: { flexDirection: "row", alignItems: "center", gap: 12, alignSelf: "center" },
+  hintText: { color: colors.text, fontFamily: fonts.medium, fontSize: 18 },
+  instruction: { color: colors.text, fontFamily: fonts.bold, fontSize: 29, lineHeight: 38 },
+  feedback: { borderRadius: radius.md, padding: 18 },
+  success: { backgroundColor: colors.selectedBg },
   care: { backgroundColor: "#FFF1D6" },
-  feedbackTitle: { color: colors.text, fontSize: 20, fontWeight: "800" },
-  feedbackText: { color: colors.text, fontSize: 17, lineHeight: 25, marginTop: 5 },
-  next: { minHeight: 60, borderRadius: 15, backgroundColor: colors.primary, alignItems: "center", justifyContent: "center" },
-  nextText: { color: "white", fontSize: 18, fontWeight: "800" },
-  continue: { minHeight: 60, borderRadius: 15, borderWidth: 2, borderColor: colors.primary, alignItems: "center", justifyContent: "center" },
-  continueText: { color: colors.primary, fontSize: 18, fontWeight: "800" },
-  saving: { color: colors.muted, fontSize: 16, fontWeight: "700", textAlign: "center" },
+  feedbackTitle: { color: colors.text, fontSize: 20, fontFamily: fonts.bold },
+  feedbackText: { color: colors.text, fontSize: 17, lineHeight: 25, marginTop: 5, fontFamily: fonts.regular },
+  saving: { color: colors.muted, fontSize: 16, fontFamily: fonts.medium, textAlign: "center" },
   restart: { alignSelf: "center", minHeight: 48, justifyContent: "center", paddingHorizontal: 16 },
-  restartText: { color: colors.primary, fontSize: 16, fontWeight: "700", textDecorationLine: "underline" },
-  celebration: { color: colors.success, fontSize: 34, fontWeight: "900", textAlign: "center" }, summaryLead: { color: colors.text, fontSize: 20, lineHeight: 29, textAlign: "center" },
-  summaryGrid: { flexDirection: "row", flexWrap: "wrap", gap: 12 }, summaryCard: { width: "47%", padding: 16, borderRadius: 16, alignItems: "center", backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.border },
-  summaryValue: { color: colors.primary, fontSize: 32, fontWeight: "900" }, summaryLabel: { color: colors.muted, fontSize: 15, fontWeight: "700", textAlign: "center" }, encouragement: { padding: 16, borderRadius: 14, backgroundColor: "#DDF3E9", color: colors.text, fontSize: 18, lineHeight: 26, textAlign: "center" },
+  restartText: { color: colors.text, fontSize: 16, fontFamily: fonts.semibold, textDecorationLine: "underline", textTransform: "uppercase" },
 });

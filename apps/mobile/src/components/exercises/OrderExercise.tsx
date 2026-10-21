@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
-import { colors } from "../../theme";
+import { colors, fonts, radius, shadows } from "../../theme";
 import type { ExerciseRendererProps } from "./ChoiceExercise";
 import { ManagedIllustration } from "../../assets/ManagedIllustration";
 import { joinTokens } from "./order";
@@ -38,18 +38,18 @@ export function OrderExercise({ exercise, selected, disabled = false, onChoose, 
 const styles = StyleSheet.create({
   container: { gap: 16, marginVertical: 12 },
   context: { alignItems: "center" },
-  assembly: { minHeight: 72, borderRadius: 16, borderWidth: 2, borderStyle: "dashed", borderColor: colors.border, backgroundColor: colors.surface, alignItems: "center", justifyContent: "center", paddingHorizontal: 12 },
-  correct: { borderStyle: "solid", borderColor: colors.success, backgroundColor: "#DDF3E9" },
-  wrong: { borderStyle: "solid", borderColor: colors.accent, backgroundColor: "#FFF8EA" },
-  assembled: { color: colors.text, fontSize: 28, fontWeight: "800", letterSpacing: 1, textAlign: "center" },
-  tokens: { flexDirection: "row", flexWrap: "wrap", gap: 12, justifyContent: "center" },
-  token: { minWidth: 84, minHeight: 72, borderRadius: 16, backgroundColor: colors.surface, borderWidth: 3, borderColor: colors.primary, alignItems: "center", justifyContent: "center", paddingHorizontal: 14 },
+  assembly: { minHeight: 72, borderRadius: radius.md, borderWidth: 2, borderStyle: "dashed", borderColor: colors.track, backgroundColor: colors.background, alignItems: "center", justifyContent: "center", paddingHorizontal: 12 },
+  correct: { borderStyle: "solid", borderColor: colors.successBright, backgroundColor: colors.selectedBg },
+  wrong: { borderStyle: "solid", borderColor: colors.accent, backgroundColor: colors.careBg },
+  assembled: { color: colors.text, fontSize: 28, fontFamily: fonts.semibold, letterSpacing: 1, textAlign: "center" },
+  tokens: { flexDirection: "row", flexWrap: "wrap", gap: 14, justifyContent: "center" },
+  token: { minWidth: 84, minHeight: 72, borderRadius: radius.md, backgroundColor: colors.surface, alignItems: "center", justifyContent: "center", paddingHorizontal: 14, ...shadows.card },
   usedToken: { opacity: 0.35 },
-  tokenText: { fontSize: 30, color: colors.primary, fontWeight: "800", letterSpacing: 1 },
+  tokenText: { fontSize: 30, color: colors.text, fontFamily: fonts.semibold, letterSpacing: 1 },
   usedText: { color: colors.muted },
   reset: { alignSelf: "center", minHeight: 48, justifyContent: "center", paddingHorizontal: 16 },
-  resetText: { color: colors.primary, fontSize: 17, fontWeight: "700" },
+  resetText: { color: colors.link, fontSize: 17, fontFamily: fonts.semibold, textDecorationLine: "underline" },
   actions: { flexDirection: "row", justifyContent: "center", gap: 18 },
-  confirm: { minHeight: 56, borderRadius: 15, backgroundColor: colors.primary, alignItems: "center", justifyContent: "center", paddingHorizontal: 20 },
-  confirmText: { color: "white", fontSize: 18, fontWeight: "800" },
+  confirm: { minHeight: 56, borderRadius: radius.pill, backgroundColor: colors.action, alignItems: "center", justifyContent: "center", paddingHorizontal: 24, ...shadows.cta },
+  confirmText: { color: colors.onAction, fontSize: 20, fontFamily: fonts.semibold, textTransform: "uppercase" },
 });
