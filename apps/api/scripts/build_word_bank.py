@@ -108,6 +108,28 @@ def bootstrap_difficulty(text: str, syllables: str, frequency: float) -> str:
     return "facil" if score < 3 else "medio" if score < 5 else "dificil"
 
 
+def load_supervised_classifier():
+    """Usa o manifesto promovido do Prosa quando existir; senão cai nas regras bootstrap."""
+    manifest = REPO_ROOT / "ml" / "artifacts" / "difficulty_manifest.json"
+    if not manifest.exists():
+        return None
+    try:
+        from alfabetiza_ml.difficulty import classify_with_model, load_model
+    except ImportError:
+        return None
+    model = load_model(manifest)
+    if not model.promotion_allowed:
+        return None
+
+    def predict(text: str, syllables: str, frequency: float) -> str:
+        return classify_with_model(model, text, syllables, frequency)
+
+    return predict
+
+
+assign_difficulty = load_supervised_classifier() or bootstrap_difficulty
+
+
 def build() -> list[dict]:
     if not CORPUS.exists():
         raise FileNotFoundError(f"Corpus não encontrado: {CORPUS}")
@@ -148,7 +170,7 @@ def build() -> list[dict]:
             "syllables": syllables,
             "frequency": frequency,
             "raw_frequency": totals[key],
-            "difficulty": bootstrap_difficulty(text, syllables, frequency),
+            "difficulty": assign_difficulty(text, syllables, frequency),
             "source": "corpus-santos-toni",
         })
     if len(words) < 1000:
