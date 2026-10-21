@@ -41,6 +41,13 @@ export function isLessonUnlocked(lesson: { prerequisiteLetters: string[] }, prog
   return lesson.prerequisiteLetters.every((letter) => isLetterPresented(letter, progress));
 }
 
+/**
+ * Unidade que pode ser aberta: liberada pelos pré-requisitos ou já concluída. Uma unidade concluída continua
+ * aberta para revisão mesmo que o conteúdo novo tenha mudado seus pré-requisitos. Trilha e lição usam este portão.
+ */
+export const isLessonOpen = (lesson: { id: string; prerequisiteLetters: string[] }, progress: ProgressMap): boolean =>
+  progress[lesson.id]?.completed === true || isLessonUnlocked(lesson, progress);
+
 /** Itens da unidade já vistos e vencidos: o que a sessão de revisão precisa cobrir. */
 export const dueItems = (unit: Unit, states: StateMap, now: Date) => unit.exercises.filter((exercise) => { const state = states[exercise.id]; return state !== undefined && isDue(state, now); });
 

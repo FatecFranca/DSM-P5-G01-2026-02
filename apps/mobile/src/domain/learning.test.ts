@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { lessonIdFor } from "./content-ids";
-import { deriveProgress, dueItems, isLessonUnlocked, lessonNeedsReview } from "./learning";
+import { deriveProgress, dueItems, isLessonOpen, isLessonUnlocked, lessonNeedsReview } from "./learning";
 import { applyResult, type ItemState } from "./scheduler";
 import type { Unit } from "./types";
 
@@ -42,5 +42,12 @@ describe("aprendizagem respeitosa", () => {
     const letters = (list: string) => Object.fromEntries([...list].map((letter) => [lessonIdFor(letter), { completed: true }]));
     expect(isLessonUnlocked(casa, letters("AEIOUML"))).toBe(false);
     expect(isLessonUnlocked(casa, letters("AEIOUMLPSTRNDC"))).toBe(true);
+  });
+
+  it("mantém aberta a unidade concluída mesmo sem os pré-requisitos atuais", () => {
+    const lesson = { id: "lesson-B", prerequisiteLetters: ["A", "E"] };
+    expect(isLessonOpen(lesson, {})).toBe(false);
+    expect(isLessonOpen(lesson, { "lesson-B": { completed: true } })).toBe(true);
+    expect(isLessonOpen(lesson, { [lessonIdFor("A")]: { completed: true }, [lessonIdFor("E")]: { completed: true } })).toBe(true);
   });
 });
