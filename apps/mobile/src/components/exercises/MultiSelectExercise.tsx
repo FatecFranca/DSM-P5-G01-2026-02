@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
-import { colors } from "../../theme";
+import { colors, fonts, radius, shadows } from "../../theme";
 import { selectedPositionsAnswer } from "../../domain/session";
 import type { ExerciseRendererProps } from "./ChoiceExercise";
 
@@ -29,8 +29,8 @@ export function MultiSelectExercise({ exercise, selected, disabled, onChoose, on
 }
 
 const styles = StyleSheet.create({
-  container: { gap: 16, marginVertical: 16 }, word: { flexDirection: "row", flexWrap: "wrap", justifyContent: "center", gap: 6 },
-  letter: { minWidth: 50, minHeight: 64, paddingHorizontal: 8, borderRadius: 12, borderWidth: 2, borderColor: colors.border, backgroundColor: colors.surface, alignItems: "center", justifyContent: "center" },
-  marked: { borderColor: colors.primary, backgroundColor: "#DDECF5" }, letterText: { color: colors.text, fontSize: 34, fontWeight: "900" }, markedText: { color: colors.primary },
-  helper: { color: colors.muted, fontSize: 17, textAlign: "center" }, confirm: { minHeight: 56, borderRadius: 14, backgroundColor: colors.primary, alignItems: "center", justifyContent: "center" }, disabled: { opacity: 0.4 }, confirmText: { color: "white", fontSize: 18, fontWeight: "800" },
+  container: { gap: 16, marginVertical: 16 }, word: { flexDirection: "row", flexWrap: "wrap", justifyContent: "center", gap: 8 },
+  letter: { minWidth: 52, minHeight: 66, paddingHorizontal: 8, borderRadius: radius.sm, backgroundColor: colors.surface, alignItems: "center", justifyContent: "center", ...shadows.card },
+  marked: { backgroundColor: colors.selectedBg, ...shadows.selected }, letterText: { color: colors.text, fontSize: 34, fontFamily: fonts.semibold }, markedText: { color: colors.text },
+  helper: { color: colors.muted, fontSize: 17, textAlign: "center", fontFamily: fonts.regular }, confirm: { minHeight: 56, borderRadius: radius.pill, backgroundColor: colors.action, alignItems: "center", justifyContent: "center", ...shadows.cta }, disabled: { opacity: 0.4 }, confirmText: { color: colors.onAction, fontSize: 20, fontFamily: fonts.semibold, textTransform: "uppercase" },
 });
