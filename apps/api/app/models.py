@@ -13,6 +13,8 @@ class User(Base):
     __tablename__ = "users"
     id: Mapped[str] = mapped_column(String(36), primary_key=True, default=uid)
     email: Mapped[str] = mapped_column(String(320), unique=True, index=True)
+    # Como a pessoa quer ser chamada no app; opcional no cadastro.
+    name: Mapped[str | None] = mapped_column(String(80), nullable=True)
     password_hash: Mapped[str] = mapped_column(String(255))
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now)
     # Consentimento de pesquisa separado do cadastro: só tentativas de quem consentiu entram no treino do ranking.

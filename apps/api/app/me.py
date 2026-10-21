@@ -13,6 +13,17 @@ class ResearchConsent(BaseModel):
     consent: bool
 
 
+class Profile(BaseModel):
+    name: str | None
+    email: str
+
+
+@router.get("", response_model=Profile)
+def read_profile(user: User = Depends(current_user)):
+    """Perfil exibido no app: o nome é null quando não foi informado no cadastro."""
+    return Profile(name=user.name, email=user.email)
+
+
 @router.get("/research-consent")
 def read_consent(user: User = Depends(current_user)):
     return {"consent": user.research_consent, "consented_at": user.research_consent_at}

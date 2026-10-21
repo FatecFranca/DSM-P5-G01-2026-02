@@ -41,6 +41,31 @@ def test_register_login_refresh_rotation_and_logout(client):
     assert client.post("/v1/auth/refresh", json={"refresh_token": new_refresh}).status_code == 401
 
 
+def test_register_saves_optional_name_returned_by_me(client):
+    registered = client.post("/v1/auth/register", json={"name": "  Ana Maria  ", "email": "Ana.Maria@example.com", "password": "Senha-forte-123"})
+    assert registered.status_code == 201
+    assert client.get("/v1/me", headers=bearer(registered.json())).json() == {"name": "Ana Maria", "email": "ana.maria@example.com"}
+    # O login continua com o esquema de sempre (sem nome) e enxerga o mesmo perfil.
+    logged = client.post("/v1/auth/login", json={"email": "ana.maria@example.com", "password": "Senha-forte-123"})
+    assert logged.status_code == 200
+    assert client.get("/v1/me", headers=bearer(logged.json())).json()["name"] == "Ana Maria"
+
+
+def test_me_name_is_null_when_absent_or_blank(client, auth):
+    assert client.get("/v1/me", headers=bearer(auth)).json() == {"name": None, "email": "ana@example.com"}
+    blank = client.post("/v1/auth/register", json={"name": "   ", "email": "bia@example.com", "password": "Senha-forte-123"})
+    assert blank.status_code == 201
+    assert client.get("/v1/me", headers=bearer(blank.json())).json() == {"name": None, "email": "bia@example.com"}
+    assert client.get("/v1/me").status_code in (401, 403)
+
+
+def test_register_name_is_limited_to_80_characters_after_trimming(client):
+    assert client.post("/v1/auth/register", json={"name": "A" * 81, "email": "longo@example.com", "password": "Senha-forte-123"}).status_code == 422
+    exact = client.post("/v1/auth/register", json={"name": f"  {'A' * 80}  ", "email": "longo@example.com", "password": "Senha-forte-123"})
+    assert exact.status_code == 201
+    assert client.get("/v1/me", headers=bearer(exact.json())).json()["name"] == "A" * 80
+
+
 def test_sync_is_idempotent_and_isolated(client, auth):
     headers = bearer(auth)
     payload = {"events": [

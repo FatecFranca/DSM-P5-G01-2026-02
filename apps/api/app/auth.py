@@ -6,7 +6,7 @@ import jwt
 from .config import get_settings
 from .db import get_db
 from .models import AuthSession, User
-from .schemas import Credentials, LoginCredentials, RefreshRequest, Tokens
+from .schemas import LoginCredentials, RefreshRequest, Registration, Tokens
 from .security import decode, hash_password, jti_hash, token, verify_password
 
 router = APIRouter(prefix="/v1/auth", tags=["authentication"])
@@ -20,10 +20,10 @@ def issue(db: Session, user: User) -> Tokens:
     return Tokens(access_token=access, refresh_token=refresh, expires_in=settings.access_token_minutes*60)
 
 @router.post("/register", response_model=Tokens, status_code=201)
-def register(data: Credentials, db: Session = Depends(get_db)):
+def register(data: Registration, db: Session = Depends(get_db)):
     email = data.email.lower()
     if db.scalar(select(User).where(User.email == email)): raise HTTPException(409, "Email already registered")
-    user = User(email=email, password_hash=hash_password(data.password)); db.add(user); db.flush()
+    user = User(email=email, name=data.name, password_hash=hash_password(data.password)); db.add(user); db.flush()
     return issue(db, user)
 
 @router.post("/login", response_model=Tokens)

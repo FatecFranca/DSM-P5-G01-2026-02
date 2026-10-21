@@ -1,9 +1,18 @@
 from datetime import datetime
 from typing import Annotated, Literal, Union
-from pydantic import BaseModel, ConfigDict, EmailStr, Field, model_validator
+from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator, model_validator
 
 class Credentials(BaseModel):
     email: EmailStr; password: str = Field(min_length=8, max_length=128)
+class Registration(Credentials):
+    """Cadastro do app: além das credenciais, o nome opcional (como a pessoa quer ser chamada)."""
+    name: str | None = Field(default=None, max_length=80)
+
+    @field_validator("name", mode="before")
+    @classmethod
+    def blank_name_is_none(cls, value):
+        # Roda antes do max_length: o limite vale para o nome já sem espaços nas pontas.
+        return (value.strip() or None) if isinstance(value, str) else value
 class LoginCredentials(BaseModel):
     email: EmailStr; password: str = Field(min_length=1, max_length=128)
 class RefreshRequest(BaseModel): refresh_token: str
