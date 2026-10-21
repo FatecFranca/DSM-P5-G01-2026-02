@@ -6,7 +6,7 @@ import { useContentStore } from "../src/content/store";
 import { LEARNING_LEVELS, unitsForLevel } from "../src/domain/levels";
 import { getProgress } from "../src/storage/database";
 import { useSync } from "../src/sync/use-sync";
-import { colors } from "../src/theme";
+import { colors, fonts, radius, shadows } from "../src/theme";
 
 export default function Progress() {
   const query = useQuery({ queryKey: ["progress"], queryFn: getProgress });
@@ -65,19 +65,19 @@ export default function Progress() {
 }
 
 const styles = StyleSheet.create({
-  title: { fontSize: 30, color: colors.text, fontWeight: "800" },
-  card: { backgroundColor: colors.surface, padding: 22, borderRadius: 18 },
-  number: { fontSize: 36, fontWeight: "800", color: colors.primary },
-  label: { fontSize: 17, color: colors.muted },
-  track: { height: 14, borderRadius: 7, backgroundColor: colors.border, overflow: "hidden", marginTop: 16 },
-  fill: { height: "100%", backgroundColor: colors.success },
-  phases: { gap: 10 },
-  phase: { backgroundColor: colors.surface, padding: 16, borderRadius: 14 },
-  phaseTitle: { fontSize: 18, fontWeight: "800", color: colors.text },
-  phaseLabel: { fontSize: 15, color: colors.muted, marginTop: 4 },
-  button: { minHeight: 60, borderRadius: 15, backgroundColor: colors.primary, alignItems: "center", justifyContent: "center" },
-  buttonText: { color: "white", fontSize: 18, fontWeight: "800" },
-  success: { color: colors.success, fontSize: 16, fontWeight: "700" },
-  warning: { color: colors.accent, fontSize: 16, fontWeight: "700" },
-  note: { color: colors.muted, fontSize: 15, lineHeight: 22 },
+  title: { fontSize: 30, color: colors.text, fontFamily: fonts.bold },
+  card: { backgroundColor: colors.surface, padding: 22, borderRadius: radius.md, ...shadows.card },
+  number: { fontSize: 36, fontFamily: fonts.bold, color: colors.text },
+  label: { fontSize: 17, fontFamily: fonts.regular, color: colors.muted },
+  track: { height: 14, borderRadius: 7, backgroundColor: colors.track, overflow: "hidden", marginTop: 16 },
+  fill: { height: "100%", backgroundColor: colors.action },
+  phases: { gap: 12 },
+  phase: { backgroundColor: colors.surface, padding: 16, borderRadius: radius.md, ...shadows.card },
+  phaseTitle: { fontSize: 18, fontFamily: fonts.bold, color: colors.text },
+  phaseLabel: { fontSize: 15, fontFamily: fonts.regular, color: colors.muted, marginTop: 4 },
+  button: { minHeight: 56, borderRadius: radius.pill, backgroundColor: colors.action, alignItems: "center", justifyContent: "center", ...shadows.card },
+  buttonText: { color: colors.onAction, fontSize: 18, fontFamily: fonts.semibold },
+  success: { color: colors.success, fontSize: 16, fontFamily: fonts.semibold },
+  warning: { color: colors.accent, fontSize: 16, fontFamily: fonts.semibold },
+  note: { color: colors.muted, fontSize: 15, lineHeight: 22, fontFamily: fonts.regular },
 });
