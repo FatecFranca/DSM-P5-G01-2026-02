@@ -21,3 +21,12 @@ Defina `expo.extra.apiUrl` em `app.json` para a API acessível pelo dispositivo.
 A etapa atual não solicita escrita manuscrita, traçado ou classificação de escrita. O fluxo validado trabalha com imagens, áudio e inserção por toque da letra na palavra escolhida. Nenhum classificador é executado durante as lições.
 
 As instruções são lidas pelo mecanismo de texto para voz do dispositivo, em português do Brasil. O aplicativo envia ao TTS exatamente o enunciado exibido na atividade, evitando arquivos de áudio duplicados e mantendo texto e fala sincronizados. A disponibilidade e a voz podem variar conforme o sistema e os pacotes de voz instalados no aparelho.
+
+## Login com Google (Firebase Auth)
+
+1. No console do Firebase, habilite o provedor **Google** em Authentication e registre os apps Android/iOS. Copie a configuração do app Web (`apiKey`, `authDomain`, `projectId`, `appId`) para `expo.extra.firebase` em `app.json`.
+2. Em `expo.extra.googleClientIds`, coloque os client IDs OAuth do Google (Web, iOS, Android) do mesmo projeto (Google Cloud Console → Credenciais). O botão só aparece quando há ID para a plataforma atual.
+3. Na API, defina `FIREBASE_PROJECT_ID` em `apps/api/.env` e rode `alembic upgrade head`.
+4. Requer development build (`expo run:android` / `expo run:ios`); não funciona no Expo Go.
+
+Fluxo: Google → credencial no Firebase → ID token do Firebase → `POST /v1/auth/firebase`. A API valida o token, vincula ao cadastro de mesmo e-mail (se existir) ou cria conta sem senha, e devolve os JWTs do app.

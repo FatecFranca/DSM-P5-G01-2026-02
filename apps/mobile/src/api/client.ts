@@ -1,11 +1,14 @@
 import Constants from "expo-constants";
+import { Platform } from "react-native";
 import { ApiError } from "./errors";
 import type { ItemState, LessonProgress, SyncEvent } from "../domain/types";
 import { canonicalLessonId } from "../domain/content-ids";
 import { normalizeExerciseTypes } from "../domain/exercise-types";
 import { parseAcceptedIds, parsePulledItemState, parseRejections, toApiEvent } from "../sync/contract";
 
-const apiUrl = String(Constants.expoConfig?.extra?.apiUrl ?? "http://10.0.2.2:8000");
+// 10.0.2.2 é o alias do emulador Android para a máquina host; no simulador iOS o host é localhost.
+const configuredApiUrl = String(Constants.expoConfig?.extra?.apiUrl ?? "http://10.0.2.2:8000");
+const apiUrl = Platform.OS === "ios" ? configuredApiUrl.replace("10.0.2.2", "localhost") : configuredApiUrl;
 /** A API resolve IDs administrados; o app nunca monta caminho de arquivo local. */
 export const mediaUrlForAsset = (assetId: string): string => `${apiUrl.replace(/\/$/, "")}/v1/media/${encodeURIComponent(assetId.startsWith("media/") ? assetId.slice("media/".length) : assetId)}`;
 /** Converte o caminho relativo publicado pela API em URL que o React Native pode baixar. */
@@ -28,6 +31,7 @@ async function authRequest(path: string, body: Record<string, string>): Promise<
 }
 export const login = (email: string, password: string) => authRequest("/v1/auth/login", { email, password });
 export const register = (name: string, email: string, password: string) => authRequest("/v1/auth/register", { name, email, password });
+export const loginWithFirebase = (idToken: string) => authRequest("/v1/auth/firebase", { id_token: idToken });
 export const refresh = (refreshToken: string) => authRequest("/v1/auth/refresh", { refresh_token: refreshToken });
 export async function logout(refreshToken: string): Promise<void> { await fetch(`${apiUrl}/v1/auth/logout`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ refresh_token: refreshToken }) }); }
 export type PushResult = { acceptedIds: string[]; rejections: Array<{ id: string; reason: string }> };

@@ -6,7 +6,8 @@ import jwt
 from .config import get_settings
 from .db import get_db
 from .models import AuthSession, User
-from .schemas import LoginCredentials, RefreshRequest, Registration, Tokens
+from .schemas import FirebaseLogin, LoginCredentials, RefreshRequest, Registration, Tokens
+from .firebase import FirebaseAuthError, verify_firebase_token
 from .security import decode, hash_password, jti_hash, token, verify_password
 
 router = APIRouter(prefix="/v1/auth", tags=["authentication"])
@@ -51,3 +52,18 @@ def logout(data: RefreshRequest, db: Session = Depends(get_db)):
     session = db.get(AuthSession, claims["sid"])
     if session and session.refresh_jti_hash == jti_hash(claims["jti"]): session.revoked_at = datetime.now(timezone.utc); db.commit()
     return Response(status_code=204)
+
+@router.post("/firebase", response_model=Tokens)
+def firebase_login(data: FirebaseLogin, db: Session = Depends(get_db)):
+    try: claims = verify_firebase_token(data.id_token)
+    except FirebaseAuthError as error: raise HTTPException(error.status, str(error))
+    uid, email = claims["sub"], claims["email"].lower()
+    user = db.scalar(select(User).where(User.firebase_uid == uid))
+    if not user:
+        # Vincula a conta do Firebase a um cadastro existente do mesmo e-mail (verificado); senão cria uma nova.
+        user = db.scalar(select(User).where(User.email == email))
+        if user: user.firebase_uid = uid
+        else:
+            user = User(email=email, name=(claims.get("given_name") or claims.get("name") or "").strip()[:80] or None, firebase_uid=uid); db.add(user)
+        db.flush()
+    return issue(db, user)

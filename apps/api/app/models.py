@@ -15,7 +15,9 @@ class User(Base):
     email: Mapped[str] = mapped_column(String(320), unique=True, index=True)
     # Como a pessoa quer ser chamada no app; opcional no cadastro.
     name: Mapped[str | None] = mapped_column(String(80), nullable=True)
-    password_hash: Mapped[str] = mapped_column(String(255))
+    # Contas criadas só pelo Google não têm senha.
+    password_hash: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    firebase_uid: Mapped[str | None] = mapped_column(String(128), unique=True, index=True, nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now)
     # Consentimento de pesquisa separado do cadastro: só tentativas de quem consentiu entram no treino do ranking.
     research_consent: Mapped[bool] = mapped_column(Boolean, default=False); research_consent_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True)

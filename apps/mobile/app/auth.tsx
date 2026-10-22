@@ -4,6 +4,7 @@ import { KeyboardAvoidingView, Platform, Pressable, ScrollView, StyleSheet, Text
 import { SafeAreaView } from "react-native-safe-area-context";
 import { AudioButton } from "../src/components/AudioButton";
 import { BottomWaves, HeroBlobs, LockIcon, LogoSpark, MailIcon, Mascot } from "../src/components/brand/Decor";
+import { GoogleSignInButton, googleSignInAvailable } from "../src/components/GoogleSignInButton";
 import { PrimaryButton } from "../src/components/ui/PrimaryButton";
 import { validateCredentials } from "../src/domain/auth";
 import { useAuthStore } from "../src/store/auth-store";
@@ -50,6 +51,7 @@ export default function Auth() { const [mode, setMode] = useState<"login" | "reg
             <AudioButton label="Ouvir botão" text={mode === "login" ? "Entrar" : "Criar conta"} compact />
             <PrimaryButton style={styles.grow} disabled={busy} label={busy ? "Aguarde..." : mode === "login" ? "Entrar  →" : "Criar conta  →"} accessibilityLabel={mode === "login" ? "Entrar" : "Criar conta"} onPress={() => void submit()} />
           </View>
+          {googleSignInAvailable && <GoogleSignInButton disabled={busy} onError={setError} onSuccess={() => router.replace("/")} />}
           <Pressable accessibilityRole="button" onPress={() => { setMode(mode === "login" ? "register" : "login"); setError(undefined); }} style={styles.link}><Text style={styles.linkText}>{mode === "login" ? "Ainda não tenho conta" : "Já tenho conta"}</Text></Pressable>
         </View>
         <BottomWaves style={styles.waves} />

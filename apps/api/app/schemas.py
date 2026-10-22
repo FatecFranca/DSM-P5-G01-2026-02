@@ -15,6 +15,7 @@ class Registration(Credentials):
         return (value.strip() or None) if isinstance(value, str) else value
 class LoginCredentials(BaseModel):
     email: EmailStr; password: str = Field(min_length=1, max_length=128)
+class FirebaseLogin(BaseModel): id_token: str = Field(min_length=1, max_length=4096)
 class RefreshRequest(BaseModel): refresh_token: str
 class Tokens(BaseModel): access_token: str; refresh_token: str; token_type: str = "bearer"; expires_in: int
 

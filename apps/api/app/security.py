@@ -8,7 +8,8 @@ from .config import get_settings
 hasher = PasswordHasher()
 
 def hash_password(value: str) -> str: return hasher.hash(value)
-def verify_password(hashed: str, value: str) -> bool:
+def verify_password(hashed: str | None, value: str) -> bool:
+    if not hashed: return False
     try: return hasher.verify(hashed, value)
     except VerifyMismatchError: return False
 

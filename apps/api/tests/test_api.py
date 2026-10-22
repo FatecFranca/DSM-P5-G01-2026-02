@@ -114,3 +114,32 @@ def test_validation_and_attempt_id_uniqueness(client, auth):
     event["client_event_id"] = "b"
     result = client.post("/v1/sync/push", headers=headers, json={"events": [event]})
     assert result.status_code == 200 and result.json()["duplicates"] == 1
+
+
+def _firebase(monkeypatch, **claims):
+    from app import auth
+    base = {"sub": "fb-123", "email": "Bia@Example.com", "email_verified": True, "given_name": "Bia"}
+    monkeypatch.setattr(auth, "verify_firebase_token", lambda value: {**base, **claims})
+
+
+def test_firebase_login_creates_account_and_reuses_it(client, monkeypatch):
+    _firebase(monkeypatch)
+    first = client.post("/v1/auth/firebase", json={"id_token": "x"})
+    assert first.status_code == 200 and first.json()["access_token"]
+    assert client.get("/v1/me", headers={"Authorization": f"Bearer {first.json()['access_token']}"}).status_code == 200
+    assert client.post("/v1/auth/firebase", json={"id_token": "x"}).status_code == 200
+    # Conta sem senha não entra por e-mail/senha.
+    assert client.post("/v1/auth/login", json={"email": "bia@example.com", "password": "qualquer-coisa"}).status_code == 401
+
+
+def test_firebase_login_links_existing_email_account(client, auth, monkeypatch):
+    _firebase(monkeypatch, email="ana@example.com")
+    assert client.post("/v1/auth/firebase", json={"id_token": "x"}).status_code == 200
+    assert client.post("/v1/auth/login", json={"email": "ana@example.com", "password": "Senha-forte-123"}).status_code == 200
+
+
+def test_firebase_login_rejects_invalid_token(client):
+    from app.config import get_settings
+    get_settings.cache_clear()
+    response = client.post("/v1/auth/firebase", json={"id_token": "lixo"})
+    assert response.status_code in (401, 503)

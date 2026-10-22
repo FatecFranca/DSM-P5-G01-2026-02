@@ -2,13 +2,31 @@
   "expo": {
     "name": "Prosa",
     "slug": "prosa",
-    "scheme": "prosa",
+    "scheme": ["prosa", "br.edu.prosa.mobile", "com.googleusercontent.apps.205863827206-jk6do03rttouvklesi1mb7if71421fbo"],
     "version": "0.1.0",
     "orientation": "portrait",
     "userInterfaceStyle": "light",
-    "plugins": ["expo-router", "expo-secure-store", "expo-sqlite", "expo-font"],
-    "android": { "package": "br.edu.prosa.mobile" },
-    "ios": { "bundleIdentifier": "br.edu.prosa.mobile" },
-    "extra": { "apiUrl": "http://10.0.2.2:8000" }
+    "plugins": [
+      "expo-router",
+      "expo-secure-store",
+      "expo-sqlite",
+      "expo-font",
+      "expo-web-browser"
+    ],
+    "android": {
+      "package": "br.edu.prosa.mobile"
+    },
+    "ios": {
+      "bundleIdentifier": "br.edu.prosa.mobile"
+    },
+    "extra": {
+      "apiUrl": "http://10.0.2.2:8000",
+      "googleClientIds": {
+        "web": "205863827206-r1c2gbtf16gebhimbbls95vdg8kfr3sl.apps.googleusercontent.com",
+        "ios": "205863827206-jk6do03rttouvklesi1mb7if71421fbo.apps.googleusercontent.com",
+        "android": "205863827206-4k5sr4bcqig61llksci93901h5dvvfsd.apps.googleusercontent.com"
+      },
+      "firebase": { "apiKey": "AIzaSyBwN-oLeUzR7XwEF0Tq1UGJ5FUXDJVb6yQ", "authDomain": "prosa-cc0ae.firebaseapp.com", "projectId": "prosa-cc0ae", "appId": "1:205863827206:web:30000cba16d8c5e0139087" }
+    }
   }
 }

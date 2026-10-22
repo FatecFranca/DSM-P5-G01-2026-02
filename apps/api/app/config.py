@@ -10,6 +10,8 @@ class Settings(BaseSettings):
     access_token_minutes: int = Field(default=15, ge=1)
     refresh_token_days: int = Field(default=30, ge=1)
     environment: str = "development"
+    # ID do projeto Firebase: audiência dos ID tokens do Firebase Auth aceitos no login social.
+    firebase_project_id: str = ""
     # Ranking no servidor (docs/adr/0004). Desligado por padrão; ligar é o kill switch inverso.
     ranking_model_enabled: bool = False
     ranking_model_path: str | None = None
