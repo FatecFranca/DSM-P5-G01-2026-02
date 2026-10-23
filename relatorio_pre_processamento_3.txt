@@ -175,3 +175,25 @@ Resultado:
 
 O arquivo oficial continua sendo:
 `Corpus_SANTOS_TONI_FDC_tratado_sem_repeticoes.xlsx`.
+
+11. Revisão das palavras contendo "ssauro"
+
+Foi analisada a lista de palavras que continham a sequência `ssauro`.
+Havia 34 registros. Foram mantidos somente os quatro casos aprovados:
+
+- `dinossauro`;
+- `dinossauros`;
+- `tiranossauro`;
+- `tiranossaurorex`.
+
+Os outros 30 registros foram removidos por não serem úteis para a base do
+aplicativo. A remoção foi feita pelo texto da palavra, e não pelos índices,
+para evitar problemas causados pela renumeração das linhas.
+
+Resultado:
+
+- Registros contendo `ssauro` antes: 34;
+- Registros removidos: 30;
+- Registros contendo `ssauro` depois: 4;
+- Total atual da base: 9.568;
+- Palavras repetidas por `PALAVRA`: 0.
