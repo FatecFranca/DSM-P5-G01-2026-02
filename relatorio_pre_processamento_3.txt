@@ -123,3 +123,55 @@ A partir desta etapa, o arquivo oficial de trabalho passa a ser:
 
 O arquivo `Corpus_SANTOS_TONI_FDC_tratado.xlsx` foi mantido como cópia de
 segurança da etapa anterior.
+
+9. Limpeza rigorosa de palavras com até 3 caracteres
+
+Foi realizada uma revisão específica dos 450 registros cuja palavra possuía
+até 3 caracteres. A regra aprovada foi manter:
+
+- letras isoladas;
+- palavras reais;
+- artigos, preposições e pronomes;
+- verbos reais;
+- nomes próprios de pessoas claramente identificáveis.
+
+Foram removidos interjeições, abreviações, estrangeirismos, sequências sem
+significado, repetições de sons, erros de transcrição e nomes próprios que
+não puderam ser identificados com segurança.
+
+Resultado:
+
+- Registros curtos analisados: 450;
+- Registros curtos removidos: 145;
+- Registros curtos mantidos: 305;
+- Total da base após a limpeza: 9.719;
+- Palavras repetidas por `PALAVRA`: 0.
+
+Essa limpeza foi aplicada somente às palavras de até 3 caracteres. Os demais
+registros da base não foram alterados.
+
+10. Revisão manual final das palavras de até 3 caracteres
+
+Após a primeira filtragem, foi realizada uma nova conferência da listagem.
+O usuário definiu explicitamente quais índices da listagem deveriam ser
+mantidos. A regra aplicada foi:
+
+- manter os registros curtos correspondentes aos índices aprovados;
+- remover os demais registros com até 3 caracteres;
+- preservar integralmente os registros com mais de 3 caracteres.
+
+Como os índices são referências da listagem exibida no notebook e podem ser
+renumerados ao salvar com `index=False`, a aplicação final foi feita pelos
+valores de `PALAVRA` associados aos índices aprovados, evitando a remoção de
+linhas incorretas.
+
+Resultado:
+
+- Palavras curtas antes da revisão: 444;
+- Palavras curtas mantidas: 137;
+- Palavras curtas removidas nesta revisão: 307;
+- Total da base após a revisão: 9.598;
+- Palavras repetidas por `PALAVRA`: 0.
+
+O arquivo oficial continua sendo:
+`Corpus_SANTOS_TONI_FDC_tratado_sem_repeticoes.xlsx`.
