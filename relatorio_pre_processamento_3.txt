@@ -265,3 +265,16 @@ Resultado desta continuação:
 - Registros finais: 9.469;
 - Palavras repetidas por `PALAVRA`: 0;
 - Colunas preservadas: 8.
+
+14. Revis?o manual de palavras fora do escopo
+
+Foi realizada uma nova revis?o manual de palavras que n?o se adequavam ao
+escopo da base. Foram removidos 28 registros. Tamb?m foram corrigidas duas
+concatena??es: `azulmarinho` para `azul-marinho` e `chapeuzinhovermelho`
+para `chapeuzinho vermelho`.
+
+Resultado:
+
+- Registros finais: 9.441;
+- Palavras repetidas por `PALAVRA`: 0;
+- Colunas preservadas: 8.
