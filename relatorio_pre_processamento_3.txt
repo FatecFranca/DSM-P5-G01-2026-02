@@ -68,16 +68,58 @@ Os seguintes casos foram corrigidos:
 As correções foram aplicadas nas colunas `PALAVRA` e `LEMA`. As demais
 colunas foram preservadas.
 
-6. Resultado atual
+6. Resultado após a revisão manual (antes da unificação)
 
 - Registros finais: 10.653
 - Colunas: 8
 - Registros com `ESTSILABICA == 'erro'`: 0
 - Filtro por frequência: não aplicado
-- Arquivo final de trabalho: `Corpus_SANTOS_TONI_FDC_tratado.xlsx`
+- Arquivo gerado nessa subetapa: `Corpus_SANTOS_TONI_FDC_tratado.xlsx`
 
 Após as correções, ainda existem 28 duplicidades completas. Elas não foram
 removidas automaticamente nesta etapa, pois podem ter surgido quando formas
 ortográficas diferentes passaram a ter a mesma grafia. Esse ponto deve ser
 verificado antes do encerramento definitivo da limpeza.
 
+8. Unificação das palavras repetidas
+
+Foi verificado que a base possuía mais registros do que palavras distintas:
+
+- Registros antes da unificação: 10.630;
+- Palavras distintas: 9.864;
+- Registros repetidos por `PALAVRA`: 766.
+
+Essas repetições ocorriam porque a mesma palavra podia aparecer com valores
+diferentes em outras colunas. A remoção anterior de duplicidades considerava
+a linha completa, e não somente a coluna `PALAVRA`.
+
+Para a finalidade do aplicativo, foi adotada a regra de manter somente um
+registro por palavra. Quando havia mais de um registro para a mesma palavra,
+foi mantido aquele com maior valor em `FREQ`, por representar o uso mais
+frequente da palavra.
+
+O procedimento utilizado foi:
+
+```python
+df = df.sort_values(
+    by=["PALAVRA", "FREQ"],
+    ascending=[True, False]
+)
+
+df = df.drop_duplicates(
+    subset="PALAVRA",
+    keep="first"
+).copy()
+```
+
+Resultado:
+
+- Registros finais: 9.864;
+- Palavras distintas: 9.864;
+- Repetições por `PALAVRA`: 0.
+
+A partir desta etapa, o arquivo oficial de trabalho passa a ser:
+`Corpus_SANTOS_TONI_FDC_tratado_sem_repeticoes.xlsx`.
+
+O arquivo `Corpus_SANTOS_TONI_FDC_tratado.xlsx` foi mantido como cópia de
+segurança da etapa anterior.
