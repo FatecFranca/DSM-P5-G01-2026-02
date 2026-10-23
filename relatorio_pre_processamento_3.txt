@@ -197,3 +197,71 @@ Resultado:
 - Registros contendo `ssauro` depois: 4;
 - Total atual da base: 9.568;
 - Palavras repetidas por `PALAVRA`: 0.
+
+12. Revisão das palavras contendo a letra "é"
+
+Foi realizada uma revisão manual das palavras que continham `é`, conforme
+a listagem analisada no notebook. Foram aplicadas somente as decisões
+explicitamente indicadas:
+
+- correção de acentuação e ortografia, como `trés` -> `três`,
+  `bebé` -> `bebê`, `inglés` -> `inglês`, `ténis` -> `tênis`,
+  `idéia` -> `ideia`, `jácaré` -> `jacaré`, `célular` -> `celular`,
+  `freqéncia` -> `frequência` e `papelhigiénico` -> `papel higiênico`;
+- correção de palavras com acento circunflexo ausente ou incorreto, como
+  `inteligéncia` -> `inteligência`, `experiéncia` -> `experiência`,
+  `consciéncia` -> `consciência`, `ciéncia` -> `ciência`, `génio` -> `gênio`,
+  `gêmea`/`gêmeas` e outras formas aprovadas;
+- inclusão de hífen em `pré-escola` e `pré-adolescente`;
+- remoção dos casos marcados pelo usuário como inúteis, concatenações,
+  repetições de sons, erros ou palavras fora do escopo.
+
+Foram removidos 58 registros explicitamente identificados. Algumas
+correções fizeram palavras diferentes convergirem para a mesma grafia.
+Nesses casos, foi mantido o registro de maior `FREQ`, conforme a regra
+adotada anteriormente para manter uma linha por palavra.
+
+Resultado:
+
+- Registros antes da revisão: 9.568;
+- Registros removidos nesta revisão: 58;
+- Registros eliminados por duplicação após correções: 6;
+- Registros finais: 9.504;
+- Palavras distintas: 9.504;
+- Repetições por `PALAVRA`: 0;
+- Colunas preservadas: 8.
+
+As demais palavras contendo `é` que ainda não foram analisadas não foram
+alteradas. O arquivo oficial continua sendo
+`Corpus_SANTOS_TONI_FDC_tratado_sem_repeticoes.xlsx`.
+
+13. Continuação da revisão das palavras contendo "é"
+
+Na continuação da revisão manual, foram aplicadas as seguintes correções:
+
+- `perdér` -> `perder`;
+- `protégér`/`protégér` -> `proteger`;
+- `prémio` -> `prêmio`;
+- `seqéncia` -> `sequência`;
+- `seqéncias` -> `sequências`;
+- `preferéncia` -> `preferência`;
+- `énfase` -> `ênfase`.
+
+Também foram removidos os registros indicados como concatenações, erros,
+repetições de sons ou palavras sem utilidade para a base, incluindo
+`nenémvai`, `perigosézima`, `néga`, `mêêé`, `pégasus`, `respondéncia`,
+`quiném`, `quié`, `tlés`, `temtambém`, `vendéla`, `véja`, `vocénão`,
+`xanéu`, `zêzê`, `xxxchapéu`, `zémijão`, `vccé` e as sequências iniciadas por `é`
+ou `ê` apontadas na revisão.
+
+A palavra encontrada na base era `énfase`; ela foi corrigida para `ênfase`.
+O índice 9149 correspondia a `vccé`, que foi removido pelo texto exato.
+
+Resultado desta continuação:
+
+- Registros antes: 9.504;
+- Registros removidos: 32;
+- Registros corrigidos: 6;
+- Registros finais: 9.469;
+- Palavras repetidas por `PALAVRA`: 0;
+- Colunas preservadas: 8.
