@@ -1,0 +1,83 @@
+RELATÓRIO — PRÉ-PROCESSAMENTO 3
+================================
+
+1. Objetivo
+
+Nesta etapa foi realizada a revisão da base para preparar as palavras para
+as próximas fases do projeto:
+
+- verificar a estrutura silábica;
+- remover registros sem estrutura silábica válida;
+- identificar palavras concatenadas, expressões e casos fora do contexto;
+- corrigir erros ortográficos confirmados.
+
+A base original foi preservada. As alterações foram salvas somente na cópia
+de trabalho `Corpus_SANTOS_TONI_FDC_tratado.xlsx`.
+
+2. Remoção de registros sem estrutura silábica
+
+Foi analisada a coluna `ESTSILABICA`. Os registros cujo valor era `erro`
+foram removidos, pois a estrutura silábica será necessária para a futura
+classificação das palavras.
+
+- Registros antes desta etapa: 11.504
+- Registros removidos com `ESTSILABICA == 'erro'`: 641
+- Registros restantes: 10.863
+
+3. Tratamento de palavras concatenadas identificadas anteriormente
+
+Foram removidos 18 registros identificados como concatenações ou expressões
+sem interesse para a base de palavras isoladas. Entre os casos analisados
+estavam formas como `vocéestá`, `quevocé`, `corvocurioso`, `ondecadé` e
+`cadéirinha`.
+
+As correções de `vocé`, `vocés` e `cadé` foram aplicadas nas colunas
+`PALAVRA` e `LEMA`:
+
+- `vocé` -> `você`;
+- `vocés` -> `vocês`;
+- `cadé` -> `cadê`.
+
+4. Remoção de casos selecionados durante a revisão manual
+
+Foram removidos 192 índices distintos selecionados durante a inspeção
+individual da lista de palavras longas. A decisão foi baseada na análise
+manual dos casos, considerando:
+
+- expressões;
+- palavras fora do contexto do aplicativo;
+- repetições de sons ou interjeições;
+- nomes e termos sem utilidade para a base proposta;
+- erros que não seriam corrigidos com segurança.
+
+Nenhum filtro automático por frequência foi aplicado. A coluna `FREQ` foi
+mantida, pois a frequência pode ser útil nas próximas etapas.
+
+5. Correções mantidas em vez de remoção
+
+Os seguintes casos foram corrigidos:
+
+- `quebracabeça` -> `quebra-cabeça`;
+- `escondeesconde` -> `esconde-esconde`;
+- `porcoespinho` -> `porco-espinho`;
+- `cachorroquente` -> `cachorro-quente`;
+- `segundafeira` -> `segunda-feira`;
+- `inteligéncia` -> `inteligência`;
+- `consentração` -> `concentração`.
+
+As correções foram aplicadas nas colunas `PALAVRA` e `LEMA`. As demais
+colunas foram preservadas.
+
+6. Resultado atual
+
+- Registros finais: 10.653
+- Colunas: 8
+- Registros com `ESTSILABICA == 'erro'`: 0
+- Filtro por frequência: não aplicado
+- Arquivo final de trabalho: `Corpus_SANTOS_TONI_FDC_tratado.xlsx`
+
+Após as correções, ainda existem 28 duplicidades completas. Elas não foram
+removidas automaticamente nesta etapa, pois podem ter surgido quando formas
+ortográficas diferentes passaram a ter a mesma grafia. Esse ponto deve ser
+verificado antes do encerramento definitivo da limpeza.
+
