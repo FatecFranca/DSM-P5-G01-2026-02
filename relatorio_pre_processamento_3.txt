@@ -266,15 +266,14 @@ Resultado desta continuação:
 - Palavras repetidas por `PALAVRA`: 0;
 - Colunas preservadas: 8.
 
-14. Revis?o manual de palavras fora do escopo
+14. Revisão manual de palavras fora do escopo contendo 'nho'
 
-Foi realizada uma nova revis?o manual de palavras que n?o se adequavam ao
-escopo da base. Foram removidos 28 registros. Tamb?m foram corrigidas duas
-concatena??es: `azulmarinho` para `azul-marinho` e `chapeuzinhovermelho`
-para `chapeuzinho vermelho`.
+Foi realizada uma nova revisão manual de palavras que não se adequavam ao
+escopo da base. Foram removidos 377 registros. Também foi corrigido uma 
+concatenação: `azulmarinho` para `azul-marinho`.
 
 Resultado:
 
-- Registros finais: 9.441;
+- Registros finais: 9.092;
 - Palavras repetidas por `PALAVRA`: 0;
 - Colunas preservadas: 8.
