@@ -277,3 +277,14 @@ Resultado:
 - Registros finais: 9.092;
 - Palavras repetidas por `PALAVRA`: 0;
 - Colunas preservadas: 8.
+
+15. Revisão manual de palavras fora do escopo contendo 'nha'
+
+Foi realizada uma revisão manual de palavras que não se adequavam ao
+escopo da base. Foram removidos 314 registros.
+
+Resultado:
+
+- Registros finais: 8778;
+- Palavras repetidas por `PALAVRA`: 0;
+- Colunas preservadas: 8.
