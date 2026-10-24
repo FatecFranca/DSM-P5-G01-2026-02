@@ -288,3 +288,14 @@ Resultado:
 - Registros finais: 8778;
 - Palavras repetidas por `PALAVRA`: 0;
 - Colunas preservadas: 8.
+
+16. Revisão manual de palavras fora do escopo contendo 'ó'
+
+Foi realizada uma revisão manual de palavras que não se adequavam ao
+escopo da base. Foram removidos 67 registros. Também foram corrigidas palavras com erros de português.
+
+Resultado:
+
+- Registros finais: 8711;
+- Palavras repetidas por `PALAVRA`: 3;
+- Colunas preservadas: 8.
