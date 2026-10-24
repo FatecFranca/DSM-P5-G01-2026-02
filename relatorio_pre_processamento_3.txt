@@ -310,3 +310,14 @@ Resultado:
 - Registros finais: 8708;
 - Palavras repetidas por `PALAVRA`: 3;
 - Colunas preservadas: 8.
+
+18. Revisão manual de palavras fora do escopo contendo 'á'
+
+Foi realizada uma revisão manual de palavras que não se adequavam ao
+escopo da base. Foram removidos 114 registros. Também foram aplicadas correções de português.
+
+Resultado:
+
+- Registros finais: 8594;
+- Palavras repetidas por `PALAVRA`: 12;
+- Colunas preservadas: 8.
