@@ -318,6 +318,28 @@ escopo da base. Foram removidos 114 registros. Também foram aplicadas correçõ
 
 Resultado:
 
-- Registros finais: 8594;
+- Registros finais antes da resolução das duplicidades: 8594;
 - Palavras repetidas por `PALAVRA`: 12;
+- Colunas preservadas: 8.
+
+19. Resolução das duplicidades remanescentes
+
+As 12 duplicidades restantes por `PALAVRA` foram analisadas individualmente.
+Considerou-se como hipótese que parte delas surgiu durante as correções
+ortográficas. Também foram observadas diferenças de classificação
+morfológica, transcrição, frequência ou registro como nome próprio.
+
+Foram mantidos os registros correspondentes aos índices:
+
+`244, 1257, 1866, 3384, 3688, 4162, 5630, 6034, 6353, 7126, 7861, 8231`.
+
+Os demais 12 registros duplicados foram removidos, preservando-se a linha
+escolhida para cada palavra.
+
+Resultado:
+
+- Registros removidos: 12;
+- Registros finais: 8582;
+- Palavras distintas: 8582;
+- Repetições por `PALAVRA`: 0;
 - Colunas preservadas: 8.
