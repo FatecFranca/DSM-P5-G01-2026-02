@@ -1,0 +1,24 @@
+RELATÓRIO — PRÉ-PROCESSAMENTO 5
+================================
+
+1. Objetivo
+
+Dar continuidade à identificação de frases e expressões concatenadas
+na base de palavras isoladas.
+
+2. Triagem e revisão manual
+
+O notebook Pre_processamento_5.ipynb gerou uma listagem inicial de 589
+candidatos. A triagem considerou repetições, possíveis separações em
+palavras da base e comprimento. A lista foi exportada em HTML com
+numeração, frequência, separação sugerida e motivo da sinalização.
+
+A revisão manual avançou até a posição 200 da listagem inicial.
+
+3. Resultado parcial
+
+Foram selecionadas 64 grafias distintas para exclusão. O salvamento
+das exclusões no arquivo de trabalho
+Corpus_SANTOS_TONI_FDC_tratado_sem_repeticoes.xlsx foi confirmado.
+A quantidade de registros efetivamente removidos aguarda registro.
+As correções de grafia ficam para uma rodada posterior.

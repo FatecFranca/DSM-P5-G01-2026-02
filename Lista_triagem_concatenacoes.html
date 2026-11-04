@@ -1,0 +1,4222 @@
+<!doctype html><html lang="pt-BR"><meta charset="utf-8"><title>Triagem de concatenações</title><h1>Triagem de concatenações</h1><p>525 candidatos para revisão manual.</p><table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>PALAVRA</th>
+      <th>LEMA</th>
+      <th>FREQ</th>
+      <th>Separação</th>
+      <th>Motivo</th>
+    </tr>
+    <tr>
+      <th>Nº</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>1</th>
+      <td>bombom</td>
+      <td>bombom</td>
+      <td>9</td>
+      <td>bom + bom</td>
+      <td>Repetição da mesma palavra</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>pulapula</td>
+      <td>pulapula</td>
+      <td>8</td>
+      <td>pula + pula</td>
+      <td>Repetição da mesma palavra</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>ticotico</td>
+      <td>ticotico</td>
+      <td>6</td>
+      <td>tico + tico</td>
+      <td>Repetição da mesma palavra</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>piuípiuípiuí</td>
+      <td>piuípiuípiuí</td>
+      <td>1</td>
+      <td>piuí + piuí + piuí</td>
+      <td>Repetição da mesma palavra</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>senão</td>
+      <td>senão</td>
+      <td>222</td>
+      <td>se + não</td>
+      <td>Separação inclui não</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>comeu</td>
+      <td>comer</td>
+      <td>200</td>
+      <td>com + eu</td>
+      <td>Separação inclui com</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>amarela</td>
+      <td>amanhã</td>
+      <td>57</td>
+      <td>amar + ela</td>
+      <td>Separação inclui ela</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>parado</td>
+      <td>parar</td>
+      <td>13</td>
+      <td>para + do</td>
+      <td>Separação inclui para</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>separa</td>
+      <td>separar</td>
+      <td>10</td>
+      <td>se + para</td>
+      <td>Separação inclui para</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>comemorando</td>
+      <td>comemorar</td>
+      <td>8</td>
+      <td>com + em + orando</td>
+      <td>Separação inclui com</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>poderosas</td>
+      <td>poderoso</td>
+      <td>7</td>
+      <td>pode + rosas</td>
+      <td>Separação inclui pode</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>comemorar</td>
+      <td>comemorar</td>
+      <td>5</td>
+      <td>com + em + orar</td>
+      <td>Separação inclui com</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>compras</td>
+      <td>compra</td>
+      <td>5</td>
+      <td>com + pras</td>
+      <td>Separação inclui com</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>separado</td>
+      <td>separar</td>
+      <td>4</td>
+      <td>se + para + do</td>
+      <td>Separação inclui para</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>tempão</td>
+      <td>tempão</td>
+      <td>4</td>
+      <td>tem + pão</td>
+      <td>Separação inclui tem</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>comeram</td>
+      <td>comer</td>
+      <td>3</td>
+      <td>com + eram</td>
+      <td>Separação inclui com</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>superpoderosas</td>
+      <td>superpoderosas</td>
+      <td>3</td>
+      <td>super + pode + rosas</td>
+      <td>Separação inclui pode</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>combater</td>
+      <td>combater</td>
+      <td>2</td>
+      <td>com + bater</td>
+      <td>Separação inclui com</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>comem</td>
+      <td>comer</td>
+      <td>2</td>
+      <td>com + em</td>
+      <td>Separação inclui com</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <td>comparar</td>
+      <td>comparar</td>
+      <td>2</td>
+      <td>com + parar</td>
+      <td>Separação inclui com</td>
+    </tr>
+    <tr>
+      <th>21</th>
+      <td>estávamos</td>
+      <td>estar</td>
+      <td>2</td>
+      <td>está + vamos</td>
+      <td>Separação inclui está, vamos</td>
+    </tr>
+    <tr>
+      <th>22</th>
+      <td>meudeus</td>
+      <td>meudeus</td>
+      <td>2</td>
+      <td>meu + deus</td>
+      <td>Separação inclui meu</td>
+    </tr>
+    <tr>
+      <th>23</th>
+      <td>poderosa</td>
+      <td>poderoso</td>
+      <td>2</td>
+      <td>pode + rosa</td>
+      <td>Separação inclui pode</td>
+    </tr>
+    <tr>
+      <th>24</th>
+      <td>comemorou</td>
+      <td>comemorar</td>
+      <td>1</td>
+      <td>com + em + orou</td>
+      <td>Separação inclui com</td>
+    </tr>
+    <tr>
+      <th>25</th>
+      <td>compara</td>
+      <td>comparar</td>
+      <td>1</td>
+      <td>com + para</td>
+      <td>Separação inclui com, para</td>
+    </tr>
+    <tr>
+      <th>26</th>
+      <td>composto</td>
+      <td>compor</td>
+      <td>1</td>
+      <td>com + posto</td>
+      <td>Separação inclui com</td>
+    </tr>
+    <tr>
+      <th>27</th>
+      <td>comprara</td>
+      <td>comprar</td>
+      <td>1</td>
+      <td>com + prara</td>
+      <td>Separação inclui com</td>
+    </tr>
+    <tr>
+      <th>28</th>
+      <td>compressa</td>
+      <td>compressa</td>
+      <td>1</td>
+      <td>com + pressa</td>
+      <td>Separação inclui com</td>
+    </tr>
+    <tr>
+      <th>29</th>
+      <td>salvamos</td>
+      <td>salvar</td>
+      <td>1</td>
+      <td>sal + vamos</td>
+      <td>Separação inclui vamos</td>
+    </tr>
+    <tr>
+      <th>30</th>
+      <td>brinquedo</td>
+      <td>brinquedo</td>
+      <td>177</td>
+      <td>brinque + do</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>31</th>
+      <td>quadrado</td>
+      <td>quadrado</td>
+      <td>69</td>
+      <td>quadra + do</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>32</th>
+      <td>faltando</td>
+      <td>faltar</td>
+      <td>61</td>
+      <td>faltan + do</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>33</th>
+      <td>escondido</td>
+      <td>esconder</td>
+      <td>54</td>
+      <td>escondi + do</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>34</th>
+      <td>floresta</td>
+      <td>floresta</td>
+      <td>47</td>
+      <td>flores + ta</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>35</th>
+      <td>esconder</td>
+      <td>esconder</td>
+      <td>35</td>
+      <td>escon + der</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>36</th>
+      <td>qualquer</td>
+      <td>qualquer</td>
+      <td>33</td>
+      <td>qual + quer</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>37</th>
+      <td>escondeu</td>
+      <td>esconder</td>
+      <td>32</td>
+      <td>escon + deu</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>38</th>
+      <td>colorido</td>
+      <td>colorir</td>
+      <td>30</td>
+      <td>colori + do</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>39</th>
+      <td>quebrado</td>
+      <td>quebrar</td>
+      <td>30</td>
+      <td>quebra + do</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>40</th>
+      <td>cheirosa</td>
+      <td>cheiroso</td>
+      <td>25</td>
+      <td>chei + rosa</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>41</th>
+      <td>engraçado</td>
+      <td>engraçado</td>
+      <td>25</td>
+      <td>engraça + do</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>42</th>
+      <td>machucado</td>
+      <td>machucar</td>
+      <td>20</td>
+      <td>machuca + do</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>43</th>
+      <td>papainoel</td>
+      <td>papainoel</td>
+      <td>19</td>
+      <td>papai + noel</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>44</th>
+      <td>conseguindo</td>
+      <td>conseguir</td>
+      <td>18</td>
+      <td>conse + guin + do</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>45</th>
+      <td>colorindo</td>
+      <td>colorir</td>
+      <td>17</td>
+      <td>colo + rindo</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>46</th>
+      <td>apertado</td>
+      <td>apertar</td>
+      <td>15</td>
+      <td>aperta + do</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>47</th>
+      <td>empresta</td>
+      <td>emprestar</td>
+      <td>13</td>
+      <td>em + presta</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>48</th>
+      <td>aproveita</td>
+      <td>aproveitar</td>
+      <td>12</td>
+      <td>aprovei + ta</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>49</th>
+      <td>complicado</td>
+      <td>complicar</td>
+      <td>12</td>
+      <td>complica + do</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>50</th>
+      <td>espalhado</td>
+      <td>espalhar</td>
+      <td>11</td>
+      <td>espalha + do</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>51</th>
+      <td>guardachuva</td>
+      <td>guardachuva</td>
+      <td>11</td>
+      <td>guarda + chuva</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>52</th>
+      <td>desenhado</td>
+      <td>desenhar</td>
+      <td>10</td>
+      <td>desenha + do</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>53</th>
+      <td>sobremesa</td>
+      <td>sobremesa</td>
+      <td>10</td>
+      <td>sobre + mesa</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>54</th>
+      <td>batatinha</td>
+      <td>batata</td>
+      <td>9</td>
+      <td>bata + tinha</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>55</th>
+      <td>separando</td>
+      <td>separar</td>
+      <td>9</td>
+      <td>se + parando</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>56</th>
+      <td>assoprar</td>
+      <td>assoprar</td>
+      <td>8</td>
+      <td>as + soprar</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>57</th>
+      <td>guardando</td>
+      <td>guardar</td>
+      <td>8</td>
+      <td>guar + dando</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>58</th>
+      <td>arcoíris</td>
+      <td>arcoíris</td>
+      <td>7</td>
+      <td>arco + íris</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>59</th>
+      <td>demorando</td>
+      <td>demorar</td>
+      <td>7</td>
+      <td>de + morando</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>60</th>
+      <td>filmadora</td>
+      <td>filmadora</td>
+      <td>7</td>
+      <td>film + adora</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>61</th>
+      <td>namorado</td>
+      <td>namorar</td>
+      <td>7</td>
+      <td>namora + do</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>62</th>
+      <td>ajudador</td>
+      <td>ajuda</td>
+      <td>6</td>
+      <td>ajuda + dor</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>63</th>
+      <td>catavento</td>
+      <td>catavento</td>
+      <td>6</td>
+      <td>cata + vento</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>64</th>
+      <td>misturado</td>
+      <td>misturar</td>
+      <td>6</td>
+      <td>mistura + do</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>65</th>
+      <td>peixeboi</td>
+      <td>peixeboi</td>
+      <td>6</td>
+      <td>peixe + boi</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>66</th>
+      <td>supermercado</td>
+      <td>supermercado</td>
+      <td>6</td>
+      <td>super + mercado</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>67</th>
+      <td>vitamina</td>
+      <td>vitaminar</td>
+      <td>6</td>
+      <td>vi + ta + mina</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>68</th>
+      <td>amassado</td>
+      <td>amassar</td>
+      <td>5</td>
+      <td>amassa + do</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>69</th>
+      <td>chegarem</td>
+      <td>chegar</td>
+      <td>5</td>
+      <td>chegar + em</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>70</th>
+      <td>combinado</td>
+      <td>combinar</td>
+      <td>5</td>
+      <td>combina + do</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>71</th>
+      <td>emprestar</td>
+      <td>emprestar</td>
+      <td>5</td>
+      <td>em + prestar</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>72</th>
+      <td>encostado</td>
+      <td>encostar</td>
+      <td>5</td>
+      <td>encosta + do</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>73</th>
+      <td>enrolado</td>
+      <td>enrolar</td>
+      <td>5</td>
+      <td>enrola + do</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>74</th>
+      <td>loboguará</td>
+      <td>loboguará</td>
+      <td>5</td>
+      <td>lobo + guará</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>75</th>
+      <td>melhorar</td>
+      <td>melhorar</td>
+      <td>5</td>
+      <td>melhor + ar</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>76</th>
+      <td>ajudadora</td>
+      <td>ajuda</td>
+      <td>4</td>
+      <td>ajuda + dora</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>77</th>
+      <td>amarrado</td>
+      <td>amarra</td>
+      <td>4</td>
+      <td>amarra + do</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>78</th>
+      <td>desligado</td>
+      <td>desligar</td>
+      <td>4</td>
+      <td>desliga + do</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>79</th>
+      <td>enfeitado</td>
+      <td>enfeitar</td>
+      <td>4</td>
+      <td>enfeita + do</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>80</th>
+      <td>entrevistadora</td>
+      <td>entrevistador</td>
+      <td>4</td>
+      <td>entrevista + dora</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>81</th>
+      <td>fotografia</td>
+      <td>fotografia</td>
+      <td>4</td>
+      <td>foto + grafia</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>82</th>
+      <td>maionese</td>
+      <td>maionese</td>
+      <td>4</td>
+      <td>maio + nese</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>83</th>
+      <td>sacolinha</td>
+      <td>sacolinha</td>
+      <td>4</td>
+      <td>saco + linha</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>84</th>
+      <td>salvador</td>
+      <td>salvador</td>
+      <td>4</td>
+      <td>salva + dor</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>85</th>
+      <td>viralata</td>
+      <td>viralata</td>
+      <td>4</td>
+      <td>vira + lata</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>86</th>
+      <td>acordado</td>
+      <td>acordar</td>
+      <td>3</td>
+      <td>acorda + do</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>87</th>
+      <td>acrobacia</td>
+      <td>acrobacia</td>
+      <td>3</td>
+      <td>acro + bacia</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>88</th>
+      <td>apagador</td>
+      <td>apagador</td>
+      <td>3</td>
+      <td>apaga + dor</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>89</th>
+      <td>armarinho</td>
+      <td>armarinho</td>
+      <td>3</td>
+      <td>ar + marinho</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>90</th>
+      <td>arrumado</td>
+      <td>arrumar</td>
+      <td>3</td>
+      <td>arruma + do</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>91</th>
+      <td>assustado</td>
+      <td>assustar</td>
+      <td>3</td>
+      <td>assusta + do</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>92</th>
+      <td>assustador</td>
+      <td>assustador</td>
+      <td>3</td>
+      <td>assusta + dor</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>93</th>
+      <td>bagunçado</td>
+      <td>bagunçado</td>
+      <td>3</td>
+      <td>bagunça + do</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>94</th>
+      <td>beijaflor</td>
+      <td>beijaflor</td>
+      <td>3</td>
+      <td>beija + flor</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>95</th>
+      <td>caçadora</td>
+      <td>caçador</td>
+      <td>3</td>
+      <td>caça + dora</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>96</th>
+      <td>detonado</td>
+      <td>detonar</td>
+      <td>3</td>
+      <td>detona + do</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>97</th>
+      <td>emprestou</td>
+      <td>emprestar</td>
+      <td>3</td>
+      <td>em + prestou</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>98</th>
+      <td>estudando</td>
+      <td>estudar</td>
+      <td>3</td>
+      <td>estu + dando</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>99</th>
+      <td>mariafumaça</td>
+      <td>mariafumaça</td>
+      <td>3</td>
+      <td>maria + fumaça</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>100</th>
+      <td>meiacalça</td>
+      <td>meiacalça</td>
+      <td>3</td>
+      <td>meia + calça</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>101</th>
+      <td>treinador</td>
+      <td>treinador</td>
+      <td>3</td>
+      <td>treina + dor</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>102</th>
+      <td>adiantado</td>
+      <td>adiantar</td>
+      <td>2</td>
+      <td>adianta + do</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>103</th>
+      <td>arrebentado</td>
+      <td>arrebentar</td>
+      <td>2</td>
+      <td>arrebenta + do</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>104</th>
+      <td>assinado</td>
+      <td>assinar</td>
+      <td>2</td>
+      <td>assina + do</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>105</th>
+      <td>autofalante</td>
+      <td>autofalante</td>
+      <td>2</td>
+      <td>auto + falante</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>106</th>
+      <td>brincaar</td>
+      <td>brincaar</td>
+      <td>2</td>
+      <td>brinca + ar</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>107</th>
+      <td>brincarem</td>
+      <td>brincar</td>
+      <td>2</td>
+      <td>brincar + em</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>108</th>
+      <td>colocava</td>
+      <td>colocar</td>
+      <td>2</td>
+      <td>colo + cava</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>109</th>
+      <td>consertado</td>
+      <td>consertar</td>
+      <td>2</td>
+      <td>conserta + do</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>110</th>
+      <td>conversarem</td>
+      <td>conversar</td>
+      <td>2</td>
+      <td>conversar + em</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>111</th>
+      <td>copacabana</td>
+      <td>copacabana</td>
+      <td>2</td>
+      <td>copa + cabana</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>112</th>
+      <td>depressa</td>
+      <td>depressa</td>
+      <td>2</td>
+      <td>de + pressa</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>113</th>
+      <td>dormirem</td>
+      <td>dormir</td>
+      <td>2</td>
+      <td>dormir + em</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>114</th>
+      <td>embolado</td>
+      <td>embolado</td>
+      <td>2</td>
+      <td>embola + do</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>115</th>
+      <td>empoeirado</td>
+      <td>empoeirar</td>
+      <td>2</td>
+      <td>em + poeira + do</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>116</th>
+      <td>encaixado</td>
+      <td>encaixar</td>
+      <td>2</td>
+      <td>encaixa + do</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>117</th>
+      <td>ensinado</td>
+      <td>ensinar</td>
+      <td>2</td>
+      <td>ensina + do</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>118</th>
+      <td>entendido</td>
+      <td>entender</td>
+      <td>2</td>
+      <td>entendi + do</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>119</th>
+      <td>escorregador</td>
+      <td>escorregador</td>
+      <td>2</td>
+      <td>escorrega + dor</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>120</th>
+      <td>estadosunidos</td>
+      <td>estadosunidos</td>
+      <td>2</td>
+      <td>estados + unidos</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>121</th>
+      <td>felicidade</td>
+      <td>felicidade</td>
+      <td>2</td>
+      <td>felici + dade</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>122</th>
+      <td>filhotinha</td>
+      <td>filhotinha</td>
+      <td>2</td>
+      <td>filho + tinha</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>123</th>
+      <td>fotografado</td>
+      <td>fotografar</td>
+      <td>2</td>
+      <td>fotografa + do</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>124</th>
+      <td>grilofalante</td>
+      <td>grilofalante</td>
+      <td>2</td>
+      <td>grilo + falante</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>125</th>
+      <td>guardada</td>
+      <td>guardar</td>
+      <td>2</td>
+      <td>guar + dada</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>126</th>
+      <td>guardado</td>
+      <td>guardar</td>
+      <td>2</td>
+      <td>guar + dado</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>127</th>
+      <td>guardasol</td>
+      <td>guardasol</td>
+      <td>2</td>
+      <td>guarda + sol</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>128</th>
+      <td>jogadora</td>
+      <td>jogador</td>
+      <td>2</td>
+      <td>joga + dora</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>129</th>
+      <td>jogadores</td>
+      <td>jogador</td>
+      <td>2</td>
+      <td>joga + dores</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>130</th>
+      <td>papapapapapapapapapapapa</td>
+      <td>papapapapapapapapapapapa</td>
+      <td>2</td>
+      <td>papapapapa + papapapapapapa</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>131</th>
+      <td>peixesapo</td>
+      <td>peixesapo</td>
+      <td>2</td>
+      <td>peixe + sapo</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>132</th>
+      <td>percebido</td>
+      <td>perceber</td>
+      <td>2</td>
+      <td>percebi + do</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>133</th>
+      <td>pregador</td>
+      <td>pregador</td>
+      <td>2</td>
+      <td>prega + dor</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>134</th>
+      <td>quadronegro</td>
+      <td>quadronegro</td>
+      <td>2</td>
+      <td>quadro + negro</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>135</th>
+      <td>quebracabeças</td>
+      <td>quebracabeças</td>
+      <td>2</td>
+      <td>quebra + cabeças</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>136</th>
+      <td>queimado</td>
+      <td>queimar</td>
+      <td>2</td>
+      <td>queima + do</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>137</th>
+      <td>queimadura</td>
+      <td>queimadura</td>
+      <td>2</td>
+      <td>queima + dura</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>138</th>
+      <td>quiseram</td>
+      <td>querer</td>
+      <td>2</td>
+      <td>quis + eram</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>139</th>
+      <td>quiserem</td>
+      <td>querer</td>
+      <td>2</td>
+      <td>quiser + em</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>140</th>
+      <td>rabiscado</td>
+      <td>rabiscar</td>
+      <td>2</td>
+      <td>rabisca + do</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>141</th>
+      <td>separada</td>
+      <td>separar</td>
+      <td>2</td>
+      <td>se + parada</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>142</th>
+      <td>simsalabimsalabimbimbim</td>
+      <td>simsalabimsalabimbimbim</td>
+      <td>2</td>
+      <td>simsalabim + salabimbimbim</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>143</th>
+      <td>sobrarem</td>
+      <td>sobrar</td>
+      <td>2</td>
+      <td>sobrar + em</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>144</th>
+      <td>sobrenome</td>
+      <td>sobrenome</td>
+      <td>2</td>
+      <td>sobre + nome</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>145</th>
+      <td>sorridente</td>
+      <td>sorridente</td>
+      <td>2</td>
+      <td>sorri + dente</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>146</th>
+      <td>superlegal</td>
+      <td>superlegal</td>
+      <td>2</td>
+      <td>super + legal</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>147</th>
+      <td>thcitchitchitchi</td>
+      <td>thcitchitchitchi</td>
+      <td>2</td>
+      <td>thci + tchitchitchi</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>148</th>
+      <td>trabalhador</td>
+      <td>trabalhador</td>
+      <td>2</td>
+      <td>trabalha + dor</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>149</th>
+      <td>vendedora</td>
+      <td>vendedor</td>
+      <td>2</td>
+      <td>vende + dora</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>150</th>
+      <td>voadoras</td>
+      <td>voador</td>
+      <td>2</td>
+      <td>voador + as</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>151</th>
+      <td>acabarem</td>
+      <td>acabar</td>
+      <td>1</td>
+      <td>acabar + em</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>152</th>
+      <td>acordarem</td>
+      <td>acordar</td>
+      <td>1</td>
+      <td>acordar + em</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>153</th>
+      <td>afundarem</td>
+      <td>afundar</td>
+      <td>1</td>
+      <td>afundar + em</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>154</th>
+      <td>amarelas</td>
+      <td>amanhecer</td>
+      <td>1</td>
+      <td>amar + elas</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>155</th>
+      <td>amarrada</td>
+      <td>amargar</td>
+      <td>1</td>
+      <td>amar + rada</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>156</th>
+      <td>amelieolha</td>
+      <td>amelié</td>
+      <td>1</td>
+      <td>amelie + olha</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>157</th>
+      <td>amelievai</td>
+      <td>amélie</td>
+      <td>1</td>
+      <td>amelie + vai</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>158</th>
+      <td>apaixonado</td>
+      <td>apaixonar</td>
+      <td>1</td>
+      <td>apaixona + do</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>159</th>
+      <td>aparecerem</td>
+      <td>aparecer</td>
+      <td>1</td>
+      <td>aparecer + em</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>160</th>
+      <td>aprendido</td>
+      <td>aprender</td>
+      <td>1</td>
+      <td>aprendi + do</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>161</th>
+      <td>apresentador</td>
+      <td>apresentador</td>
+      <td>1</td>
+      <td>apresenta + dor</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>162</th>
+      <td>apresentadora</td>
+      <td>apresentador</td>
+      <td>1</td>
+      <td>apresenta + dora</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>163</th>
+      <td>arranjaremos</td>
+      <td>arranjar</td>
+      <td>1</td>
+      <td>arranja + remos</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>164</th>
+      <td>arrebento</td>
+      <td>arrebento</td>
+      <td>1</td>
+      <td>arre + bento</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>165</th>
+      <td>assoprou</td>
+      <td>assoprar</td>
+      <td>1</td>
+      <td>as + soprou</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>166</th>
+      <td>batidona</td>
+      <td>batidona</td>
+      <td>1</td>
+      <td>bati + dona</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>167</th>
+      <td>bemvindo</td>
+      <td>bemvindo</td>
+      <td>1</td>
+      <td>bem + vindo</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>168</th>
+      <td>bepepilantra</td>
+      <td>bepepilantra</td>
+      <td>1</td>
+      <td>bepe + pilantra</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>169</th>
+      <td>bichopreguiça</td>
+      <td>bichopreguiça</td>
+      <td>1</td>
+      <td>bicho + preguiça</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>170</th>
+      <td>boniestou</td>
+      <td>boniestou</td>
+      <td>1</td>
+      <td>boni + estou</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>171</th>
+      <td>brincado</td>
+      <td>brincar</td>
+      <td>1</td>
+      <td>brinca + do</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>172</th>
+      <td>brincarcomigo</td>
+      <td>brincarcomigo</td>
+      <td>1</td>
+      <td>brincar + comigo</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>173</th>
+      <td>brincarde</td>
+      <td>brincarde</td>
+      <td>1</td>
+      <td>brincar + de</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>174</th>
+      <td>cantandobrincando</td>
+      <td>cantandobrincando</td>
+      <td>1</td>
+      <td>cantando + brincando</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>175</th>
+      <td>carademau</td>
+      <td>carademau</td>
+      <td>1</td>
+      <td>cara + de + mau</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>176</th>
+      <td>carregado</td>
+      <td>carregar</td>
+      <td>1</td>
+      <td>carrega + do</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>177</th>
+      <td>catapulta</td>
+      <td>catapultar</td>
+      <td>1</td>
+      <td>catapul + ta</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>178</th>
+      <td>chamasse</td>
+      <td>chamar</td>
+      <td>1</td>
+      <td>chamas + se</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>179</th>
+      <td>chuvarada</td>
+      <td>chuvarada</td>
+      <td>1</td>
+      <td>chuva + rada</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>180</th>
+      <td>cobradora</td>
+      <td>cobrador</td>
+      <td>1</td>
+      <td>cobra + dora</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>181</th>
+      <td>colherzona</td>
+      <td>colherzona</td>
+      <td>1</td>
+      <td>colher + zona</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>182</th>
+      <td>colocado</td>
+      <td>colocar</td>
+      <td>1</td>
+      <td>coloca + do</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>183</th>
+      <td>colocara</td>
+      <td>colocar</td>
+      <td>1</td>
+      <td>colo + cara</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>184</th>
+      <td>combinarem</td>
+      <td>combinar</td>
+      <td>1</td>
+      <td>combinar + em</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>185</th>
+      <td>comprado</td>
+      <td>comprar</td>
+      <td>1</td>
+      <td>compra + do</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>186</th>
+      <td>comprador</td>
+      <td>comprador</td>
+      <td>1</td>
+      <td>compra + dor</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>187</th>
+      <td>concertado</td>
+      <td>concertar</td>
+      <td>1</td>
+      <td>concerta + do</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>188</th>
+      <td>conseguirem</td>
+      <td>conseguir</td>
+      <td>1</td>
+      <td>conseguir + em</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>189</th>
+      <td>contador</td>
+      <td>contador</td>
+      <td>1</td>
+      <td>conta + dor</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>190</th>
+      <td>convidado</td>
+      <td>convidar</td>
+      <td>1</td>
+      <td>convida + do</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>191</th>
+      <td>corderosas</td>
+      <td>corderosas</td>
+      <td>1</td>
+      <td>cor + de + rosas</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>192</th>
+      <td>corresponde</td>
+      <td>corresponder</td>
+      <td>1</td>
+      <td>cor + responde</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>193</th>
+      <td>costurado</td>
+      <td>costurar</td>
+      <td>1</td>
+      <td>costura + do</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>194</th>
+      <td>cuidadora</td>
+      <td>cuidador</td>
+      <td>1</td>
+      <td>cuida + dora</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>195</th>
+      <td>cuidocuidado</td>
+      <td>cuidocuidado</td>
+      <td>1</td>
+      <td>cuido + cuidado</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>196</th>
+      <td>deixaeuver</td>
+      <td>deixaeuver</td>
+      <td>1</td>
+      <td>deixa + euver</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>197</th>
+      <td>deixasse</td>
+      <td>deixar</td>
+      <td>1</td>
+      <td>deix + as + se</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>198</th>
+      <td>descansado</td>
+      <td>descansar</td>
+      <td>1</td>
+      <td>descansa + do</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>199</th>
+      <td>desencaixado</td>
+      <td>desencaixar</td>
+      <td>1</td>
+      <td>desencaixa + do</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>200</th>
+      <td>desmontado</td>
+      <td>desmontar</td>
+      <td>1</td>
+      <td>desmonta + do</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>201</th>
+      <td>determina</td>
+      <td>determinar</td>
+      <td>1</td>
+      <td>de + termina</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>202</th>
+      <td>detetive</td>
+      <td>detetive</td>
+      <td>1</td>
+      <td>dete + tive</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>203</th>
+      <td>dinotrem</td>
+      <td>dinotrem</td>
+      <td>1</td>
+      <td>dino + trem</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>204</th>
+      <td>distrairem</td>
+      <td>distrairem</td>
+      <td>1</td>
+      <td>distrair + em</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>205</th>
+      <td>donadecasa</td>
+      <td>donadecasa</td>
+      <td>1</td>
+      <td>dona + de + casa</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>206</th>
+      <td>dormimdo</td>
+      <td>dormimdo</td>
+      <td>1</td>
+      <td>dor + mim + do</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>207</th>
+      <td>dovagabundo</td>
+      <td>dovagabundo</td>
+      <td>1</td>
+      <td>do + vagabundo</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>208</th>
+      <td>eletrodoméstico</td>
+      <td>eletrodoméstico</td>
+      <td>1</td>
+      <td>eletro + doméstico</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>209</th>
+      <td>empatado</td>
+      <td>empatar</td>
+      <td>1</td>
+      <td>empata + do</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>210</th>
+      <td>emprestando</td>
+      <td>emprestar</td>
+      <td>1</td>
+      <td>em + prestando</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>211</th>
+      <td>emprestei</td>
+      <td>emprestar</td>
+      <td>1</td>
+      <td>em + prestei</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>212</th>
+      <td>encomendado</td>
+      <td>encomendar</td>
+      <td>1</td>
+      <td>encomenda + do</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>213</th>
+      <td>enganado</td>
+      <td>enganar</td>
+      <td>1</td>
+      <td>engana + do</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>214</th>
+      <td>engolido</td>
+      <td>engolir</td>
+      <td>1</td>
+      <td>engoli + do</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>215</th>
+      <td>entrevista</td>
+      <td>entrevista</td>
+      <td>1</td>
+      <td>entre + vista</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>216</th>
+      <td>entrevistador</td>
+      <td>entrevistador</td>
+      <td>1</td>
+      <td>entrevista + dor</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>217</th>
+      <td>enxergarem</td>
+      <td>enxergar</td>
+      <td>1</td>
+      <td>enxergar + em</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>218</th>
+      <td>escrevedora</td>
+      <td>escrevedor</td>
+      <td>1</td>
+      <td>escreve + dora</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>219</th>
+      <td>escutado</td>
+      <td>escutar</td>
+      <td>1</td>
+      <td>escuta + do</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>220</th>
+      <td>espalhadão</td>
+      <td>espalhado</td>
+      <td>1</td>
+      <td>espalha + dão</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>221</th>
+      <td>espaçonave</td>
+      <td>espaçonave</td>
+      <td>1</td>
+      <td>espaço + nave</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>222</th>
+      <td>esperoolha</td>
+      <td>esperoolha</td>
+      <td>1</td>
+      <td>espero + olha</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>223</th>
+      <td>estadounidos</td>
+      <td>estadounidos</td>
+      <td>1</td>
+      <td>estado + unidos</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>224</th>
+      <td>estoufazendo</td>
+      <td>estoufazendo</td>
+      <td>1</td>
+      <td>estou + fazendo</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>225</th>
+      <td>estragado</td>
+      <td>estragar</td>
+      <td>1</td>
+      <td>estraga + do</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>226</th>
+      <td>estrelado</td>
+      <td>estrelar</td>
+      <td>1</td>
+      <td>estrela + do</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>227</th>
+      <td>fazeroutro</td>
+      <td>fazeroutro</td>
+      <td>1</td>
+      <td>fazer + outro</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>228</th>
+      <td>ficarvendendo</td>
+      <td>ficarvendendo</td>
+      <td>1</td>
+      <td>ficar + vendendo</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>229</th>
+      <td>filmadoras</td>
+      <td>filmadoras</td>
+      <td>1</td>
+      <td>filma + dor + as</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>230</th>
+      <td>fumaçaolha</td>
+      <td>fumaçaolha</td>
+      <td>1</td>
+      <td>fumaça + olha</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>231</th>
+      <td>ganhador</td>
+      <td>ganhador</td>
+      <td>1</td>
+      <td>ganha + dor</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>232</th>
+      <td>gramamas</td>
+      <td>gramamas</td>
+      <td>1</td>
+      <td>grama + mas</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>233</th>
+      <td>guardaar</td>
+      <td>guardaar</td>
+      <td>1</td>
+      <td>guarda + ar</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>234</th>
+      <td>guardava</td>
+      <td>guardar</td>
+      <td>1</td>
+      <td>guar + dava</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>235</th>
+      <td>hipercansada</td>
+      <td>hipercansada</td>
+      <td>1</td>
+      <td>hiper + cansada</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>236</th>
+      <td>indicador</td>
+      <td>indicador</td>
+      <td>1</td>
+      <td>indica + dor</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>237</th>
+      <td>interessado</td>
+      <td>interessado</td>
+      <td>1</td>
+      <td>interessa + do</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>238</th>
+      <td>jogolonge</td>
+      <td>jogolonge</td>
+      <td>1</td>
+      <td>jogo + longe</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>239</th>
+      <td>lalalalala</td>
+      <td>lalalalala</td>
+      <td>1</td>
+      <td>lala + lalala</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>240</th>
+      <td>lambedor</td>
+      <td>lambedor</td>
+      <td>1</td>
+      <td>lambe + dor</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>241</th>
+      <td>lobomaudesmaiou</td>
+      <td>lobomaudesmaiou</td>
+      <td>1</td>
+      <td>lobomau + desmaiou</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>242</th>
+      <td>luizasette</td>
+      <td>luizasette</td>
+      <td>1</td>
+      <td>luiza + sette</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>243</th>
+      <td>luizausa</td>
+      <td>luizausa</td>
+      <td>1</td>
+      <td>luiza + usa</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>244</th>
+      <td>lutadora</td>
+      <td>lutador</td>
+      <td>1</td>
+      <td>luta + dora</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>245</th>
+      <td>macacula</td>
+      <td>macacula</td>
+      <td>1</td>
+      <td>maca + cula</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>246</th>
+      <td>machuque</td>
+      <td>machucar</td>
+      <td>1</td>
+      <td>machu + que</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>247</th>
+      <td>mantanosseratope</td>
+      <td>mantanosseratope</td>
+      <td>1</td>
+      <td>mantanossera + tope</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>248</th>
+      <td>maradona</td>
+      <td>maradona</td>
+      <td>1</td>
+      <td>mara + dona</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>249</th>
+      <td>marchasoldado</td>
+      <td>marchasoldado</td>
+      <td>1</td>
+      <td>marcha + soldado</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>250</th>
+      <td>mariarita</td>
+      <td>mariarita</td>
+      <td>1</td>
+      <td>maria + rita</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>251</th>
+      <td>melecado</td>
+      <td>melecado</td>
+      <td>1</td>
+      <td>meleca + do</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>252</th>
+      <td>melhorarem</td>
+      <td>melhorar</td>
+      <td>1</td>
+      <td>melhorar + em</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>253</th>
+      <td>meninolobo</td>
+      <td>meninolobo</td>
+      <td>1</td>
+      <td>menino + lobo</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>254</th>
+      <td>montarsua</td>
+      <td>montarsua</td>
+      <td>1</td>
+      <td>montar + sua</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>255</th>
+      <td>motherinvestigator</td>
+      <td>motherinvestigator</td>
+      <td>1</td>
+      <td>mother + investigator</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>256</th>
+      <td>muitogrande</td>
+      <td>muitogrande</td>
+      <td>1</td>
+      <td>muito + grande</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>257</th>
+      <td>muitoperto</td>
+      <td>muitoperto</td>
+      <td>1</td>
+      <td>muito + perto</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>258</th>
+      <td>multidão</td>
+      <td>multidão</td>
+      <td>1</td>
+      <td>multi + dão</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>259</th>
+      <td>nossocasamento</td>
+      <td>nossocasamento</td>
+      <td>1</td>
+      <td>nosso + casamento</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>260</th>
+      <td>olhodevidro</td>
+      <td>olhodevidro</td>
+      <td>1</td>
+      <td>olho + de + vidro</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>261</th>
+      <td>partirem</td>
+      <td>partir</td>
+      <td>1</td>
+      <td>partir + em</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>262</th>
+      <td>passarem</td>
+      <td>passar</td>
+      <td>1</td>
+      <td>passar + em</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>263</th>
+      <td>passatempo</td>
+      <td>passatempo</td>
+      <td>1</td>
+      <td>passa + tempo</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>264</th>
+      <td>pegaesconde</td>
+      <td>pegaesconde</td>
+      <td>1</td>
+      <td>pega + esconde</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>265</th>
+      <td>pernadepau</td>
+      <td>pernadepau</td>
+      <td>1</td>
+      <td>perna + de + pau</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>266</th>
+      <td>peticolecola</td>
+      <td>peticolecola</td>
+      <td>1</td>
+      <td>peti + cole + cola</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>267</th>
+      <td>pompompompompompompom</td>
+      <td>pompompompompompompom</td>
+      <td>1</td>
+      <td>pompom + pompom + pompompom</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>268</th>
+      <td>portacaneta</td>
+      <td>portacaneta</td>
+      <td>1</td>
+      <td>porta + caneta</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>269</th>
+      <td>portamala</td>
+      <td>portamala</td>
+      <td>1</td>
+      <td>porta + mala</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>270</th>
+      <td>princesaaurora</td>
+      <td>princesaaurora</td>
+      <td>1</td>
+      <td>princesa + aurora</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>271</th>
+      <td>procurasse</td>
+      <td>procurar</td>
+      <td>1</td>
+      <td>procuras + se</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>272</th>
+      <td>produzem</td>
+      <td>produzir</td>
+      <td>1</td>
+      <td>produz + em</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>273</th>
+      <td>príncipefelipe</td>
+      <td>príncipefelipe</td>
+      <td>1</td>
+      <td>príncipe + felipe</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>274</th>
+      <td>puxavida</td>
+      <td>puxavida</td>
+      <td>1</td>
+      <td>puxa + vida</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>275</th>
+      <td>quartafeira</td>
+      <td>quartafeira</td>
+      <td>1</td>
+      <td>quarta + feira</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>276</th>
+      <td>queconversar</td>
+      <td>queconversar</td>
+      <td>1</td>
+      <td>que + conversar</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>277</th>
+      <td>quercomer</td>
+      <td>quercomer</td>
+      <td>1</td>
+      <td>quer + comer</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>278</th>
+      <td>queremos</td>
+      <td>querer</td>
+      <td>1</td>
+      <td>que + remos</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>279</th>
+      <td>quintaanimada</td>
+      <td>quintaanimada</td>
+      <td>1</td>
+      <td>quinta + animada</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>280</th>
+      <td>rabiscadona</td>
+      <td>rabiscadona</td>
+      <td>1</td>
+      <td>rabisca + dona</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>281</th>
+      <td>relaxarem</td>
+      <td>relaxar</td>
+      <td>1</td>
+      <td>relaxar + em</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>282</th>
+      <td>reparado</td>
+      <td>reparar</td>
+      <td>1</td>
+      <td>repara + do</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>283</th>
+      <td>revoltado</td>
+      <td>revoltar</td>
+      <td>1</td>
+      <td>revolta + do</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>284</th>
+      <td>semigente</td>
+      <td>semigente</td>
+      <td>1</td>
+      <td>semi + gente</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>285</th>
+      <td>sentarem</td>
+      <td>sentar</td>
+      <td>1</td>
+      <td>sentar + em</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>286</th>
+      <td>separados</td>
+      <td>separar</td>
+      <td>1</td>
+      <td>se + parados</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>287</th>
+      <td>servirem</td>
+      <td>servir</td>
+      <td>1</td>
+      <td>servir + em</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>288</th>
+      <td>sextafeira</td>
+      <td>sextafeira</td>
+      <td>1</td>
+      <td>sexta + feira</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>289</th>
+      <td>superalto</td>
+      <td>superalto</td>
+      <td>1</td>
+      <td>super + alto</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>290</th>
+      <td>superbola</td>
+      <td>superbola</td>
+      <td>1</td>
+      <td>super + bola</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>291</th>
+      <td>superbonito</td>
+      <td>superbonito</td>
+      <td>1</td>
+      <td>super + bonito</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>292</th>
+      <td>superdiferente</td>
+      <td>superdiferente</td>
+      <td>1</td>
+      <td>super + diferente</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>293</th>
+      <td>supergostoso</td>
+      <td>supergostoso</td>
+      <td>1</td>
+      <td>super + gostoso</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>294</th>
+      <td>superhomem</td>
+      <td>superhomem</td>
+      <td>1</td>
+      <td>super + homem</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>295</th>
+      <td>supersol</td>
+      <td>supersol</td>
+      <td>1</td>
+      <td>super + sol</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>296</th>
+      <td>tatatatata</td>
+      <td>tatatatata</td>
+      <td>1</td>
+      <td>ta + tata + tata</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>297</th>
+      <td>tatatatatata</td>
+      <td>tatatatatata</td>
+      <td>1</td>
+      <td>ta + tatatatata</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>298</th>
+      <td>temporada</td>
+      <td>temporada</td>
+      <td>1</td>
+      <td>tempo + rada</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>299</th>
+      <td>terradonunca</td>
+      <td>terradonunca</td>
+      <td>1</td>
+      <td>terra + do + nunca</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>300</th>
+      <td>ticatati</td>
+      <td>ticatati</td>
+      <td>1</td>
+      <td>ti + cata + ti</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>301</th>
+      <td>tomaraquecaia</td>
+      <td>tomaraquecaia</td>
+      <td>1</td>
+      <td>tomara + que + caia</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>302</th>
+      <td>tomouseu</td>
+      <td>tomouseu</td>
+      <td>1</td>
+      <td>tomou + seu</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>303</th>
+      <td>transformado</td>
+      <td>transformar</td>
+      <td>1</td>
+      <td>transforma + do</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>304</th>
+      <td>verduras</td>
+      <td>verdura</td>
+      <td>1</td>
+      <td>ver + duras</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>305</th>
+      <td>viscondedesabugosa</td>
+      <td>viscondedesabugosa</td>
+      <td>1</td>
+      <td>visconde + de + sabugosa</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>306</th>
+      <td>xixiiiiii</td>
+      <td>xixiiiiii</td>
+      <td>1</td>
+      <td>xixi + iiiii</td>
+      <td>Separável em palavras da base</td>
+    </tr>
+    <tr>
+      <th>307</th>
+      <td>interessante</td>
+      <td>interessante</td>
+      <td>33</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>308</th>
+      <td>tiranossauro</td>
+      <td>tiranossauro</td>
+      <td>23</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>309</th>
+      <td>atrapalhando</td>
+      <td>atrapalhar</td>
+      <td>10</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>310</th>
+      <td>brinquedoteca</td>
+      <td>brinquedoteca</td>
+      <td>9</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>311</th>
+      <td>questionando</td>
+      <td>questionar</td>
+      <td>8</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>312</th>
+      <td>investigação</td>
+      <td>investigação</td>
+      <td>7</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>313</th>
+      <td>pterodactilo</td>
+      <td>pterodactilo</td>
+      <td>5</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>314</th>
+      <td>encantamento</td>
+      <td>encantamento</td>
+      <td>4</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>315</th>
+      <td>lembrancinha</td>
+      <td>lembrancinha</td>
+      <td>4</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>316</th>
+      <td>arquiospiteriquix</td>
+      <td>arquiospiteriquix</td>
+      <td>3</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>317</th>
+      <td>brincadeiras</td>
+      <td>brincadeira</td>
+      <td>3</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>318</th>
+      <td>ciamortirano</td>
+      <td>ciamortirano</td>
+      <td>3</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>319</th>
+      <td>impressionada</td>
+      <td>impressionar</td>
+      <td>3</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>320</th>
+      <td>impressionante</td>
+      <td>impressionante</td>
+      <td>3</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>321</th>
+      <td>inteligência</td>
+      <td>inteligência</td>
+      <td>3</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>322</th>
+      <td>interrompendo</td>
+      <td>interromper</td>
+      <td>3</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>323</th>
+      <td>orisquidocado</td>
+      <td>orisquidocado</td>
+      <td>3</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>324</th>
+      <td>participants</td>
+      <td>participants</td>
+      <td>3</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>325</th>
+      <td>piperanodonte</td>
+      <td>piperanodonte</td>
+      <td>3</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>326</th>
+      <td>pteranodonte</td>
+      <td>pteranodonte</td>
+      <td>3</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>327</th>
+      <td>tridimensional</td>
+      <td>tridimensional</td>
+      <td>3</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>328</th>
+      <td>velociraptor</td>
+      <td>velociraptor</td>
+      <td>3</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>329</th>
+      <td>adamaeovagabundo</td>
+      <td>adamaeovagabundo</td>
+      <td>2</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>330</th>
+      <td>alfabetizada</td>
+      <td>alemie</td>
+      <td>2</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>331</th>
+      <td>antecipadamente</td>
+      <td>ant</td>
+      <td>2</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>332</th>
+      <td>backyardigan</td>
+      <td>backyardigan</td>
+      <td>2</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>333</th>
+      <td>completamente</td>
+      <td>completamente</td>
+      <td>2</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>334</th>
+      <td>departamento</td>
+      <td>departamento</td>
+      <td>2</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>335</th>
+      <td>desenrolando</td>
+      <td>desenrolar</td>
+      <td>2</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>336</th>
+      <td>eletrodomésticos</td>
+      <td>eletrodoméstico</td>
+      <td>2</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>337</th>
+      <td>endireitando</td>
+      <td>endireitar</td>
+      <td>2</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>338</th>
+      <td>engatinhando</td>
+      <td>engatinhar</td>
+      <td>2</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>339</th>
+      <td>envergonhada</td>
+      <td>envergonhar</td>
+      <td>2</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>340</th>
+      <td>escondidinha</td>
+      <td>escondido</td>
+      <td>2</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>341</th>
+      <td>estremilique</td>
+      <td>estremilique</td>
+      <td>2</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>342</th>
+      <td>experimentar</td>
+      <td>experimentar</td>
+      <td>2</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>343</th>
+      <td>interessantes</td>
+      <td>interessante</td>
+      <td>2</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>344</th>
+      <td>investigator</td>
+      <td>investigator</td>
+      <td>2</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>345</th>
+      <td>mantanossera</td>
+      <td>mantanossera</td>
+      <td>2</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>346</th>
+      <td>ornitorrinco</td>
+      <td>ornitorrinco</td>
+      <td>2</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>347</th>
+      <td>orroorroorro</td>
+      <td>orroorroorro</td>
+      <td>2</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>348</th>
+      <td>participando</td>
+      <td>participar</td>
+      <td>2</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>349</th>
+      <td>participantes</td>
+      <td>participante</td>
+      <td>2</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>350</th>
+      <td>participantschi</td>
+      <td>participantschi</td>
+      <td>2</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>351</th>
+      <td>pequeniníssima</td>
+      <td>pequenino</td>
+      <td>2</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>352</th>
+      <td>proprietário</td>
+      <td>proprietário</td>
+      <td>2</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>353</th>
+      <td>riodejaneiro</td>
+      <td>riodejaneiro</td>
+      <td>2</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>354</th>
+      <td>sinsalabinsalabinbinbin</td>
+      <td>sinsalabinsalabinbinbin</td>
+      <td>2</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>355</th>
+      <td>sombrancelha</td>
+      <td>sombrancelha</td>
+      <td>2</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>356</th>
+      <td>sombrancelhas</td>
+      <td>sombrancelhas</td>
+      <td>2</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>357</th>
+      <td>tchitchitchi</td>
+      <td>tchitchitchi</td>
+      <td>2</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>358</th>
+      <td>tchuquitchuquitchuqui</td>
+      <td>tchuquitchuquitchuqui</td>
+      <td>2</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>359</th>
+      <td>tchutchutchu</td>
+      <td>tchutchutchu</td>
+      <td>2</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>360</th>
+      <td>tricerapodes</td>
+      <td>tricerapodes</td>
+      <td>2</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>361</th>
+      <td>universidade</td>
+      <td>universidade</td>
+      <td>2</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>362</th>
+      <td>americanizado</td>
+      <td>amendoim</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>363</th>
+      <td>apresentação</td>
+      <td>apresentação</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>364</th>
+      <td>arrebentando</td>
+      <td>arrebentar</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>365</th>
+      <td>arrumadinhas</td>
+      <td>arrumado</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>366</th>
+      <td>arrumadinhos</td>
+      <td>arrumado</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>367</th>
+      <td>asferiasdabruxonilda</td>
+      <td>asferiasdabruxonilda</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>368</th>
+      <td>astronômicas</td>
+      <td>astronómico</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>369</th>
+      <td>atartarugaquequeriavoar</td>
+      <td>atartarugaquequeriavoar</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>370</th>
+      <td>atravessasse</td>
+      <td>atravessar</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>371</th>
+      <td>backyardgans</td>
+      <td>backyardgans</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>372</th>
+      <td>balangandans</td>
+      <td>balangandans</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>373</th>
+      <td>bandeirantes</td>
+      <td>bandeirantes</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>374</th>
+      <td>beelelenocirco</td>
+      <td>beelelenocirco</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>375</th>
+      <td>bigtreinador</td>
+      <td>bigtreinador</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>376</th>
+      <td>bleubleubleu</td>
+      <td>bleubleubleu</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>377</th>
+      <td>blinblonblonblin</td>
+      <td>blinblonblonblin</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>378</th>
+      <td>blublublublu</td>
+      <td>blublublublu</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>379</th>
+      <td>bonecojoaquim</td>
+      <td>bonecojoaquim</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>380</th>
+      <td>brumbrumbrumbrum</td>
+      <td>brumbrumbrumbrum</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>381</th>
+      <td>bububububububu</td>
+      <td>bububububububu</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>382</th>
+      <td>bíbliadosanimais</td>
+      <td>bíbliadosanimais</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>383</th>
+      <td>cabeleireira</td>
+      <td>cabeleireiro</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>384</th>
+      <td>cabeleireiro</td>
+      <td>cabeleireiro</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>385</th>
+      <td>característica</td>
+      <td>característica</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>386</th>
+      <td>chichichichichi</td>
+      <td>chichichichichi</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>387</th>
+      <td>coincidentes</td>
+      <td>coincidente</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>388</th>
+      <td>comocontarcrocodilos</td>
+      <td>comocontarcrocodilos</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>389</th>
+      <td>concentração</td>
+      <td>concentração</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>390</th>
+      <td>confabulação</td>
+      <td>confabulação</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>391</th>
+      <td>confortáveis</td>
+      <td>confortável</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>392</th>
+      <td>conversandos</td>
+      <td>conversandos</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>393</th>
+      <td>correcutianacasadatia</td>
+      <td>correcutianacasadatia</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>394</th>
+      <td>creamcracker</td>
+      <td>creamcracker</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>395</th>
+      <td>cuidadíssimo</td>
+      <td>cuidado</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>396</th>
+      <td>cumpriiiiido</td>
+      <td>cumpriiiiido</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>397</th>
+      <td>cutecutecute</td>
+      <td>cutecutecute</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>398</th>
+      <td>dadadadadadodododo</td>
+      <td>dadadadadadodododo</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>399</th>
+      <td>definitivamente</td>
+      <td>definitivamente</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>400</th>
+      <td>desaparafusar</td>
+      <td>desaparafusar</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>401</th>
+      <td>desaparecendo</td>
+      <td>desaparecer</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>402</th>
+      <td>desapareceram</td>
+      <td>desaparecer</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>403</th>
+      <td>descaradamente</td>
+      <td>descaradamente</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>404</th>
+      <td>descarregada</td>
+      <td>descarregado</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>405</th>
+      <td>descarreguei</td>
+      <td>descarregar</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>406</th>
+      <td>desconfiança</td>
+      <td>desconfiança</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>407</th>
+      <td>descongelado</td>
+      <td>descongelar</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>408</th>
+      <td>desconhecido</td>
+      <td>desconhecer</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>409</th>
+      <td>desconsolada</td>
+      <td>desconsolar</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>410</th>
+      <td>desdetrodonte</td>
+      <td>desdetrodonte</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>411</th>
+      <td>desenganchou</td>
+      <td>desenganchar</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>412</th>
+      <td>desobedecendo</td>
+      <td>desobedecer</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>413</th>
+      <td>desprevenido</td>
+      <td>desprevenir</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>414</th>
+      <td>destrambelha</td>
+      <td>destrambelha</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>415</th>
+      <td>distribuíndo</td>
+      <td>distribuíndo</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>416</th>
+      <td>divagarzinho</td>
+      <td>divagarzinho</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>417</th>
+      <td>documentação</td>
+      <td>documentação</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>418</th>
+      <td>eletricidade</td>
+      <td>eletricidade</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>419</th>
+      <td>encantamentos</td>
+      <td>encantamento</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>420</th>
+      <td>engraçadinho</td>
+      <td>engraçado</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>421</th>
+      <td>equilibrista</td>
+      <td>equilibrista</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>422</th>
+      <td>esbugalhados</td>
+      <td>esbugalhar</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>423</th>
+      <td>escondidinhas</td>
+      <td>escondido</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>424</th>
+      <td>escondidinho</td>
+      <td>escondido</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>425</th>
+      <td>escorregando</td>
+      <td>escorregar</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>426</th>
+      <td>escorregasse</td>
+      <td>escorregar</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>427</th>
+      <td>espalhafatoso</td>
+      <td>espalhafatoso</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>428</th>
+      <td>espaçodavila</td>
+      <td>espaçodavila</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>429</th>
+      <td>espreguiçada</td>
+      <td>espreguiçar</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>430</th>
+      <td>esprimentando</td>
+      <td>esprimentando</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>431</th>
+      <td>estacionados</td>
+      <td>estacionar</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>432</th>
+      <td>estreladomar</td>
+      <td>estreladomar</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>433</th>
+      <td>experimentada</td>
+      <td>experimentar</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>434</th>
+      <td>experimentando</td>
+      <td>experimentar</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>435</th>
+      <td>extremidades</td>
+      <td>extremidade</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>436</th>
+      <td>fiiiiiiuuuuuu</td>
+      <td>fiiiiiiuuuuuu</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>437</th>
+      <td>formiguinhas</td>
+      <td>formiga</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>438</th>
+      <td>fotografados</td>
+      <td>fotografar</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>439</th>
+      <td>fotografavam</td>
+      <td>fotografar</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>440</th>
+      <td>gragrandmother</td>
+      <td>gragrandmother</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>441</th>
+      <td>grandparents</td>
+      <td>grandparents</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>442</th>
+      <td>greatgrandmother</td>
+      <td>greatgrandmother</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>443</th>
+      <td>hermanotauro</td>
+      <td>hermanotauro</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>444</th>
+      <td>hipnotizando</td>
+      <td>hipnotizar</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>445</th>
+      <td>horrorizadas</td>
+      <td>horrorizar</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>446</th>
+      <td>huuuuuuummmm</td>
+      <td>huuuuuuummmm</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>447</th>
+      <td>iiiiiiiiiiriiioo</td>
+      <td>iiiiiiiiiiriiioo</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>448</th>
+      <td>iiiiiiiiiriii</td>
+      <td>iiiiiiiiiriii</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>449</th>
+      <td>ilhadosprazeres</td>
+      <td>ilhadosprazeres</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>450</th>
+      <td>impressionou</td>
+      <td>impressionar</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>451</th>
+      <td>improvisação</td>
+      <td>improvisação</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>452</th>
+      <td>infelizmente</td>
+      <td>infelizmente</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>453</th>
+      <td>insuportável</td>
+      <td>insuportável</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>454</th>
+      <td>inteligentíssimo</td>
+      <td>inteligente</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>455</th>
+      <td>interpretação</td>
+      <td>interpretação</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>456</th>
+      <td>interviewers</td>
+      <td>interviewers</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>457</th>
+      <td>jabuticabeira</td>
+      <td>jabuticabeira</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>458</th>
+      <td>justificações</td>
+      <td>justificação</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>459</th>
+      <td>machadodeassis</td>
+      <td>machadodeassis</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>460</th>
+      <td>magneticgiro</td>
+      <td>magneticgiro</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>461</th>
+      <td>manobrasolha</td>
+      <td>manobrasolha</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>462</th>
+      <td>maravilhosas</td>
+      <td>maravilhoso</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>463</th>
+      <td>maravilhosos</td>
+      <td>maravilhoso</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>464</th>
+      <td>mariacarlota</td>
+      <td>mariacarlota</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>465</th>
+      <td>medicamentos</td>
+      <td>medicamento</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>466</th>
+      <td>meticulosidade</td>
+      <td>meticulosidade</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>467</th>
+      <td>movimentando</td>
+      <td>movimentar</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>468</th>
+      <td>movimentação</td>
+      <td>movimentação</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>469</th>
+      <td>nananimnanam</td>
+      <td>nananimnanam</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>470</th>
+      <td>ocoelhoquincaseopotedeouro</td>
+      <td>ocoelhoquincaseopotedeouro</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>471</th>
+      <td>ornitominodois</td>
+      <td>ornitominodois</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>472</th>
+      <td>outonoinverno</td>
+      <td>outonoinverno</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>473</th>
+      <td>papapapapapapa</td>
+      <td>papapapapapapa</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>474</th>
+      <td>parabenizando</td>
+      <td>parabenizar</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>475</th>
+      <td>parafernalhona</td>
+      <td>parafernalhona</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>476</th>
+      <td>participante</td>
+      <td>participante</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>477</th>
+      <td>perfeitamente</td>
+      <td>perfeitamente</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>478</th>
+      <td>perigosesima</td>
+      <td>perigosesima</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>479</th>
+      <td>perigosesimo</td>
+      <td>perigosesimo</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>480</th>
+      <td>piriquitisse</td>
+      <td>piriquitisse</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>481</th>
+      <td>piuiticticpiui</td>
+      <td>piuiticticpiui</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>482</th>
+      <td>ponponponponpon</td>
+      <td>ponponponponpon</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>483</th>
+      <td>predominando</td>
+      <td>predominar</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>484</th>
+      <td>pretendentes</td>
+      <td>pretendente</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>485</th>
+      <td>problemassos</td>
+      <td>problemassos</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>486</th>
+      <td>protosseratope</td>
+      <td>protosseratope</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>487</th>
+      <td>provavelmente</td>
+      <td>provavelmente</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>488</th>
+      <td>ptveronesichi</td>
+      <td>ptveronesichi</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>489</th>
+      <td>quebrascabeças</td>
+      <td>quebrascabeças</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>490</th>
+      <td>queinmqueinm</td>
+      <td>queinmqueinm</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>491</th>
+      <td>quinquilharia</td>
+      <td>quinquilharia</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>492</th>
+      <td>raciocinando</td>
+      <td>raciocinar</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>493</th>
+      <td>reencontrálos</td>
+      <td>reencontrálos</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>494</th>
+      <td>rinocerontes</td>
+      <td>rinoceronte</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>495</th>
+      <td>salabimbimbim</td>
+      <td>salabimbimbim</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>496</th>
+      <td>sallyscouter</td>
+      <td>sallyscouter</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>497</th>
+      <td>simbolizando</td>
+      <td>simbolizar</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>498</th>
+      <td>simplesmente</td>
+      <td>simplesmente</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>499</th>
+      <td>sobrehumanas</td>
+      <td>sobrehumanas</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>500</th>
+      <td>sofisticados</td>
+      <td>sofisticar</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>501</th>
+      <td>sorrateiramente</td>
+      <td>sorrateiramente</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>502</th>
+      <td>superpoderes</td>
+      <td>superpoderes</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>503</th>
+      <td>tchatchatchatchatchan</td>
+      <td>tchatchatchatchatchan</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>504</th>
+      <td>tchetchetche</td>
+      <td>tchetchetche</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>505</th>
+      <td>tchiatchiatchia</td>
+      <td>tchiatchiatchia</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>506</th>
+      <td>tchiiiiitchiiii</td>
+      <td>tchiiiiitchiiii</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>507</th>
+      <td>tchithcithci</td>
+      <td>tchithcithci</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>508</th>
+      <td>tchithcithcitchi</td>
+      <td>tchithcithcitchi</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>509</th>
+      <td>tchucotchucotchucotchuco</td>
+      <td>tchucotchucotchucotchuco</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>510</th>
+      <td>tchucotchucothuco</td>
+      <td>tchucotchucothuco</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>511</th>
+      <td>tchutchururururuuuuuuuuuu</td>
+      <td>tchutchururururuuuuuuuuuu</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>512</th>
+      <td>tesselopatato</td>
+      <td>tesselopatato</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>513</th>
+      <td>tiranossaurorex</td>
+      <td>tiranossaurorex</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>514</th>
+      <td>tititititititi</td>
+      <td>tititititititi</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>515</th>
+      <td>trabalhadeira</td>
+      <td>trabalhador</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>516</th>
+      <td>tralalalalala</td>
+      <td>tralalalalala</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>517</th>
+      <td>transformasse</td>
+      <td>transformar</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>518</th>
+      <td>trisserapodes</td>
+      <td>trisserapodes</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>519</th>
+      <td>trisseraptor</td>
+      <td>trisseraptor</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>520</th>
+      <td>tucutucutucu</td>
+      <td>tucutucutucu</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>521</th>
+      <td>tulutulutulu</td>
+      <td>tulutulutulu</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>522</th>
+      <td>turururururu</td>
+      <td>turururururu</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>523</th>
+      <td>tururutururutururuprupru</td>
+      <td>tururutururutururuprupru</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>524</th>
+      <td>umacoroaparaguilherme</td>
+      <td>umacoroaparaguilherme</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+    <tr>
+      <th>525</th>
+      <td>voluntariamente</td>
+      <td>voluntariamente</td>
+      <td>1</td>
+      <td>—</td>
+      <td>Comprimento de 12 letras ou mais</td>
+    </tr>
+  </tbody>
+</table></html>
