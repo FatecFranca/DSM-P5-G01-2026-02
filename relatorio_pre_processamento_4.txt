@@ -3,53 +3,26 @@ RELATÓRIO — PRÉ-PROCESSAMENTO 4
 
 1. Objetivo
 
-Nesta etapa foi retomada a revisão da base de palavras isoladas. Foram
-selecionados os registros cuja coluna PALAVRA contém â, é, ê, ú, û, ã ou õ
-em qualquer posição. A busca incluiu as formas maiúsculas desses caracteres.
+Dar continuidade à revisão da base de palavras isoladas, selecionando os
+registros com â, é, ê, ú, û, ã ou õ em qualquer posição de PALAVRA.
 
-2. Listagem e revisão manual
+2. Revisão manual
 
-O notebook Pre_processamento_4.ipynb listou 580 registros, ordenados por
-frequência decrescente. A revisão foi dividida em blocos de 50 registros.
-Nesta primeira rodada, foram revisadas as posições 1 a 200 da listagem
-inicial. As decisões de manter, corrigir ou remover foram tomadas caso a
-caso. A frequência serviu para ordenar a lista.
+O notebook Pre_processamento_4.ipynb listou 580 registros em ordem
+decrescente de frequência. Foram revisados os cinco primeiros blocos
+de 50 registros. A revisão resultou em correções de grafia, ajustes
+de lema e categoria morfológica e remoções selecionadas manualmente.
 
-3. Correções aplicadas
+O bloco 5 (posições 201 a 250) foi incorporado ao notebook com 10
+remoções previstas e ajustes de lema e categoria morfológica. O resultado
+do salvamento deste bloco aguarda confirmação.
 
-As seguintes grafias foram corrigidas nas colunas PALAVRA e LEMA:
+3. Resultado parcial confirmado (blocos 1 a 4)
 
-- melância → melancia;
-- péssego → pêssego;
-- colméia → colmeia.
+As alterações foram salvas no arquivo de trabalho
+Corpus_SANTOS_TONI_FDC_tratado_sem_repeticoes.xlsx, sem gravar o índice.
 
-Também foram ajustados lemas específicos, como amadurecer → amanhã na linha
-de amanhã e aniversário → anão na linha de anões. Na coluna CATMORF, foram
-ajustadas categorias como as de amanhã, vocês, dedão e tânia, conforme
-as decisões da revisão. O lema de anúncio foi mantido conforme aprovado.
-
-4. Remoção de registros selecionados
-
-Foram removidos 23 registros correspondentes às palavras selecionadas
-manualmente nos quatro blocos:
-
-- Bloco 1 — nené.
-- Bloco 2 — hércules, bocão, tutú.
-- Bloco 3 — peladão, cocozão, melecão, cachorrão, grúfalo, porcalhão,
-  chinês, joãovítor, rubão, botãozinho, cão, pernão.
-- Bloco 4 — cavalão, pokémon, punzão, alazão, joãozinho, dinossaurão,
-  brunão.
-
-5. Salvamento e resultado parcial
-
-O resultado foi salvo no mesmo arquivo de trabalho, sem gravar o índice
-do DataFrame no Excel.
-
-- Arquivo atualizado — Corpus_SANTOS_TONI_FDC_tratado_sem_repeticoes.xlsx
-- Registros removidos — 23
-- Registros restantes — 8.559
-- Repetições restantes em PALAVRA — 1
-
-A repetição foi contabilizada no salvamento e fica pendente de conferência.
-A revisão pode ser retomada na posição 201 da listagem inicial para
-preservar a numeração usada nas notas dos blocos.
+- Registros removidos: 23
+- Registros restantes: 8.559
+- Repetições restantes em PALAVRA: 1, pendente de conferência
+- Próximo bloco: posições 251 a 300 da listagem inicial
