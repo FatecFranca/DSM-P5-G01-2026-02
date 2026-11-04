@@ -1,4 +1,4 @@
-﻿RELATÓRIO — PRÉ-PROCESSAMENTO 4
+RELATÓRIO — PRÉ-PROCESSAMENTO 4
 ================================
 
 1. Objetivo
@@ -16,10 +16,10 @@ Corpus_SANTOS_TONI_FDC_tratado_sem_repeticoes.xlsx, sem gravar o índice.
 - Registros restantes: 8.559
 - Repetições restantes em PALAVRA: 1, pendente de conferência
 
-3. Resultado parcial (blocos 5 a 8)
+3. Resultado parcial (blocos 5 a 10)
 
 O notebook Pre_processamento_4.ipynb listou 580 registros em ordem
-decrescente de frequência. Foram revisados os oito primeiros blocos
+decrescente de frequência. Foram revisados os dez primeiros blocos
 de 50 registros. A revisão resultou em correções de grafia, ajustes
 de lema e categoria morfológica e remoções selecionadas manualmente.
 
@@ -35,4 +35,6 @@ O bloco 7 (posições 301 a 350) foi incorporado ao notebook com 19 remoções p
 
 O bloco 8 (posições 351 a 400) foi incorporado ao notebook com 19 remoções previstas, 1 correção de grafia, 2 ajustes de lema e 4 ajustes de categoria morfológica. O salvamento deste bloco aguarda confirmação.
 
-- Próximo bloco: posições 401 a 450 da listagem inicial
+Os blocos 9 e 10 (posições 401 a 500) foram incorporados ao notebook com 24 remoções previstas (13 no bloco 9 e 11 no bloco 10), ajustes de categoria morfológica e uma correção de grafia em PALAVRA e LEMA. O salvamento aguarda confirmação.
+
+- Próximo bloco: posições 501 a 550 da listagem inicial
