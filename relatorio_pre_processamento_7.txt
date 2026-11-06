@@ -1,0 +1,21 @@
+RELATÓRIO — PRÉ-PROCESSAMENTO 7
+================================
+
+1. Conferência final
+
+O notebook Pre_processamento_7.ipynb gerou três listas HTML para
+conferir lemas ausentes, registros com a classificação erro em
+ESTSILABICA e palavras repetidas.
+
+2. Resultados
+
+- Foram preenchidos 27 lemas ausentes, todos de numerais.
+- A consulta em ESTSILABICA retornou zero registros com a classificação erro.
+- Foram removidas 5 linhas duplicadas. Para cada grafia repetida em
+  PALAVRA, foi mantido o registro de maior FREQ, sem somar frequências.
+
+3. Salvamento e conclusão
+
+O resultado foi salvo no arquivo de trabalho
+Corpus_SANTOS_TONI_FDC_tratado_sem_repeticoes.xlsx.
+Com a conferência final e o salvamento, o pré-processamento foi concluído.
