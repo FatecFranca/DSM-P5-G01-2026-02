@@ -1,0 +1,28 @@
+RELATÓRIO — PRÉ-PROCESSAMENTO 6
+================================
+
+1. Revisão das palavras com q
+
+O notebook Pre_processamento_6.ipynb listou 310 registros com q em
+qualquer posição de PALAVRA. A revisão resultou em 3 correções de
+grafia e na seleção de 87 grafias para exclusão em dois lotes.
+
+2. Triagem de inglês e revisão complementar
+
+A triagem consultou PALAVRA e LEMA nos 8.147 registros da base naquele
+momento. Após revisão das candidatas e dos casos duvidosos, foram
+selecionadas 96 grafias para exclusão.
+
+A lista de triagem foi exportada em HTML para conferência manual.
+Essa conferência resultou em mais 4 correções de grafia e na seleção
+de 156 grafias para exclusão.
+
+3. Salvamento e conclusão
+
+As correções foram aplicadas em PALAVRA e LEMA. As exclusões foram
+feitas por correspondência exata em PALAVRA. O salvamento do lote final
+no arquivo Corpus_SANTOS_TONI_FDC_tratado_sem_repeticoes.xlsx foi
+confirmado, concluindo a etapa 6.
+
+As contagens de exclusão acima se referem às grafias selecionadas
+por rodada. 
