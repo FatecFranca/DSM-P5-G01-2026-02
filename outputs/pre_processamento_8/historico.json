@@ -1,0 +1,392 @@
+[
+  {
+    "hash_entrada": "8f8ee96b536e23365d0db0818b932723f374a873aa479fa7cfe84f650336db59",
+    "hash_saida": "19d730d5873cc2917cf3672c829b659d94445aa5164731a6f01ebdf02b0fab7d",
+    "total_antes": 7830,
+    "correcoes": 35,
+    "remocoes": 18,
+    "total_depois": 7812,
+    "palavras_removidas": [
+      "atamedama",
+      "bibolo",
+      "cafeta",
+      "casma",
+      "cehgar",
+      "dexo",
+      "encontralo",
+      "esto",
+      "euxo",
+      "letre",
+      "moder",
+      "niclodaplo",
+      "nicrodoplo",
+      "noís",
+      "ocabelo",
+      "opapaiurso",
+      "sarlso",
+      "siamem"
+    ],
+    "alteracoes": [
+      {
+        "LINHA_EXCEL": 237,
+        "PALAVRA": "ajudando",
+        "LEMA": "ajudá-lo",
+        "CATMORF": "Nome Comun Masculino Singular",
+        "CATEGORIA_SUGERIDA": "Verbo Principal Gerúndio",
+        "JUSTIFICATIVA": "Gerúndio de ajudar; não corresponde a substantivo masculino singular.",
+        "DECISAO": "Aprovada",
+        "CATEGORIA_ANTERIOR": "Nome Comun Masculino Singular"
+      },
+      {
+        "LINHA_EXCEL": 246,
+        "PALAVRA": "ajudá-lo",
+        "LEMA": "ajudador",
+        "CATMORF": "Nome Comun Masculino Singular",
+        "CATEGORIA_SUGERIDA": "Verbo Principal Infinitivo",
+        "JUSTIFICATIVA": "Infinitivo verbal com pronome enclítico; classificar o componente verbal, preservando a palavra completa.",
+        "DECISAO": "Aprovada",
+        "CATEGORIA_ANTERIOR": "Nome Comun Masculino Singular"
+      },
+      {
+        "LINHA_EXCEL": 253,
+        "PALAVRA": "albuns",
+        "LEMA": "alazão",
+        "CATMORF": "Nome Comun Masculino Singular",
+        "CATEGORIA_SUGERIDA": "Nome Comun Masculino Plural",
+        "JUSTIFICATIVA": "Forma plural de álbum, sem acento no dado original; propõe-se apenas corrigir o número, preservando a grafia.",
+        "DECISAO": "Aprovada",
+        "CATEGORIA_ANTERIOR": "Nome Comun Masculino Singular"
+      },
+      {
+        "LINHA_EXCEL": 258,
+        "PALAVRA": "alcaparra",
+        "LEMA": "alcanço",
+        "CATMORF": "Nome Comun Masculino Singular",
+        "CATEGORIA_SUGERIDA": "Nome Comun Feminino Singular",
+        "JUSTIFICATIVA": "Substantivo de gênero feminino; a classificação masculina não corresponde à forma.",
+        "DECISAO": "Aprovada",
+        "CATEGORIA_ANTERIOR": "Nome Comun Masculino Singular"
+      },
+      {
+        "LINHA_EXCEL": 261,
+        "PALAVRA": "aldeia",
+        "LEMA": "alce",
+        "CATMORF": "Nome Comun Masculino Singular",
+        "CATEGORIA_SUGERIDA": "Nome Comun Feminino Singular",
+        "JUSTIFICATIVA": "Substantivo de gênero feminino; a classificação masculina não corresponde à forma.",
+        "DECISAO": "Aprovada",
+        "CATEGORIA_ANTERIOR": "Nome Comun Masculino Singular"
+      },
+      {
+        "LINHA_EXCEL": 269,
+        "PALAVRA": "alergia",
+        "LEMA": "alemão",
+        "CATMORF": "Nome Comun Masculino Singular",
+        "CATEGORIA_SUGERIDA": "Nome Comun Feminino Singular",
+        "JUSTIFICATIVA": "Substantivo de gênero feminino; a classificação masculina não corresponde à forma.",
+        "DECISAO": "Aprovada",
+        "CATEGORIA_ANTERIOR": "Nome Comun Masculino Singular"
+      },
+      {
+        "LINHA_EXCEL": 274,
+        "PALAVRA": "algo",
+        "LEMA": "alfinete",
+        "CATMORF": "Nome Comun Masculino Singular",
+        "CATEGORIA_SUGERIDA": "Pronome Indefinido Invariável Indefinido",
+        "JUSTIFICATIVA": "Indefinido invariável, também empregado como advérbio; a proposta pronominal é uma análise possível.",
+        "DECISAO": "Aprovada",
+        "CATEGORIA_ANTERIOR": "Nome Comun Masculino Singular"
+      },
+      {
+        "LINHA_EXCEL": 276,
+        "PALAVRA": "algum",
+        "LEMA": "algodão",
+        "CATMORF": "Nome Comun Masculino Singular",
+        "CATEGORIA_SUGERIDA": "Determinante Indefinido Masculino Singular Indefinido",
+        "JUSTIFICATIVA": "Indefinido masculino singular; pode funcionar como determinante ou pronome, não como nome comum nessa análise lexical.",
+        "DECISAO": "Aprovada",
+        "CATEGORIA_ANTERIOR": "Nome Comun Masculino Singular"
+      },
+      {
+        "LINHA_EXCEL": 291,
+        "PALAVRA": "almofadas",
+        "LEMA": "almoço",
+        "CATMORF": "Nome Comun Masculino Singular",
+        "CATEGORIA_SUGERIDA": "Nome Comun Feminino Plural",
+        "JUSTIFICATIVA": "Substantivo feminino no plural; gênero e número incompatíveis com masculino singular.",
+        "DECISAO": "Aprovada",
+        "CATEGORIA_ANTERIOR": "Nome Comun Masculino Singular"
+      },
+      {
+        "LINHA_EXCEL": 292,
+        "PALAVRA": "almoça",
+        "LEMA": "alívio",
+        "CATMORF": "Nome Comun Masculino Singular",
+        "CATEGORIA_SUGERIDA": "Verbo Principal Indicativo Presente Terceira Pessoa Singular",
+        "JUSTIFICATIVA": "Forma de almoçar; também admite imperativo. Presente do indicativo é uma opção válida, sem preferência entre análises verbais possíveis.",
+        "DECISAO": "Aprovada",
+        "CATEGORIA_ANTERIOR": "Nome Comun Masculino Singular"
+      },
+      {
+        "LINHA_EXCEL": 304,
+        "PALAVRA": "aluga",
+        "LEMA": "alto",
+        "CATMORF": "Nome Comun Masculino Singular",
+        "CATEGORIA_SUGERIDA": "Verbo Principal Indicativo Presente Terceira Pessoa Singular",
+        "JUSTIFICATIVA": "Forma de alugar; também admite imperativo. A proposta é uma análise verbal possível.",
+        "DECISAO": "Aprovada",
+        "CATEGORIA_ANTERIOR": "Nome Comun Masculino Singular"
+      },
+      {
+        "LINHA_EXCEL": 309,
+        "PALAVRA": "alunos",
+        "LEMA": "aluguel",
+        "CATMORF": "Nome Comun Masculino Singular",
+        "CATEGORIA_SUGERIDA": "Nome Comun Masculino Plural",
+        "JUSTIFICATIVA": "Forma plural do substantivo; a classificação singular não corresponde à palavra.",
+        "DECISAO": "Aprovada",
+        "CATEGORIA_ANTERIOR": "Nome Comun Masculino Singular"
+      },
+      {
+        "LINHA_EXCEL": 351,
+        "PALAVRA": "ameaçou",
+        "LEMA": "ambiente",
+        "CATMORF": "Nome Comun Masculino Singular",
+        "CATEGORIA_SUGERIDA": "Verbo Principal Indicativo Passado Terceira Pessoa Singular",
+        "JUSTIFICATIVA": "Forma de ameaçar no pretérito perfeito, terceira pessoa do singular.",
+        "DECISAO": "Aprovada",
+        "CATEGORIA_ANTERIOR": "Nome Comun Masculino Singular"
+      },
+      {
+        "LINHA_EXCEL": 357,
+        "PALAVRA": "americanas",
+        "LEMA": "amendoim",
+        "CATMORF": "Nome Comun Masculino Singular",
+        "CATEGORIA_SUGERIDA": "Nome Comun Feminino Plural",
+        "JUSTIFICATIVA": "Admite leitura como substantivo, mas na forma feminina plural; preservar a classe nominal e corrigir gênero/número.",
+        "DECISAO": "Aprovada",
+        "CATEGORIA_ANTERIOR": "Nome Comun Masculino Singular"
+      },
+      {
+        "LINHA_EXCEL": 361,
+        "PALAVRA": "amigas",
+        "LEMA": "americano",
+        "CATMORF": "Nome Comun Masculino Singular",
+        "CATEGORIA_SUGERIDA": "Nome Comun Feminino Plural",
+        "JUSTIFICATIVA": "Admite leitura como substantivo, mas na forma feminina plural; preservar a classe nominal e corrigir gênero/número.",
+        "DECISAO": "Aprovada",
+        "CATEGORIA_ANTERIOR": "Nome Comun Masculino Singular"
+      },
+      {
+        "LINHA_EXCEL": 364,
+        "PALAVRA": "amizade",
+        "LEMA": "amigo",
+        "CATMORF": "Nome Comun Masculino Singular",
+        "CATEGORIA_SUGERIDA": "Nome Comun Feminino Singular",
+        "JUSTIFICATIVA": "Substantivo de gênero feminino; a classificação masculina não corresponde à forma.",
+        "DECISAO": "Aprovada",
+        "CATEGORIA_ANTERIOR": "Nome Comun Masculino Singular"
+      },
+      {
+        "LINHA_EXCEL": 369,
+        "PALAVRA": "amostra",
+        "LEMA": "amo",
+        "CATMORF": "Nome Comun Masculino Singular",
+        "CATEGORIA_SUGERIDA": "Nome Comun Feminino Singular",
+        "JUSTIFICATIVA": "Substantivo de gênero feminino; a classificação masculina não corresponde à forma.",
+        "DECISAO": "Aprovada",
+        "CATEGORIA_ANTERIOR": "Nome Comun Masculino Singular"
+      },
+      {
+        "LINHA_EXCEL": 370,
+        "PALAVRA": "amostras",
+        "LEMA": "amor",
+        "CATMORF": "Nome Comun Masculino Singular",
+        "CATEGORIA_SUGERIDA": "Nome Comun Feminino Plural",
+        "JUSTIFICATIVA": "Substantivo feminino no plural; gênero e número incompatíveis com masculino singular.",
+        "DECISAO": "Aprovada",
+        "CATEGORIA_ANTERIOR": "Nome Comun Masculino Singular"
+      },
+      {
+        "LINHA_EXCEL": 379,
+        "PALAVRA": "anda",
+        "LEMA": "anão",
+        "CATMORF": "Nome Comun Masculino Singular",
+        "CATEGORIA_SUGERIDA": "Verbo Principal Indicativo Presente Terceira Pessoa Singular",
+        "JUSTIFICATIVA": "Forma de andar ou, como substantivo, feminino (anda/perna de pau). Masculino singular não se sustenta nessas leituras; a proposta verbal é possível.",
+        "DECISAO": "Aprovada",
+        "CATEGORIA_ANTERIOR": "Nome Comun Masculino Singular"
+      },
+      {
+        "LINHA_EXCEL": 402,
+        "PALAVRA": "anoitecendo",
+        "LEMA": "anjo",
+        "CATMORF": "Nome Comun Masculino Singular",
+        "CATEGORIA_SUGERIDA": "Verbo Principal Gerúndio",
+        "JUSTIFICATIVA": "Gerúndio de anoitecer; não corresponde a substantivo masculino singular.",
+        "DECISAO": "Aprovada",
+        "CATEGORIA_ANTERIOR": "Nome Comun Masculino Singular"
+      },
+      {
+        "LINHA_EXCEL": 403,
+        "PALAVRA": "anos",
+        "LEMA": "ano",
+        "CATMORF": "Nome Comun Masculino Singular",
+        "CATEGORIA_SUGERIDA": "Nome Comun Masculino Plural",
+        "JUSTIFICATIVA": "Forma plural do substantivo; a classificação singular não corresponde à palavra.",
+        "DECISAO": "Aprovada",
+        "CATEGORIA_ANTERIOR": "Nome Comun Masculino Singular"
+      },
+      {
+        "LINHA_EXCEL": 416,
+        "PALAVRA": "antigas",
+        "LEMA": "antídoto",
+        "CATMORF": "Nome Comun Masculino Singular",
+        "CATEGORIA_SUGERIDA": "Adjetivo Qualificativo Feminino Plural",
+        "JUSTIFICATIVA": "Forma feminina plural de antigo. Mesmo em leitura substantivada, masculino singular é incompatível; adjetivo é uma proposta possível.",
+        "DECISAO": "Aprovada",
+        "CATEGORIA_ANTERIOR": "Nome Comun Masculino Singular"
+      },
+      {
+        "LINHA_EXCEL": 2247,
+        "PALAVRA": "der",
+        "LEMA": "der",
+        "CATMORF": "Nome Comun Masculino Singular",
+        "CATEGORIA_SUGERIDA": "Verbo Principal Subjuntivo Futuro Terceira Pessoa Singular",
+        "JUSTIFICATIVA": "Forma do futuro do subjuntivo de dar; primeira e terceira pessoas do singular são possíveis. Propõe-se uma delas sem preferência.",
+        "DECISAO": "Aprovada",
+        "CATEGORIA_ANTERIOR": "Nome Comun Masculino Singular"
+      },
+      {
+        "LINHA_EXCEL": 2251,
+        "PALAVRA": "derrete",
+        "LEMA": "derrete",
+        "CATMORF": "Nome Comun Masculino Singular",
+        "CATEGORIA_SUGERIDA": "Verbo Principal Indicativo Presente Terceira Pessoa Singular",
+        "JUSTIFICATIVA": "Forma de derreter; também admite imperativo. A proposta é uma análise verbal possível.",
+        "DECISAO": "Aprovada",
+        "CATEGORIA_ANTERIOR": "Nome Comun Masculino Singular"
+      },
+      {
+        "LINHA_EXCEL": 2463,
+        "PALAVRA": "dica",
+        "LEMA": "dica",
+        "CATMORF": "Nome Comun Masculino Singular",
+        "CATEGORIA_SUGERIDA": "Nome Comun Feminino Singular",
+        "JUSTIFICATIVA": "Substantivo de gênero feminino; a classificação masculina não corresponde à forma.",
+        "DECISAO": "Aprovada",
+        "CATEGORIA_ANTERIOR": "Nome Comun Masculino Singular"
+      },
+      {
+        "LINHA_EXCEL": 2483,
+        "PALAVRA": "dinamite",
+        "LEMA": "dinamite",
+        "CATMORF": "Nome Comun Masculino Singular",
+        "CATEGORIA_SUGERIDA": "Nome Comun Feminino Singular",
+        "JUSTIFICATIVA": "Substantivo de gênero feminino; a classificação masculina não corresponde à forma.",
+        "DECISAO": "Aprovada",
+        "CATEGORIA_ANTERIOR": "Nome Comun Masculino Singular"
+      },
+      {
+        "LINHA_EXCEL": 2538,
+        "PALAVRA": "devagarzinho",
+        "LEMA": "devagarzinho",
+        "CATMORF": "Nome Comun Masculino Singular",
+        "CATEGORIA_SUGERIDA": "Advérbio Geral",
+        "JUSTIFICATIVA": "Forma diminutiva de devagar, com valor adverbial de modo.",
+        "DECISAO": "Aprovada",
+        "CATEGORIA_ANTERIOR": "Nome Comun Masculino Singular"
+      },
+      {
+        "LINHA_EXCEL": 2662,
+        "PALAVRA": "dói",
+        "LEMA": "dói",
+        "CATMORF": "Nome Comun Masculino Singular",
+        "CATEGORIA_SUGERIDA": "Verbo Principal Indicativo Presente Terceira Pessoa Singular",
+        "JUSTIFICATIVA": "Forma de doer no presente, terceira pessoa do singular.",
+        "DECISAO": "Aprovada",
+        "CATEGORIA_ANTERIOR": "Nome Comun Masculino Singular"
+      },
+      {
+        "LINHA_EXCEL": 2759,
+        "PALAVRA": "encaixo",
+        "LEMA": "encaixo",
+        "CATMORF": "Nome Comun Masculino Singular",
+        "CATEGORIA_SUGERIDA": "Verbo Principal Indicativo Presente Primeira Pessoa Singular",
+        "JUSTIFICATIVA": "Forma de encaixar no presente, primeira pessoa do singular; o substantivo usual é encaixe.",
+        "DECISAO": "Aprovada",
+        "CATEGORIA_ANTERIOR": "Nome Comun Masculino Singular"
+      },
+      {
+        "LINHA_EXCEL": 2831,
+        "PALAVRA": "enganá-lo",
+        "LEMA": "enganá-lo",
+        "CATMORF": "Nome Comun Masculino Singular",
+        "CATEGORIA_SUGERIDA": "Verbo Principal Infinitivo",
+        "JUSTIFICATIVA": "Infinitivo verbal com pronome enclítico; classificar o componente verbal, preservando a palavra completa.",
+        "DECISAO": "Aprovada",
+        "CATEGORIA_ANTERIOR": "Nome Comun Masculino Singular"
+      },
+      {
+        "LINHA_EXCEL": 4245,
+        "PALAVRA": "jogue",
+        "LEMA": "jogue",
+        "CATMORF": "Nome Comun Masculino Singular",
+        "CATEGORIA_SUGERIDA": "Verbo Principal Subjuntivo Presente Terceira Pessoa Singular",
+        "JUSTIFICATIVA": "Forma de jogar no presente do subjuntivo ou imperativo; propõe-se uma análise verbal possível.",
+        "DECISAO": "Aprovada",
+        "CATEGORIA_ANTERIOR": "Nome Comun Masculino Singular"
+      },
+      {
+        "LINHA_EXCEL": 4318,
+        "PALAVRA": "lanchonete",
+        "LEMA": "lanchonete",
+        "CATMORF": "Nome Comun Masculino Singular",
+        "CATEGORIA_SUGERIDA": "Nome Comun Feminino Singular",
+        "JUSTIFICATIVA": "Substantivo de gênero feminino; a classificação masculina não corresponde à forma.",
+        "DECISAO": "Aprovada",
+        "CATEGORIA_ANTERIOR": "Nome Comun Masculino Singular"
+      },
+      {
+        "LINHA_EXCEL": 4408,
+        "PALAVRA": "levanto",
+        "LEMA": "levanto",
+        "CATMORF": "Nome Comun Masculino Singular",
+        "CATEGORIA_SUGERIDA": "Verbo Principal Indicativo Presente Primeira Pessoa Singular",
+        "JUSTIFICATIVA": "Forma de levantar no presente, primeira pessoa do singular.",
+        "DECISAO": "Aprovada",
+        "CATEGORIA_ANTERIOR": "Nome Comun Masculino Singular"
+      },
+      {
+        "LINHA_EXCEL": 6667,
+        "PALAVRA": "salvá-lo",
+        "LEMA": "salvá-lo",
+        "CATMORF": "Nome Comun Masculino Singular",
+        "CATEGORIA_SUGERIDA": "Verbo Principal Infinitivo",
+        "JUSTIFICATIVA": "Infinitivo verbal com pronome enclítico; classificar o componente verbal, preservando a palavra completa.",
+        "DECISAO": "Aprovada",
+        "CATEGORIA_ANTERIOR": "Nome Comun Masculino Singular"
+      },
+      {
+        "LINHA_EXCEL": 7421,
+        "PALAVRA": "troque",
+        "LEMA": "troque",
+        "CATMORF": "Nome Comun Masculino Singular",
+        "CATEGORIA_SUGERIDA": "Verbo Principal Subjuntivo Presente Terceira Pessoa Singular",
+        "JUSTIFICATIVA": "Forma de trocar no presente do subjuntivo ou imperativo; propõe-se uma análise verbal possível.",
+        "DECISAO": "Aprovada",
+        "CATEGORIA_ANTERIOR": "Nome Comun Masculino Singular"
+      }
+    ]
+  },
+  {
+    "hash_entrada": "19d730d5873cc2917cf3672c829b659d94445aa5164731a6f01ebdf02b0fab7d",
+    "hash_saida": "19d730d5873cc2917cf3672c829b659d94445aa5164731a6f01ebdf02b0fab7d",
+    "total_antes": 7812,
+    "correcoes": 0,
+    "remocoes": 0,
+    "total_depois": 7812,
+    "palavras_removidas": [],
+    "alteracoes": []
+  }
+]
