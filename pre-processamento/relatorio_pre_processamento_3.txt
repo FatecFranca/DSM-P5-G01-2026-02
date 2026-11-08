@@ -1,0 +1,345 @@
+RELATÓRIO — PRÉ-PROCESSAMENTO 3
+================================
+
+1. Objetivo
+
+Nesta etapa foi realizada a revisão da base para preparar as palavras para
+as próximas fases do projeto:
+
+- verificar a estrutura silábica;
+- remover registros sem estrutura silábica válida;
+- identificar palavras concatenadas, expressões e casos fora do contexto;
+- corrigir erros ortográficos confirmados.
+
+A base original foi preservada. As alterações foram salvas somente na cópia
+de trabalho `Corpus_SANTOS_TONI_FDC_tratado.xlsx`.
+
+2. Remoção de registros sem estrutura silábica
+
+Foi analisada a coluna `ESTSILABICA`. Os registros cujo valor era `erro`
+foram removidos, pois a estrutura silábica será necessária para a futura
+classificação das palavras.
+
+- Registros antes desta etapa: 11.504
+- Registros removidos com `ESTSILABICA == 'erro'`: 641
+- Registros restantes: 10.863
+
+3. Tratamento de palavras concatenadas identificadas anteriormente
+
+Foram removidos 18 registros identificados como concatenações ou expressões
+sem interesse para a base de palavras isoladas. Entre os casos analisados
+estavam formas como `vocéestá`, `quevocé`, `corvocurioso`, `ondecadé` e
+`cadéirinha`.
+
+As correções de `vocé`, `vocés` e `cadé` foram aplicadas nas colunas
+`PALAVRA` e `LEMA`:
+
+- `vocé` -> `você`;
+- `vocés` -> `vocês`;
+- `cadé` -> `cadê`.
+
+4. Remoção de casos selecionados durante a revisão manual
+
+Foram removidos 192 índices distintos selecionados durante a inspeção
+individual da lista de palavras longas. A decisão foi baseada na análise
+manual dos casos, considerando:
+
+- expressões;
+- palavras fora do contexto do aplicativo;
+- repetições de sons ou interjeições;
+- nomes e termos sem utilidade para a base proposta;
+- erros que não seriam corrigidos com segurança.
+
+Nenhum filtro automático por frequência foi aplicado. A coluna `FREQ` foi
+mantida, pois a frequência pode ser útil nas próximas etapas.
+
+5. Correções mantidas em vez de remoção
+
+Os seguintes casos foram corrigidos:
+
+- `quebracabeça` -> `quebra-cabeça`;
+- `escondeesconde` -> `esconde-esconde`;
+- `porcoespinho` -> `porco-espinho`;
+- `cachorroquente` -> `cachorro-quente`;
+- `segundafeira` -> `segunda-feira`;
+- `inteligéncia` -> `inteligência`;
+- `consentração` -> `concentração`.
+
+As correções foram aplicadas nas colunas `PALAVRA` e `LEMA`. As demais
+colunas foram preservadas.
+
+6. Resultado após a revisão manual (antes da unificação)
+
+- Registros finais: 10.653
+- Colunas: 8
+- Registros com `ESTSILABICA == 'erro'`: 0
+- Filtro por frequência: não aplicado
+- Arquivo gerado nessa subetapa: `Corpus_SANTOS_TONI_FDC_tratado.xlsx`
+
+Após as correções, ainda existem 28 duplicidades completas. Elas não foram
+removidas automaticamente nesta etapa, pois podem ter surgido quando formas
+ortográficas diferentes passaram a ter a mesma grafia. Esse ponto deve ser
+verificado antes do encerramento definitivo da limpeza.
+
+8. Unificação das palavras repetidas
+
+Foi verificado que a base possuía mais registros do que palavras distintas:
+
+- Registros antes da unificação: 10.630;
+- Palavras distintas: 9.864;
+- Registros repetidos por `PALAVRA`: 766.
+
+Essas repetições ocorriam porque a mesma palavra podia aparecer com valores
+diferentes em outras colunas. A remoção anterior de duplicidades considerava
+a linha completa, e não somente a coluna `PALAVRA`.
+
+Para a finalidade do aplicativo, foi adotada a regra de manter somente um
+registro por palavra. Quando havia mais de um registro para a mesma palavra,
+foi mantido aquele com maior valor em `FREQ`, por representar o uso mais
+frequente da palavra.
+
+O procedimento utilizado foi:
+
+```python
+df = df.sort_values(
+    by=["PALAVRA", "FREQ"],
+    ascending=[True, False]
+)
+
+df = df.drop_duplicates(
+    subset="PALAVRA",
+    keep="first"
+).copy()
+```
+
+Resultado:
+
+- Registros finais: 9.864;
+- Palavras distintas: 9.864;
+- Repetições por `PALAVRA`: 0.
+
+A partir desta etapa, o arquivo oficial de trabalho passa a ser:
+`Corpus_SANTOS_TONI_FDC_tratado_sem_repeticoes.xlsx`.
+
+O arquivo `Corpus_SANTOS_TONI_FDC_tratado.xlsx` foi mantido como cópia de
+segurança da etapa anterior.
+
+9. Limpeza rigorosa de palavras com até 3 caracteres
+
+Foi realizada uma revisão específica dos 450 registros cuja palavra possuía
+até 3 caracteres. A regra aprovada foi manter:
+
+- letras isoladas;
+- palavras reais;
+- artigos, preposições e pronomes;
+- verbos reais;
+- nomes próprios de pessoas claramente identificáveis.
+
+Foram removidos interjeições, abreviações, estrangeirismos, sequências sem
+significado, repetições de sons, erros de transcrição e nomes próprios que
+não puderam ser identificados com segurança.
+
+Resultado:
+
+- Registros curtos analisados: 450;
+- Registros curtos removidos: 145;
+- Registros curtos mantidos: 305;
+- Total da base após a limpeza: 9.719;
+- Palavras repetidas por `PALAVRA`: 0.
+
+Essa limpeza foi aplicada somente às palavras de até 3 caracteres. Os demais
+registros da base não foram alterados.
+
+10. Revisão manual final das palavras de até 3 caracteres
+
+Após a primeira filtragem, foi realizada uma nova conferência da listagem.
+O usuário definiu explicitamente quais índices da listagem deveriam ser
+mantidos. A regra aplicada foi:
+
+- manter os registros curtos correspondentes aos índices aprovados;
+- remover os demais registros com até 3 caracteres;
+- preservar integralmente os registros com mais de 3 caracteres.
+
+Como os índices são referências da listagem exibida no notebook e podem ser
+renumerados ao salvar com `index=False`, a aplicação final foi feita pelos
+valores de `PALAVRA` associados aos índices aprovados, evitando a remoção de
+linhas incorretas.
+
+Resultado:
+
+- Palavras curtas antes da revisão: 444;
+- Palavras curtas mantidas: 137;
+- Palavras curtas removidas nesta revisão: 307;
+- Total da base após a revisão: 9.598;
+- Palavras repetidas por `PALAVRA`: 0.
+
+O arquivo oficial continua sendo:
+`Corpus_SANTOS_TONI_FDC_tratado_sem_repeticoes.xlsx`.
+
+11. Revisão das palavras contendo "ssauro"
+
+Foi analisada a lista de palavras que continham a sequência `ssauro`.
+Havia 34 registros. Foram mantidos somente os quatro casos aprovados:
+
+- `dinossauro`;
+- `dinossauros`;
+- `tiranossauro`;
+- `tiranossaurorex`.
+
+Os outros 30 registros foram removidos por não serem úteis para a base do
+aplicativo. A remoção foi feita pelo texto da palavra, e não pelos índices,
+para evitar problemas causados pela renumeração das linhas.
+
+Resultado:
+
+- Registros contendo `ssauro` antes: 34;
+- Registros removidos: 30;
+- Registros contendo `ssauro` depois: 4;
+- Total atual da base: 9.568;
+- Palavras repetidas por `PALAVRA`: 0.
+
+12. Revisão das palavras contendo a letra "é"
+
+Foi realizada uma revisão manual das palavras que continham `é`, conforme
+a listagem analisada no notebook. Foram aplicadas somente as decisões
+explicitamente indicadas:
+
+- correção de acentuação e ortografia, como `trés` -> `três`,
+  `bebé` -> `bebê`, `inglés` -> `inglês`, `ténis` -> `tênis`,
+  `idéia` -> `ideia`, `jácaré` -> `jacaré`, `célular` -> `celular`,
+  `freqéncia` -> `frequência` e `papelhigiénico` -> `papel higiênico`;
+- correção de palavras com acento circunflexo ausente ou incorreto, como
+  `inteligéncia` -> `inteligência`, `experiéncia` -> `experiência`,
+  `consciéncia` -> `consciência`, `ciéncia` -> `ciência`, `génio` -> `gênio`,
+  `gêmea`/`gêmeas` e outras formas aprovadas;
+- inclusão de hífen em `pré-escola` e `pré-adolescente`;
+- remoção dos casos marcados pelo usuário como inúteis, concatenações,
+  repetições de sons, erros ou palavras fora do escopo.
+
+Foram removidos 58 registros explicitamente identificados. Algumas
+correções fizeram palavras diferentes convergirem para a mesma grafia.
+Nesses casos, foi mantido o registro de maior `FREQ`, conforme a regra
+adotada anteriormente para manter uma linha por palavra.
+
+Resultado:
+
+- Registros antes da revisão: 9.568;
+- Registros removidos nesta revisão: 58;
+- Registros eliminados por duplicação após correções: 6;
+- Registros finais: 9.504;
+- Palavras distintas: 9.504;
+- Repetições por `PALAVRA`: 0;
+- Colunas preservadas: 8.
+
+As demais palavras contendo `é` que ainda não foram analisadas não foram
+alteradas. O arquivo oficial continua sendo
+`Corpus_SANTOS_TONI_FDC_tratado_sem_repeticoes.xlsx`.
+
+13. Continuação da revisão das palavras contendo "é"
+
+Na continuação da revisão manual, foram aplicadas as seguintes correções:
+
+- `perdér` -> `perder`;
+- `protégér`/`protégér` -> `proteger`;
+- `prémio` -> `prêmio`;
+- `seqéncia` -> `sequência`;
+- `seqéncias` -> `sequências`;
+- `preferéncia` -> `preferência`;
+- `énfase` -> `ênfase`.
+
+Também foram removidos os registros indicados como concatenações, erros,
+repetições de sons ou palavras sem utilidade para a base, incluindo
+`nenémvai`, `perigosézima`, `néga`, `mêêé`, `pégasus`, `respondéncia`,
+`quiném`, `quié`, `tlés`, `temtambém`, `vendéla`, `véja`, `vocénão`,
+`xanéu`, `zêzê`, `xxxchapéu`, `zémijão`, `vccé` e as sequências iniciadas por `é`
+ou `ê` apontadas na revisão.
+
+A palavra encontrada na base era `énfase`; ela foi corrigida para `ênfase`.
+O índice 9149 correspondia a `vccé`, que foi removido pelo texto exato.
+
+Resultado desta continuação:
+
+- Registros antes: 9.504;
+- Registros removidos: 32;
+- Registros corrigidos: 6;
+- Registros finais: 9.469;
+- Palavras repetidas por `PALAVRA`: 0;
+- Colunas preservadas: 8.
+
+14. Revisão manual de palavras fora do escopo contendo 'nho'
+
+Foi realizada uma nova revisão manual de palavras que não se adequavam ao
+escopo da base. Foram removidos 377 registros. Também foi corrigido uma 
+concatenação: `azulmarinho` para `azul-marinho`.
+
+Resultado:
+
+- Registros finais: 9.092;
+- Palavras repetidas por `PALAVRA`: 0;
+- Colunas preservadas: 8.
+
+15. Revisão manual de palavras fora do escopo contendo 'nha'
+
+Foi realizada uma revisão manual de palavras que não se adequavam ao
+escopo da base. Foram removidos 314 registros.
+
+Resultado:
+
+- Registros finais: 8778;
+- Palavras repetidas por `PALAVRA`: 0;
+- Colunas preservadas: 8.
+
+16. Revisão manual de palavras fora do escopo contendo 'ó'
+
+Foi realizada uma revisão manual de palavras que não se adequavam ao
+escopo da base. Foram removidos 67 registros. Também foram corrigidas palavras com erros de português.
+
+Resultado:
+
+- Registros finais: 8711;
+- Palavras repetidas por `PALAVRA`: 3;
+- Colunas preservadas: 8.
+
+17. Revisão manual de palavras fora do escopo contendo 'ô'
+
+Foi realizada uma revisão manual de palavras que não se adequavam ao
+escopo da base. Foram removidos 3 registros.
+
+Resultado:
+
+- Registros finais: 8708;
+- Palavras repetidas por `PALAVRA`: 3;
+- Colunas preservadas: 8.
+
+18. Revisão manual de palavras fora do escopo contendo 'á'
+
+Foi realizada uma revisão manual de palavras que não se adequavam ao
+escopo da base. Foram removidos 114 registros. Também foram aplicadas correções de português.
+
+Resultado:
+
+- Registros finais antes da resolução das duplicidades: 8594;
+- Palavras repetidas por `PALAVRA`: 12;
+- Colunas preservadas: 8.
+
+19. Resolução das duplicidades remanescentes
+
+As 12 duplicidades restantes por `PALAVRA` foram analisadas individualmente.
+Considerou-se como hipótese que parte delas surgiu durante as correções
+ortográficas. Também foram observadas diferenças de classificação
+morfológica, transcrição, frequência ou registro como nome próprio.
+
+Foram mantidos os registros correspondentes aos índices:
+
+`244, 1257, 1866, 3384, 3688, 4162, 5630, 6034, 6353, 7126, 7861, 8231`.
+
+Os demais 12 registros duplicados foram removidos, preservando-se a linha
+escolhida para cada palavra.
+
+Resultado:
+
+- Registros removidos: 12;
+- Registros finais: 8582;
+- Palavras distintas: 8582;
+- Repetições por `PALAVRA`: 0;
+- Colunas preservadas: 8.

@@ -1,0 +1,43 @@
+## Relatório — Pré-processamento 1
+
+### 1. Base utilizada
+
+- Arquivo: `Corpus SANTOS TONI_FDC.xlsx`
+- Planilha: `Plan2`
+
+### 2. Estrutura da base
+
+- **11.642 registros**
+- **8 colunas**
+
+### 3. Colunas identificadas
+
+- `PALAVRA`
+- `LEMA`
+- `CATMORF`
+- `TRANSCRICAO`
+- `ACENTUACAO`
+- `ESTSILABICA`
+- `CATACENTUAL`
+- `FREQ`
+
+### 4. Tipos de dados
+
+- As colunas textuais foram identificadas como `object`;
+- A coluna `FREQ` foi identificada como numérica (`int64`).
+
+### 5. Valores ausentes
+
+Foi utilizado:
+
+```python
+df.isnull().sum()
+```
+
+Todas as colunas apresentaram resultado **0**. Portanto, não foram encontrados valores ausentes.
+
+### 6. Conclusão
+
+A base foi carregada corretamente, sua estrutura foi identificada e não possui valores ausentes. Nenhuma coluna foi removida nesta fase, pois todas podem ter utilidade para as etapas posteriores do projeto.
+
+**Situação:** Pré-processamento 1 concluído.

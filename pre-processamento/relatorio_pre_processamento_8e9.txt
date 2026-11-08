@@ -1,0 +1,71 @@
+RELATÓRIO — PRÉ-PROCESSAMENTO 8 E 9
+==================================
+
+1. Início da revisão no notebook 8
+
+O notebook Pre_processamento_8.ipynb iniciou a revisão da
+compatibilidade entre PALAVRA e CATMORF nos grupos Nome Comun
+Masculino Singular, Nome Comun Feminino Singular, Nome Própio Pessoa,
+Verbo Principal Infinitivo, Verbo Principal Indicativo Presente
+Terceira Pessoa Singular e Verbo Principal Indicativo Passado
+Terceira Pessoa Singular.
+
+As sugestões foram apresentadas para aprovação antes da aplicação.
+Nessa etapa, foram corrigidas 189 categorias e removidos 54 registros,
+reduzindo a base de 7.830 para 7.776 registros. Entre as exclusões,
+doi e dodoi foram removidas porque dói e dodói já existiam na base.
+Não foram alterados lemas ou grafias dos registros mantidos.
+
+2. Continuação da revisão no notebook 9
+
+O notebook Pre_processamento_9.ipynb continuou a análise dos grupos
+seguintes. A revisão começou por grupos individuais e passou a
+rodadas de cinco e depois dez grupos, mantendo as decisões e os
+scripts separados por classificação.
+
+Inicialmente, a categoria era mantida quando admitia uma leitura
+compatível. Na revisão complementar, passou-se a priorizar a
+categoria mais adequada entre as disponíveis na base, conforme as
+decisões do usuário.
+
+No notebook 9, foram corrigidas 158 categorias e removidos 127
+registros, reduzindo a base de 7.776 para 7.649 registros.
+
+3. Conferência complementar em HTML
+
+Foi gerado o arquivo palavras_grupos_pendentes.html, com 413 palavras
+de 119 grupos, apresentando somente PALAVRA e CATMORF para conferência
+manual. Os ajustes indicados nessa conferência resultaram em 16
+correções de categoria e 20 exclusões, já incluídas nos totais do
+notebook 9.
+
+4. Resultados acumulados
+
+- Foram corrigidas 347 classificações em CATMORF:
+  189 no notebook 8 e 158 no notebook 9.
+- Foram removidos 181 registros:
+  54 no notebook 8 e 127 no notebook 9.
+- Foram aplicados três ajustes de grafia, somente em PALAVRA:
+  doris → dóris; minasgerais → minas gerais;
+  distrairem → distraírem.
+- Todos os lemas foram preservados.
+- A base passou de 7.830 para 7.649 registros, sem palavras repetidas.
+
+As contagens são acumuladas dos dois notebooks, e não apenas da
+última execução. A comparação entre as bases inicial e final
+confirmou a preservação das demais colunas dos registros mantidos.
+
+5. Salvamento e conclusão
+
+O resultado foi salvo no arquivo de trabalho
+Corpus_SANTOS_TONI_FDC_tratado_sem_repeticoes.xlsx.
+
+As exclusões foram feitas por correspondência exata em PALAVRA.
+Os notebooks mantêm as contagens da execução e o total final da base.
+O notebook 9 teve a reexecução conferida sem gerar novas alterações.
+Os arquivos intermediários são temporários e limpos automaticamente,
+sem criação de backups ou histórico externo; o código é versionado
+pelo Git.
+
+Com a aplicação das decisões e a conferência do resultado salvo,
+a revisão realizada nos notebooks 8 e 9 foi concluída.
