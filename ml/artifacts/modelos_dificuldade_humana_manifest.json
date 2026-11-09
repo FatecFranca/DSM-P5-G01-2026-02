@@ -1,0 +1,28 @@
+{
+  "models": {
+    "SVM": "/Users/torquato/Documents/GitHub/DSM-P5-G01-2026-02/ml/artifacts/svm_dificuldade_humana.joblib",
+    "LR": "/Users/torquato/Documents/GitHub/DSM-P5-G01-2026-02/ml/artifacts/lr_dificuldade_humana.joblib",
+    "LDA": "/Users/torquato/Documents/GitHub/DSM-P5-G01-2026-02/ml/artifacts/lda_dificuldade_humana.joblib"
+  },
+  "source_corpus": "/Users/torquato/Documents/GitHub/DSM-P5-G01-2026-02/ml/data/Corpus_SANTOS_TONI_FDC_tratado_sem_repeticoes_final.xlsx",
+  "training_rows": 339,
+  "class_counts": {
+    "medio": 141,
+    "dificil": 104,
+    "facil": 94
+  },
+  "feature_names": [
+    "syllable_count",
+    "complex_syllable_count",
+    "cluster_count",
+    "max_shape_length",
+    "coda_count",
+    "glide_count",
+    "word_length",
+    "accented",
+    "digraph_count",
+    "complex_grapheme_count",
+    "log_frequency"
+  ],
+  "random_state": 7
+}
