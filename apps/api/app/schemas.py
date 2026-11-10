@@ -1,6 +1,6 @@
 from datetime import datetime
 from typing import Annotated, Literal, Union
-from pydantic import BaseModel, ConfigDict, EmailStr, Field, field_validator, model_validator
+from pydantic import BaseModel, ConfigDict, EmailStr, Field, StrictInt, field_validator, model_validator
 
 class Credentials(BaseModel):
     email: EmailStr; password: str = Field(min_length=8, max_length=128)
@@ -61,13 +61,22 @@ class ItemStatePayload(BaseModel):
     strength: int = Field(ge=0); half_life_hours: float = Field(gt=0); due_at: datetime
     reps: int = Field(ge=0); lapses: int = Field(ge=0); consecutive_correct: int = Field(ge=0); last_result: bool; last_seen_at: datetime
 
+class PlacementPayload(BaseModel):
+    """Espelha apps/mobile/src/domain/placement-record.ts: só respostas brutas; a correção é refeita no servidor."""
+    model_config = ConfigDict(extra="forbid")
+    result_id: str = Field(min_length=1, max_length=100); quiz_version: str = Field(min_length=1, max_length=32); skipped: bool = False
+    # Índice escolhido (base 1) ou null quando a pessoa pulou; IDs e faixas são validados pela correção, que rejeita o evento.
+    responses: dict[Annotated[str, Field(max_length=8)], StrictInt | None] = Field(default_factory=dict, max_length=20)
+
 class AttemptEvent(BaseModel):
     client_event_id: str = Field(min_length=1, max_length=100); type: Literal["attempt"]; occurred_at: datetime; payload: AttemptPayload
 class ProgressEvent(BaseModel):
     client_event_id: str = Field(min_length=1, max_length=100); type: Literal["progress"]; occurred_at: datetime; payload: ProgressPayload
 class ItemStateEvent(BaseModel):
     client_event_id: str = Field(min_length=1, max_length=100); type: Literal["item_state"]; occurred_at: datetime; payload: ItemStatePayload
-SyncEventIn = Annotated[Union[AttemptEvent, ProgressEvent, ItemStateEvent], Field(discriminator="type")]
+class PlacementEvent(BaseModel):
+    client_event_id: str = Field(min_length=1, max_length=100); type: Literal["placement"]; occurred_at: datetime; payload: PlacementPayload
+SyncEventIn = Annotated[Union[AttemptEvent, ProgressEvent, ItemStateEvent, PlacementEvent], Field(discriminator="type")]
 class SyncPush(BaseModel): events: list[SyncEventIn] = Field(max_length=500)
 class SyncRejection(BaseModel):
     client_event_id: str

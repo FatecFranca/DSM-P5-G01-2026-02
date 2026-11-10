@@ -201,6 +201,18 @@ class RankingLog(Base):
     served_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now)
 
 
+class PlacementResult(Base):
+    """Quiz de nivelamento (contracts/placement-quiz.json): respostas brutas do app e a correção refeita no servidor."""
+    __tablename__ = "placement_results"; __table_args__ = (UniqueConstraint("user_id", "result_id", name="uq_placement_results_user_result"),)
+    id: Mapped[str] = mapped_column(String(36), primary_key=True, default=uid); user_id: Mapped[str] = mapped_column(ForeignKey("users.id"), index=True)
+    result_id: Mapped[str] = mapped_column(String(100)); quiz_version: Mapped[str] = mapped_column(String(32)); skipped: Mapped[bool] = mapped_column(Boolean, default=False)
+    responses: Mapped[dict] = mapped_column(JSON)
+    hits_facil: Mapped[int] = mapped_column(Integer); hits_medio: Mapped[int] = mapped_column(Integer); hits_dificil: Mapped[int] = mapped_column(Integer)
+    difficulty: Mapped[str] = mapped_column(String(16)); provisional: Mapped[bool] = mapped_column(Boolean); provisional_reason: Mapped[str | None] = mapped_column(String(32), nullable=True)
+    start_level: Mapped[int] = mapped_column(Integer); credited_letters: Mapped[str] = mapped_column(String(26), default="")
+    completed_at: Mapped[datetime] = mapped_column(DateTime(timezone=True)); created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), default=now)
+
+
 class SyncEvent(Base):
     __tablename__ = "sync_events"; __table_args__ = (UniqueConstraint("user_id", "client_event_id"),)
     id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True); user_id: Mapped[str] = mapped_column(ForeignKey("users.id"), index=True)

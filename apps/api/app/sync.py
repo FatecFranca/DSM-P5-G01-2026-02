@@ -7,7 +7,8 @@ from .content_ids import canonical_exercise_id, canonical_lesson_id
 from .content_types import normalize_exercise_type
 from .db import get_db
 from .deps import current_user
-from .models import Attempt, Item, ItemState, Progress, SyncEvent, Unit, User
+from .models import Attempt, Item, ItemState, PlacementResult, Progress, SyncEvent, Unit, User
+from .placement import QUIZ_VERSION, PlacementError, score_placement
 from .schemas import DEPRECATED_ATTEMPT_FIELDS, DEPRECATED_PROGRESS_FIELDS, SyncPush, SyncPushResult, SyncRejection
 
 logger = logging.getLogger(__name__)
@@ -107,6 +108,20 @@ def push(body: SyncPush, user: User = Depends(current_user), db: Session = Depen
                 accepted_ids.append(event.client_event_id)
                 continue
             db.add(Attempt(user_id=user.id, occurred_at=event.occurred_at, **event.payload.model_dump(exclude=DEPRECATED_ATTEMPT_FIELDS)))
+        elif event.type == "placement":
+            placement = event.payload
+            try:
+                if placement.quiz_version != QUIZ_VERSION: raise PlacementError(f"versão {placement.quiz_version} do nivelamento não é a atual ({QUIZ_VERSION})")
+                score = score_placement(placement.responses, skipped=placement.skipped)
+            except PlacementError as error:
+                rejections.append(SyncRejection(client_event_id=event.client_event_id, reason=str(error)))
+                continue
+            payload = {**placement.model_dump(mode="json"), **{key: score[key] for key in ("hits", "difficulty", "provisional", "provisional_reason", "start_level", "credited_letters")}}
+            if not db.scalar(select(PlacementResult).where(PlacementResult.user_id == user.id, PlacementResult.result_id == placement.result_id)):
+                db.add(PlacementResult(user_id=user.id, result_id=placement.result_id, quiz_version=placement.quiz_version, skipped=placement.skipped, responses=placement.responses,
+                                       hits_facil=score["hits"]["facil"], hits_medio=score["hits"]["medio"], hits_dificil=score["hits"]["dificil"], difficulty=score["difficulty"],
+                                       provisional=score["provisional"], provisional_reason=score["provisional_reason"], start_level=score["start_level"],
+                                       credited_letters=score["credited_letters"], completed_at=event.occurred_at))
         elif event.type == "item_state":
             event.payload.item_id = canonicalized(event.payload.item_id, canonical_exercise_id)
             event.payload.unit_id = canonicalized(event.payload.unit_id, canonical_lesson_id) if event.payload.unit_id else None
