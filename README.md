@@ -15,6 +15,7 @@ Este projeto é desenvolvido pelo grupo formado por:
 - [Privacidade e acessibilidade](docs/PRIVACY_AND_ACCESSIBILITY.md)
 - [Operação e implantação](docs/OPERATIONS.md)
 - [Relatório de validação](docs/VALIDATION_REPORT.md)
+- [Banco editorial de questões e carga PostgreSQL](bancoquestoesequiz/README.md)
 
 ## MVP Prosa
 
