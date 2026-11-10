@@ -42,4 +42,11 @@ export async function refreshContent(): Promise<"updated" | "unchanged" | "rejec
   return "updated";
 }
 
-export const requiredTypesOf = (unitId: string) => useContentStore.getState().units.find((unit) => unit.id === unitId)?.exercises.map((exercise) => exercise.type);
+/**
+ * Tipos que, todos dominados, concluem a unidade — só quando cada tipo é um único item (as lições de letra).
+ * Em unidades com vários itens do mesmo tipo, um acerto por tipo não basta: a conclusão fica com os itens.
+ */
+export const requiredTypesOf = (unitId: string) => {
+  const types = useContentStore.getState().units.find((unit) => unit.id === unitId)?.exercises.map((exercise) => exercise.type);
+  return types && new Set(types).size === types.length ? types : undefined;
+};

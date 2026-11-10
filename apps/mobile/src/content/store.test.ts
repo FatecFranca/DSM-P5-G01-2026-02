@@ -20,6 +20,8 @@ describe("carregamento de conteúdo", () => {
     expect(useContentStore.getState().version).toBe(seed.version);
     expect(requiredTypesOf("lesson-A")).toEqual(["listen_choose", "recognize_letter", "initial_sound", "find_all_in_word", "compare_words", "complete_word", "mixed_review"]);
     expect(requiredTypesOf("inexistente")).toBeUndefined();
+    // Unidade com vários itens do mesmo tipo: acertar um de cada tipo não conclui; a conclusão vem dos itens.
+    expect(requiredTypesOf("casa-frases")).toBeUndefined();
   });
 
   it("prefere o cache local válido e envia seu ETag ao atualizar", async () => {
