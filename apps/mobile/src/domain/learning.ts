@@ -30,23 +30,24 @@ export function deriveProgress(unit: Unit, states: StateMap, now: Date, current?
   };
 }
 
-/** Uma letra conta como apresentada quando sua unidade foi concluída. */
-export const isLetterPresented = (letter: string, progress: ProgressMap): boolean => progress[lessonIdFor(letter)]?.completed === true;
+/** Uma letra conta como apresentada quando sua unidade foi concluída ou quando o nivelamento a creditou. */
+export const isLetterPresented = (letter: string, progress: ProgressMap, creditedLetters = ""): boolean => creditedLetters.includes(letter) || progress[lessonIdFor(letter)]?.completed === true;
 
 /**
- * Portão pedagógico único para letras e trilhas temáticas: toda letra pré-requisito precisa estar dominada.
- * A unidade sem pré-requisitos (a letra A) está sempre liberada; a trilha temática nunca libera nada por si.
+ * Portão pedagógico único para letras e trilhas temáticas: toda letra pré-requisito precisa estar dominada ou
+ * creditada pelo nivelamento (contracts/placement-quiz.json). A unidade sem pré-requisitos (a letra A) está sempre
+ * liberada; a trilha temática nunca libera nada por si, e o crédito não conclui nenhuma lição.
  */
-export function isLessonUnlocked(lesson: { prerequisiteLetters: string[] }, progress: ProgressMap): boolean {
-  return lesson.prerequisiteLetters.every((letter) => isLetterPresented(letter, progress));
+export function isLessonUnlocked(lesson: { prerequisiteLetters: string[] }, progress: ProgressMap, creditedLetters = ""): boolean {
+  return lesson.prerequisiteLetters.every((letter) => isLetterPresented(letter, progress, creditedLetters));
 }
 
 /**
  * Unidade que pode ser aberta: liberada pelos pré-requisitos ou já concluída. Uma unidade concluída continua
  * aberta para revisão mesmo que o conteúdo novo tenha mudado seus pré-requisitos. Trilha e lição usam este portão.
  */
-export const isLessonOpen = (lesson: { id: string; prerequisiteLetters: string[] }, progress: ProgressMap): boolean =>
-  progress[lesson.id]?.completed === true || isLessonUnlocked(lesson, progress);
+export const isLessonOpen = (lesson: { id: string; prerequisiteLetters: string[] }, progress: ProgressMap, creditedLetters = ""): boolean =>
+  progress[lesson.id]?.completed === true || isLessonUnlocked(lesson, progress, creditedLetters);
 
 /** Itens da unidade já vistos e vencidos: o que a sessão de revisão precisa cobrir. */
 export const dueItems = (unit: Unit, states: StateMap, now: Date) => unit.exercises.filter((exercise) => { const state = states[exercise.id]; return state !== undefined && isDue(state, now); });

@@ -1,0 +1,189 @@
+{
+  "$comment": "Fonte única do quiz de nivelamento (bancoquestoesequiz/QUIZ_NIVELAMENTO.md). O app (src/domain/placement.ts), a API (app/placement.py) e a carga PostgreSQL (bancoquestoesequiz/gerar_banco.py) usam estes itens e regras; os testes de cada lado falham se divergirem. answer é o índice da opção, começando em 1, na ordem armazenada. As posições do gabarito estão balanceadas (quatro em cada posição) e a ordem é fixa para que os resultados do piloto sejam comparáveis entre participantes.",
+  "version": 1,
+  "id": "nivelamento-v1",
+  "intro": "Vamos fazer algumas atividades para escolher por onde começar. Faça no seu ritmo. Se quiser, você pode pular uma questão.",
+  "outro": "Vamos começar com atividades no seu ritmo. Conforme você pratica, vamos ajustando as próximas.",
+  "demo": {
+    "instruction": "Toque no círculo.",
+    "options": [
+      { "label": "Círculo", "shape": "circle" },
+      { "label": "Quadrado", "shape": "square" }
+    ],
+    "answer": 1
+  },
+  "bands": ["facil", "medio", "dificil"],
+  "scoring": {
+    "band_threshold": 3,
+    "min_easy_answered": 3
+  },
+  "mixes": {
+    "facil": { "facil": 6, "medio": 3, "dificil": 1 },
+    "medio": { "facil": 3, "medio": 5, "dificil": 2 },
+    "dificil": { "facil": 2, "medio": 3, "dificil": 5 }
+  },
+  "start_level": {
+    "$comment": "Nível de partida: o maior nível até o teto da dificuldade em que este e todos os níveis anteriores atingem o mínimo de acertos. Níveis seguem docs/PEDAGOGICAL_CONTRACT.md (1 Letras, 2 Sílabas, 3 Palavras, 4 Frases).",
+    "cap_by_difficulty": { "facil": 1, "medio": 3, "dificil": 4 },
+    "min_hits_by_level": { "1": 2, "2": 3, "3": 2, "4": 3 }
+  },
+  "credit": {
+    "$comment": "Fases da trilha fônica cujas letras contam como já apresentadas para abrir unidades. Não marca nenhuma lição como concluída; resultado provisório nunca dá crédito.",
+    "phases_by_start_level": { "1": [], "2": [1, 2], "3": [1, 2], "4": [1, 2, 3] }
+  },
+  "item_difficulty_bands": {
+    "introducao": "facil",
+    "facil": "facil",
+    "medio": "medio",
+    "revisao": "medio",
+    "desafio": "dificil"
+  },
+  "default_item_band": "medio",
+  "items": [
+    {
+      "id": "F1", "order": 1, "band": "facil", "level": 1, "skill": "nome_da_vogal",
+      "instruction": "Ouça e toque na letra que você ouviu.",
+      "stimulus": { "audio": "A" },
+      "options": [{ "label": "O" }, { "label": "A" }, { "label": "E" }],
+      "answer": 2
+    },
+    {
+      "id": "F2", "order": 2, "band": "facil", "level": 1, "skill": "nome_da_consoante",
+      "instruction": "Ouça e toque na letra que você ouviu.",
+      "stimulus": { "audio": "eme" },
+      "options": [{ "label": "M" }, { "label": "N" }, { "label": "P" }],
+      "answer": 1
+    },
+    {
+      "id": "F3", "order": 3, "band": "facil", "level": 2, "skill": "silaba_inicial",
+      "instruction": "Olhe a imagem e toque na sílaba que falta.",
+      "stimulus": { "image": "images/words/casa.svg", "image_alt": "Desenho de uma casa.", "text": "___ SA" },
+      "options": [{ "label": "PA" }, { "label": "MA" }, { "label": "CA" }],
+      "answer": 3
+    },
+    {
+      "id": "F4", "order": 4, "band": "facil", "level": 3, "skill": "leitura_de_palavra",
+      "instruction": "Leia a palavra e toque na imagem que combina.",
+      "stimulus": { "text": "COPO" },
+      "options": [
+        { "label": "Prato", "image": "images/words/prato.svg" },
+        { "label": "Copo", "image": "images/words/copo.svg" },
+        { "label": "Colher", "image": "images/quiz/colher.svg" }
+      ],
+      "answer": 2
+    },
+    {
+      "id": "M1", "order": 5, "band": "medio", "level": 2, "skill": "silaba_interna",
+      "instruction": "Olhe a imagem e toque na sílaba que falta.",
+      "stimulus": { "image": "images/words/panela.svg", "image_alt": "Desenho de uma panela de cozinha.", "text": "PA ___ LA" },
+      "options": [{ "label": "NA" }, { "label": "ME" }, { "label": "NE" }],
+      "answer": 3
+    },
+    {
+      "id": "M2", "order": 6, "band": "medio", "level": 2, "skill": "silaba_final",
+      "instruction": "Olhe a imagem e toque na sílaba que falta.",
+      "stimulus": { "image": "images/words/tapete.svg", "image_alt": "Desenho de um tapete.", "text": "TA PE ___" },
+      "options": [{ "label": "TE" }, { "label": "TA" }, { "label": "TO" }],
+      "answer": 1
+    },
+    {
+      "id": "M3", "order": 7, "band": "medio", "level": 3, "skill": "discriminacao_de_palavras",
+      "instruction": "Olhe a imagem e toque na palavra que combina.",
+      "stimulus": { "image": "images/quiz/sapato.svg", "image_alt": "Desenho de um sapato fechado." },
+      "options": [{ "label": "SACOLA" }, { "label": "SAPATO" }, { "label": "SABÃO" }],
+      "answer": 2
+    },
+    {
+      "id": "M4", "order": 8, "band": "medio", "level": 4, "skill": "compreensao_de_frase",
+      "instruction": "Leia a frase e toque na imagem que combina.",
+      "stimulus": { "text": "O COPO ESTÁ NA MESA." },
+      "options": [
+        { "label": "Copo debaixo da mesa", "image": "images/quiz/copo-debaixo-da-mesa.svg" },
+        { "label": "Copo no chão, ao lado da mesa", "image": "images/quiz/copo-no-chao.svg" },
+        { "label": "Copo em cima da mesa", "image": "images/quiz/copo-em-cima-da-mesa.svg" }
+      ],
+      "answer": 3
+    },
+    {
+      "id": "D1", "order": 9, "band": "dificil", "level": 2, "skill": "encontro_consonantal",
+      "instruction": "Olhe a imagem e toque na sílaba que falta.",
+      "stimulus": { "image": "images/quiz/prato-vazio.svg", "image_alt": "Desenho de um prato vazio.", "text": "___ TO" },
+      "options": [{ "label": "PRA" }, { "label": "BRA" }, { "label": "TRA" }],
+      "answer": 1
+    },
+    {
+      "id": "D2", "order": 10, "band": "dificil", "level": 4, "skill": "discriminacao_de_frases",
+      "instruction": "Olhe a cena e toque na frase que descreve o que acontece.",
+      "stimulus": { "image": "images/quiz/varal.svg", "image_alt": "Pessoa colocando um prendedor em uma camiseta no varal, ao lado de outras roupas penduradas." },
+      "options": [{ "label": "A PESSOA DOBRA A ROUPA." }, { "label": "A PESSOA ESTENDE A ROUPA." }, { "label": "A PESSOA LAVA A ROUPA." }],
+      "answer": 2
+    },
+    {
+      "id": "D3", "order": 11, "band": "dificil", "level": 4, "skill": "informacao_explicita",
+      "instruction": "Leia o aviso. Em qual dia a feira vai abrir?",
+      "stimulus": { "text": "A FEIRA ABRE NO SÁBADO. NO DOMINGO, A FEIRA FICA FECHADA." },
+      "options": [{ "label": "DOMINGO" }, { "label": "SEGUNDA-FEIRA" }, { "label": "SÁBADO" }],
+      "answer": 3
+    },
+    {
+      "id": "D4", "order": 12, "band": "dificil", "level": 4, "skill": "relacao_entre_frases",
+      "instruction": "Leia o texto. Por que Rui pegou o guarda-chuva?",
+      "stimulus": { "text": "RUI VIU QUE ESTAVA CHOVENDO. ANTES DE SAIR, PEGOU O GUARDA-CHUVA." },
+      "options": [{ "label": "PORQUE ESTAVA CHOVENDO." }, { "label": "PORQUE IA COMPRAR UM GUARDA-CHUVA." }, { "label": "PORQUE ESTAVA FAZENDO SOL." }],
+      "answer": 1
+    }
+  ],
+  "examples": [
+    {
+      "name": "exemplo do README: duas difíceis puladas",
+      "responses": { "F1": 2, "F2": 1, "F3": 3, "F4": 2, "M1": 3, "M2": 1, "M3": 2, "M4": 3, "D1": 1, "D2": 2, "D3": null, "D4": null },
+      "expected": { "hits": { "facil": 4, "medio": 4, "dificil": 2 }, "difficulty": "medio", "provisional": false, "provisional_reason": null, "start_level": 3, "credited_phases": [1, 2] }
+    },
+    {
+      "name": "tudo certo",
+      "responses": { "F1": 2, "F2": 1, "F3": 3, "F4": 2, "M1": 3, "M2": 1, "M3": 2, "M4": 3, "D1": 1, "D2": 2, "D3": 3, "D4": 1 },
+      "expected": { "hits": { "facil": 4, "medio": 4, "dificil": 4 }, "difficulty": "dificil", "provisional": false, "provisional_reason": null, "start_level": 4, "credited_phases": [1, 2, 3] }
+    },
+    {
+      "name": "quiz pulado",
+      "skipped": true,
+      "responses": {},
+      "expected": { "hits": { "facil": 0, "medio": 0, "dificil": 0 }, "difficulty": "facil", "provisional": true, "provisional_reason": "quiz_pulado", "start_level": 1, "credited_phases": [] }
+    },
+    {
+      "name": "interrompido na quinta questão",
+      "responses": { "F1": 2, "F2": 1, "F3": 3, "F4": 2 },
+      "expected": { "hits": { "facil": 4, "medio": 0, "dificil": 0 }, "difficulty": "facil", "provisional": true, "provisional_reason": "quiz_incompleto", "start_level": 1, "credited_phases": [] }
+    },
+    {
+      "name": "pulou fáceis demais",
+      "responses": { "F1": null, "F2": null, "F3": 3, "F4": 2, "M1": 3, "M2": 1, "M3": 2, "M4": 3, "D1": 1, "D2": 2, "D3": 3, "D4": 1 },
+      "expected": { "hits": { "facil": 2, "medio": 4, "dificil": 4 }, "difficulty": "facil", "provisional": true, "provisional_reason": "poucas_respostas_faceis", "start_level": 1, "credited_phases": [] }
+    },
+    {
+      "name": "fáceis baixas e médias altas",
+      "responses": { "F1": 1, "F2": 2, "F3": 3, "F4": 2, "M1": 3, "M2": 1, "M3": 2, "M4": 3, "D1": 2, "D2": 1, "D3": 1, "D4": 2 },
+      "expected": { "hits": { "facil": 2, "medio": 4, "dificil": 0 }, "difficulty": "facil", "provisional": true, "provisional_reason": "resultado_contrastante", "start_level": 1, "credited_phases": [] }
+    },
+    {
+      "name": "sempre a primeira opção",
+      "responses": { "F1": 1, "F2": 1, "F3": 1, "F4": 1, "M1": 1, "M2": 1, "M3": 1, "M4": 1, "D1": 1, "D2": 1, "D3": 1, "D4": 1 },
+      "expected": { "hits": { "facil": 1, "medio": 1, "dificil": 2 }, "difficulty": "facil", "provisional": false, "provisional_reason": null, "start_level": 1, "credited_phases": [] }
+    },
+    {
+      "name": "fáceis e difíceis certas, médias erradas",
+      "responses": { "F1": 2, "F2": 1, "F3": 3, "F4": 2, "M1": 1, "M2": 2, "M3": 1, "M4": 1, "D1": 1, "D2": 2, "D3": 3, "D4": 1 },
+      "expected": { "hits": { "facil": 4, "medio": 0, "dificil": 4 }, "difficulty": "medio", "provisional": false, "provisional_reason": null, "start_level": 1, "credited_phases": [] }
+    },
+    {
+      "name": "lê sílabas mas não palavras",
+      "responses": { "F1": 2, "F2": 1, "F3": 3, "F4": 1, "M1": 3, "M2": 1, "M3": 1, "M4": 3, "D1": 1, "D2": 1, "D3": 1, "D4": 2 },
+      "expected": { "hits": { "facil": 3, "medio": 3, "dificil": 1 }, "difficulty": "medio", "provisional": false, "provisional_reason": null, "start_level": 2, "credited_phases": [1, 2] }
+    },
+    {
+      "name": "só letras",
+      "responses": { "F1": 2, "F2": 1, "F3": 1, "F4": 2, "M1": 1, "M2": 2, "M3": 1, "M4": 1, "D1": 2, "D2": 1, "D3": 1, "D4": 2 },
+      "expected": { "hits": { "facil": 3, "medio": 0, "dificil": 0 }, "difficulty": "medio", "provisional": false, "provisional_reason": null, "start_level": 1, "credited_phases": [] }
+    }
+  ]
+}

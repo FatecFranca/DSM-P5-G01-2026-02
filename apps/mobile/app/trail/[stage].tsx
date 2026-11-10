@@ -8,6 +8,7 @@ import jaguaSitting from "../../assets/trail/jagua-sitting.webp";
 import { TrailCard, TrailDot, TrailScene } from "../../src/components/ui/Trail";
 import { useContentStore } from "../../src/content/store";
 import { nextTrailUnit, trailStage, unitsForStage, unitStatus, type TrailStatus } from "../../src/domain/trail";
+import { usePlacementStore } from "../../src/store/placement-store";
 import { useStudyStore } from "../../src/store/study-store";
 
 // Figma 9:224 e 13:1538: galhos 852×1847 desenhados em 321×696 a partir de x = -1. Cada imagem leva três exercícios,
@@ -31,6 +32,7 @@ export default function TrailStageScreen() {
   const stage = trailStage(stageId);
   const progress = useStudyStore((state) => state.progress);
   const tracks = useContentStore((state) => state.tracks);
+  const placement = usePlacementStore((state) => state.trail);
   const { width } = useWindowDimensions();
   const scroll = useRef<ScrollView>(null);
   // Medidas para abrir já no galho atual: só rola quando a tela, o conteúdo e o menu foram medidos.
@@ -40,8 +42,8 @@ export default function TrailStageScreen() {
   const k = width / TILE.width;
   const tileHeight = TILE.height * k;
   const units = unitsForStage(tracks, stage);
-  const next = nextTrailUnit(tracks, progress);
-  const statuses = units.map((unit) => unitStatus(unit, progress, next));
+  const next = nextTrailUnit(tracks, progress, placement);
+  const statuses = units.map((unit) => unitStatus(unit, progress, next, placement?.creditedLetters));
   const tiles = Math.max(1, Math.ceil(units.length / SLOTS.length));
   // O Jagua fica no exercício atual; com a etapa toda feita, no último concluído; em etapa fechada, some.
   const currentIndex = statuses.indexOf("current");

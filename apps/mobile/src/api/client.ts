@@ -4,7 +4,8 @@ import { ApiError } from "./errors";
 import type { ItemState, LessonProgress, SyncEvent } from "../domain/types";
 import { canonicalLessonId } from "../domain/content-ids";
 import { normalizeExerciseTypes } from "../domain/exercise-types";
-import { parseAcceptedIds, parsePulledItemState, parseRejections, toApiEvent } from "../sync/contract";
+import type { PlacementRecord } from "../domain/placement-record";
+import { parseAcceptedIds, parsePulledItemState, parsePulledPlacement, parseRejections, toApiEvent } from "../sync/contract";
 
 // 10.0.2.2 é o alias do emulador Android para a máquina host; no simulador iOS o host é localhost.
 const configuredApiUrl = String(Constants.expoConfig?.extra?.apiUrl ?? "http://10.0.2.2:8000");
@@ -42,7 +43,7 @@ export async function pushEvents(events: SyncEvent[], accessToken?: string | nul
   return { acceptedIds: parseAcceptedIds(data), rejections: parseRejections(data) };
 }
 const pulledStatus = (value: unknown): LessonProgress["status"] => value === "completed" || value === "mastered" ? "mastered" : value === "review" || value === "needs_review" ? value : "learning";
-export type PulledEvents = { cursor: string; progress: LessonProgress[]; itemStates: ItemState[] };
+export type PulledEvents = { cursor: string; progress: LessonProgress[]; itemStates: ItemState[]; placements: PlacementRecord[] };
 export async function pullEvents(cursor: string | null, accessToken: string): Promise<PulledEvents> {
   const response = await fetch(`${apiUrl}/v1/sync/pull${cursor ? `?cursor=${encodeURIComponent(cursor)}` : ""}`, { headers: { Authorization: `Bearer ${accessToken}` } });
   if (!response.ok) throw new ApiError(`Falha ao receber atualizações (${response.status})`, response.status);
@@ -50,7 +51,8 @@ export async function pullEvents(cursor: string | null, accessToken: string): Pr
   const events = data.events ?? [];
   const progress = events.filter((event) => event.type === "progress").map(({ payload: p, occurred_at }) => { const count = Number(p.completed_exercises ?? 0); const completedTypes = normalizeExerciseTypes(p.completed_types); return { lessonId: canonicalLessonId(String(p.unit_id ?? p.lesson_id)), completedTypes, score: count, completed: p.status === "completed" || p.status === "mastered", status: pulledStatus(p.status), attempts: Number(p.attempts ?? 0), correctAttempts: Number(p.correct_attempts ?? 0), accuracy: typeof p.accuracy === "number" ? p.accuracy : undefined, reviewCount: Number(p.review_count ?? 0), lastPracticedAt: typeof p.last_practiced_at === "string" ? p.last_practiced_at : undefined, nextReviewAt: typeof p.next_review_at === "string" ? p.next_review_at : undefined, updatedAt: occurred_at }; });
   const itemStates = events.filter((event) => event.type === "item_state").map(({ payload, occurred_at }) => parsePulledItemState(payload, occurred_at)).filter((state): state is ItemState => state !== undefined);
-  return { cursor: String(data.next_cursor), progress, itemStates };
+  const placements = events.filter((event) => event.type === "placement").map(({ payload, occurred_at }) => parsePulledPlacement(payload, occurred_at)).filter((record): record is PlacementRecord => record !== undefined);
+  return { cursor: String(data.next_cursor), progress, itemStates, placements };
 }
 export type Me = { name: string | null; email: string };
 export async function getMe(accessToken: string): Promise<Me> {

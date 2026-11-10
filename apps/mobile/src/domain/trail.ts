@@ -1,4 +1,5 @@
 import { isLessonOpen } from "./learning";
+import { LEARNING_LEVELS, type LearningLevelId } from "./levels";
 import type { Track, Unit, UnitKind } from "./types";
 
 type ProgressMap = Record<string, { completed?: boolean } | undefined>;
@@ -45,26 +46,44 @@ export function unitsForStage(tracks: Track[], stage: TrailStage): Unit[] {
 
 export type TrailStatus = "done" | "current" | "available" | "locked";
 
-const isDone = (unit: Unit, progress: ProgressMap) => progress[unit.id]?.completed === true;
-const isOpen = (unit: Unit, progress: ProgressMap) => isLessonOpen(unit, progress);
+/** O que o nivelamento muda na trilha: o nível por onde começar e as letras creditadas (vazio = nenhum crédito). */
+export type TrailPlacement = { startLevel: LearningLevelId; creditedLetters: string };
 
-/** Próxima lição de toda a trilha: a primeira liberada e não concluída, na ordem pedagógica. */
-export function nextTrailUnit(tracks: Track[], progress: ProgressMap): Unit | null {
+const isDone = (unit: Unit, progress: ProgressMap) => progress[unit.id]?.completed === true;
+const isOpen = (unit: Unit, progress: ProgressMap, creditedLetters = "") => isLessonOpen(unit, progress, creditedLetters);
+
+/** Unidades das trilhas temáticas de um nível do Prosa, na ordem das trilhas e das unidades. */
+const themeUnitsForLevel = (tracks: Track[], level: LearningLevelId): Unit[] => {
+  const kinds = new Set(LEARNING_LEVELS.find((item) => item.id === level)?.unitKinds ?? []);
+  return [...tracks].sort((a, b) => a.order - b.order).flatMap((track) => [...track.units].sort((a, b) => a.order - b.order).filter((unit) => kinds.has(unit.kind)));
+};
+
+/**
+ * Próxima lição de toda a trilha: a primeira liberada e não concluída, na ordem pedagógica. Com nivelamento, começa
+ * pelas unidades do nível sugerido em diante; esgotadas, volta à ordem pedagógica (letras e sílabas que faltam).
+ */
+export function nextTrailUnit(tracks: Track[], progress: ProgressMap, placement?: TrailPlacement): Unit | null {
+  const credited = placement?.creditedLetters ?? "";
+  const pending = (unit: Unit) => isOpen(unit, progress, credited) && !isDone(unit, progress);
+  for (let level = placement && placement.startLevel > 1 ? placement.startLevel : 5; level <= 4; level += 1) {
+    const unit = themeUnitsForLevel(tracks, level as LearningLevelId).find(pending);
+    if (unit) return unit;
+  }
   for (const id of LEARNING_ORDER) {
-    const unit = unitsForStage(tracks, trailStage(id)!).find((item) => isOpen(item, progress) && !isDone(item, progress));
+    const unit = unitsForStage(tracks, trailStage(id)!).find(pending);
     if (unit) return unit;
   }
   return null;
 }
 
-export function unitStatus(unit: Unit, progress: ProgressMap, next: Unit | null): TrailStatus {
+export function unitStatus(unit: Unit, progress: ProgressMap, next: Unit | null, creditedLetters = ""): TrailStatus {
   if (unit.id === next?.id) return "current";
   if (isDone(unit, progress)) return "done";
-  return isOpen(unit, progress) ? "available" : "locked";
+  return isOpen(unit, progress, creditedLetters) ? "available" : "locked";
 }
 
-export function stageStatus(units: Unit[], progress: ProgressMap, next: Unit | null): TrailStatus {
+export function stageStatus(units: Unit[], progress: ProgressMap, next: Unit | null, creditedLetters = ""): TrailStatus {
   if (units.some((unit) => unit.id === next?.id)) return "current";
   if (units.length > 0 && units.every((unit) => isDone(unit, progress))) return "done";
-  return units.some((unit) => isOpen(unit, progress)) ? "available" : "locked";
+  return units.some((unit) => isOpen(unit, progress, creditedLetters)) ? "available" : "locked";
 }

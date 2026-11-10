@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { ItemState, LessonProgress, SyncEvent } from "../domain/types";
-import { canonicalizeProgress, mergeItemState, mergeProgress, parseAcceptedIds, parsePulledItemState, parseRejections, toApiEvent } from "./contract";
+import { canonicalizeProgress, mergeItemState, mergeProgress, parseAcceptedIds, parsePulledItemState, parsePulledPlacement, parseRejections, toApiEvent } from "./contract";
 describe("contrato da API de sync", () => {
   it("converte tentativa camelCase para envelope snake_case com IDs canônicos e contexto de sessão", () => {
     const event: SyncEvent = { id: "evt-1", type: "attempt", payload: { clientAttemptId: "try-1", lessonId: "letter-a", exerciseId: "A-complete-word", exerciseType: "complete_word", answer: "cachorro", correct: true, durationMs: 1200, createdAt: "2026-01-01T00:00:00Z", sessionId: "s1", positionInSession: 2, attemptIndexInItem: 1, audioRepeats: 3, timeToFirstInteractionMs: 800, servedBy: "rules", servedPolicyVersion: "session-v1" } };
@@ -40,6 +40,20 @@ describe("contrato da API de sync", () => {
     expect(merged.lessonId).toBe("lesson-A");
     expect(merged.completed).toBe(true);
     expect(merged.completedTypes).toEqual(["listen_choose", "recognize_letter", "find_in_word"]);
+  });
+});
+
+describe("nivelamento no sync", () => {
+  const record = { resultId: "r1", quizVersion: "nivelamento-v1", completedAt: "2026-11-10T12:00:00.000Z", skipped: false, responses: { F1: 2, F2: null } };
+  it("envia só as respostas brutas; o servidor corrige com a mesma regra", () => {
+    expect(toApiEvent({ id: "placement:r1", type: "placement", payload: record })).toEqual({
+      client_event_id: "placement:r1", type: "placement", occurred_at: "2026-11-10T12:00:00.000Z",
+      payload: { result_id: "r1", quiz_version: "nivelamento-v1", skipped: false, responses: { F1: 2, F2: null } },
+    });
+  });
+  it("lê o nivelamento recebido no pull e ignora payload inválido", () => {
+    expect(parsePulledPlacement({ result_id: "r1", quiz_version: "nivelamento-v1", skipped: false, responses: { F1: 2, F2: null }, difficulty: "facil" }, "2026-11-10T12:00:00Z")).toEqual({ ...record, completedAt: "2026-11-10T12:00:00Z" });
+    expect(parsePulledPlacement({ result_id: "r1", quiz_version: "nivelamento-v1", responses: { Z: 1 } }, "2026-11-10T12:00:00Z")).toBeUndefined();
   });
 });
 

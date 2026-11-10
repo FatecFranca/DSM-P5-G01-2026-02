@@ -1,4 +1,5 @@
 import * as SQLite from "expo-sqlite";
+import { latestPlacement, parsePlacementRecord, placementPointsOf, scoreOf, type PlacementRecord } from "../domain/placement-record";
 import type { Attempt, ExerciseType, ItemState, LessonProgress, SyncEvent } from "../domain/types";
 import { canonicalizeProgress, mergeItemState, mergeProgress } from "../sync/contract";
 
@@ -122,13 +123,44 @@ export const PLACEMENT_POINTS_KEY = "placement_points";
 /** Nome vindo de GET /v1/me, guardado para o perfil abrir offline. */
 export const USER_NAME_KEY = "user_name";
 export const PLACEMENT_LEVEL_KEY = "placement_level";
+/** Último nivelamento (JSON de PlacementRecord: respostas brutas; a correção é refeita ao ler). */
+export const PLACEMENT_RESULT_KEY = "placement_result";
 /** Conquistas registradas no aparelho (JSON `{ [id]: { at: ISO, celebrated: boolean } }`, ver domain/achievements). */
 export const ACHIEVEMENTS_KEY = "achievements";
 
-export async function applyPulled(incoming: { progress: LessonProgress[]; itemStates: ItemState[]; cursor: string }, requiredTypesOf: (lessonId: string) => readonly ExerciseType[] | undefined): Promise<{ progress: LessonProgress[]; itemStates: ItemState[] }> {
+export async function getPlacement(): Promise<PlacementRecord | undefined> {
+  const raw = await getSetting(PLACEMENT_RESULT_KEY);
+  if (!raw) return undefined;
+  try { return parsePlacementRecord(JSON.parse(raw)); } catch { return undefined; }
+}
+
+/** Grava o resultado e os resumos que o resto do app lê. Refazer o quiz nunca tira pontos já ganhos. */
+async function writePlacement(conn: SQLite.SQLiteDatabase, record: PlacementRecord): Promise<void> {
+  const previousPoints = Number((await conn.getFirstAsync<{ value: string }>("SELECT value FROM settings WHERE key = ?", PLACEMENT_POINTS_KEY))?.value ?? 0) || 0;
+  const upsert = "INSERT OR REPLACE INTO settings VALUES (?, ?)";
+  await conn.runAsync(upsert, PLACEMENT_RESULT_KEY, JSON.stringify(record));
+  await conn.runAsync(upsert, PLACEMENT_DONE_KEY, "1");
+  await conn.runAsync(upsert, PLACEMENT_LEVEL_KEY, String(scoreOf(record).startLevel));
+  await conn.runAsync(upsert, PLACEMENT_POINTS_KEY, String(Math.max(previousPoints, placementPointsOf(record))));
+}
+
+export async function savePlacement(record: PlacementRecord): Promise<void> {
+  const conn = await db();
+  await conn.withTransactionAsync(async () => {
+    await writePlacement(conn, record);
+    await conn.runAsync("INSERT OR IGNORE INTO sync_queue (id, type, payload) VALUES (?, 'placement', ?)", `placement:${record.resultId}`, JSON.stringify(record));
+  });
+}
+
+export async function applyPulled(incoming: { progress: LessonProgress[]; itemStates: ItemState[]; placements?: PlacementRecord[]; cursor: string }, requiredTypesOf: (lessonId: string) => readonly ExerciseType[] | undefined): Promise<{ progress: LessonProgress[]; itemStates: ItemState[]; placement?: PlacementRecord }> {
   const conn = await db();
   const progress: LessonProgress[] = []; const itemStates: ItemState[] = [];
+  let placement: PlacementRecord | undefined;
   await conn.withTransactionAsync(async () => {
+    // Nivelamento feito em outro aparelho: o mais recente vence, sem reenfileirar.
+    const local = await getPlacement();
+    const latest = (incoming.placements ?? []).reduce<PlacementRecord | undefined>((best, remote) => latestPlacement(best, remote), local);
+    if (latest && latest !== local) { await writePlacement(conn, latest); placement = latest; }
     for (const remote of incoming.itemStates) {
       const row = await conn.getFirstAsync<{ payload: string }>("SELECT payload FROM item_states WHERE item_id = ?", remote.itemId);
       const merged = mergeItemState(row ? JSON.parse(row.payload) as ItemState : undefined, remote);
@@ -143,5 +175,5 @@ export async function applyPulled(incoming: { progress: LessonProgress[]; itemSt
     }
     await conn.runAsync("INSERT OR REPLACE INTO settings VALUES ('sync_cursor', ?)", incoming.cursor);
   });
-  return { progress, itemStates };
+  return { progress, itemStates, placement };
 }

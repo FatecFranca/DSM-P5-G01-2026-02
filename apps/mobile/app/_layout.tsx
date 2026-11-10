@@ -6,9 +6,10 @@ import { router, Stack, useSegments } from "expo-router";
 import { useEffect, useState } from "react";
 import { ActivityIndicator, AppState, Text, View } from "react-native";
 import { loadContent, refreshContent } from "../src/content/store";
-import { getItemStates, getProgress, initializeDatabase } from "../src/storage/database";
+import { getItemStates, getPlacement, getProgress, initializeDatabase } from "../src/storage/database";
 import { colors, fonts } from "../src/theme";
 import { useStudyStore } from "../src/store/study-store";
+import { usePlacementStore } from "../src/store/placement-store";
 import { useAuthStore } from "../src/store/auth-store";
 
 const queryClient = new QueryClient({ defaultOptions: { queries: { retry: 2 }, mutations: { retry: 0 } } });
@@ -17,14 +18,15 @@ export default function RootLayout() {
   const [fontsLoaded, fontError] = useFonts({ Inter_300Light, Inter_400Regular, Inter_500Medium, Inter_600SemiBold, Inter_700Bold, SourceSerifPro_400Regular });
   const [ready, setReady] = useState(false); const [error, setError] = useState<string>();
   const hydrate = useStudyStore((state) => state.hydrate);
+  const setPlacement = usePlacementStore((state) => state.setPlacement);
   const restore = useAuthStore((state) => state.restore);
   const status = useAuthStore((state) => state.status);
   const segments = useSegments();
   useEffect(() => {
-    Promise.all([initializeDatabase().then(() => loadContent()).then(() => Promise.all([getProgress(), getItemStates()])), restore()])
-      .then(([[progress, itemStates]]) => { hydrate(progress, itemStates); setReady(true); void refreshContent().catch(() => undefined); })
+    Promise.all([initializeDatabase().then(() => loadContent()).then(() => Promise.all([getProgress(), getItemStates(), getPlacement()])), restore()])
+      .then(([[progress, itemStates, placement]]) => { hydrate(progress, itemStates); setPlacement(placement); setReady(true); void refreshContent().catch(() => undefined); })
       .catch((cause: unknown) => setError(cause instanceof Error ? cause.message : "Falha ao abrir dados locais"));
-  }, [hydrate, restore]);
+  }, [hydrate, restore, setPlacement]);
   // Sem sessão, nenhuma tela do app fica aberta: assim que o token some (logout, refresh recusado, armazenamento vazio), volta ao login.
   useEffect(() => {
     if (ready && status === "anonymous" && segments[0] !== "auth") router.replace("/auth");

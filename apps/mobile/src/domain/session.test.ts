@@ -43,6 +43,23 @@ describe("fila de sessão", () => {
     expect(dueFirst).toContain("e");
   });
 
+  it("distribui os novos pela mistura de dificuldade do nivelamento, com a apresentação sempre primeiro", () => {
+    const leveled = [["a", "introducao"], ["b", "facil"], ["c", "medio"], ["d", "medio"], ["e", "desafio"], ["f", "facil"]].map(([id, difficulty]) => ({ id, difficulty }));
+    const bandOf = (item: { difficulty: string }) => (item.difficulty === "desafio" ? "dificil" : item.difficulty === "medio" ? "medio" : "facil") as "facil" | "medio" | "dificil";
+    const pinned = (item: { difficulty: string }) => item.difficulty === "introducao";
+    const order = (mix?: { facil: number; medio: number; dificil: number }) => buildSession({ exercises: leveled, states: {}, now, seed: "s", bandMix: mix, bandOf, pinFirst: pinned }).map((item) => item.id);
+    expect(order()).toEqual(["a", "b", "c", "d", "e", "f"]);
+    expect(order({ facil: 2, medio: 3, dificil: 5 })).toEqual(["a", "e", "c", "b", "d", "f"]);
+    expect(order({ facil: 6, medio: 3, dificil: 1 })).toEqual(["a", "b", "f", "c", "d", "e"]);
+  });
+
+  it("a mistura só reordena os novos: vencidos e fracos continuam na frente", () => {
+    const leveled = [["a", "facil"], ["b", "desafio"], ["c", "facil"]].map(([id, difficulty]) => ({ id, difficulty }));
+    const states = { c: state("c", [true], hours(-9)) };
+    const session = buildSession({ exercises: leveled, states, now, seed: "s", bandMix: { facil: 2, medio: 3, dificil: 5 }, bandOf: (item) => (item.difficulty === "desafio" ? "dificil" : "facil") });
+    expect(session.map((item) => item.id)).toEqual(["c", "b", "a"]);
+  });
+
   it("reinsere o item errado três posições adiante ou no fim", () => {
     expect(reinsert(["b", "c", "d", "e"], "a")).toEqual(["b", "c", "d", "a", "e"]);
     expect(reinsert(["b"], "a")).toEqual(["b", "a"]);

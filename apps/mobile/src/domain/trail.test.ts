@@ -57,6 +57,32 @@ describe("etapas da árvore da trilha", () => {
     expect(stageStatus([], progress, next)).toBe("locked");
   });
 
+  it("começa pelo nível sugerido no nivelamento quando há crédito de letras", () => {
+    const credit = (startLevel: 1 | 2 | 3 | 4) => ({ startLevel, creditedLetters: startLevel > 1 ? "AEM" : "" });
+    expect(nextTrailUnit(tracks, {}, credit(2))?.id).toBe("casa-silabas");
+    expect(nextTrailUnit(tracks, {}, credit(3))?.id).toBe("casa-1");
+    expect(nextTrailUnit(tracks, {}, credit(4))?.id).toBe("casa-frases");
+    expect(nextTrailUnit(tracks, {}, credit(1))?.id).toBe("lesson-A");
+    // Acabou o que há do nível sugerido em diante: volta à ordem pedagógica, que ainda tem as letras e as sílabas.
+    expect(nextTrailUnit(tracks, { "casa-frases": { completed: true } }, credit(4))?.id).toBe("lesson-A");
+    expect(nextTrailUnit(tracks, { "casa-1": { completed: true }, "casa-frases": { completed: true } }, credit(3))?.id).toBe("lesson-A");
+  });
+
+  it("sem crédito, o nível sugerido não abre nada: a sugestão cai na primeira lição liberada", () => {
+    expect(nextTrailUnit(tracks, {}, { startLevel: 3, creditedLetters: "" })?.id).toBe("lesson-A");
+  });
+
+  it("mostra as unidades abertas pelo crédito como liberadas, e as letras continuam sem concluir", () => {
+    const placement = { startLevel: 3 as const, creditedLetters: "AEM" };
+    const next = nextTrailUnit(tracks, {}, placement);
+    const letras = unitsForStage(tracks, trailStage("letras")!);
+    expect(letras.map((unit) => unitStatus(unit, {}, next, placement.creditedLetters))).toEqual(["available", "available", "available", "available"]);
+    expect(stageStatus(letras, {}, next, placement.creditedLetters)).toBe("available");
+    expect(stageStatus(unitsForStage(tracks, trailStage("palavras")!), {}, next, placement.creditedLetters)).toBe("current");
+    expect(unitStatus(letras[0], {}, next)).toBe("available");
+    expect(unitStatus(letras[1], {}, next)).toBe("locked");
+  });
+
   it("não reconhece etapa desconhecida", () => {
     expect(trailStage("frases")).toBeUndefined();
   });

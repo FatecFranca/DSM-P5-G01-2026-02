@@ -6,6 +6,7 @@ import { Screen } from "../src/components/Screen";
 import { getSetting, PLACEMENT_DONE_KEY } from "../src/storage/database";
 import { colors, fonts } from "../src/theme";
 import { useAuthStore } from "../src/store/auth-store";
+import { syncNow } from "../src/sync/use-sync";
 
 /** Rota de entrada, sem tela própria: login, depois introdução e nivelamento no primeiro acesso, depois a Trilha. */
 export default function Entry() {
@@ -14,7 +15,12 @@ export default function Entry() {
 
   useEffect(() => {
     if (status === "anonymous") return;
-    void getSetting(PLACEMENT_DONE_KEY).then((done) => setPlacementDone(done === "1"));
+    let cancelled = false;
+    // Aparelho novo ou reinstalado: antes de mostrar o quiz, tenta trazer da API um nivelamento já feito (até 3 s).
+    const restore = (done: string | null) => done === "1" ? Promise.resolve(done)
+      : Promise.race([syncNow().catch(() => 0), new Promise((resolve) => setTimeout(resolve, 3000))]).then(() => getSetting(PLACEMENT_DONE_KEY));
+    void getSetting(PLACEMENT_DONE_KEY).then(restore).then((done) => { if (!cancelled) setPlacementDone(done === "1"); });
+    return () => { cancelled = true; };
   }, [status]);
 
   if (status === "anonymous") return <Redirect href="/auth" />;

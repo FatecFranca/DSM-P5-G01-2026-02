@@ -35,6 +35,8 @@ export default function Profile() {
         <View style={{ height: 18 * s }} />
         <LinkCard label="Minhas conquistas" audio="Minhas conquistas: veja os selos que você já ganhou" onPress={() => router.push("/achievements")} />
         <View style={{ height: 18 * s }} />
+        <LinkCard label="Refazer nivelamento" audio="Refazer nivelamento: responda o quiz de novo para ajustar por onde começar" onPress={() => router.push({ pathname: "/placement", params: { retake: "1" } })} />
+        <View style={{ height: 18 * s }} />
         <LinkCard label="Sair" audio="Sair da conta" onPress={confirmLogout} />
       </View>
     </ScrollView>

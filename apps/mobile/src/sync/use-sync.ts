@@ -4,6 +4,7 @@ import { requiredTypesOf } from "../content/store";
 import { acknowledgeEvents, applyPulled, deferEvents, getQueue, getSyncCursor } from "../storage/database";
 import { SessionMissingError, withSession } from "./session-retry";
 import { useStudyStore } from "../store/study-store";
+import { usePlacementStore } from "../store/placement-store";
 
 let inFlight: Promise<number> | null = null;
 
@@ -16,7 +17,9 @@ async function runSync(): Promise<number> {
       if (result.rejections.length) console.warn("Eventos descartados pelo servidor:", result.rejections.map((item) => `${item.id}: ${item.reason}`).join("; "));
       await acknowledgeEvents([...result.acceptedIds, ...result.rejections.map((item) => item.id)]);
       const incoming = await pullEvents(await getSyncCursor(), accessToken);
-      useStudyStore.getState().applyRemote(await applyPulled(incoming, requiredTypesOf));
+      const merged = await applyPulled(incoming, requiredTypesOf);
+      useStudyStore.getState().applyRemote(merged);
+      if (merged.placement) usePlacementStore.getState().setPlacement(merged.placement);
       return result.acceptedIds.length;
     });
   } catch (error) {

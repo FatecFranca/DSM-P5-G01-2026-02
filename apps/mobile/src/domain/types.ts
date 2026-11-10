@@ -120,7 +120,7 @@ export type Attempt = {
 
 export type SyncEvent = {
   id: string;
-  type: "attempt" | "progress" | "item_state";
+  type: "attempt" | "progress" | "item_state" | "placement";
   payload: Record<string, unknown>;
   retries?: number;
 };

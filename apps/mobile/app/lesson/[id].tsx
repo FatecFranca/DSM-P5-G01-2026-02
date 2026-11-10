@@ -18,12 +18,15 @@ import { useContentStore } from "../../src/content/store";
 import { canonicalLessonId } from "../../src/domain/content-ids";
 import { sessionIncentiveMessage, successIncentiveTitle } from "../../src/domain/incentives";
 import { deriveProgress, isLessonOpen, type Feedback } from "../../src/domain/learning";
+import { itemBand } from "../../src/domain/placement";
+import { scoreOf } from "../../src/domain/placement-record";
 import { applyResult } from "../../src/domain/scheduler";
 import { SESSION_POLICY_VERSION, buildSession, reinsert, sessionSummary } from "../../src/domain/session";
 import type { Exercise, Unit } from "../../src/domain/types";
 import { rankNext } from "../../src/api/client";
 import { saveAttempt, saveItemState } from "../../src/storage/database";
 import { useAuthStore } from "../../src/store/auth-store";
+import { useCreditedLetters, usePlacementStore } from "../../src/store/placement-store";
 import { useStudyStore } from "../../src/store/study-store";
 import { syncNow } from "../../src/sync/use-sync";
 import { colors, fonts, radius } from "../../src/theme";
@@ -41,12 +44,13 @@ export default function Lesson() {
   const { id } = useLocalSearchParams<{ id: string }>();
   const units = useContentStore((state) => state.units);
   const progress = useStudyStore((state) => state.progress);
+  const credited = useCreditedLetters();
   const unit = units.find((item) => item.id === canonicalLessonId(String(id)));
 
   useEffect(() => {
     if (!units.length) return;
-    if (!unit || !isLessonOpen(unit, progress)) leaveLesson();
-  }, [progress, unit, units.length]);
+    if (!unit || !isLessonOpen(unit, progress, credited)) leaveLesson();
+  }, [credited, progress, unit, units.length]);
 
   if (!unit) return <Screen><Text style={styles.instruction}>{units.length ? "Atividade não encontrada." : "Preparando atividade…"}</Text></Screen>;
   return <LessonSession unit={unit} />;
@@ -57,9 +61,11 @@ function LessonSession({ unit }: { unit: Unit }) {
   const itemStates = useStudyStore((state) => state.itemStates);
   const setProgress = useStudyStore((state) => state.setProgress);
   const setItemState = useStudyStore((state) => state.setItemState);
+  // Mistura de dificuldade do nivelamento (contracts/placement-quiz.json): só reordena os itens ainda não vistos.
+  const bandMix = usePlacementStore((state) => (state.record ? scoreOf(state.record).mix : undefined));
 
   // A sessão é montada uma vez por abertura da unidade: vencidos e fracos primeiro, novos na ordem do currículo.
-  const [session] = useState(() => { const now = new Date(); return { id: makeId(), startedAt: now, queue: buildSession({ exercises: unit.exercises, states: itemStates, now, seed: `${unit.id}:${dayBucket(now)}:${Object.keys(itemStates).length}` }) }; });
+  const [session] = useState(() => { const now = new Date(); return { id: makeId(), startedAt: now, queue: buildSession({ exercises: unit.exercises, states: itemStates, now, seed: `${unit.id}:${dayBucket(now)}:${Object.keys(itemStates).length}`, bandMix, bandOf: (item) => itemBand(item.difficulty), pinFirst: (item) => item.difficulty === "introducao" }) }; });
   const [queue, setQueue] = useState<Exercise[]>(session.queue);
   const [position, setPosition] = useState(0);
   const [feedback, setFeedback] = useState<Feedback>();

@@ -44,6 +44,14 @@ describe("aprendizagem respeitosa", () => {
     expect(isLessonUnlocked(casa, letters("AEIOUMLPSTRNDC"))).toBe(true);
   });
 
+  it("conta as letras creditadas pelo nivelamento como apresentadas, sem concluir nenhuma lição", () => {
+    const casa = { id: "casa-1", prerequisiteLetters: ["A", "M", "C", "S"] };
+    expect(isLessonUnlocked(casa, {}, "AEIOUMLPSTRNDCG")).toBe(true);
+    expect(isLessonOpen(casa, {}, "AEIOUMLPSTRNDCG")).toBe(true);
+    expect(isLessonOpen(casa, {}, "AEIOUM")).toBe(false);
+    expect(isLessonOpen(casa, {})).toBe(false);
+  });
+
   it("mantém aberta a unidade concluída mesmo sem os pré-requisitos atuais", () => {
     const lesson = { id: "lesson-B", prerequisiteLetters: ["A", "E"] };
     expect(isLessonOpen(lesson, {})).toBe(false);

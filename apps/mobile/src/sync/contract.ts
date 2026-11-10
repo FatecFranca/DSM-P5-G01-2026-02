@@ -1,5 +1,6 @@
 import { canonicalExerciseId, canonicalLessonId } from "../domain/content-ids";
 import { normalizeExerciseType, normalizeExerciseTypes } from "../domain/exercise-types";
+import { parsePlacementRecord, type PlacementRecord } from "../domain/placement-record";
 import type { ExerciseType, ItemState, LessonProgress, SyncEvent } from "../domain/types";
 
 export type ApiSyncEvent = { client_event_id: string; type: string; occurred_at: string; payload: Record<string, unknown> };
@@ -12,6 +13,9 @@ export const parseRejections = (data: { rejections?: Array<{ client_event_id?: s
 // No domínio do app a unidade é `lessonId` e o item é `exerciseId`; no fio são `unit_id` e `item_id`.
 export function toApiEvent(event: SyncEvent): ApiSyncEvent {
   const p = event.payload as Record<string, unknown>;
+  if (event.type === "placement") return { client_event_id: event.id, type: "placement", occurred_at: String(p.completedAt), payload: {
+    result_id: p.resultId, quiz_version: p.quizVersion, skipped: p.skipped === true, responses: p.responses,
+  } };
   const occurredAt = String(p.createdAt ?? p.updatedAt ?? new Date().toISOString());
   if (event.type === "attempt") return { client_event_id: event.id, type: "attempt", occurred_at: occurredAt, payload: {
     client_attempt_id: p.clientAttemptId, item_id: canonicalExerciseId(String(p.exerciseId)), unit_id: canonicalLessonId(String(p.lessonId)), exercise_type: normalizeExerciseType(p.exerciseType) ?? null,
@@ -51,6 +55,10 @@ export function parsePulledItemState(payload: Record<string, unknown>, occurredA
   if (!itemId || !unitId || !dueAt || !lastSeenAt) return undefined;
   return { itemId: canonicalExerciseId(itemId), unitId: canonicalLessonId(unitId), strength: number(payload.strength), halfLifeHours: number(payload.half_life_hours, 4), dueAt, reps: number(payload.reps), lapses: number(payload.lapses), consecutiveCorrect: number(payload.consecutive_correct), lastResult: payload.last_result === true, lastSeenAt, updatedAt: occurredAt };
 }
+
+/** Converte um evento `placement` recebido no pull; a data do evento é a de conclusão do quiz. */
+export const parsePulledPlacement = (payload: Record<string, unknown>, occurredAt: string): PlacementRecord | undefined =>
+  parsePlacementRecord({ resultId: payload.result_id, quizVersion: payload.quiz_version, completedAt: occurredAt, skipped: payload.skipped === true, responses: payload.responses });
 
 /** Reúne progresso salvo sob IDs legados (`letter-a`) no ID canônico, mesclando duplicatas. */
 export function canonicalizeProgress(items: LessonProgress[]): LessonProgress[] {

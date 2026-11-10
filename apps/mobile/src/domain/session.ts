@@ -32,16 +32,49 @@ export function shuffle<T>(items: readonly T[], random: () => number): T[] {
   return copy;
 }
 
-export type SessionInput<T extends { id: string }> = { exercises: readonly T[]; states: Record<string, ItemState | undefined>; now: Date; size?: number; mix?: SessionMix; seed: string };
+export type BandName = "facil" | "medio" | "dificil";
+const BAND_ORDER: readonly BandName[] = ["facil", "medio", "dificil"];
 
-export function buildSession<T extends { id: string }>({ exercises, states, now, size = exercises.length, mix = DEFAULT_MIX, seed }: SessionInput<T>): T[] {
+export type SessionInput<T extends { id: string }> = {
+  exercises: readonly T[]; states: Record<string, ItemState | undefined>; now: Date; size?: number; mix?: SessionMix; seed: string;
+  /** Mistura de dificuldade do nivelamento (ex.: 2 fáceis, 3 médios, 5 difíceis); só reordena os itens novos. */
+  bandMix?: Readonly<Record<BandName, number>>;
+  bandOf?: (exercise: T) => BandName;
+  /** Itens novos que abrem a lição (a apresentação da letra) ficam sempre na frente, na ordem do currículo. */
+  pinFirst?: (exercise: T) => boolean;
+};
+
+/**
+ * Intercala os itens novos pela mistura alvo: a cada passo entra a faixa com menor (já escolhidos + 1) / peso,
+ * empatando na ordem fácil → médio → difícil. Dentro da faixa, a ordem do currículo é mantida.
+ */
+export function interleaveByBand<T>(items: readonly T[], mix: Readonly<Record<BandName, number>>, bandOf: (item: T) => BandName): T[] {
+  const queues = new Map(BAND_ORDER.map((band) => [band, items.filter((item) => bandOf(item) === band)]));
+  const taken: Record<BandName, number> = { facil: 0, medio: 0, dificil: 0 };
+  const result: T[] = [];
+  while (result.length < items.length) {
+    const open = BAND_ORDER.filter((band) => (queues.get(band)?.length ?? 0) > 0);
+    const weighted = open.filter((band) => mix[band] > 0);
+    const band = (weighted.length ? weighted : open).reduce((best, current) => {
+      const score = (name: BandName) => (mix[name] > 0 ? (taken[name] + 1) / mix[name] : Number.POSITIVE_INFINITY);
+      return score(current) < score(best) ? current : best;
+    });
+    result.push(queues.get(band)!.shift()!);
+    taken[band] += 1;
+  }
+  return result;
+}
+
+export function buildSession<T extends { id: string }>({ exercises, states, now, size = exercises.length, mix = DEFAULT_MIX, seed, bandMix, bandOf, pinFirst }: SessionInput<T>): T[] {
   const random = mulberry32(hashSeed(seed));
   const stateOf = (exercise: T) => states[exercise.id];
   const due = exercises.filter((exercise) => { const state = stateOf(exercise); return state !== undefined && isDue(state, now); })
     .sort((a, b) => Date.parse(stateOf(a)!.dueAt) - Date.parse(stateOf(b)!.dueAt) || stateOf(b)!.lapses - stateOf(a)!.lapses || a.id.localeCompare(b.id));
   const weak = exercises.filter((exercise) => { const state = stateOf(exercise); return state !== undefined && !isDue(state, now) && isWeak(state); })
     .sort((a, b) => stateOf(b)!.lapses - stateOf(a)!.lapses || a.id.localeCompare(b.id));
-  const fresh = exercises.filter((exercise) => stateOf(exercise) === undefined);
+  const unseen = exercises.filter((exercise) => stateOf(exercise) === undefined);
+  const pinned = pinFirst ? unseen.filter(pinFirst) : [];
+  const fresh = bandMix && bandOf ? [...pinned, ...interleaveByBand(unseen.filter((exercise) => !pinned.includes(exercise)), bandMix, bandOf)] : unseen;
   const chosen = new Set([...due, ...weak, ...fresh]);
   const rest = exercises.filter((exercise) => !chosen.has(exercise));
   const quota = (share: number) => Math.round(size * share);

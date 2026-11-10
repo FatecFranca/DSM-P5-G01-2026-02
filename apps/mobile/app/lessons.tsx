@@ -8,6 +8,7 @@ import { TrailCorner } from "../src/components/brand/Decor";
 import { TRAIL_LINE, TrailCard, TrailDot, TrailScene } from "../src/components/ui/Trail";
 import { useContentStore } from "../src/content/store";
 import { nextTrailUnit, stageStatus, TRAIL_STAGES, unitsForStage, type TrailStageId, type TrailStatus } from "../src/domain/trail";
+import { usePlacementStore } from "../src/store/placement-store";
 import { useStudyStore } from "../src/store/study-store";
 import { FIGMA_FRAME_WIDTH, fonts, palette } from "../src/theme";
 
@@ -27,14 +28,16 @@ const STATUS_LABEL: Record<TrailStatus, string> = { done: "concluída", current:
 export default function Lessons() {
   const progress = useStudyStore((state) => state.progress);
   const tracks = useContentStore((state) => state.tracks);
+  const placement = usePlacementStore((state) => state.trail);
+  const credited = placement?.creditedLetters ?? "";
   const { width } = useWindowDimensions();
   const insets = useSafeAreaInsets();
   const [height, setHeight] = useState(0);
   const s = width / FIGMA_FRAME_WIDTH;
-  const next = nextTrailUnit(tracks, progress);
+  const next = nextTrailUnit(tracks, progress, placement);
   const stages = TRAIL_STAGES.map((stage) => {
     const units = unitsForStage(tracks, stage);
-    return { stage, units, status: stageStatus(units, progress, next) };
+    return { stage, units, status: stageStatus(units, progress, next, credited) };
   });
 
   return <TrailScene scale={s}>
