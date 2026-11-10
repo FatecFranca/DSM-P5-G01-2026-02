@@ -13,21 +13,55 @@ A carga PostgreSQL adapta os 18 modelos do arquivo [EXERCICIOSPARAOAPP.txt](EXER
 
 Por exemplo, o modelo 2B define como completar uma sílaba. Uma linha em `variacoes` autoriza SORVETE com a posição inicial e outra autoriza a posição final. Para montar `___ VE TE` com gabarito `SOR`, a consulta usa a lista de sílabas da palavra no banco linguístico. As questões de cena ficam prontas em `questoes_fixas`, com suas próprias alternativas e gabarito.
 
-## Como carregar
+## Como carregar a base tratada, as questões e o quiz
 
-Execute na raiz do repositório, com Python 3.11+ e o cliente `psql`. Use o PostgreSQL do Prosa com as migrações da API já aplicadas. Troque o host, usuário e nome do banco pelos da sua instalação.
+**1. Confirme o banco de destino.** Use o PostgreSQL do Prosa com as migrações da API já aplicadas, ou o `prosa_laboratorio` já configurado. No banco da equipe, a conta precisa poder gravar em `public.words`, referenciar essa tabela e criar ou atualizar os objetos do esquema `banco_questoes`.
+
+**2. Gere um único arquivo SQL.** No PowerShell, na raiz do repositório, use Python 3.11+:
 
 ```powershell
+python -m pip install openpyxl
 $arquivo = Join-Path $env:TEMP 'prosa-banco-questoes.sql'
-python bancoquestoesequiz/gerar_banco.py $arquivo
-psql -h localhost -U prosa -d prosa -v ON_ERROR_STOP=1 -f $arquivo
+python bancoquestoesequiz/gerar_banco.py $arquivo --base-tratada
+$arquivo
 ```
 
-A carga cria o esquema `banco_questoes` em uma transação. O usuário precisa poder criá-lo e ler e referenciar `public.words`. A carga pode ser repetida para inserir novos IDs e tentar vincular palavras pendentes. Edições em registros já carregados são preservadas. Se a carga anterior foi executada, sua tabela `banco_questoes.questoes` é preservada como histórico. Questões que continuam fixas aproveitam as versões aprovadas ou arquivadas desse histórico. Revisões antigas dos exercícios convertidos em modelos ficam registradas no histórico para conferência.
+A opção `--base-tratada` usa a planilha `pre-processamento/Corpus_SANTOS_TONI_FDC_tratado_sem_repeticoes.xlsx`. Para usar outra versão da planilha, passe seu caminho após a opção. Para carregar só as questões e o quiz em um banco que já tem o vocabulário, omita a opção.
+
+**3. Execute a carga.** No pgAdmin, abra a **Query Tool** do banco correto, abra o arquivo SQL pelo ícone de pasta e pressione **F5**. Pelo terminal, use o comando abaixo com o host, porta, usuário e banco da equipe.
+
+```powershell
+psql -h SEU_HOST -p 5432 -U SEU_USUARIO -d SEU_BANCO -v ON_ERROR_STOP=1 -f $arquivo
+```
+
+Se estiver usando o laboratório, os valores são `127.0.0.1`, `55432`, `prosa` e `prosa_laboratorio`. Se o PostgreSQL estiver no Docker Compose da equipe, copie o SQL gerado para o host que roda o Compose. A partir da pasta `infra` nesse host, substitua `CAMINHO_DO_SQL` pelo caminho do arquivo e execute:
+
+```sh
+docker compose cp "CAMINHO_DO_SQL" db:/tmp/prosa-banco-questoes.sql
+docker compose exec -T db sh -c 'psql -U "$POSTGRES_USER" -d "$POSTGRES_DB" -v ON_ERROR_STOP=1 -f /tmp/prosa-banco-questoes.sql'
+```
+
+A carga executa em uma transação. Ela importa o vocabulário, instala as questões e o quiz e resolve os vínculos. Pode ser repetida para inserir novos IDs e vincular palavras pendentes. Se a versão antiga foi instalada, `banco_questoes.questoes` fica como histórico, e as questões que continuam fixas aproveitam as versões aprovadas ou arquivadas.
+
+**4. Confira a carga.** Execute no mesmo banco:
+
+```sql
+SELECT (SELECT count(*) FROM public.words) AS palavras_no_banco,
+       (SELECT count(*) FROM banco_questoes.questoes_fixas) AS fixas,
+       (SELECT count(*) FROM banco_questoes.variacoes) AS variacoes,
+       (SELECT count(*) FROM banco_questoes.quiz_itens) AS itens_do_quiz;
+
+SELECT count(palavra_id) AS vinculados, count(*) - count(palavra_id) AS pendentes
+FROM banco_questoes.vocabulario;
+```
+
+Uma carga inicial do catálogo cria 85 questões fixas, 349 configurações de variação e 12 itens de quiz. Os totais de palavras e vínculos também dependem do que já existe no banco.
 
 ## Como a base linguística se conecta
 
 `vocabulario.termo` guarda a grafia solicitada pela curadoria. `vocabulario.palavra_id` referencia `public.words.id` por chave estrangeira. A carga procura a grafia exata, em maiúsculas e com acento. Se a palavra ainda estiver em tratamento ou ausente, o vínculo fica pendente. As variações dependentes dela aparecem na consulta de montagem assim que a palavra estiver vinculada e seus dados forem suficientes para o modelo. O esquema lê a base linguística e guarda os vínculos no banco pedagógico.
+
+A importação usa a coluna `PALAVRA`, preserva acentos e remove duplicatas após normalizar a grafia. A separação silábica vem da curadoria pedagógica e do vocabulário versionado do projeto. A coluna `ESTSILABICA` da planilha contém padrões como `CV`. Quando a separação escrita está ausente, a palavra entra com uma lista vazia e fica fora das variações que precisam desse dado. No banco do projeto, novas palavras entram como candidatas. Os campos obrigatórios de dificuldade recebem o valor inicial `medio`, e a predição do modelo fica vazia. Para palavras já cadastradas, a carga só preenche sílabas ausentes quando há uma separação disponível.
 
 ```sql
 -- Questões fixas, como a cena da menina no balanço
