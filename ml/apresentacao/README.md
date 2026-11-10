@@ -9,7 +9,8 @@ Execute sempre a partir da pasta `ml/`. Cada script é independente e mostra o r
 | `03_svm_conjunto_humano.py` | SVM no conjunto humano: teste 80/20, validação cruzada, relatório por classe e as palavras que ele errou. Gera `svm_conjunto_humano.png`. |
 | `04_svm_dataset_completo.py` | Carrega o SVM salvo (`.joblib`) e classifica o dataset principal (7.649 palavras). Gera `svm_dataset_completo.csv`. |
 | `05_gravar_resultados_no_banco.py` | Regrava as tabelas `ml_experiment_runs` e `ml_word_predictions` em `apps/api/alfabetiza.db`, para abrir no DBeaver. |
-| `executar_tudo.sh` | Roda os cinco scripts em ordem. |
+| `06_humano_vs_svm_por_palavra.py` | Compara, palavra por palavra, o veredito humano com a previsão do SVM (339 palavras). Gera `conjunto_humano_vs_svm.xlsx/.csv` e a tabela `ml_conjunto_humano_comparacao` no banco. |
+| `executar_tudo.sh` | Roda os seis scripts em ordem. |
 
 ## Como rodar
 
