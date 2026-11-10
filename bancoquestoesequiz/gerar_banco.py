@@ -2,9 +2,12 @@
 
 import argparse
 import json
+import random
 from pathlib import Path
 from string import ascii_uppercase
 from unicodedata import normalize
+
+RAIZ = Path(__file__).resolve().parents[1]
 
 
 # Duas palavras por letra para a sequência do nível 3.
@@ -32,6 +35,17 @@ CENAS = (
     ("O MENINO LÊ UM LIVRO", "LIVRO", "um livro"),
     ("A MULHER SEGURA UMA BOLSA", "BOLSA", "uma bolsa"),
 )
+
+# 4B: distratores de par mínimo (mudam uma palavra), para que a resposta dependa de ler a frase inteira e olhar a cena.
+# O da menina vem do arquivo original da curadoria. O destaque orienta a ilustração a mostrar o que diferencia as opções.
+DISTRATORES_CENA = {
+    "A LARANJA É UMA FRUTA": (("A LARANJA É UMA FLOR", "A BANANA É UMA FRUTA"), "Mostrar uma laranja inteira, sem outras frutas nem flores."),
+    "O COPO ESTÁ NA MESA": (("O COPO ESTÁ NO CHÃO", "O PRATO ESTÁ NA MESA"), "Mostrar só um copo, em cima da mesa, sem prato."),
+    "A MENINA BRINCA NO BALANÇO": (("A MENINA GOSTA DE CHOCOLATE", "A MENINA NADA"), "Mostrar a menina sentada no balanço, em movimento."),
+    "O GATO DORME NA CADEIRA": (("O GATO COME NA CADEIRA", "O CACHORRO DORME NA CADEIRA"), "Mostrar um gato de olhos fechados, sem comida por perto."),
+    "O MENINO LÊ UM LIVRO": (("O MENINO RASGA UM LIVRO", "A MENINA LÊ UM LIVRO"), "Mostrar um menino com o livro aberto, olhando as páginas."),
+    "A MULHER SEGURA UMA BOLSA": (("A MULHER SEGURA UMA SACOLA", "O HOMEM SEGURA UMA BOLSA"), "Mostrar uma mulher segurando uma bolsa com alça, sem sacolas."),
+}
 
 # Cada estratégia tem um enunciado e uma regra de montagem no esquema SQL.
 DINAMICOS = {
@@ -61,13 +75,26 @@ def alternativas(resposta, distratores, indice):
     return opcoes[giro:] + opcoes[:giro]
 
 
+def embaralhar(sequencia, semente):
+    """Ordem determinística que não é a original nem uma rotação dela (rotação vira padrão fácil de decorar)."""
+    gerador = random.Random(f"prosa:{semente}")
+    rotacoes = [sequencia[i:] + sequencia[:i] for i in range(len(sequencia))]
+    for _ in range(100):
+        candidata = list(sequencia)
+        gerador.shuffle(candidata)
+        if candidata not in rotacoes:
+            return candidata
+    raise ValueError(f"Não há ordem sem rotação para {sequencia}.")
+
+
 def itens():
     def item(modelo, alvo, formato, enunciado, resposta, **dados):
         return (f"{modelo}-{chave(alvo)}", modelo, formato, enunciado, dados, resposta)
 
     for i, (letra, dupla) in enumerate(zip(ascii_uppercase, PALAVRAS_POR_LETRA, strict=True)):
         vogal = letra in "AEIOU"
-        outras = [l for l in ("AEIOU" if vogal else ascii_uppercase) if l != letra]
+        # Distratores do mesmo grupo: numa questão de consoante, uma vogal entre as opções seria eliminada de cara.
+        outras = [l for l in ascii_uppercase if (l in "AEIOU") == vogal and l != letra]
         opcoes = alternativas(letra, (outras[i % len(outras)], outras[(i + 1) % len(outras)]), i)
         palavras = dupla.split()
         lacunas = [{"imagem": imagem(p), "lacuna": "_" + p[1:]} for p in palavras]
@@ -146,7 +173,7 @@ def itens():
     for grupo in grupos_palavras:
         palavras = grupo.split()
         yield item("3B", palavras[0], "ligar_pares", "Ligue cada imagem à palavra correspondente.",
-                   dict(zip(map(chave, palavras), palavras)), imagens=[imagem(p) for p in palavras[1:] + palavras[:1]],
+                   dict(zip(map(chave, palavras), palavras)), imagens=[imagem(p) for p in embaralhar(palavras, grupo)],
                    opcoes=palavras)
     for i, grupo in enumerate(("FOLHA CHAMA FOCA", "UVA PERA MAÇÃ", "COPO MESA PRATO", "NAVIO PONTE CARRO",
                                "BOLSA BOLA BOLO", "DADO DENTE DEDO", "SAPATO CASACO MEIA")):
@@ -162,26 +189,23 @@ def itens():
         yield item("3D", palavra, "escolha", "Selecione a palavra que corresponde ao desenho.",
                    palavra, imagem=imagem(palavra), opcoes=opcoes)
 
-    textos = [texto for texto, _, _ in CENAS]
     for i, (texto, termo, descricao) in enumerate(CENAS):
         palavras = texto.split()
-        ordem = palavras[1:] + palavras[:1]
         yield item("4A", texto, "ordenar", "Monte a frase usando o nome da figura.",
                    palavras, frase_com_lacuna=texto.replace(termo, "___", 1),
-                   imagem=imagem(termo, descricao), pecas=ordem)
-        outras = (textos[i + 1:] + textos[:i])[:2]
-        if termo == "BALANÇO":
-            outras = ["A MENINA GOSTA DE CHOCOLATE", "A MENINA NADA"]
+                   imagem=imagem(termo, descricao), pecas=embaralhar(palavras, texto))
+        distratores, destaque = DISTRATORES_CENA[texto]
         yield item("4B", texto, "escolha", "Observe a ilustração e selecione a frase correspondente.",
-                   texto, imagem=imagem(texto, f"Cena a ilustrar. {texto.capitalize()}."),
-                   opcoes=alternativas(texto, outras, i))
+                   texto, imagem=imagem(texto, f"Cena a ilustrar. {texto.capitalize()}. {destaque}"),
+                   opcoes=alternativas(texto, distratores, i))
 
 
 def sql_texto(valor):
     return "'" + valor.replace("'", "''") + "'"
 
 
-def inserir(tabela, colunas, linhas):
+def inserir(tabela, colunas, linhas, chave_conflito=None, atualizar=(), so_rascunho=False):
+    """INSERT idempotente. Com `atualizar`, a recarga aplica a curadoria nova; `so_rascunho` preserva o que foi revisado."""
     valores = ",\n".join(
         "    (" + ", ".join(
             sql_texto(campo) if isinstance(campo, str)
@@ -191,7 +215,147 @@ def inserir(tabela, colunas, linhas):
         ) + ")"
         for linha in linhas
     )
-    return f"INSERT INTO banco_questoes.{tabela} ({colunas}) VALUES\n{valores}\nON CONFLICT DO NOTHING;\n"
+    conflito = "ON CONFLICT DO NOTHING"
+    if atualizar:
+        conflito = f"ON CONFLICT ({chave_conflito}) DO UPDATE SET " + ", ".join(f"{coluna} = EXCLUDED.{coluna}" for coluna in atualizar)
+        if so_rascunho:
+            conflito += f"\nWHERE banco_questoes.{tabela}.status = 'rascunho'"
+    return f"INSERT INTO banco_questoes.{tabela} ({colunas}) VALUES\n{valores}\n{conflito};\n"
+
+
+AVISO_PENDENTES = """DO $$
+DECLARE
+    total integer;
+    lista text;
+BEGIN
+    SELECT count(*), string_agg(id, ', ' ORDER BY id) INTO total, lista FROM banco_questoes.variacoes_pendentes;
+    IF total > 0 THEN
+        RAISE NOTICE '% variações não montadas (veja banco_questoes.variacoes_pendentes): %', total, lista;
+    END IF;
+END $$;
+"""
+
+
+def quiz_sql():
+    """quiz_nivelamento.sql gerado de contracts/placement-quiz.json: itens, nível de cada item e a mesma correção do app."""
+    contrato = json.loads((RAIZ / "contracts" / "placement-quiz.json").read_text(encoding="utf-8"))
+    fases = {fase["phase"]: fase["letters"] for fase in json.loads((RAIZ / "contracts" / "pedagogy.json").read_text(encoding="utf-8"))["phases"]}
+    regras, nivel = contrato["scoring"], contrato["start_level"]
+    corte, minimo_faceis = regras["band_threshold"], regras["min_easy_answered"]
+    linhas = []
+    for item in contrato["items"]:
+        alternativas_sql = ", ".join(sql_texto(opcao["label"]) for opcao in item["options"])
+        estimulo = dict(item["stimulus"])
+        if any("image" in opcao for opcao in item["options"]):
+            estimulo["imagens_das_alternativas"] = [opcao.get("image") for opcao in item["options"]]
+        linhas.append(f"    ({sql_texto(item['id'])}, {item['order']}, {sql_texto(item['band'])}, {item['level']}, {sql_texto(item['skill'])},\n"
+                      f"     {sql_texto(item['instruction'])},\n     {sql_texto(json.dumps(estimulo, ensure_ascii=False))},\n"
+                      f"     ARRAY[{alternativas_sql}], {item['answer']})")
+    tetos = " ".join(f"WHEN {sql_texto(faixa)} THEN {teto}" for faixa, teto in nivel["cap_by_difficulty"].items())
+    minimos = " ".join(f"WHEN {nivel_} THEN {minimo}" for nivel_, minimo in nivel["min_hits_by_level"].items())
+    creditos = " ".join(f"WHEN {nivel_} THEN {sql_texto(''.join(fases[fase] for fase in lista))}"
+                        for nivel_, lista in contrato["credit"]["phases_by_start_level"].items())
+    return f"""-- Gerado por gerar_banco.py a partir de contracts/placement-quiz.json ({contrato['id']}). Não edite à mão:
+-- altere o contrato e rode `python bancoquestoesequiz/gerar_banco.py --atualizar-quiz`.
+CREATE SCHEMA IF NOT EXISTS banco_questoes;
+
+CREATE TABLE IF NOT EXISTS banco_questoes.quiz_itens (
+    id text PRIMARY KEY,
+    ordem smallint NOT NULL UNIQUE CHECK (ordem > 0),
+    faixa text NOT NULL CHECK (faixa IN ('facil', 'medio', 'dificil')),
+    habilidade text NOT NULL,
+    enunciado text NOT NULL,
+    estimulo jsonb NOT NULL CHECK (jsonb_typeof(estimulo) = 'object'),
+    alternativas text[] NOT NULL CHECK (cardinality(alternativas) = 3 AND array_position(alternativas, NULL) IS NULL),
+    gabarito smallint NOT NULL CHECK (gabarito BETWEEN 1 AND 3)
+);
+-- Nível do Prosa que o item mede (1 Letras, 2 Sílabas, 3 Palavras, 4 Frases); bancos antigos ganham a coluna aqui.
+ALTER TABLE banco_questoes.quiz_itens ADD COLUMN IF NOT EXISTS nivel smallint CHECK (nivel BETWEEN 1 AND 4);
+
+INSERT INTO banco_questoes.quiz_itens
+    (id, ordem, faixa, nivel, habilidade, enunciado, estimulo, alternativas, gabarito)
+VALUES
+{(","+chr(10)).join(linhas)}
+ON CONFLICT (id) DO UPDATE SET ordem = EXCLUDED.ordem, faixa = EXCLUDED.faixa, nivel = EXCLUDED.nivel,
+    habilidade = EXCLUDED.habilidade, enunciado = EXCLUDED.enunciado, estimulo = EXCLUDED.estimulo,
+    alternativas = EXCLUDED.alternativas, gabarito = EXCLUDED.gabarito;
+
+CREATE OR REPLACE VIEW banco_questoes.quiz_apresentacao AS
+SELECT id, ordem, faixa, habilidade, enunciado, estimulo, alternativas, nivel
+FROM banco_questoes.quiz_itens;
+
+-- Cada resposta é o índice original (1 a 3). null significa que a pessoa pulou.
+-- Um ID ausente indica uma questão que ainda não foi respondida nem pulada.
+-- `pulado` = a pessoa pulou o quiz inteiro. A regra é a mesma do app e da API (contracts/placement-quiz.json).
+DROP FUNCTION IF EXISTS banco_questoes.corrigir_quiz(jsonb);
+DROP FUNCTION IF EXISTS banco_questoes.corrigir_quiz(jsonb, boolean);
+CREATE FUNCTION banco_questoes.corrigir_quiz(respostas jsonb, pulado boolean DEFAULT false)
+RETURNS TABLE (
+    acertos_faceis integer,
+    acertos_medios integer,
+    acertos_dificeis integer,
+    dificuldade text,
+    provisoria boolean,
+    motivo_provisorio text,
+    nivel_inicial smallint,
+    letras_creditadas text
+)
+LANGUAGE plpgsql STABLE
+AS $$
+DECLARE
+    faceis_respondidas integer;
+    faltando integer;
+    acertos_nivel integer;
+BEGIN
+    IF jsonb_typeof(respostas) IS DISTINCT FROM 'object' THEN
+        RAISE EXCEPTION 'Informe um objeto JSON com os IDs e índices das respostas.';
+    END IF;
+
+    IF EXISTS (
+        SELECT 1
+        FROM jsonb_each(respostas) AS r(id, escolha)
+        LEFT JOIN banco_questoes.quiz_itens AS q ON q.id = r.id
+        WHERE q.id IS NULL OR NOT (r.escolha = 'null'::jsonb OR (jsonb_typeof(r.escolha) = 'number'
+            AND r.escolha::text ~ '^[0-9]+$' AND (r.escolha::text)::integer BETWEEN 1 AND cardinality(q.alternativas)))
+    ) THEN
+        RAISE EXCEPTION 'Use IDs do quiz e os índices 1, 2, 3 ou null.';
+    END IF;
+
+    SELECT count(*) FILTER (WHERE q.faixa = 'facil' AND respostas->q.id = to_jsonb(q.gabarito)),
+           count(*) FILTER (WHERE q.faixa = 'medio' AND respostas->q.id = to_jsonb(q.gabarito)),
+           count(*) FILTER (WHERE q.faixa = 'dificil' AND respostas->q.id = to_jsonb(q.gabarito)),
+           count(*) FILTER (WHERE q.faixa = 'facil' AND respostas->q.id <> 'null'::jsonb),
+           count(*) FILTER (WHERE NOT respostas ? q.id)
+    INTO acertos_faceis, acertos_medios, acertos_dificeis, faceis_respondidas, faltando
+    FROM banco_questoes.quiz_itens AS q;
+
+    motivo_provisorio := CASE
+        WHEN pulado THEN 'quiz_pulado'
+        WHEN faltando > 0 THEN 'quiz_incompleto'
+        WHEN faceis_respondidas < {minimo_faceis} THEN 'poucas_respostas_faceis'
+        WHEN acertos_faceis < {corte} AND greatest(acertos_medios, acertos_dificeis) >= {corte} THEN 'resultado_contrastante'
+    END;
+    provisoria := motivo_provisorio IS NOT NULL;
+    dificuldade := CASE
+        WHEN provisoria OR acertos_faceis < {corte} THEN 'facil'
+        WHEN acertos_medios >= {corte} AND acertos_dificeis >= {corte} THEN 'dificil'
+        ELSE 'medio'
+    END;
+
+    nivel_inicial := 1;
+    IF NOT provisoria THEN
+        FOR nivel_avaliado IN 1..(CASE dificuldade {tetos} END) LOOP
+            SELECT count(*) INTO acertos_nivel FROM banco_questoes.quiz_itens AS q
+            WHERE q.nivel = nivel_avaliado AND respostas->q.id = to_jsonb(q.gabarito);
+            EXIT WHEN acertos_nivel < (CASE nivel_avaliado {minimos} END);
+            nivel_inicial := nivel_avaliado;
+        END LOOP;
+    END IF;
+    letras_creditadas := CASE WHEN provisoria THEN '' ELSE (CASE nivel_inicial {creditos} END) END;
+    RETURN NEXT;
+END;
+$$;
+"""
 
 
 def termos_fixos(modelo, dados):
@@ -251,7 +415,7 @@ def gerar_sql(base_tratada=None):
             referencias.extend((id_, termo) for termo in sorted(termos))
     esquema = Path(__file__).with_name("esquema.sql").read_text(encoding="utf-8")
     vincular = Path(__file__).with_name("vincular_vocabulario.sql").read_text(encoding="utf-8")
-    quiz = Path(__file__).with_name("quiz_nivelamento.sql").read_text(encoding="utf-8")
+    quiz = quiz_sql()
     palavras_sql = ""
     if base_tratada is not None:
         from importar_base_tratada import carga_palavras
@@ -261,10 +425,11 @@ def gerar_sql(base_tratada=None):
         "BEGIN;\nSET LOCAL client_encoding = 'UTF8';\nSET LOCAL standard_conforming_strings = on;\n",
         palavras_sql,
         esquema,
-        inserir("modelos", "id, formato, regra, enunciado", modelos.values()),
+        inserir("modelos", "id, formato, regra, enunciado", modelos.values(), "id", ("formato", "regra", "enunciado")),
         inserir("vocabulario", "termo", ((termo,) for termo in sorted(vocabulario))),
-        inserir("variacoes", "id, modelo, termo, parametros", variacoes),
-        inserir("questoes_fixas", "id, modelo, formato, enunciado, dados, gabarito", fixas),
+        inserir("variacoes", "id, modelo, termo, parametros", variacoes, "id", ("modelo", "termo", "parametros"), so_rascunho=True),
+        inserir("questoes_fixas", "id, modelo, formato, enunciado, dados, gabarito", fixas, "id",
+                ("modelo", "formato", "enunciado", "dados", "gabarito"), so_rascunho=True),
         inserir("questao_vocabulario", "questao_id, termo", referencias),
         """DO $$
 BEGIN
@@ -280,6 +445,7 @@ END $$;
 """,
         vincular,
         quiz,
+        AVISO_PENDENTES,
         "\nCOMMIT;\n",
     ))
 
@@ -288,11 +454,18 @@ if __name__ == "__main__":
     from importar_base_tratada import PLANILHA_PADRAO
 
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("saida", type=Path, help="Caminho do arquivo SQL a gerar.")
+    parser.add_argument("saida", type=Path, nargs="?", help="Caminho do arquivo SQL a gerar.")
     parser.add_argument("--base-tratada", nargs="?", type=Path, const=PLANILHA_PADRAO,
                         help="Inclui a planilha tratada do repositório ou o arquivo informado.")
+    parser.add_argument("--atualizar-quiz", action="store_true",
+                        help="Regrava quiz_nivelamento.sql a partir de contracts/placement-quiz.json.")
     args = parser.parse_args()
+    if not args.saida and not args.atualizar_quiz:
+        parser.error("informe o arquivo SQL de saída ou --atualizar-quiz")
     try:
-        args.saida.write_text(gerar_sql(args.base_tratada), encoding="utf-8")
+        if args.atualizar_quiz:
+            Path(__file__).with_name("quiz_nivelamento.sql").write_text(quiz_sql(), encoding="utf-8")
+        if args.saida:
+            args.saida.write_text(gerar_sql(args.base_tratada), encoding="utf-8")
     except (OSError, ValueError) as exc:
         parser.error(str(exc))

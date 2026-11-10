@@ -10,7 +10,7 @@
 2. Apresente uma questão por tela, em ordem de faixa, com quatro questões fáceis, quatro médias e quatro difíceis. Use toque, opção de repetir a instrução e botão **Pular**. Deixe o participante responder no próprio ritmo.
 3. Registre a primeira resposta confirmada ou o estado **pulada**. Mostre o resultado ao final. Nas questões de leitura, mantenha o texto avaliado na tela e separe-o do áudio da instrução.
 
-Os IDs abaixo identificam itens fixos do quiz. A dificuldade é uma proposta de curadoria para o item inteiro. As classificações de palavras do ML continuam com as categorias fácil, médio e difícil.
+A versão executável desta proposta está em [`contracts/placement-quiz.json`](../contracts/placement-quiz.json), usada pelo app, pela API e pela carga PostgreSQL. Mudanças nos itens ou na regra devem ser feitas nos dois lugares; os testes conferem o contrato. Os IDs abaixo identificam itens fixos do quiz. A dificuldade é uma proposta de curadoria para o item inteiro. As classificações de palavras do ML continuam com as categorias fácil, médio e difícil.
 
 ## Questões
 
@@ -25,7 +25,7 @@ As opções estão na ordem proposta para a primeira versão. A coluna **Gabarit
 | M1 | Média | Completar sílaba interna | Olhe a imagem e toque na sílaba que falta. | Desenho de uma panela de cozinha e texto `PA ___ LA`. | NA · ME · NE | NE |
 | M2 | Média | Identificar sílaba final | Olhe a imagem e toque na sílaba que falta. | Desenho de um tapete e texto `TA PE ___`. | TE · TA · TO | TE |
 | M3 | Média | Ler e distinguir palavras parecidas | Olhe a imagem e toque na palavra que combina. | Desenho de um sapato fechado. | SACOLA · SAPATO · SABÃO | SAPATO |
-| M4 | Média | Entender uma frase curta | Leia a frase e toque na imagem que combina. | `O COPO ESTÁ NA MESA.` Três cenas com os mesmos objetos. | Copo debaixo da mesa · Copo ao lado da mesa, no chão · Copo em cima da mesa | Copo em cima da mesa |
+| M4 | Média | Entender uma frase curta | Leia a frase e toque na imagem que combina. | `O COPO ESTÁ NA MESA.` Três cenas com os mesmos objetos. | Copo debaixo da mesa · Copo no chão, ao lado da mesa · Copo em cima da mesa | Copo em cima da mesa |
 | D1 | Difícil | Completar sílaba com encontro consonantal | Olhe a imagem e toque na sílaba que falta. | Desenho de um prato vazio e texto `___ TO`. | PRA · BRA · TRA | PRA |
 | D2 | Difícil | Distinguir ações em frases parecidas | Olhe a cena e toque na frase que descreve o que acontece. | Pessoa colocando um prendedor em uma camiseta no varal, ao lado de outras roupas penduradas. | A PESSOA DOBRA A ROUPA. · A PESSOA ESTENDE A ROUPA. · A PESSOA LAVA A ROUPA. | A PESSOA ESTENDE A ROUPA. |
 | D3 | Difícil | Encontrar uma informação em um aviso | Leia o aviso. Em qual dia a feira vai abrir? | `A FEIRA ABRE NO SÁBADO. NO DOMINGO, A FEIRA FICA FECHADA.` | DOMINGO · SEGUNDA-FEIRA · SÁBADO | SÁBADO |
@@ -46,6 +46,19 @@ As proporções são metas para sessões seguintes e dependem dos exercícios di
 Se o quiz for pulado, interrompido ou tiver menos de três respostas confirmadas na faixa fácil, use **fácil provisório**. Registre separadamente que faltou evidência. Se os acertos nas faixas mais altas contrastarem com um resultado baixo na faixa fácil, comece com fácil provisório e reveja a recomendação com as primeiras respostas de prática.
 
 **Mensagem ao terminar.** “Vamos começar com atividades no seu ritmo. Conforme você pratica, vamos ajustando as próximas.”
+
+## Nível de partida e crédito na trilha
+
+Além da dificuldade, o resultado indica por qual nível do Prosa começar. Cada item mede um nível:
+
+- **Letras:** F1 e F2.
+- **Sílabas:** F3, M1, M2 e D1.
+- **Palavras:** F4 e M3.
+- **Frases:** M4, D2, D3 e D4.
+
+O nível de partida é o maior nível em que ele e todos os anteriores atingem o mínimo de acertos: 2 em Letras, 3 em Sílabas, 2 em Palavras e 3 em Frases. Há um teto pela dificuldade: fácil começa em Letras, médio vai no máximo até Palavras e difícil pode chegar a Frases.
+
+Quando o nível é Sílabas ou acima, as letras das fases 1 e 2 contam como já apresentadas para abrir as unidades das trilhas. Em Frases, as três fases contam. Nenhuma lição é marcada como concluída: as letras continuam disponíveis para revisão. Resultado provisório nunca dá crédito.
 
 ## Entrega para a equipe
 

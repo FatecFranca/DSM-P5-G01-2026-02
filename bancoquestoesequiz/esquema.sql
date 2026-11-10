@@ -112,3 +112,15 @@ WHERE resposta IS NOT NULL
       SELECT string_agg(parte, '' ORDER BY ordem)
       FROM jsonb_array_elements_text(silabas) WITH ORDINALITY AS s(parte, ordem)
   ));
+
+-- Variações que a consulta de montagem ainda descarta, com o motivo. A carga avisa quantas são.
+CREATE OR REPLACE VIEW banco_questoes.variacoes_pendentes AS
+SELECT v.id, v.modelo, v.termo,
+       CASE
+           WHEN v.termo IS NOT NULL AND vocab.palavra_id IS NULL THEN 'palavra sem vínculo em public.words'
+           ELSE 'dados insuficientes para o modelo (sílabas ou opções)'
+       END AS motivo
+FROM banco_questoes.variacoes AS v
+LEFT JOIN banco_questoes.vocabulario AS vocab ON vocab.termo = v.termo
+WHERE v.status <> 'arquivada'
+  AND NOT EXISTS (SELECT 1 FROM banco_questoes.variacoes_montadas AS m WHERE m.id = v.id);

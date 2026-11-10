@@ -14,7 +14,7 @@ A experiência do estudante é apresentada em cinco níveis, mapeados sobre o ca
 4. **Frases** — organização e compreensão de frases curtas;
 5. **Consolidação** — revisão espaçada e retomada do que já foi dominado.
 
-Um nivelamento inicial por toque orienta o ponto de partida sugerido, sem liberar conteúdo que ainda dependa de pré-requisitos.
+Um nivelamento inicial por toque (12 itens, `contracts/placement-quiz.json`) indica o nível de partida e a mistura de dificuldade da prática. A partir do nível Sílabas, as letras das fases já demonstradas contam como apresentadas para abrir unidades. Nenhuma lição é marcada como concluída por isso, e um resultado provisório não dá crédito (ADR 0006).
 
 A revisão de objetivos, sequência, textos e observação dos testes é responsabilidade do integrante capacitado do grupo. A aprovação humana permanece registrada como pendência antes de qualquer pesquisa com participantes.
 
@@ -54,7 +54,7 @@ As trilhas temáticas usam estes tipos, todos registrados em `contracts/exercise
 - `completar a frase` (`sentence_fill_word`), com distratores que não cabem no sentido da frase;
 - `ordenar a frase` (`sentence_order`).
 
-Uma unidade temática só abre quando todas as letras de todas as suas palavras e frases já foram dominadas (`required_letters`). A trilha organiza e sugere ordem, mas nunca libera conteúdo. A primeira trilha, `Tem em casa`, tem duas unidades de palavras (`CASA, MESA, CAMA, SALA` e `COPO, PRATO, PORTA, PANELA, TAPETE`) e uma de frases (`EU DURMO NA CAMA`, `O COPO ESTÁ NA MESA`, `EU COMO NO PRATO`, `A SALA É GRANDE`, `A CASA TEM UMA PORTA`), todas restritas às letras das fases 1 e 2 e com status `pending` até a revisão pedagógica. A segunda trilha, `Família`, começa com palavras (`PAI, MÃE, TIA, TIO` e `IRMÃ, NOME, MAMA`), pendente de revisão pedagógica. Ilustrações e frases dessa trilha ficam para expansão seguinte.
+Uma unidade temática só abre quando todas as letras de todas as suas palavras e frases já foram dominadas (`required_letters`) ou creditadas pelo nivelamento. A trilha organiza e sugere ordem, mas nunca libera conteúdo. A primeira trilha, `Tem em casa`, tem duas unidades de palavras (`CASA, MESA, CAMA, SALA` e `COPO, PRATO, PORTA, PANELA, TAPETE`) e uma de frases (`EU DURMO NA CAMA`, `O COPO ESTÁ NA MESA`, `EU COMO NO PRATO`, `A SALA É GRANDE`, `A CASA TEM UMA PORTA`), todas restritas às letras das fases 1 e 2 e com status `pending` até a revisão pedagógica. A segunda trilha, `Família`, começa com palavras (`PAI, MÃE, TIA, TIO` e `IRMÃ, NOME, MAMA`), pendente de revisão pedagógica. Ilustrações e frases dessa trilha ficam para expansão seguinte.
 
 As atividades de palavra são liberadas somente quando todas as letras da palavra já foram apresentadas. O domínio é registrado por atividade: cada acerto dobra o intervalo até a próxima revisão (a partir de 4 horas, no máximo 90 dias) e cada erro encurta esse intervalo e devolve a atividade à sessão em até três posições. Uma unidade conta como concluída quando todas as suas atividades foram acertadas no último encontro, e pede revisão quando alguma delas vence.
 

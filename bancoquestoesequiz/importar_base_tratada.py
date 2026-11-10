@@ -1,17 +1,42 @@
 """Prepara a carga do vocabulário tratado para public.words."""
 
+import csv
 import json
 import unicodedata
 import uuid
+from collections import Counter
 from pathlib import Path
 
 
 RAIZ = Path(__file__).resolve().parents[1]
 PLANILHA_PADRAO = RAIZ / "pre-processamento" / "Corpus_SANTOS_TONI_FDC_tratado_sem_repeticoes.xlsx"
+# Predições do corpus inteiro; os três modelos treinados com rótulos humanos (ml/artifacts) votam a dificuldade.
+PREDICOES = RAIZ / "ml" / "reports" / "final_corpus_six_model_predictions.csv"
+MODELOS_VOTANTES = ("PREDICAO_LR", "PREDICAO_LDA", "PREDICAO_SVM")
+DIFICULDADES = {"facil", "medio", "dificil"}
 
 
 def normalizar(texto):
     return unicodedata.normalize("NFC", texto.strip().upper())
+
+
+def dificuldade_por_votacao(votos):
+    """Maioria entre os votos válidos; empate fica em `medio`; sem voto, None (a carga usa `medio`)."""
+    validos = [voto for voto in votos if voto in DIFICULDADES]
+    if not validos:
+        return None
+    contagem = Counter(validos).most_common()
+    if len(contagem) > 1 and contagem[0][1] == contagem[1][1]:
+        return "medio"
+    return contagem[0][0]
+
+
+def ler_predicoes(caminho=PREDICOES):
+    if not caminho.exists():
+        return {}
+    with caminho.open(encoding="utf-8", newline="") as arquivo:
+        return {normalizar(linha["PALAVRA"]): dificuldade_por_votacao(linha.get(coluna) for coluna in MODELOS_VOTANTES)
+                for linha in csv.DictReader(arquivo) if linha.get("PALAVRA")}
 
 
 def ler_palavras(planilha):
@@ -49,6 +74,7 @@ def carga_palavras(planilha, silabas_curadas, sql_texto):
     silabas.update({"".join(partes.split()): partes.split() for partes in silabas_curadas})
     contrato = json.loads((RAIZ / "contracts/pedagogy.json").read_text(encoding="utf-8"))
     ordem = contrato["learning_order"]
+    predicoes = ler_predicoes()
     linhas = []
     for palavra in ler_palavras(planilha):
         partes = silabas.get(palavra, [])
@@ -58,12 +84,13 @@ def carga_palavras(planilha, silabas_curadas, sql_texto):
         letras = "".join(c for c in ordem if c in sem_acentos)
         id_ = str(uuid.uuid5(uuid.NAMESPACE_URL, f"alfabetiza:word:{palavra}"))
         campos = ", ".join(map(sql_texto, (id_, palavra, letras, json.dumps(partes, ensure_ascii=False))))
-        linhas.append(f"({campos}, {'true' if sem_acentos != palavra else 'false'})")
+        dificuldade = predicoes.get(palavra)
+        linhas.append(f"({campos}, {'true' if sem_acentos != palavra else 'false'}, {sql_texto(dificuldade) if dificuldade else 'NULL'})")
 
     valores = ",\n".join(linhas)
     return f"""
 CREATE TEMP TABLE prosa_palavras_importacao (
-    id varchar(36), texto varchar(40), letras varchar(26), silabas json, acentuada boolean
+    id varchar(36), texto varchar(40), letras varchar(26), silabas json, acentuada boolean, dificuldade varchar(16)
 ) ON COMMIT DROP;
 
 INSERT INTO prosa_palavras_importacao VALUES
@@ -75,14 +102,25 @@ BEGIN
         SELECT 1 FROM information_schema.columns
         WHERE table_schema = 'public' AND table_name = 'words' AND column_name = 'required_letters'
     ) THEN
+        -- Candidatos recebem a dificuldade votada pelos modelos (ADR 0005); sem predição, `medio`.
         INSERT INTO public.words (
             id, text, syllables, required_letters, accented, length, initial_difficulty,
-            current_difficulty, source, review_status, content_version
+            current_difficulty, difficulty_rationale, model_difficulty, label_feedback, source, review_status, content_version
         )
-        SELECT id, texto, silabas, letras, acentuada, char_length(texto), 'medio',
-               'medio', 'corpus-santos-toni', 'candidate', 1
+        SELECT id, texto, silabas, letras, acentuada, char_length(texto), coalesce(dificuldade, 'medio'),
+               coalesce(dificuldade, 'medio'),
+               CASE WHEN dificuldade IS NULL THEN 'sem predição: valor inicial' ELSE 'votação LR/LDA/SVM (rótulos humanos)' END,
+               dificuldade, CASE WHEN dificuldade IS NULL THEN NULL ELSE 'pending' END,
+               'corpus-santos-toni', 'candidate', 1
         FROM prosa_palavras_importacao
         ON CONFLICT (text) DO NOTHING;
+
+        -- Palavras já cadastradas: só candidatos sem predição recebem a do modelo; a curadoria continua soberana.
+        UPDATE public.words AS w
+        SET model_difficulty = carga.dificuldade, label_feedback = coalesce(w.label_feedback, 'pending')
+        FROM prosa_palavras_importacao AS carga
+        WHERE w.text = carga.texto AND w.review_status = 'candidate'
+          AND w.model_difficulty IS NULL AND carga.dificuldade IS NOT NULL;
     ELSIF current_database() = 'prosa_laboratorio' THEN
         INSERT INTO public.words (id, text, syllables)
         SELECT id, texto, silabas FROM prosa_palavras_importacao

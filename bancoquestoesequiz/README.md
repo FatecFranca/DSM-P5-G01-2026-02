@@ -1,6 +1,6 @@
 # Banco de questões do Prosa
 
-O [quiz inicial de nivelamento](QUIZ_NIVELAMENTO.md) reúne os itens, gabaritos e a regra proposta para recomendar a dificuldade da prática. A carga deste banco também instala as 12 questões do quiz e sua função de correção.
+O [quiz inicial de nivelamento](QUIZ_NIVELAMENTO.md) reúne os itens, gabaritos e a regra proposta para recomendar a dificuldade da prática. A fonte única dos itens e da regra é [`contracts/placement-quiz.json`](../contracts/placement-quiz.json): o app aplica o quiz offline, a API recalcula o resultado e esta carga instala as mesmas 12 questões e a mesma função de correção. `quiz_nivelamento.sql` é gerado desse contrato. Para mudar o quiz, altere o contrato e rode `python bancoquestoesequiz/gerar_banco.py --atualizar-quiz`. Os testes falham se algum dos quatro lados divergir.
 
 A carga PostgreSQL adapta os 18 modelos do arquivo [EXERCICIOSPARAOAPP.txt](EXERCICIOSPARAOAPP.txt). São **85 questões fixas** e **349 configurações de variação**. A configuração guarda os parâmetros permitidos. A questão e o gabarito são montados ao consultar o banco.
 
@@ -41,7 +41,7 @@ docker compose cp "CAMINHO_DO_SQL" db:/tmp/prosa-banco-questoes.sql
 docker compose exec -T db sh -c 'psql -U "$POSTGRES_USER" -d "$POSTGRES_DB" -v ON_ERROR_STOP=1 -f /tmp/prosa-banco-questoes.sql'
 ```
 
-A carga executa em uma transação. Ela importa o vocabulário, instala as questões e o quiz e resolve os vínculos. Pode ser repetida para inserir novos IDs e vincular palavras pendentes. Se a versão antiga foi instalada, `banco_questoes.questoes` fica como histórico, e as questões que continuam fixas aproveitam as versões aprovadas ou arquivadas.
+A carga executa em uma transação. Ela importa o vocabulário, instala as questões e o quiz e resolve os vínculos. Pode ser repetida: insere novos IDs, vincula palavras pendentes e **atualiza o conteúdo das questões e variações que ainda estão em `rascunho`**. Itens `aprovada` ou `arquivada` nunca são sobrescritos pela recarga. Se a versão antiga foi instalada, `banco_questoes.questoes` fica como histórico, e as questões que continuam fixas aproveitam as versões aprovadas ou arquivadas. Ao final, a carga avisa (NOTICE) quantas variações ainda não montam; a lista com o motivo fica em `banco_questoes.variacoes_pendentes`.
 
 **4. Confira a carga.** Execute no mesmo banco:
 
@@ -61,7 +61,7 @@ Uma carga inicial do catálogo cria 85 questões fixas, 349 configurações de v
 
 `vocabulario.termo` guarda a grafia solicitada pela curadoria. `vocabulario.palavra_id` referencia `public.words.id` por chave estrangeira. A carga procura a grafia exata, em maiúsculas e com acento. Se a palavra ainda estiver em tratamento ou ausente, o vínculo fica pendente. As variações dependentes dela aparecem na consulta de montagem assim que a palavra estiver vinculada e seus dados forem suficientes para o modelo. O esquema lê a base linguística e guarda os vínculos no banco pedagógico.
 
-A importação usa a coluna `PALAVRA`, preserva acentos e remove duplicatas após normalizar a grafia. A separação silábica vem da curadoria pedagógica e do vocabulário versionado do projeto. A coluna `ESTSILABICA` da planilha contém padrões como `CV`. Quando a separação escrita está ausente, a palavra entra com uma lista vazia e fica fora das variações que precisam desse dado. No banco do projeto, novas palavras entram como candidatas. Os campos obrigatórios de dificuldade recebem o valor inicial `medio`, e a predição do modelo fica vazia. Para palavras já cadastradas, a carga só preenche sílabas ausentes quando há uma separação disponível.
+A importação usa a coluna `PALAVRA`, preserva acentos e remove duplicatas após normalizar a grafia. A separação silábica vem da curadoria pedagógica e do vocabulário versionado do projeto. A coluna `ESTSILABICA` da planilha contém padrões como `CV`. Quando a separação escrita está ausente, a palavra entra com uma lista vazia e fica fora das variações que precisam desse dado. No banco do projeto, novas palavras entram como candidatas. A dificuldade vem da votação dos três modelos treinados com rótulos humanos (LR, LDA e SVM, em `ml/reports/final_corpus_six_model_predictions.csv`). A maioria vence e, em empate, fica `medio`. A predição é gravada em `model_difficulty` com `label_feedback = 'pending'` para revisão (ADR 0005). Palavras sem predição recebem `medio`. Candidatos já cadastrados sem predição a recebem, e palavras curadas não são alteradas. Para palavras já cadastradas, a carga só preenche sílabas ausentes quando há uma separação disponível.
 
 ```sql
 -- Questões fixas, como a cena da menina no balanço
@@ -83,7 +83,16 @@ ORDER BY termo;
 
 Quando a equipe importar mais palavras em `public.words`, execute novamente a carga ou rode `vincular_vocabulario.sql` no mesmo banco. A tabela `questao_vocabulario` lista as palavras associadas a cada questão fixa, inclusive as que aguardam vínculo.
 
-As novas questões fixas e configurações entram como rascunho. Imagens têm identificadores editoriais e descrições, e o áudio tem texto de referência. A consulta de montagem é para revisão e testes no banco. Para uso por estudantes, a integração do app ainda precisa selecionar itens aprovados, resolver as mídias do servidor e aplicar as regras de progressão, dificuldade e revisão.
+As novas questões fixas e configurações entram como rascunho. Imagens têm identificadores editoriais e descrições, e o áudio tem texto de referência. A consulta de montagem é para revisão e testes no banco. O quiz já está integrado ao app. Para que as questões do catálogo cheguem aos estudantes, os itens aprovados precisam virar tipos de exercício do contrato (`contracts/exercise-types.json`) no Estúdio de conteúdo, com mídias próprias e os metadados pedagógicos obrigatórios. Formatos de digitar e de ligar pares não entram assim: o app responde só por toque (`docs/EXERCISES_IMPLEMENTATION_ROADMAP.md`).
+
+Na geração, as questões que antes seguiam um padrão decorável foram corrigidas:
+
+- **Ordenar frase (4A):** as peças são embaralhadas de forma determinística, nunca na ordem certa nem em rotação dela.
+- **Ligar imagens (3B):** as imagens também não seguem rotação.
+- **Letra inicial (1A e 3A):** os distratores são do mesmo grupo, vogal com vogal e consoante com consoante.
+- **Frase da cena (4B):** os distratores são pares mínimos que mudam uma palavra, como `O COPO ESTÁ NO CHÃO` e `O PRATO ESTÁ NA MESA`. A descrição da cena diz o que a ilustração precisa mostrar.
+
+Esses distratores novos aguardam a revisão pedagógica, como os demais rascunhos.
 
 ## Testar o quiz de nivelamento
 
@@ -102,4 +111,19 @@ FROM banco_questoes.corrigir_quiz('{
 }'::jsonb);
 ```
 
-O exemplo retorna 4 acertos fáceis, 4 médios, 2 difíceis e recomendação `medio`. A função recebe o índice da alternativa na ordem armazenada, começando em 1. Envie `null` quando a pessoa pular uma questão. Um ID ausente indica quiz incompleto e gera recomendação provisória. A função devolve o resultado da correção para a integração. O registro das respostas por usuário e a seleção da prática ficam com a equipe do app.
+O exemplo retorna 4 acertos fáceis, 4 médios e 2 difíceis, com recomendação `medio`. O nível inicial é 3 (Palavras), e as letras creditadas são `AEIOUMLPSTRNDCG`.
+
+A função recebe o índice da alternativa na ordem armazenada, começando em 1. Envie `null` quando a pessoa pular uma questão. Um ID ausente indica quiz incompleto e gera recomendação provisória. O segundo parâmetro, `pulado`, marca o quiz inteiro como pulado: `corrigir_quiz('{}', true)`.
+
+`motivo_provisorio` explica um resultado provisório e pode ser `quiz_pulado`, `quiz_incompleto`, `poucas_respostas_faceis` ou `resultado_contrastante`. Os exemplos com resultado esperado ficam em `contracts/placement-quiz.json`.
+
+O app registra as respostas de cada pessoa e a API as guarda em `placement_results` (`GET /v1/placement`). O resultado define o nível de partida, as letras creditadas e a mistura de dificuldade. Ver `docs/adr/0006-nivelamento-inicial.md`.
+
+## Testes
+
+```powershell
+python -m pip install pytest openpyxl
+python -m pytest bancoquestoesequiz
+```
+
+Para incluir o teste de integração com PostgreSQL, aponte `PROSA_TEST_DATABASE_URL` para um banco de testes com as migrações da API aplicadas. O teste carrega o SQL duas vezes e confere a correção do quiz com todos os exemplos do contrato.
