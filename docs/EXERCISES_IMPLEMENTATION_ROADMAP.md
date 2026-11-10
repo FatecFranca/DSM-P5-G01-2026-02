@@ -121,6 +121,23 @@ unidades e IDs novos não alteram conclusões existentes nem exigem migração.
 5. Testes de contrato, conteúdo, API e mobile estão verdes.
 6. A revisão pedagógica humana está registrada para itens liberados.
 
+## Catálogo de `bancoquestoesequiz`: como cada modelo entra no app
+
+O banco PostgreSQL da curadoria (`bancoquestoesequiz/`) é fonte editorial e não é lido pelo app. Um item só chega ao estudante depois de aprovado e convertido, no Estúdio ou em `content_data.py`, para um tipo de `contracts/exercise-types.json`. Ele precisa ter os metadados obrigatórios e uma ilustração própria. O quiz de nivelamento já foi integrado (ADR 0006).
+
+| Modelo do banco | Tipo do app | Ajuste necessário |
+| --- | --- | --- |
+| 1A, 3A letra inicial pela figura | `initial_sound` | Usar só palavras com letras já apresentadas. |
+| 1E letra ouvida | `listen_choose` | Já existe uma por letra; serve como item extra de revisão. |
+| 2F sílaba ouvida | `syllable_listen_choose` | Já existe para as consoantes CV. |
+| 2B, 2C sílaba inicial ou final | `syllable_position_choose` | Resposta por toque, em vez de digitar. |
+| 2D, 2E separar e formar | `word_from_syllables` | Montagem por toque, sem teclado. |
+| 3C desenho da palavra | Novo renderizador de escolha por imagem | Exige decisão de contrato. |
+| 3D palavra do desenho | `word_image_choose` | Ilustração própria por palavra. |
+| 4A ordenar frase | `sentence_order` | Peças já embaralhadas sem rotação na carga. |
+| 4B frase da cena | `sentence_image_choose` | Pares mínimos já curados na carga; ilustrar cada cena. |
+| 1B, 3B ligar pares; 1C, 1D, 3E digitar | Não entram | O piloto decidiu por decisões individuais por toque (seção de decisões acima). |
+
 ## Registro de execução
 
 | Data | Etapa | Resultado | Evidência |
