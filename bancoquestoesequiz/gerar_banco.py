@@ -229,7 +229,7 @@ def parametros_variacao(modelo, dados, resposta):
     return termo, parametros
 
 
-def gerar_sql():
+def gerar_sql(base_tratada=None):
     linhas = list(itens())
     if len({linha[0] for linha in linhas}) != len(linhas):
         raise ValueError("Há identificadores de questões duplicados.")
@@ -252,8 +252,14 @@ def gerar_sql():
     esquema = Path(__file__).with_name("esquema.sql").read_text(encoding="utf-8")
     vincular = Path(__file__).with_name("vincular_vocabulario.sql").read_text(encoding="utf-8")
     quiz = Path(__file__).with_name("quiz_nivelamento.sql").read_text(encoding="utf-8")
+    palavras_sql = ""
+    if base_tratada is not None:
+        from importar_base_tratada import carga_palavras
+
+        palavras_sql = carga_palavras(base_tratada, SILABAS_POR_PALAVRA, sql_texto)
     return "".join((
         "BEGIN;\nSET LOCAL client_encoding = 'UTF8';\nSET LOCAL standard_conforming_strings = on;\n",
+        palavras_sql,
         esquema,
         inserir("modelos", "id, formato, regra, enunciado", modelos.values()),
         inserir("vocabulario", "termo", ((termo,) for termo in sorted(vocabulario))),
@@ -279,7 +285,14 @@ END $$;
 
 
 if __name__ == "__main__":
+    from importar_base_tratada import PLANILHA_PADRAO
+
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("saida", type=Path, help="Caminho do arquivo SQL a gerar.")
+    parser.add_argument("--base-tratada", nargs="?", type=Path, const=PLANILHA_PADRAO,
+                        help="Inclui a planilha tratada do repositório ou o arquivo informado.")
     args = parser.parse_args()
-    args.saida.write_text(gerar_sql(), encoding="utf-8")
+    try:
+        args.saida.write_text(gerar_sql(args.base_tratada), encoding="utf-8")
+    except (OSError, ValueError) as exc:
+        parser.error(str(exc))
