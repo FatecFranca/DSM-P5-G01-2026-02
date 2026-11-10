@@ -56,9 +56,16 @@ export function parsePulledItemState(payload: Record<string, unknown>, occurredA
   return { itemId: canonicalExerciseId(itemId), unitId: canonicalLessonId(unitId), strength: number(payload.strength), halfLifeHours: number(payload.half_life_hours, 4), dueAt, reps: number(payload.reps), lapses: number(payload.lapses), consecutiveCorrect: number(payload.consecutive_correct), lastResult: payload.last_result === true, lastSeenAt, updatedAt: occurredAt };
 }
 
+/** O servidor em SQLite devolve datas sem fuso; elas são UTC. Sem isso, o horário local deslocaria a comparação. */
+const asUtc = (timestamp: string): string => {
+  if (/(Z|[+-]\d\d:?\d\d)$/i.test(timestamp)) return timestamp;
+  const parsed = Date.parse(`${timestamp.replace(/(\.\d{3})\d+$/, "$1")}Z`);
+  return Number.isNaN(parsed) ? timestamp : new Date(parsed).toISOString();
+};
+
 /** Converte um evento `placement` recebido no pull; a data do evento é a de conclusão do quiz. */
 export const parsePulledPlacement = (payload: Record<string, unknown>, occurredAt: string): PlacementRecord | undefined =>
-  parsePlacementRecord({ resultId: payload.result_id, quizVersion: payload.quiz_version, completedAt: occurredAt, skipped: payload.skipped === true, responses: payload.responses });
+  parsePlacementRecord({ resultId: payload.result_id, quizVersion: payload.quiz_version, completedAt: asUtc(occurredAt), skipped: payload.skipped === true, responses: payload.responses });
 
 /** Reúne progresso salvo sob IDs legados (`letter-a`) no ID canônico, mesclando duplicatas. */
 export function canonicalizeProgress(items: LessonProgress[]): LessonProgress[] {

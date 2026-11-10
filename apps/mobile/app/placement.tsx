@@ -123,7 +123,7 @@ export default function Placement() {
   const item = PLACEMENT_ITEMS[index];
   return <>
     <Stack.Screen options={{ headerShown: false }} />
-    <QuizLayout prompt={item.instruction} promptAudioLabel="Ouvir pergunta" closeLabel="Sair do nivelamento" onClose={confirmStop}
+    <QuizLayout key={item.id} prompt={item.instruction} promptAudioLabel="Ouvir pergunta" closeLabel="Sair do nivelamento" onClose={confirmStop}
       progress={{ current: index + 1, total: TOTAL, accessibilityLabel: `Nivelamento: pergunta ${index + 1} de ${TOTAL}` }}>
       <PlacementQuestion key={item.id} item={item} onAnswer={answer} />
     </QuizLayout>

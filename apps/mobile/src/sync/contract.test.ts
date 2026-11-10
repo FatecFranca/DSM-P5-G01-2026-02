@@ -55,6 +55,10 @@ describe("nivelamento no sync", () => {
     expect(parsePulledPlacement({ result_id: "r1", quiz_version: "nivelamento-v1", skipped: false, responses: { F1: 2, F2: null }, difficulty: "facil" }, "2026-11-10T12:00:00Z")).toEqual({ ...record, completedAt: "2026-11-10T12:00:00Z" });
     expect(parsePulledPlacement({ result_id: "r1", quiz_version: "nivelamento-v1", responses: { Z: 1 } }, "2026-11-10T12:00:00Z")).toBeUndefined();
   });
+  it("trata data sem fuso vinda do servidor como UTC, para não parecer mais recente que é", () => {
+    const pulled = parsePulledPlacement({ result_id: "r1", quiz_version: "nivelamento-v1", responses: {} }, "2026-11-10T16:40:08.781000");
+    expect(pulled?.completedAt).toBe("2026-11-10T16:40:08.781Z");
+  });
 });
 
 describe("rejeições do servidor", () => {
