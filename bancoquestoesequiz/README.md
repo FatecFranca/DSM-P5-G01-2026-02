@@ -1,5 +1,7 @@
 # Banco de questões do Prosa
 
+O [quiz inicial de nivelamento](QUIZ_NIVELAMENTO.md) reúne os itens, gabaritos e a regra proposta para recomendar a dificuldade da prática. A carga deste banco também instala as 12 questões do quiz e sua função de correção.
+
 A carga PostgreSQL adapta os 18 modelos do arquivo [EXERCICIOSPARAOAPP.txt](EXERCICIOSPARAOAPP.txt). São **85 questões fixas** e **349 configurações de variação**. A configuração guarda os parâmetros permitidos. A questão e o gabarito são montados ao consultar o banco.
 
 | Nível | Questões fixas | Modelos com variações |
@@ -48,3 +50,22 @@ ORDER BY termo;
 Quando a equipe importar mais palavras em `public.words`, execute novamente a carga ou rode `vincular_vocabulario.sql` no mesmo banco. A tabela `questao_vocabulario` lista as palavras associadas a cada questão fixa, inclusive as que aguardam vínculo.
 
 As novas questões fixas e configurações entram como rascunho. Imagens têm identificadores editoriais e descrições, e o áudio tem texto de referência. A consulta de montagem é para revisão e testes no banco. Para uso por estudantes, a integração do app ainda precisa selecionar itens aprovados, resolver as mídias do servidor e aplicar as regras de progressão, dificuldade e revisão.
+
+## Testar o quiz de nivelamento
+
+Depois de gerar e importar a carga, abra a Query Tool do banco no pgAdmin. Para instalar só o quiz em um laboratório que já tem o esquema `banco_questoes`, abra o arquivo `quiz_nivelamento.sql` na Query Tool e execute-o.
+
+```sql
+SELECT id, enunciado, estimulo, alternativas
+FROM banco_questoes.quiz_apresentacao
+ORDER BY ordem;
+
+SELECT *
+FROM banco_questoes.corrigir_quiz('{
+  "F1":2,"F2":1,"F3":3,"F4":2,
+  "M1":3,"M2":1,"M3":2,"M4":3,
+  "D1":1,"D2":2,"D3":null,"D4":null
+}'::jsonb);
+```
+
+O exemplo retorna 4 acertos fáceis, 4 médios, 2 difíceis e recomendação `medio`. A função recebe o índice da alternativa na ordem armazenada, começando em 1. Envie `null` quando a pessoa pular uma questão. Um ID ausente indica quiz incompleto e gera recomendação provisória. A função devolve o resultado da correção para a integração. O registro das respostas por usuário e a seleção da prática ficam com a equipe do app.

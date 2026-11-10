@@ -251,6 +251,7 @@ def gerar_sql():
             referencias.extend((id_, termo) for termo in sorted(termos))
     esquema = Path(__file__).with_name("esquema.sql").read_text(encoding="utf-8")
     vincular = Path(__file__).with_name("vincular_vocabulario.sql").read_text(encoding="utf-8")
+    quiz = Path(__file__).with_name("quiz_nivelamento.sql").read_text(encoding="utf-8")
     return "".join((
         "BEGIN;\nSET LOCAL client_encoding = 'UTF8';\nSET LOCAL standard_conforming_strings = on;\n",
         esquema,
@@ -272,6 +273,7 @@ BEGIN
 END $$;
 """,
         vincular,
+        quiz,
         "\nCOMMIT;\n",
     ))
 
