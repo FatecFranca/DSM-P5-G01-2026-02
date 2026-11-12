@@ -22,7 +22,7 @@ def test_word_bank_entries_become_candidates_and_enrich_curated_words(client, mo
     bank = tmp_path / "word_bank.json"
     bank.write_text(json.dumps([
         {"text": "CASA", "syllables": "CA-SA", "frequency": 0.91, "raw_frequency": 1200, "difficulty": "facil", "source": "corpus-santos-toni"},
-        {"text": "JANELA", "syllables": "JA-NE-LA", "frequency": 0.42, "raw_frequency": 80, "difficulty": "medio", "source": "corpus-santos-toni"},
+        {"text": "TELEFONE", "syllables": "TE-LE-FO-NE", "frequency": 0.42, "raw_frequency": 80, "difficulty": "medio", "source": "corpus-santos-toni"},
     ]), encoding="utf-8")
     monkeypatch.setattr(seed, "WORD_BANK_PATH", bank)
     seed.seed_content()
@@ -30,11 +30,11 @@ def test_word_bank_entries_become_candidates_and_enrich_curated_words(client, mo
 
     with SessionLocal() as db:
         casa = db.scalar(select(Word).where(Word.text == "CASA"))
-        janela = db.scalar(select(Word).where(Word.text == "JANELA"))
+        janela = db.scalar(select(Word).where(Word.text == "TELEFONE"))
         assert casa.review_status == "pending" and casa.source == "curadoria" and casa.frequency == 0.91 and casa.frequency_source == "corpus-santos-toni"
-        assert janela.review_status == "candidate" and janela.syllables == ["JA", "NE", "LA"] and janela.required_letters == "AELNJ"
-        assert db.scalar(select(Word).where(Word.text == "JANELA").where(Word.review_status == "candidate")) is not None
+        assert janela.review_status == "candidate" and janela.syllables == ["TE", "LE", "FO", "NE"] and janela.required_letters == "EOLTNF"
+        assert db.scalar(select(Word).where(Word.text == "TELEFONE").where(Word.review_status == "candidate")) is not None
 
     content = client.get("/v1/content").json()
-    assert "JANELA" not in {word["text"] for word in content["words"]}
+    assert "TELEFONE" not in {word["text"] for word in content["words"]}
     assert lint_content(content) == []

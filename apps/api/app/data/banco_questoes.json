@@ -1,0 +1,8882 @@
+{
+ "$comment": "Gerado por apps/api/scripts/export_question_bank.py a partir de bancoquestoesequiz/gerar_banco.py. Não edite à mão.",
+ "silabas_por_palavra": {
+  "CASA": [
+   "CA",
+   "SA"
+  ],
+  "DADO": [
+   "DA",
+   "DO"
+  ],
+  "BOLO": [
+   "BO",
+   "LO"
+  ],
+  "SORVETE": [
+   "SOR",
+   "VE",
+   "TE"
+  ],
+  "NAVIO": [
+   "NA",
+   "VI",
+   "O"
+  ],
+  "CAMELO": [
+   "CA",
+   "ME",
+   "LO"
+  ],
+  "BANANA": [
+   "BA",
+   "NA",
+   "NA"
+  ],
+  "MESA": [
+   "ME",
+   "SA"
+  ],
+  "SAPATO": [
+   "SA",
+   "PA",
+   "TO"
+  ],
+  "PANELA": [
+   "PA",
+   "NE",
+   "LA"
+  ],
+  "TAPETE": [
+   "TA",
+   "PE",
+   "TE"
+  ],
+  "JANELA": [
+   "JA",
+   "NE",
+   "LA"
+  ],
+  "FOLHA": [
+   "FO",
+   "LHA"
+  ],
+  "COPO": [
+   "CO",
+   "PO"
+  ],
+  "UVA": [
+   "U",
+   "VA"
+  ],
+  "TOMATE": [
+   "TO",
+   "MA",
+   "TE"
+  ],
+  "MAÇÃ": [
+   "MA",
+   "ÇÃ"
+  ],
+  "RATO": [
+   "RA",
+   "TO"
+  ]
+ },
+ "questoes": [
+  {
+   "id": "1A-abelha",
+   "modelo": "1A",
+   "formato": "escolha",
+   "enunciado": "Selecione a vogal inicial do nome do desenho.",
+   "dados": {
+    "grupo": "vogal",
+    "opcoes": [
+     "A",
+     "E",
+     "I"
+    ],
+    "imagem": {
+     "id": "abelha",
+     "termo": "ABELHA",
+     "descricao": "Ilustração de abelha."
+    },
+    "lacuna": "_BELHA"
+   },
+   "gabarito": "A"
+  },
+  {
+   "id": "3A-abelha",
+   "modelo": "3A",
+   "formato": "escolha",
+   "enunciado": "Selecione a letra inicial do nome do desenho.",
+   "dados": {
+    "opcoes": [
+     "A",
+     "E",
+     "I"
+    ],
+    "imagem": {
+     "id": "abelha",
+     "termo": "ABELHA",
+     "descricao": "Ilustração de abelha."
+    },
+    "lacuna": "_BELHA"
+   },
+   "gabarito": "A"
+  },
+  {
+   "id": "1D-abelha",
+   "modelo": "1D",
+   "formato": "digitar_campos",
+   "enunciado": "Leia a palavra e escreva a primeira e a última letra.",
+   "dados": {
+    "palavra": "ABELHA",
+    "imagem": {
+     "id": "abelha",
+     "termo": "ABELHA",
+     "descricao": "Ilustração de abelha."
+    },
+    "campos": [
+     "inicial",
+     "final"
+    ]
+   },
+   "gabarito": [
+    "A",
+    "A"
+   ]
+  },
+  {
+   "id": "1A-anjo",
+   "modelo": "1A",
+   "formato": "escolha",
+   "enunciado": "Selecione a vogal inicial do nome do desenho.",
+   "dados": {
+    "grupo": "vogal",
+    "opcoes": [
+     "A",
+     "E",
+     "I"
+    ],
+    "imagem": {
+     "id": "anjo",
+     "termo": "ANJO",
+     "descricao": "Ilustração de anjo."
+    },
+    "lacuna": "_NJO"
+   },
+   "gabarito": "A"
+  },
+  {
+   "id": "3A-anjo",
+   "modelo": "3A",
+   "formato": "escolha",
+   "enunciado": "Selecione a letra inicial do nome do desenho.",
+   "dados": {
+    "opcoes": [
+     "A",
+     "E",
+     "I"
+    ],
+    "imagem": {
+     "id": "anjo",
+     "termo": "ANJO",
+     "descricao": "Ilustração de anjo."
+    },
+    "lacuna": "_NJO"
+   },
+   "gabarito": "A"
+  },
+  {
+   "id": "1D-anjo",
+   "modelo": "1D",
+   "formato": "digitar_campos",
+   "enunciado": "Leia a palavra e escreva a primeira e a última letra.",
+   "dados": {
+    "palavra": "ANJO",
+    "imagem": {
+     "id": "anjo",
+     "termo": "ANJO",
+     "descricao": "Ilustração de anjo."
+    },
+    "campos": [
+     "inicial",
+     "final"
+    ]
+   },
+   "gabarito": [
+    "A",
+    "O"
+   ]
+  },
+  {
+   "id": "3E-a",
+   "modelo": "3E",
+   "formato": "digitar_campos",
+   "enunciado": "Complete as palavras com a letra A.",
+   "dados": {
+    "linhas": [
+     {
+      "imagem": {
+       "id": "abelha",
+       "termo": "ABELHA",
+       "descricao": "Ilustração de abelha."
+      },
+      "lacuna": "_BELHA"
+     },
+     {
+      "imagem": {
+       "id": "anjo",
+       "termo": "ANJO",
+       "descricao": "Ilustração de anjo."
+      },
+      "lacuna": "_NJO"
+     }
+    ]
+   },
+   "gabarito": [
+    "A",
+    "A"
+   ]
+  },
+  {
+   "id": "1E-a",
+   "modelo": "1E",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a letra que escutar.",
+   "dados": {
+    "audio": "A",
+    "opcoes": [
+     "A",
+     "E",
+     "M",
+     "O",
+     "P"
+    ]
+   },
+   "gabarito": "A"
+  },
+  {
+   "id": "1A-bolsa",
+   "modelo": "1A",
+   "formato": "escolha",
+   "enunciado": "Selecione a consoante inicial do nome do desenho.",
+   "dados": {
+    "grupo": "consoante",
+    "opcoes": [
+     "D",
+     "F",
+     "B"
+    ],
+    "imagem": {
+     "id": "bolsa",
+     "termo": "BOLSA",
+     "descricao": "Ilustração de bolsa."
+    },
+    "lacuna": "_OLSA"
+   },
+   "gabarito": "B"
+  },
+  {
+   "id": "3A-bolsa",
+   "modelo": "3A",
+   "formato": "escolha",
+   "enunciado": "Selecione a letra inicial do nome do desenho.",
+   "dados": {
+    "opcoes": [
+     "D",
+     "F",
+     "B"
+    ],
+    "imagem": {
+     "id": "bolsa",
+     "termo": "BOLSA",
+     "descricao": "Ilustração de bolsa."
+    },
+    "lacuna": "_OLSA"
+   },
+   "gabarito": "B"
+  },
+  {
+   "id": "1D-bolsa",
+   "modelo": "1D",
+   "formato": "digitar_campos",
+   "enunciado": "Leia a palavra e escreva a primeira e a última letra.",
+   "dados": {
+    "palavra": "BOLSA",
+    "imagem": {
+     "id": "bolsa",
+     "termo": "BOLSA",
+     "descricao": "Ilustração de bolsa."
+    },
+    "campos": [
+     "inicial",
+     "final"
+    ]
+   },
+   "gabarito": [
+    "B",
+    "A"
+   ]
+  },
+  {
+   "id": "1A-bolo",
+   "modelo": "1A",
+   "formato": "escolha",
+   "enunciado": "Selecione a consoante inicial do nome do desenho.",
+   "dados": {
+    "grupo": "consoante",
+    "opcoes": [
+     "D",
+     "F",
+     "B"
+    ],
+    "imagem": {
+     "id": "bolo",
+     "termo": "BOLO",
+     "descricao": "Ilustração de bolo."
+    },
+    "lacuna": "_OLO"
+   },
+   "gabarito": "B"
+  },
+  {
+   "id": "3A-bolo",
+   "modelo": "3A",
+   "formato": "escolha",
+   "enunciado": "Selecione a letra inicial do nome do desenho.",
+   "dados": {
+    "opcoes": [
+     "D",
+     "F",
+     "B"
+    ],
+    "imagem": {
+     "id": "bolo",
+     "termo": "BOLO",
+     "descricao": "Ilustração de bolo."
+    },
+    "lacuna": "_OLO"
+   },
+   "gabarito": "B"
+  },
+  {
+   "id": "1D-bolo",
+   "modelo": "1D",
+   "formato": "digitar_campos",
+   "enunciado": "Leia a palavra e escreva a primeira e a última letra.",
+   "dados": {
+    "palavra": "BOLO",
+    "imagem": {
+     "id": "bolo",
+     "termo": "BOLO",
+     "descricao": "Ilustração de bolo."
+    },
+    "campos": [
+     "inicial",
+     "final"
+    ]
+   },
+   "gabarito": [
+    "B",
+    "O"
+   ]
+  },
+  {
+   "id": "3E-b",
+   "modelo": "3E",
+   "formato": "digitar_campos",
+   "enunciado": "Complete as palavras com a letra B.",
+   "dados": {
+    "linhas": [
+     {
+      "imagem": {
+       "id": "bolsa",
+       "termo": "BOLSA",
+       "descricao": "Ilustração de bolsa."
+      },
+      "lacuna": "_OLSA"
+     },
+     {
+      "imagem": {
+       "id": "bolo",
+       "termo": "BOLO",
+       "descricao": "Ilustração de bolo."
+      },
+      "lacuna": "_OLO"
+     }
+    ]
+   },
+   "gabarito": [
+    "B",
+    "B"
+   ]
+  },
+  {
+   "id": "1C-b",
+   "modelo": "1C",
+   "formato": "digitar_campos",
+   "enunciado": "Escreva as letras que vêm antes e depois.",
+   "dados": {
+    "letra": "B",
+    "campos": [
+     "anterior",
+     "posterior"
+    ]
+   },
+   "gabarito": [
+    "A",
+    "C"
+   ]
+  },
+  {
+   "id": "1E-b",
+   "modelo": "1E",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a letra que escutar.",
+   "dados": {
+    "audio": "B",
+    "opcoes": [
+     "C",
+     "E",
+     "H",
+     "L",
+     "B"
+    ]
+   },
+   "gabarito": "B"
+  },
+  {
+   "id": "1A-casa",
+   "modelo": "1A",
+   "formato": "escolha",
+   "enunciado": "Selecione a consoante inicial do nome do desenho.",
+   "dados": {
+    "grupo": "consoante",
+    "opcoes": [
+     "G",
+     "C",
+     "F"
+    ],
+    "imagem": {
+     "id": "casa",
+     "termo": "CASA",
+     "descricao": "Ilustração de casa."
+    },
+    "lacuna": "_ASA"
+   },
+   "gabarito": "C"
+  },
+  {
+   "id": "3A-casa",
+   "modelo": "3A",
+   "formato": "escolha",
+   "enunciado": "Selecione a letra inicial do nome do desenho.",
+   "dados": {
+    "opcoes": [
+     "G",
+     "C",
+     "F"
+    ],
+    "imagem": {
+     "id": "casa",
+     "termo": "CASA",
+     "descricao": "Ilustração de casa."
+    },
+    "lacuna": "_ASA"
+   },
+   "gabarito": "C"
+  },
+  {
+   "id": "1D-casa",
+   "modelo": "1D",
+   "formato": "digitar_campos",
+   "enunciado": "Leia a palavra e escreva a primeira e a última letra.",
+   "dados": {
+    "palavra": "CASA",
+    "imagem": {
+     "id": "casa",
+     "termo": "CASA",
+     "descricao": "Ilustração de casa."
+    },
+    "campos": [
+     "inicial",
+     "final"
+    ]
+   },
+   "gabarito": [
+    "C",
+    "A"
+   ]
+  },
+  {
+   "id": "1A-copo",
+   "modelo": "1A",
+   "formato": "escolha",
+   "enunciado": "Selecione a consoante inicial do nome do desenho.",
+   "dados": {
+    "grupo": "consoante",
+    "opcoes": [
+     "G",
+     "C",
+     "F"
+    ],
+    "imagem": {
+     "id": "copo",
+     "termo": "COPO",
+     "descricao": "Ilustração de copo."
+    },
+    "lacuna": "_OPO"
+   },
+   "gabarito": "C"
+  },
+  {
+   "id": "3A-copo",
+   "modelo": "3A",
+   "formato": "escolha",
+   "enunciado": "Selecione a letra inicial do nome do desenho.",
+   "dados": {
+    "opcoes": [
+     "G",
+     "C",
+     "F"
+    ],
+    "imagem": {
+     "id": "copo",
+     "termo": "COPO",
+     "descricao": "Ilustração de copo."
+    },
+    "lacuna": "_OPO"
+   },
+   "gabarito": "C"
+  },
+  {
+   "id": "1D-copo",
+   "modelo": "1D",
+   "formato": "digitar_campos",
+   "enunciado": "Leia a palavra e escreva a primeira e a última letra.",
+   "dados": {
+    "palavra": "COPO",
+    "imagem": {
+     "id": "copo",
+     "termo": "COPO",
+     "descricao": "Ilustração de copo."
+    },
+    "campos": [
+     "inicial",
+     "final"
+    ]
+   },
+   "gabarito": [
+    "C",
+    "O"
+   ]
+  },
+  {
+   "id": "3E-c",
+   "modelo": "3E",
+   "formato": "digitar_campos",
+   "enunciado": "Complete as palavras com a letra C.",
+   "dados": {
+    "linhas": [
+     {
+      "imagem": {
+       "id": "casa",
+       "termo": "CASA",
+       "descricao": "Ilustração de casa."
+      },
+      "lacuna": "_ASA"
+     },
+     {
+      "imagem": {
+       "id": "copo",
+       "termo": "COPO",
+       "descricao": "Ilustração de copo."
+      },
+      "lacuna": "_OPO"
+     }
+    ]
+   },
+   "gabarito": [
+    "C",
+    "C"
+   ]
+  },
+  {
+   "id": "1C-c",
+   "modelo": "1C",
+   "formato": "digitar_campos",
+   "enunciado": "Escreva as letras que vêm antes e depois.",
+   "dados": {
+    "letra": "C",
+    "campos": [
+     "anterior",
+     "posterior"
+    ]
+   },
+   "gabarito": [
+    "B",
+    "D"
+   ]
+  },
+  {
+   "id": "1E-c",
+   "modelo": "1E",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a letra que escutar.",
+   "dados": {
+    "audio": "C",
+    "opcoes": [
+     "F",
+     "I",
+     "M",
+     "C",
+     "D"
+    ]
+   },
+   "gabarito": "C"
+  },
+  {
+   "id": "1A-dado",
+   "modelo": "1A",
+   "formato": "escolha",
+   "enunciado": "Selecione a consoante inicial do nome do desenho.",
+   "dados": {
+    "grupo": "consoante",
+    "opcoes": [
+     "D",
+     "G",
+     "H"
+    ],
+    "imagem": {
+     "id": "dado",
+     "termo": "DADO",
+     "descricao": "Ilustração de dado."
+    },
+    "lacuna": "_ADO"
+   },
+   "gabarito": "D"
+  },
+  {
+   "id": "3A-dado",
+   "modelo": "3A",
+   "formato": "escolha",
+   "enunciado": "Selecione a letra inicial do nome do desenho.",
+   "dados": {
+    "opcoes": [
+     "D",
+     "G",
+     "H"
+    ],
+    "imagem": {
+     "id": "dado",
+     "termo": "DADO",
+     "descricao": "Ilustração de dado."
+    },
+    "lacuna": "_ADO"
+   },
+   "gabarito": "D"
+  },
+  {
+   "id": "1D-dado",
+   "modelo": "1D",
+   "formato": "digitar_campos",
+   "enunciado": "Leia a palavra e escreva a primeira e a última letra.",
+   "dados": {
+    "palavra": "DADO",
+    "imagem": {
+     "id": "dado",
+     "termo": "DADO",
+     "descricao": "Ilustração de dado."
+    },
+    "campos": [
+     "inicial",
+     "final"
+    ]
+   },
+   "gabarito": [
+    "D",
+    "O"
+   ]
+  },
+  {
+   "id": "1A-dente",
+   "modelo": "1A",
+   "formato": "escolha",
+   "enunciado": "Selecione a consoante inicial do nome do desenho.",
+   "dados": {
+    "grupo": "consoante",
+    "opcoes": [
+     "D",
+     "G",
+     "H"
+    ],
+    "imagem": {
+     "id": "dente",
+     "termo": "DENTE",
+     "descricao": "Ilustração de dente."
+    },
+    "lacuna": "_ENTE"
+   },
+   "gabarito": "D"
+  },
+  {
+   "id": "3A-dente",
+   "modelo": "3A",
+   "formato": "escolha",
+   "enunciado": "Selecione a letra inicial do nome do desenho.",
+   "dados": {
+    "opcoes": [
+     "D",
+     "G",
+     "H"
+    ],
+    "imagem": {
+     "id": "dente",
+     "termo": "DENTE",
+     "descricao": "Ilustração de dente."
+    },
+    "lacuna": "_ENTE"
+   },
+   "gabarito": "D"
+  },
+  {
+   "id": "1D-dente",
+   "modelo": "1D",
+   "formato": "digitar_campos",
+   "enunciado": "Leia a palavra e escreva a primeira e a última letra.",
+   "dados": {
+    "palavra": "DENTE",
+    "imagem": {
+     "id": "dente",
+     "termo": "DENTE",
+     "descricao": "Ilustração de dente."
+    },
+    "campos": [
+     "inicial",
+     "final"
+    ]
+   },
+   "gabarito": [
+    "D",
+    "E"
+   ]
+  },
+  {
+   "id": "3E-d",
+   "modelo": "3E",
+   "formato": "digitar_campos",
+   "enunciado": "Complete as palavras com a letra D.",
+   "dados": {
+    "linhas": [
+     {
+      "imagem": {
+       "id": "dado",
+       "termo": "DADO",
+       "descricao": "Ilustração de dado."
+      },
+      "lacuna": "_ADO"
+     },
+     {
+      "imagem": {
+       "id": "dente",
+       "termo": "DENTE",
+       "descricao": "Ilustração de dente."
+      },
+      "lacuna": "_ENTE"
+     }
+    ]
+   },
+   "gabarito": [
+    "D",
+    "D"
+   ]
+  },
+  {
+   "id": "1C-d",
+   "modelo": "1C",
+   "formato": "digitar_campos",
+   "enunciado": "Escreva as letras que vêm antes e depois.",
+   "dados": {
+    "letra": "D",
+    "campos": [
+     "anterior",
+     "posterior"
+    ]
+   },
+   "gabarito": [
+    "C",
+    "E"
+   ]
+  },
+  {
+   "id": "1E-d",
+   "modelo": "1E",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a letra que escutar.",
+   "dados": {
+    "audio": "D",
+    "opcoes": [
+     "J",
+     "N",
+     "D",
+     "E",
+     "G"
+    ]
+   },
+   "gabarito": "D"
+  },
+  {
+   "id": "1A-escada",
+   "modelo": "1A",
+   "formato": "escolha",
+   "enunciado": "Selecione a vogal inicial do nome do desenho.",
+   "dados": {
+    "grupo": "vogal",
+    "opcoes": [
+     "A",
+     "I",
+     "E"
+    ],
+    "imagem": {
+     "id": "escada",
+     "termo": "ESCADA",
+     "descricao": "Ilustração de escada."
+    },
+    "lacuna": "_SCADA"
+   },
+   "gabarito": "E"
+  },
+  {
+   "id": "3A-escada",
+   "modelo": "3A",
+   "formato": "escolha",
+   "enunciado": "Selecione a letra inicial do nome do desenho.",
+   "dados": {
+    "opcoes": [
+     "A",
+     "I",
+     "E"
+    ],
+    "imagem": {
+     "id": "escada",
+     "termo": "ESCADA",
+     "descricao": "Ilustração de escada."
+    },
+    "lacuna": "_SCADA"
+   },
+   "gabarito": "E"
+  },
+  {
+   "id": "1D-escada",
+   "modelo": "1D",
+   "formato": "digitar_campos",
+   "enunciado": "Leia a palavra e escreva a primeira e a última letra.",
+   "dados": {
+    "palavra": "ESCADA",
+    "imagem": {
+     "id": "escada",
+     "termo": "ESCADA",
+     "descricao": "Ilustração de escada."
+    },
+    "campos": [
+     "inicial",
+     "final"
+    ]
+   },
+   "gabarito": [
+    "E",
+    "A"
+   ]
+  },
+  {
+   "id": "1A-escova",
+   "modelo": "1A",
+   "formato": "escolha",
+   "enunciado": "Selecione a vogal inicial do nome do desenho.",
+   "dados": {
+    "grupo": "vogal",
+    "opcoes": [
+     "A",
+     "I",
+     "E"
+    ],
+    "imagem": {
+     "id": "escova",
+     "termo": "ESCOVA",
+     "descricao": "Ilustração de escova."
+    },
+    "lacuna": "_SCOVA"
+   },
+   "gabarito": "E"
+  },
+  {
+   "id": "3A-escova",
+   "modelo": "3A",
+   "formato": "escolha",
+   "enunciado": "Selecione a letra inicial do nome do desenho.",
+   "dados": {
+    "opcoes": [
+     "A",
+     "I",
+     "E"
+    ],
+    "imagem": {
+     "id": "escova",
+     "termo": "ESCOVA",
+     "descricao": "Ilustração de escova."
+    },
+    "lacuna": "_SCOVA"
+   },
+   "gabarito": "E"
+  },
+  {
+   "id": "1D-escova",
+   "modelo": "1D",
+   "formato": "digitar_campos",
+   "enunciado": "Leia a palavra e escreva a primeira e a última letra.",
+   "dados": {
+    "palavra": "ESCOVA",
+    "imagem": {
+     "id": "escova",
+     "termo": "ESCOVA",
+     "descricao": "Ilustração de escova."
+    },
+    "campos": [
+     "inicial",
+     "final"
+    ]
+   },
+   "gabarito": [
+    "E",
+    "A"
+   ]
+  },
+  {
+   "id": "3E-e",
+   "modelo": "3E",
+   "formato": "digitar_campos",
+   "enunciado": "Complete as palavras com a letra E.",
+   "dados": {
+    "linhas": [
+     {
+      "imagem": {
+       "id": "escada",
+       "termo": "ESCADA",
+       "descricao": "Ilustração de escada."
+      },
+      "lacuna": "_SCADA"
+     },
+     {
+      "imagem": {
+       "id": "escova",
+       "termo": "ESCOVA",
+       "descricao": "Ilustração de escova."
+      },
+      "lacuna": "_SCOVA"
+     }
+    ]
+   },
+   "gabarito": [
+    "E",
+    "E"
+   ]
+  },
+  {
+   "id": "1C-e",
+   "modelo": "1C",
+   "formato": "digitar_campos",
+   "enunciado": "Escreva as letras que vêm antes e depois.",
+   "dados": {
+    "letra": "E",
+    "campos": [
+     "anterior",
+     "posterior"
+    ]
+   },
+   "gabarito": [
+    "D",
+    "F"
+   ]
+  },
+  {
+   "id": "1E-e",
+   "modelo": "1E",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a letra que escutar.",
+   "dados": {
+    "audio": "E",
+    "opcoes": [
+     "O",
+     "E",
+     "F",
+     "H",
+     "K"
+    ]
+   },
+   "gabarito": "E"
+  },
+  {
+   "id": "1A-folha",
+   "modelo": "1A",
+   "formato": "escolha",
+   "enunciado": "Selecione a consoante inicial do nome do desenho.",
+   "dados": {
+    "grupo": "consoante",
+    "opcoes": [
+     "K",
+     "F",
+     "J"
+    ],
+    "imagem": {
+     "id": "folha",
+     "termo": "FOLHA",
+     "descricao": "Ilustração de folha."
+    },
+    "lacuna": "_OLHA"
+   },
+   "gabarito": "F"
+  },
+  {
+   "id": "3A-folha",
+   "modelo": "3A",
+   "formato": "escolha",
+   "enunciado": "Selecione a letra inicial do nome do desenho.",
+   "dados": {
+    "opcoes": [
+     "K",
+     "F",
+     "J"
+    ],
+    "imagem": {
+     "id": "folha",
+     "termo": "FOLHA",
+     "descricao": "Ilustração de folha."
+    },
+    "lacuna": "_OLHA"
+   },
+   "gabarito": "F"
+  },
+  {
+   "id": "1D-folha",
+   "modelo": "1D",
+   "formato": "digitar_campos",
+   "enunciado": "Leia a palavra e escreva a primeira e a última letra.",
+   "dados": {
+    "palavra": "FOLHA",
+    "imagem": {
+     "id": "folha",
+     "termo": "FOLHA",
+     "descricao": "Ilustração de folha."
+    },
+    "campos": [
+     "inicial",
+     "final"
+    ]
+   },
+   "gabarito": [
+    "F",
+    "A"
+   ]
+  },
+  {
+   "id": "1A-foca",
+   "modelo": "1A",
+   "formato": "escolha",
+   "enunciado": "Selecione a consoante inicial do nome do desenho.",
+   "dados": {
+    "grupo": "consoante",
+    "opcoes": [
+     "K",
+     "F",
+     "J"
+    ],
+    "imagem": {
+     "id": "foca",
+     "termo": "FOCA",
+     "descricao": "Ilustração de foca."
+    },
+    "lacuna": "_OCA"
+   },
+   "gabarito": "F"
+  },
+  {
+   "id": "3A-foca",
+   "modelo": "3A",
+   "formato": "escolha",
+   "enunciado": "Selecione a letra inicial do nome do desenho.",
+   "dados": {
+    "opcoes": [
+     "K",
+     "F",
+     "J"
+    ],
+    "imagem": {
+     "id": "foca",
+     "termo": "FOCA",
+     "descricao": "Ilustração de foca."
+    },
+    "lacuna": "_OCA"
+   },
+   "gabarito": "F"
+  },
+  {
+   "id": "1D-foca",
+   "modelo": "1D",
+   "formato": "digitar_campos",
+   "enunciado": "Leia a palavra e escreva a primeira e a última letra.",
+   "dados": {
+    "palavra": "FOCA",
+    "imagem": {
+     "id": "foca",
+     "termo": "FOCA",
+     "descricao": "Ilustração de foca."
+    },
+    "campos": [
+     "inicial",
+     "final"
+    ]
+   },
+   "gabarito": [
+    "F",
+    "A"
+   ]
+  },
+  {
+   "id": "3E-f",
+   "modelo": "3E",
+   "formato": "digitar_campos",
+   "enunciado": "Complete as palavras com a letra F.",
+   "dados": {
+    "linhas": [
+     {
+      "imagem": {
+       "id": "folha",
+       "termo": "FOLHA",
+       "descricao": "Ilustração de folha."
+      },
+      "lacuna": "_OLHA"
+     },
+     {
+      "imagem": {
+       "id": "foca",
+       "termo": "FOCA",
+       "descricao": "Ilustração de foca."
+      },
+      "lacuna": "_OCA"
+     }
+    ]
+   },
+   "gabarito": [
+    "F",
+    "F"
+   ]
+  },
+  {
+   "id": "1C-f",
+   "modelo": "1C",
+   "formato": "digitar_campos",
+   "enunciado": "Escreva as letras que vêm antes e depois.",
+   "dados": {
+    "letra": "F",
+    "campos": [
+     "anterior",
+     "posterior"
+    ]
+   },
+   "gabarito": [
+    "E",
+    "G"
+   ]
+  },
+  {
+   "id": "1E-f",
+   "modelo": "1E",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a letra que escutar.",
+   "dados": {
+    "audio": "F",
+    "opcoes": [
+     "F",
+     "G",
+     "I",
+     "L",
+     "P"
+    ]
+   },
+   "gabarito": "F"
+  },
+  {
+   "id": "1A-gato",
+   "modelo": "1A",
+   "formato": "escolha",
+   "enunciado": "Selecione a consoante inicial do nome do desenho.",
+   "dados": {
+    "grupo": "consoante",
+    "opcoes": [
+     "G",
+     "K",
+     "L"
+    ],
+    "imagem": {
+     "id": "gato",
+     "termo": "GATO",
+     "descricao": "Ilustração de gato."
+    },
+    "lacuna": "_ATO"
+   },
+   "gabarito": "G"
+  },
+  {
+   "id": "3A-gato",
+   "modelo": "3A",
+   "formato": "escolha",
+   "enunciado": "Selecione a letra inicial do nome do desenho.",
+   "dados": {
+    "opcoes": [
+     "G",
+     "K",
+     "L"
+    ],
+    "imagem": {
+     "id": "gato",
+     "termo": "GATO",
+     "descricao": "Ilustração de gato."
+    },
+    "lacuna": "_ATO"
+   },
+   "gabarito": "G"
+  },
+  {
+   "id": "1D-gato",
+   "modelo": "1D",
+   "formato": "digitar_campos",
+   "enunciado": "Leia a palavra e escreva a primeira e a última letra.",
+   "dados": {
+    "palavra": "GATO",
+    "imagem": {
+     "id": "gato",
+     "termo": "GATO",
+     "descricao": "Ilustração de gato."
+    },
+    "campos": [
+     "inicial",
+     "final"
+    ]
+   },
+   "gabarito": [
+    "G",
+    "O"
+   ]
+  },
+  {
+   "id": "1A-garrafa",
+   "modelo": "1A",
+   "formato": "escolha",
+   "enunciado": "Selecione a consoante inicial do nome do desenho.",
+   "dados": {
+    "grupo": "consoante",
+    "opcoes": [
+     "G",
+     "K",
+     "L"
+    ],
+    "imagem": {
+     "id": "garrafa",
+     "termo": "GARRAFA",
+     "descricao": "Ilustração de garrafa."
+    },
+    "lacuna": "_ARRAFA"
+   },
+   "gabarito": "G"
+  },
+  {
+   "id": "3A-garrafa",
+   "modelo": "3A",
+   "formato": "escolha",
+   "enunciado": "Selecione a letra inicial do nome do desenho.",
+   "dados": {
+    "opcoes": [
+     "G",
+     "K",
+     "L"
+    ],
+    "imagem": {
+     "id": "garrafa",
+     "termo": "GARRAFA",
+     "descricao": "Ilustração de garrafa."
+    },
+    "lacuna": "_ARRAFA"
+   },
+   "gabarito": "G"
+  },
+  {
+   "id": "1D-garrafa",
+   "modelo": "1D",
+   "formato": "digitar_campos",
+   "enunciado": "Leia a palavra e escreva a primeira e a última letra.",
+   "dados": {
+    "palavra": "GARRAFA",
+    "imagem": {
+     "id": "garrafa",
+     "termo": "GARRAFA",
+     "descricao": "Ilustração de garrafa."
+    },
+    "campos": [
+     "inicial",
+     "final"
+    ]
+   },
+   "gabarito": [
+    "G",
+    "A"
+   ]
+  },
+  {
+   "id": "3E-g",
+   "modelo": "3E",
+   "formato": "digitar_campos",
+   "enunciado": "Complete as palavras com a letra G.",
+   "dados": {
+    "linhas": [
+     {
+      "imagem": {
+       "id": "gato",
+       "termo": "GATO",
+       "descricao": "Ilustração de gato."
+      },
+      "lacuna": "_ATO"
+     },
+     {
+      "imagem": {
+       "id": "garrafa",
+       "termo": "GARRAFA",
+       "descricao": "Ilustração de garrafa."
+      },
+      "lacuna": "_ARRAFA"
+     }
+    ]
+   },
+   "gabarito": [
+    "G",
+    "G"
+   ]
+  },
+  {
+   "id": "1C-g",
+   "modelo": "1C",
+   "formato": "digitar_campos",
+   "enunciado": "Escreva as letras que vêm antes e depois.",
+   "dados": {
+    "letra": "G",
+    "campos": [
+     "anterior",
+     "posterior"
+    ]
+   },
+   "gabarito": [
+    "F",
+    "H"
+   ]
+  },
+  {
+   "id": "1E-g",
+   "modelo": "1E",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a letra que escutar.",
+   "dados": {
+    "audio": "G",
+    "opcoes": [
+     "H",
+     "J",
+     "M",
+     "Q",
+     "G"
+    ]
+   },
+   "gabarito": "G"
+  },
+  {
+   "id": "1A-harpa",
+   "modelo": "1A",
+   "formato": "escolha",
+   "enunciado": "Selecione a consoante inicial do nome do desenho.",
+   "dados": {
+    "grupo": "consoante",
+    "opcoes": [
+     "L",
+     "M",
+     "H"
+    ],
+    "imagem": {
+     "id": "harpa",
+     "termo": "HARPA",
+     "descricao": "Ilustração de harpa."
+    },
+    "lacuna": "_ARPA"
+   },
+   "gabarito": "H"
+  },
+  {
+   "id": "3A-harpa",
+   "modelo": "3A",
+   "formato": "escolha",
+   "enunciado": "Selecione a letra inicial do nome do desenho.",
+   "dados": {
+    "opcoes": [
+     "L",
+     "M",
+     "H"
+    ],
+    "imagem": {
+     "id": "harpa",
+     "termo": "HARPA",
+     "descricao": "Ilustração de harpa."
+    },
+    "lacuna": "_ARPA"
+   },
+   "gabarito": "H"
+  },
+  {
+   "id": "1D-harpa",
+   "modelo": "1D",
+   "formato": "digitar_campos",
+   "enunciado": "Leia a palavra e escreva a primeira e a última letra.",
+   "dados": {
+    "palavra": "HARPA",
+    "imagem": {
+     "id": "harpa",
+     "termo": "HARPA",
+     "descricao": "Ilustração de harpa."
+    },
+    "campos": [
+     "inicial",
+     "final"
+    ]
+   },
+   "gabarito": [
+    "H",
+    "A"
+   ]
+  },
+  {
+   "id": "1A-helicoptero",
+   "modelo": "1A",
+   "formato": "escolha",
+   "enunciado": "Selecione a consoante inicial do nome do desenho.",
+   "dados": {
+    "grupo": "consoante",
+    "opcoes": [
+     "L",
+     "M",
+     "H"
+    ],
+    "imagem": {
+     "id": "helicoptero",
+     "termo": "HELICÓPTERO",
+     "descricao": "Ilustração de helicóptero."
+    },
+    "lacuna": "_ELICÓPTERO"
+   },
+   "gabarito": "H"
+  },
+  {
+   "id": "3A-helicoptero",
+   "modelo": "3A",
+   "formato": "escolha",
+   "enunciado": "Selecione a letra inicial do nome do desenho.",
+   "dados": {
+    "opcoes": [
+     "L",
+     "M",
+     "H"
+    ],
+    "imagem": {
+     "id": "helicoptero",
+     "termo": "HELICÓPTERO",
+     "descricao": "Ilustração de helicóptero."
+    },
+    "lacuna": "_ELICÓPTERO"
+   },
+   "gabarito": "H"
+  },
+  {
+   "id": "1D-helicoptero",
+   "modelo": "1D",
+   "formato": "digitar_campos",
+   "enunciado": "Leia a palavra e escreva a primeira e a última letra.",
+   "dados": {
+    "palavra": "HELICÓPTERO",
+    "imagem": {
+     "id": "helicoptero",
+     "termo": "HELICÓPTERO",
+     "descricao": "Ilustração de helicóptero."
+    },
+    "campos": [
+     "inicial",
+     "final"
+    ]
+   },
+   "gabarito": [
+    "H",
+    "O"
+   ]
+  },
+  {
+   "id": "3E-h",
+   "modelo": "3E",
+   "formato": "digitar_campos",
+   "enunciado": "Complete as palavras com a letra H.",
+   "dados": {
+    "linhas": [
+     {
+      "imagem": {
+       "id": "harpa",
+       "termo": "HARPA",
+       "descricao": "Ilustração de harpa."
+      },
+      "lacuna": "_ARPA"
+     },
+     {
+      "imagem": {
+       "id": "helicoptero",
+       "termo": "HELICÓPTERO",
+       "descricao": "Ilustração de helicóptero."
+      },
+      "lacuna": "_ELICÓPTERO"
+     }
+    ]
+   },
+   "gabarito": [
+    "H",
+    "H"
+   ]
+  },
+  {
+   "id": "1C-h",
+   "modelo": "1C",
+   "formato": "digitar_campos",
+   "enunciado": "Escreva as letras que vêm antes e depois.",
+   "dados": {
+    "letra": "H",
+    "campos": [
+     "anterior",
+     "posterior"
+    ]
+   },
+   "gabarito": [
+    "G",
+    "I"
+   ]
+  },
+  {
+   "id": "1E-h",
+   "modelo": "1E",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a letra que escutar.",
+   "dados": {
+    "audio": "H",
+    "opcoes": [
+     "K",
+     "N",
+     "R",
+     "H",
+     "I"
+    ]
+   },
+   "gabarito": "H"
+  },
+  {
+   "id": "1A-igreja",
+   "modelo": "1A",
+   "formato": "escolha",
+   "enunciado": "Selecione a vogal inicial do nome do desenho.",
+   "dados": {
+    "grupo": "vogal",
+    "opcoes": [
+     "E",
+     "I",
+     "A"
+    ],
+    "imagem": {
+     "id": "igreja",
+     "termo": "IGREJA",
+     "descricao": "Ilustração de igreja."
+    },
+    "lacuna": "_GREJA"
+   },
+   "gabarito": "I"
+  },
+  {
+   "id": "3A-igreja",
+   "modelo": "3A",
+   "formato": "escolha",
+   "enunciado": "Selecione a letra inicial do nome do desenho.",
+   "dados": {
+    "opcoes": [
+     "E",
+     "I",
+     "A"
+    ],
+    "imagem": {
+     "id": "igreja",
+     "termo": "IGREJA",
+     "descricao": "Ilustração de igreja."
+    },
+    "lacuna": "_GREJA"
+   },
+   "gabarito": "I"
+  },
+  {
+   "id": "1D-igreja",
+   "modelo": "1D",
+   "formato": "digitar_campos",
+   "enunciado": "Leia a palavra e escreva a primeira e a última letra.",
+   "dados": {
+    "palavra": "IGREJA",
+    "imagem": {
+     "id": "igreja",
+     "termo": "IGREJA",
+     "descricao": "Ilustração de igreja."
+    },
+    "campos": [
+     "inicial",
+     "final"
+    ]
+   },
+   "gabarito": [
+    "I",
+    "A"
+   ]
+  },
+  {
+   "id": "1A-ilha",
+   "modelo": "1A",
+   "formato": "escolha",
+   "enunciado": "Selecione a vogal inicial do nome do desenho.",
+   "dados": {
+    "grupo": "vogal",
+    "opcoes": [
+     "E",
+     "I",
+     "A"
+    ],
+    "imagem": {
+     "id": "ilha",
+     "termo": "ILHA",
+     "descricao": "Ilustração de ilha."
+    },
+    "lacuna": "_LHA"
+   },
+   "gabarito": "I"
+  },
+  {
+   "id": "3A-ilha",
+   "modelo": "3A",
+   "formato": "escolha",
+   "enunciado": "Selecione a letra inicial do nome do desenho.",
+   "dados": {
+    "opcoes": [
+     "E",
+     "I",
+     "A"
+    ],
+    "imagem": {
+     "id": "ilha",
+     "termo": "ILHA",
+     "descricao": "Ilustração de ilha."
+    },
+    "lacuna": "_LHA"
+   },
+   "gabarito": "I"
+  },
+  {
+   "id": "1D-ilha",
+   "modelo": "1D",
+   "formato": "digitar_campos",
+   "enunciado": "Leia a palavra e escreva a primeira e a última letra.",
+   "dados": {
+    "palavra": "ILHA",
+    "imagem": {
+     "id": "ilha",
+     "termo": "ILHA",
+     "descricao": "Ilustração de ilha."
+    },
+    "campos": [
+     "inicial",
+     "final"
+    ]
+   },
+   "gabarito": [
+    "I",
+    "A"
+   ]
+  },
+  {
+   "id": "3E-i",
+   "modelo": "3E",
+   "formato": "digitar_campos",
+   "enunciado": "Complete as palavras com a letra I.",
+   "dados": {
+    "linhas": [
+     {
+      "imagem": {
+       "id": "igreja",
+       "termo": "IGREJA",
+       "descricao": "Ilustração de igreja."
+      },
+      "lacuna": "_GREJA"
+     },
+     {
+      "imagem": {
+       "id": "ilha",
+       "termo": "ILHA",
+       "descricao": "Ilustração de ilha."
+      },
+      "lacuna": "_LHA"
+     }
+    ]
+   },
+   "gabarito": [
+    "I",
+    "I"
+   ]
+  },
+  {
+   "id": "1C-i",
+   "modelo": "1C",
+   "formato": "digitar_campos",
+   "enunciado": "Escreva as letras que vêm antes e depois.",
+   "dados": {
+    "letra": "I",
+    "campos": [
+     "anterior",
+     "posterior"
+    ]
+   },
+   "gabarito": [
+    "H",
+    "J"
+   ]
+  },
+  {
+   "id": "1E-i",
+   "modelo": "1E",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a letra que escutar.",
+   "dados": {
+    "audio": "I",
+    "opcoes": [
+     "O",
+     "S",
+     "I",
+     "J",
+     "L"
+    ]
+   },
+   "gabarito": "I"
+  },
+  {
+   "id": "1A-janela",
+   "modelo": "1A",
+   "formato": "escolha",
+   "enunciado": "Selecione a consoante inicial do nome do desenho.",
+   "dados": {
+    "grupo": "consoante",
+    "opcoes": [
+     "J",
+     "N",
+     "P"
+    ],
+    "imagem": {
+     "id": "janela",
+     "termo": "JANELA",
+     "descricao": "Ilustração de janela."
+    },
+    "lacuna": "_ANELA"
+   },
+   "gabarito": "J"
+  },
+  {
+   "id": "3A-janela",
+   "modelo": "3A",
+   "formato": "escolha",
+   "enunciado": "Selecione a letra inicial do nome do desenho.",
+   "dados": {
+    "opcoes": [
+     "J",
+     "N",
+     "P"
+    ],
+    "imagem": {
+     "id": "janela",
+     "termo": "JANELA",
+     "descricao": "Ilustração de janela."
+    },
+    "lacuna": "_ANELA"
+   },
+   "gabarito": "J"
+  },
+  {
+   "id": "1D-janela",
+   "modelo": "1D",
+   "formato": "digitar_campos",
+   "enunciado": "Leia a palavra e escreva a primeira e a última letra.",
+   "dados": {
+    "palavra": "JANELA",
+    "imagem": {
+     "id": "janela",
+     "termo": "JANELA",
+     "descricao": "Ilustração de janela."
+    },
+    "campos": [
+     "inicial",
+     "final"
+    ]
+   },
+   "gabarito": [
+    "J",
+    "A"
+   ]
+  },
+  {
+   "id": "1A-jarra",
+   "modelo": "1A",
+   "formato": "escolha",
+   "enunciado": "Selecione a consoante inicial do nome do desenho.",
+   "dados": {
+    "grupo": "consoante",
+    "opcoes": [
+     "J",
+     "N",
+     "P"
+    ],
+    "imagem": {
+     "id": "jarra",
+     "termo": "JARRA",
+     "descricao": "Ilustração de jarra."
+    },
+    "lacuna": "_ARRA"
+   },
+   "gabarito": "J"
+  },
+  {
+   "id": "3A-jarra",
+   "modelo": "3A",
+   "formato": "escolha",
+   "enunciado": "Selecione a letra inicial do nome do desenho.",
+   "dados": {
+    "opcoes": [
+     "J",
+     "N",
+     "P"
+    ],
+    "imagem": {
+     "id": "jarra",
+     "termo": "JARRA",
+     "descricao": "Ilustração de jarra."
+    },
+    "lacuna": "_ARRA"
+   },
+   "gabarito": "J"
+  },
+  {
+   "id": "1D-jarra",
+   "modelo": "1D",
+   "formato": "digitar_campos",
+   "enunciado": "Leia a palavra e escreva a primeira e a última letra.",
+   "dados": {
+    "palavra": "JARRA",
+    "imagem": {
+     "id": "jarra",
+     "termo": "JARRA",
+     "descricao": "Ilustração de jarra."
+    },
+    "campos": [
+     "inicial",
+     "final"
+    ]
+   },
+   "gabarito": [
+    "J",
+    "A"
+   ]
+  },
+  {
+   "id": "3E-j",
+   "modelo": "3E",
+   "formato": "digitar_campos",
+   "enunciado": "Complete as palavras com a letra J.",
+   "dados": {
+    "linhas": [
+     {
+      "imagem": {
+       "id": "janela",
+       "termo": "JANELA",
+       "descricao": "Ilustração de janela."
+      },
+      "lacuna": "_ANELA"
+     },
+     {
+      "imagem": {
+       "id": "jarra",
+       "termo": "JARRA",
+       "descricao": "Ilustração de jarra."
+      },
+      "lacuna": "_ARRA"
+     }
+    ]
+   },
+   "gabarito": [
+    "J",
+    "J"
+   ]
+  },
+  {
+   "id": "1C-j",
+   "modelo": "1C",
+   "formato": "digitar_campos",
+   "enunciado": "Escreva as letras que vêm antes e depois.",
+   "dados": {
+    "letra": "J",
+    "campos": [
+     "anterior",
+     "posterior"
+    ]
+   },
+   "gabarito": [
+    "I",
+    "K"
+   ]
+  },
+  {
+   "id": "1E-j",
+   "modelo": "1E",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a letra que escutar.",
+   "dados": {
+    "audio": "J",
+    "opcoes": [
+     "T",
+     "J",
+     "K",
+     "M",
+     "P"
+    ]
+   },
+   "gabarito": "J"
+  },
+  {
+   "id": "1A-kimono",
+   "modelo": "1A",
+   "formato": "escolha",
+   "enunciado": "Selecione a consoante inicial do nome do desenho.",
+   "dados": {
+    "grupo": "consoante",
+    "opcoes": [
+     "P",
+     "Q",
+     "K"
+    ],
+    "imagem": {
+     "id": "kimono",
+     "termo": "KIMONO",
+     "descricao": "Ilustração de kimono."
+    },
+    "lacuna": "_IMONO"
+   },
+   "gabarito": "K"
+  },
+  {
+   "id": "3A-kimono",
+   "modelo": "3A",
+   "formato": "escolha",
+   "enunciado": "Selecione a letra inicial do nome do desenho.",
+   "dados": {
+    "opcoes": [
+     "P",
+     "Q",
+     "K"
+    ],
+    "imagem": {
+     "id": "kimono",
+     "termo": "KIMONO",
+     "descricao": "Ilustração de kimono."
+    },
+    "lacuna": "_IMONO"
+   },
+   "gabarito": "K"
+  },
+  {
+   "id": "1D-kimono",
+   "modelo": "1D",
+   "formato": "digitar_campos",
+   "enunciado": "Leia a palavra e escreva a primeira e a última letra.",
+   "dados": {
+    "palavra": "KIMONO",
+    "imagem": {
+     "id": "kimono",
+     "termo": "KIMONO",
+     "descricao": "Ilustração de kimono."
+    },
+    "campos": [
+     "inicial",
+     "final"
+    ]
+   },
+   "gabarito": [
+    "K",
+    "O"
+   ]
+  },
+  {
+   "id": "1A-ketchup",
+   "modelo": "1A",
+   "formato": "escolha",
+   "enunciado": "Selecione a consoante inicial do nome do desenho.",
+   "dados": {
+    "grupo": "consoante",
+    "opcoes": [
+     "P",
+     "Q",
+     "K"
+    ],
+    "imagem": {
+     "id": "ketchup",
+     "termo": "KETCHUP",
+     "descricao": "Ilustração de ketchup."
+    },
+    "lacuna": "_ETCHUP"
+   },
+   "gabarito": "K"
+  },
+  {
+   "id": "3A-ketchup",
+   "modelo": "3A",
+   "formato": "escolha",
+   "enunciado": "Selecione a letra inicial do nome do desenho.",
+   "dados": {
+    "opcoes": [
+     "P",
+     "Q",
+     "K"
+    ],
+    "imagem": {
+     "id": "ketchup",
+     "termo": "KETCHUP",
+     "descricao": "Ilustração de ketchup."
+    },
+    "lacuna": "_ETCHUP"
+   },
+   "gabarito": "K"
+  },
+  {
+   "id": "1D-ketchup",
+   "modelo": "1D",
+   "formato": "digitar_campos",
+   "enunciado": "Leia a palavra e escreva a primeira e a última letra.",
+   "dados": {
+    "palavra": "KETCHUP",
+    "imagem": {
+     "id": "ketchup",
+     "termo": "KETCHUP",
+     "descricao": "Ilustração de ketchup."
+    },
+    "campos": [
+     "inicial",
+     "final"
+    ]
+   },
+   "gabarito": [
+    "K",
+    "P"
+   ]
+  },
+  {
+   "id": "3E-k",
+   "modelo": "3E",
+   "formato": "digitar_campos",
+   "enunciado": "Complete as palavras com a letra K.",
+   "dados": {
+    "linhas": [
+     {
+      "imagem": {
+       "id": "kimono",
+       "termo": "KIMONO",
+       "descricao": "Ilustração de kimono."
+      },
+      "lacuna": "_IMONO"
+     },
+     {
+      "imagem": {
+       "id": "ketchup",
+       "termo": "KETCHUP",
+       "descricao": "Ilustração de ketchup."
+      },
+      "lacuna": "_ETCHUP"
+     }
+    ]
+   },
+   "gabarito": [
+    "K",
+    "K"
+   ]
+  },
+  {
+   "id": "1C-k",
+   "modelo": "1C",
+   "formato": "digitar_campos",
+   "enunciado": "Escreva as letras que vêm antes e depois.",
+   "dados": {
+    "letra": "K",
+    "campos": [
+     "anterior",
+     "posterior"
+    ]
+   },
+   "gabarito": [
+    "J",
+    "L"
+   ]
+  },
+  {
+   "id": "1E-k",
+   "modelo": "1E",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a letra que escutar.",
+   "dados": {
+    "audio": "K",
+    "opcoes": [
+     "K",
+     "L",
+     "N",
+     "Q",
+     "U"
+    ]
+   },
+   "gabarito": "K"
+  },
+  {
+   "id": "1A-laranja",
+   "modelo": "1A",
+   "formato": "escolha",
+   "enunciado": "Selecione a consoante inicial do nome do desenho.",
+   "dados": {
+    "grupo": "consoante",
+    "opcoes": [
+     "R",
+     "L",
+     "Q"
+    ],
+    "imagem": {
+     "id": "laranja",
+     "termo": "LARANJA",
+     "descricao": "Ilustração de laranja."
+    },
+    "lacuna": "_ARANJA"
+   },
+   "gabarito": "L"
+  },
+  {
+   "id": "3A-laranja",
+   "modelo": "3A",
+   "formato": "escolha",
+   "enunciado": "Selecione a letra inicial do nome do desenho.",
+   "dados": {
+    "opcoes": [
+     "R",
+     "L",
+     "Q"
+    ],
+    "imagem": {
+     "id": "laranja",
+     "termo": "LARANJA",
+     "descricao": "Ilustração de laranja."
+    },
+    "lacuna": "_ARANJA"
+   },
+   "gabarito": "L"
+  },
+  {
+   "id": "1D-laranja",
+   "modelo": "1D",
+   "formato": "digitar_campos",
+   "enunciado": "Leia a palavra e escreva a primeira e a última letra.",
+   "dados": {
+    "palavra": "LARANJA",
+    "imagem": {
+     "id": "laranja",
+     "termo": "LARANJA",
+     "descricao": "Ilustração de laranja."
+    },
+    "campos": [
+     "inicial",
+     "final"
+    ]
+   },
+   "gabarito": [
+    "L",
+    "A"
+   ]
+  },
+  {
+   "id": "1A-lata",
+   "modelo": "1A",
+   "formato": "escolha",
+   "enunciado": "Selecione a consoante inicial do nome do desenho.",
+   "dados": {
+    "grupo": "consoante",
+    "opcoes": [
+     "R",
+     "L",
+     "Q"
+    ],
+    "imagem": {
+     "id": "lata",
+     "termo": "LATA",
+     "descricao": "Ilustração de lata."
+    },
+    "lacuna": "_ATA"
+   },
+   "gabarito": "L"
+  },
+  {
+   "id": "3A-lata",
+   "modelo": "3A",
+   "formato": "escolha",
+   "enunciado": "Selecione a letra inicial do nome do desenho.",
+   "dados": {
+    "opcoes": [
+     "R",
+     "L",
+     "Q"
+    ],
+    "imagem": {
+     "id": "lata",
+     "termo": "LATA",
+     "descricao": "Ilustração de lata."
+    },
+    "lacuna": "_ATA"
+   },
+   "gabarito": "L"
+  },
+  {
+   "id": "1D-lata",
+   "modelo": "1D",
+   "formato": "digitar_campos",
+   "enunciado": "Leia a palavra e escreva a primeira e a última letra.",
+   "dados": {
+    "palavra": "LATA",
+    "imagem": {
+     "id": "lata",
+     "termo": "LATA",
+     "descricao": "Ilustração de lata."
+    },
+    "campos": [
+     "inicial",
+     "final"
+    ]
+   },
+   "gabarito": [
+    "L",
+    "A"
+   ]
+  },
+  {
+   "id": "3E-l",
+   "modelo": "3E",
+   "formato": "digitar_campos",
+   "enunciado": "Complete as palavras com a letra L.",
+   "dados": {
+    "linhas": [
+     {
+      "imagem": {
+       "id": "laranja",
+       "termo": "LARANJA",
+       "descricao": "Ilustração de laranja."
+      },
+      "lacuna": "_ARANJA"
+     },
+     {
+      "imagem": {
+       "id": "lata",
+       "termo": "LATA",
+       "descricao": "Ilustração de lata."
+      },
+      "lacuna": "_ATA"
+     }
+    ]
+   },
+   "gabarito": [
+    "L",
+    "L"
+   ]
+  },
+  {
+   "id": "1C-l",
+   "modelo": "1C",
+   "formato": "digitar_campos",
+   "enunciado": "Escreva as letras que vêm antes e depois.",
+   "dados": {
+    "letra": "L",
+    "campos": [
+     "anterior",
+     "posterior"
+    ]
+   },
+   "gabarito": [
+    "K",
+    "M"
+   ]
+  },
+  {
+   "id": "1E-l",
+   "modelo": "1E",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a letra que escutar.",
+   "dados": {
+    "audio": "L",
+    "opcoes": [
+     "M",
+     "O",
+     "R",
+     "V",
+     "L"
+    ]
+   },
+   "gabarito": "L"
+  },
+  {
+   "id": "1A-martelo",
+   "modelo": "1A",
+   "formato": "escolha",
+   "enunciado": "Selecione a consoante inicial do nome do desenho.",
+   "dados": {
+    "grupo": "consoante",
+    "opcoes": [
+     "M",
+     "R",
+     "S"
+    ],
+    "imagem": {
+     "id": "martelo",
+     "termo": "MARTELO",
+     "descricao": "Ilustração de martelo."
+    },
+    "lacuna": "_ARTELO"
+   },
+   "gabarito": "M"
+  },
+  {
+   "id": "3A-martelo",
+   "modelo": "3A",
+   "formato": "escolha",
+   "enunciado": "Selecione a letra inicial do nome do desenho.",
+   "dados": {
+    "opcoes": [
+     "M",
+     "R",
+     "S"
+    ],
+    "imagem": {
+     "id": "martelo",
+     "termo": "MARTELO",
+     "descricao": "Ilustração de martelo."
+    },
+    "lacuna": "_ARTELO"
+   },
+   "gabarito": "M"
+  },
+  {
+   "id": "1D-martelo",
+   "modelo": "1D",
+   "formato": "digitar_campos",
+   "enunciado": "Leia a palavra e escreva a primeira e a última letra.",
+   "dados": {
+    "palavra": "MARTELO",
+    "imagem": {
+     "id": "martelo",
+     "termo": "MARTELO",
+     "descricao": "Ilustração de martelo."
+    },
+    "campos": [
+     "inicial",
+     "final"
+    ]
+   },
+   "gabarito": [
+    "M",
+    "O"
+   ]
+  },
+  {
+   "id": "1A-maca",
+   "modelo": "1A",
+   "formato": "escolha",
+   "enunciado": "Selecione a consoante inicial do nome do desenho.",
+   "dados": {
+    "grupo": "consoante",
+    "opcoes": [
+     "M",
+     "R",
+     "S"
+    ],
+    "imagem": {
+     "id": "maca",
+     "termo": "MAÇÃ",
+     "descricao": "Ilustração de maçã."
+    },
+    "lacuna": "_AÇÃ"
+   },
+   "gabarito": "M"
+  },
+  {
+   "id": "3A-maca",
+   "modelo": "3A",
+   "formato": "escolha",
+   "enunciado": "Selecione a letra inicial do nome do desenho.",
+   "dados": {
+    "opcoes": [
+     "M",
+     "R",
+     "S"
+    ],
+    "imagem": {
+     "id": "maca",
+     "termo": "MAÇÃ",
+     "descricao": "Ilustração de maçã."
+    },
+    "lacuna": "_AÇÃ"
+   },
+   "gabarito": "M"
+  },
+  {
+   "id": "1D-maca",
+   "modelo": "1D",
+   "formato": "digitar_campos",
+   "enunciado": "Leia a palavra e escreva a primeira e a última letra.",
+   "dados": {
+    "palavra": "MAÇÃ",
+    "imagem": {
+     "id": "maca",
+     "termo": "MAÇÃ",
+     "descricao": "Ilustração de maçã."
+    },
+    "campos": [
+     "inicial",
+     "final"
+    ]
+   },
+   "gabarito": [
+    "M",
+    "Ã"
+   ]
+  },
+  {
+   "id": "3E-m",
+   "modelo": "3E",
+   "formato": "digitar_campos",
+   "enunciado": "Complete as palavras com a letra M.",
+   "dados": {
+    "linhas": [
+     {
+      "imagem": {
+       "id": "martelo",
+       "termo": "MARTELO",
+       "descricao": "Ilustração de martelo."
+      },
+      "lacuna": "_ARTELO"
+     },
+     {
+      "imagem": {
+       "id": "maca",
+       "termo": "MAÇÃ",
+       "descricao": "Ilustração de maçã."
+      },
+      "lacuna": "_AÇÃ"
+     }
+    ]
+   },
+   "gabarito": [
+    "M",
+    "M"
+   ]
+  },
+  {
+   "id": "1C-m",
+   "modelo": "1C",
+   "formato": "digitar_campos",
+   "enunciado": "Escreva as letras que vêm antes e depois.",
+   "dados": {
+    "letra": "M",
+    "campos": [
+     "anterior",
+     "posterior"
+    ]
+   },
+   "gabarito": [
+    "L",
+    "N"
+   ]
+  },
+  {
+   "id": "1E-m",
+   "modelo": "1E",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a letra que escutar.",
+   "dados": {
+    "audio": "M",
+    "opcoes": [
+     "P",
+     "S",
+     "W",
+     "M",
+     "N"
+    ]
+   },
+   "gabarito": "M"
+  },
+  {
+   "id": "1A-navio",
+   "modelo": "1A",
+   "formato": "escolha",
+   "enunciado": "Selecione a consoante inicial do nome do desenho.",
+   "dados": {
+    "grupo": "consoante",
+    "opcoes": [
+     "S",
+     "T",
+     "N"
+    ],
+    "imagem": {
+     "id": "navio",
+     "termo": "NAVIO",
+     "descricao": "Ilustração de navio."
+    },
+    "lacuna": "_AVIO"
+   },
+   "gabarito": "N"
+  },
+  {
+   "id": "3A-navio",
+   "modelo": "3A",
+   "formato": "escolha",
+   "enunciado": "Selecione a letra inicial do nome do desenho.",
+   "dados": {
+    "opcoes": [
+     "S",
+     "T",
+     "N"
+    ],
+    "imagem": {
+     "id": "navio",
+     "termo": "NAVIO",
+     "descricao": "Ilustração de navio."
+    },
+    "lacuna": "_AVIO"
+   },
+   "gabarito": "N"
+  },
+  {
+   "id": "1D-navio",
+   "modelo": "1D",
+   "formato": "digitar_campos",
+   "enunciado": "Leia a palavra e escreva a primeira e a última letra.",
+   "dados": {
+    "palavra": "NAVIO",
+    "imagem": {
+     "id": "navio",
+     "termo": "NAVIO",
+     "descricao": "Ilustração de navio."
+    },
+    "campos": [
+     "inicial",
+     "final"
+    ]
+   },
+   "gabarito": [
+    "N",
+    "O"
+   ]
+  },
+  {
+   "id": "1A-nuvem",
+   "modelo": "1A",
+   "formato": "escolha",
+   "enunciado": "Selecione a consoante inicial do nome do desenho.",
+   "dados": {
+    "grupo": "consoante",
+    "opcoes": [
+     "S",
+     "T",
+     "N"
+    ],
+    "imagem": {
+     "id": "nuvem",
+     "termo": "NUVEM",
+     "descricao": "Ilustração de nuvem."
+    },
+    "lacuna": "_UVEM"
+   },
+   "gabarito": "N"
+  },
+  {
+   "id": "3A-nuvem",
+   "modelo": "3A",
+   "formato": "escolha",
+   "enunciado": "Selecione a letra inicial do nome do desenho.",
+   "dados": {
+    "opcoes": [
+     "S",
+     "T",
+     "N"
+    ],
+    "imagem": {
+     "id": "nuvem",
+     "termo": "NUVEM",
+     "descricao": "Ilustração de nuvem."
+    },
+    "lacuna": "_UVEM"
+   },
+   "gabarito": "N"
+  },
+  {
+   "id": "1D-nuvem",
+   "modelo": "1D",
+   "formato": "digitar_campos",
+   "enunciado": "Leia a palavra e escreva a primeira e a última letra.",
+   "dados": {
+    "palavra": "NUVEM",
+    "imagem": {
+     "id": "nuvem",
+     "termo": "NUVEM",
+     "descricao": "Ilustração de nuvem."
+    },
+    "campos": [
+     "inicial",
+     "final"
+    ]
+   },
+   "gabarito": [
+    "N",
+    "M"
+   ]
+  },
+  {
+   "id": "3E-n",
+   "modelo": "3E",
+   "formato": "digitar_campos",
+   "enunciado": "Complete as palavras com a letra N.",
+   "dados": {
+    "linhas": [
+     {
+      "imagem": {
+       "id": "navio",
+       "termo": "NAVIO",
+       "descricao": "Ilustração de navio."
+      },
+      "lacuna": "_AVIO"
+     },
+     {
+      "imagem": {
+       "id": "nuvem",
+       "termo": "NUVEM",
+       "descricao": "Ilustração de nuvem."
+      },
+      "lacuna": "_UVEM"
+     }
+    ]
+   },
+   "gabarito": [
+    "N",
+    "N"
+   ]
+  },
+  {
+   "id": "1C-n",
+   "modelo": "1C",
+   "formato": "digitar_campos",
+   "enunciado": "Escreva as letras que vêm antes e depois.",
+   "dados": {
+    "letra": "N",
+    "campos": [
+     "anterior",
+     "posterior"
+    ]
+   },
+   "gabarito": [
+    "M",
+    "O"
+   ]
+  },
+  {
+   "id": "1E-n",
+   "modelo": "1E",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a letra que escutar.",
+   "dados": {
+    "audio": "N",
+    "opcoes": [
+     "T",
+     "X",
+     "N",
+     "O",
+     "Q"
+    ]
+   },
+   "gabarito": "N"
+  },
+  {
+   "id": "1A-ovo",
+   "modelo": "1A",
+   "formato": "escolha",
+   "enunciado": "Selecione a vogal inicial do nome do desenho.",
+   "dados": {
+    "grupo": "vogal",
+    "opcoes": [
+     "U",
+     "O",
+     "I"
+    ],
+    "imagem": {
+     "id": "ovo",
+     "termo": "OVO",
+     "descricao": "Ilustração de ovo."
+    },
+    "lacuna": "_VO"
+   },
+   "gabarito": "O"
+  },
+  {
+   "id": "3A-ovo",
+   "modelo": "3A",
+   "formato": "escolha",
+   "enunciado": "Selecione a letra inicial do nome do desenho.",
+   "dados": {
+    "opcoes": [
+     "U",
+     "O",
+     "I"
+    ],
+    "imagem": {
+     "id": "ovo",
+     "termo": "OVO",
+     "descricao": "Ilustração de ovo."
+    },
+    "lacuna": "_VO"
+   },
+   "gabarito": "O"
+  },
+  {
+   "id": "1D-ovo",
+   "modelo": "1D",
+   "formato": "digitar_campos",
+   "enunciado": "Leia a palavra e escreva a primeira e a última letra.",
+   "dados": {
+    "palavra": "OVO",
+    "imagem": {
+     "id": "ovo",
+     "termo": "OVO",
+     "descricao": "Ilustração de ovo."
+    },
+    "campos": [
+     "inicial",
+     "final"
+    ]
+   },
+   "gabarito": [
+    "O",
+    "O"
+   ]
+  },
+  {
+   "id": "1A-orelha",
+   "modelo": "1A",
+   "formato": "escolha",
+   "enunciado": "Selecione a vogal inicial do nome do desenho.",
+   "dados": {
+    "grupo": "vogal",
+    "opcoes": [
+     "U",
+     "O",
+     "I"
+    ],
+    "imagem": {
+     "id": "orelha",
+     "termo": "ORELHA",
+     "descricao": "Ilustração de orelha."
+    },
+    "lacuna": "_RELHA"
+   },
+   "gabarito": "O"
+  },
+  {
+   "id": "3A-orelha",
+   "modelo": "3A",
+   "formato": "escolha",
+   "enunciado": "Selecione a letra inicial do nome do desenho.",
+   "dados": {
+    "opcoes": [
+     "U",
+     "O",
+     "I"
+    ],
+    "imagem": {
+     "id": "orelha",
+     "termo": "ORELHA",
+     "descricao": "Ilustração de orelha."
+    },
+    "lacuna": "_RELHA"
+   },
+   "gabarito": "O"
+  },
+  {
+   "id": "1D-orelha",
+   "modelo": "1D",
+   "formato": "digitar_campos",
+   "enunciado": "Leia a palavra e escreva a primeira e a última letra.",
+   "dados": {
+    "palavra": "ORELHA",
+    "imagem": {
+     "id": "orelha",
+     "termo": "ORELHA",
+     "descricao": "Ilustração de orelha."
+    },
+    "campos": [
+     "inicial",
+     "final"
+    ]
+   },
+   "gabarito": [
+    "O",
+    "A"
+   ]
+  },
+  {
+   "id": "3E-o",
+   "modelo": "3E",
+   "formato": "digitar_campos",
+   "enunciado": "Complete as palavras com a letra O.",
+   "dados": {
+    "linhas": [
+     {
+      "imagem": {
+       "id": "ovo",
+       "termo": "OVO",
+       "descricao": "Ilustração de ovo."
+      },
+      "lacuna": "_VO"
+     },
+     {
+      "imagem": {
+       "id": "orelha",
+       "termo": "ORELHA",
+       "descricao": "Ilustração de orelha."
+      },
+      "lacuna": "_RELHA"
+     }
+    ]
+   },
+   "gabarito": [
+    "O",
+    "O"
+   ]
+  },
+  {
+   "id": "1C-o",
+   "modelo": "1C",
+   "formato": "digitar_campos",
+   "enunciado": "Escreva as letras que vêm antes e depois.",
+   "dados": {
+    "letra": "O",
+    "campos": [
+     "anterior",
+     "posterior"
+    ]
+   },
+   "gabarito": [
+    "N",
+    "P"
+   ]
+  },
+  {
+   "id": "1E-o",
+   "modelo": "1E",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a letra que escutar.",
+   "dados": {
+    "audio": "O",
+    "opcoes": [
+     "Y",
+     "O",
+     "P",
+     "R",
+     "U"
+    ]
+   },
+   "gabarito": "O"
+  },
+  {
+   "id": "1A-ponte",
+   "modelo": "1A",
+   "formato": "escolha",
+   "enunciado": "Selecione a consoante inicial do nome do desenho.",
+   "dados": {
+    "grupo": "consoante",
+    "opcoes": [
+     "P",
+     "V",
+     "W"
+    ],
+    "imagem": {
+     "id": "ponte",
+     "termo": "PONTE",
+     "descricao": "Ilustração de ponte."
+    },
+    "lacuna": "_ONTE"
+   },
+   "gabarito": "P"
+  },
+  {
+   "id": "3A-ponte",
+   "modelo": "3A",
+   "formato": "escolha",
+   "enunciado": "Selecione a letra inicial do nome do desenho.",
+   "dados": {
+    "opcoes": [
+     "P",
+     "V",
+     "W"
+    ],
+    "imagem": {
+     "id": "ponte",
+     "termo": "PONTE",
+     "descricao": "Ilustração de ponte."
+    },
+    "lacuna": "_ONTE"
+   },
+   "gabarito": "P"
+  },
+  {
+   "id": "1D-ponte",
+   "modelo": "1D",
+   "formato": "digitar_campos",
+   "enunciado": "Leia a palavra e escreva a primeira e a última letra.",
+   "dados": {
+    "palavra": "PONTE",
+    "imagem": {
+     "id": "ponte",
+     "termo": "PONTE",
+     "descricao": "Ilustração de ponte."
+    },
+    "campos": [
+     "inicial",
+     "final"
+    ]
+   },
+   "gabarito": [
+    "P",
+    "E"
+   ]
+  },
+  {
+   "id": "1A-pera",
+   "modelo": "1A",
+   "formato": "escolha",
+   "enunciado": "Selecione a consoante inicial do nome do desenho.",
+   "dados": {
+    "grupo": "consoante",
+    "opcoes": [
+     "P",
+     "V",
+     "W"
+    ],
+    "imagem": {
+     "id": "pera",
+     "termo": "PERA",
+     "descricao": "Ilustração de pera."
+    },
+    "lacuna": "_ERA"
+   },
+   "gabarito": "P"
+  },
+  {
+   "id": "3A-pera",
+   "modelo": "3A",
+   "formato": "escolha",
+   "enunciado": "Selecione a letra inicial do nome do desenho.",
+   "dados": {
+    "opcoes": [
+     "P",
+     "V",
+     "W"
+    ],
+    "imagem": {
+     "id": "pera",
+     "termo": "PERA",
+     "descricao": "Ilustração de pera."
+    },
+    "lacuna": "_ERA"
+   },
+   "gabarito": "P"
+  },
+  {
+   "id": "1D-pera",
+   "modelo": "1D",
+   "formato": "digitar_campos",
+   "enunciado": "Leia a palavra e escreva a primeira e a última letra.",
+   "dados": {
+    "palavra": "PERA",
+    "imagem": {
+     "id": "pera",
+     "termo": "PERA",
+     "descricao": "Ilustração de pera."
+    },
+    "campos": [
+     "inicial",
+     "final"
+    ]
+   },
+   "gabarito": [
+    "P",
+    "A"
+   ]
+  },
+  {
+   "id": "3E-p",
+   "modelo": "3E",
+   "formato": "digitar_campos",
+   "enunciado": "Complete as palavras com a letra P.",
+   "dados": {
+    "linhas": [
+     {
+      "imagem": {
+       "id": "ponte",
+       "termo": "PONTE",
+       "descricao": "Ilustração de ponte."
+      },
+      "lacuna": "_ONTE"
+     },
+     {
+      "imagem": {
+       "id": "pera",
+       "termo": "PERA",
+       "descricao": "Ilustração de pera."
+      },
+      "lacuna": "_ERA"
+     }
+    ]
+   },
+   "gabarito": [
+    "P",
+    "P"
+   ]
+  },
+  {
+   "id": "1C-p",
+   "modelo": "1C",
+   "formato": "digitar_campos",
+   "enunciado": "Escreva as letras que vêm antes e depois.",
+   "dados": {
+    "letra": "P",
+    "campos": [
+     "anterior",
+     "posterior"
+    ]
+   },
+   "gabarito": [
+    "O",
+    "Q"
+   ]
+  },
+  {
+   "id": "1E-p",
+   "modelo": "1E",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a letra que escutar.",
+   "dados": {
+    "audio": "P",
+    "opcoes": [
+     "P",
+     "Q",
+     "S",
+     "V",
+     "Z"
+    ]
+   },
+   "gabarito": "P"
+  },
+  {
+   "id": "1A-queijo",
+   "modelo": "1A",
+   "formato": "escolha",
+   "enunciado": "Selecione a consoante inicial do nome do desenho.",
+   "dados": {
+    "grupo": "consoante",
+    "opcoes": [
+     "W",
+     "X",
+     "Q"
+    ],
+    "imagem": {
+     "id": "queijo",
+     "termo": "QUEIJO",
+     "descricao": "Ilustração de queijo."
+    },
+    "lacuna": "_UEIJO"
+   },
+   "gabarito": "Q"
+  },
+  {
+   "id": "3A-queijo",
+   "modelo": "3A",
+   "formato": "escolha",
+   "enunciado": "Selecione a letra inicial do nome do desenho.",
+   "dados": {
+    "opcoes": [
+     "W",
+     "X",
+     "Q"
+    ],
+    "imagem": {
+     "id": "queijo",
+     "termo": "QUEIJO",
+     "descricao": "Ilustração de queijo."
+    },
+    "lacuna": "_UEIJO"
+   },
+   "gabarito": "Q"
+  },
+  {
+   "id": "1D-queijo",
+   "modelo": "1D",
+   "formato": "digitar_campos",
+   "enunciado": "Leia a palavra e escreva a primeira e a última letra.",
+   "dados": {
+    "palavra": "QUEIJO",
+    "imagem": {
+     "id": "queijo",
+     "termo": "QUEIJO",
+     "descricao": "Ilustração de queijo."
+    },
+    "campos": [
+     "inicial",
+     "final"
+    ]
+   },
+   "gabarito": [
+    "Q",
+    "O"
+   ]
+  },
+  {
+   "id": "1A-quadro",
+   "modelo": "1A",
+   "formato": "escolha",
+   "enunciado": "Selecione a consoante inicial do nome do desenho.",
+   "dados": {
+    "grupo": "consoante",
+    "opcoes": [
+     "W",
+     "X",
+     "Q"
+    ],
+    "imagem": {
+     "id": "quadro",
+     "termo": "QUADRO",
+     "descricao": "Ilustração de quadro."
+    },
+    "lacuna": "_UADRO"
+   },
+   "gabarito": "Q"
+  },
+  {
+   "id": "3A-quadro",
+   "modelo": "3A",
+   "formato": "escolha",
+   "enunciado": "Selecione a letra inicial do nome do desenho.",
+   "dados": {
+    "opcoes": [
+     "W",
+     "X",
+     "Q"
+    ],
+    "imagem": {
+     "id": "quadro",
+     "termo": "QUADRO",
+     "descricao": "Ilustração de quadro."
+    },
+    "lacuna": "_UADRO"
+   },
+   "gabarito": "Q"
+  },
+  {
+   "id": "1D-quadro",
+   "modelo": "1D",
+   "formato": "digitar_campos",
+   "enunciado": "Leia a palavra e escreva a primeira e a última letra.",
+   "dados": {
+    "palavra": "QUADRO",
+    "imagem": {
+     "id": "quadro",
+     "termo": "QUADRO",
+     "descricao": "Ilustração de quadro."
+    },
+    "campos": [
+     "inicial",
+     "final"
+    ]
+   },
+   "gabarito": [
+    "Q",
+    "O"
+   ]
+  },
+  {
+   "id": "3E-q",
+   "modelo": "3E",
+   "formato": "digitar_campos",
+   "enunciado": "Complete as palavras com a letra Q.",
+   "dados": {
+    "linhas": [
+     {
+      "imagem": {
+       "id": "queijo",
+       "termo": "QUEIJO",
+       "descricao": "Ilustração de queijo."
+      },
+      "lacuna": "_UEIJO"
+     },
+     {
+      "imagem": {
+       "id": "quadro",
+       "termo": "QUADRO",
+       "descricao": "Ilustração de quadro."
+      },
+      "lacuna": "_UADRO"
+     }
+    ]
+   },
+   "gabarito": [
+    "Q",
+    "Q"
+   ]
+  },
+  {
+   "id": "1C-q",
+   "modelo": "1C",
+   "formato": "digitar_campos",
+   "enunciado": "Escreva as letras que vêm antes e depois.",
+   "dados": {
+    "letra": "Q",
+    "campos": [
+     "anterior",
+     "posterior"
+    ]
+   },
+   "gabarito": [
+    "P",
+    "R"
+   ]
+  },
+  {
+   "id": "1E-q",
+   "modelo": "1E",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a letra que escutar.",
+   "dados": {
+    "audio": "Q",
+    "opcoes": [
+     "R",
+     "T",
+     "W",
+     "A",
+     "Q"
+    ]
+   },
+   "gabarito": "Q"
+  },
+  {
+   "id": "1A-relogio",
+   "modelo": "1A",
+   "formato": "escolha",
+   "enunciado": "Selecione a consoante inicial do nome do desenho.",
+   "dados": {
+    "grupo": "consoante",
+    "opcoes": [
+     "Y",
+     "R",
+     "X"
+    ],
+    "imagem": {
+     "id": "relogio",
+     "termo": "RELÓGIO",
+     "descricao": "Ilustração de relógio."
+    },
+    "lacuna": "_ELÓGIO"
+   },
+   "gabarito": "R"
+  },
+  {
+   "id": "3A-relogio",
+   "modelo": "3A",
+   "formato": "escolha",
+   "enunciado": "Selecione a letra inicial do nome do desenho.",
+   "dados": {
+    "opcoes": [
+     "Y",
+     "R",
+     "X"
+    ],
+    "imagem": {
+     "id": "relogio",
+     "termo": "RELÓGIO",
+     "descricao": "Ilustração de relógio."
+    },
+    "lacuna": "_ELÓGIO"
+   },
+   "gabarito": "R"
+  },
+  {
+   "id": "1D-relogio",
+   "modelo": "1D",
+   "formato": "digitar_campos",
+   "enunciado": "Leia a palavra e escreva a primeira e a última letra.",
+   "dados": {
+    "palavra": "RELÓGIO",
+    "imagem": {
+     "id": "relogio",
+     "termo": "RELÓGIO",
+     "descricao": "Ilustração de relógio."
+    },
+    "campos": [
+     "inicial",
+     "final"
+    ]
+   },
+   "gabarito": [
+    "R",
+    "O"
+   ]
+  },
+  {
+   "id": "1A-rato",
+   "modelo": "1A",
+   "formato": "escolha",
+   "enunciado": "Selecione a consoante inicial do nome do desenho.",
+   "dados": {
+    "grupo": "consoante",
+    "opcoes": [
+     "Y",
+     "R",
+     "X"
+    ],
+    "imagem": {
+     "id": "rato",
+     "termo": "RATO",
+     "descricao": "Ilustração de rato."
+    },
+    "lacuna": "_ATO"
+   },
+   "gabarito": "R"
+  },
+  {
+   "id": "3A-rato",
+   "modelo": "3A",
+   "formato": "escolha",
+   "enunciado": "Selecione a letra inicial do nome do desenho.",
+   "dados": {
+    "opcoes": [
+     "Y",
+     "R",
+     "X"
+    ],
+    "imagem": {
+     "id": "rato",
+     "termo": "RATO",
+     "descricao": "Ilustração de rato."
+    },
+    "lacuna": "_ATO"
+   },
+   "gabarito": "R"
+  },
+  {
+   "id": "1D-rato",
+   "modelo": "1D",
+   "formato": "digitar_campos",
+   "enunciado": "Leia a palavra e escreva a primeira e a última letra.",
+   "dados": {
+    "palavra": "RATO",
+    "imagem": {
+     "id": "rato",
+     "termo": "RATO",
+     "descricao": "Ilustração de rato."
+    },
+    "campos": [
+     "inicial",
+     "final"
+    ]
+   },
+   "gabarito": [
+    "R",
+    "O"
+   ]
+  },
+  {
+   "id": "3E-r",
+   "modelo": "3E",
+   "formato": "digitar_campos",
+   "enunciado": "Complete as palavras com a letra R.",
+   "dados": {
+    "linhas": [
+     {
+      "imagem": {
+       "id": "relogio",
+       "termo": "RELÓGIO",
+       "descricao": "Ilustração de relógio."
+      },
+      "lacuna": "_ELÓGIO"
+     },
+     {
+      "imagem": {
+       "id": "rato",
+       "termo": "RATO",
+       "descricao": "Ilustração de rato."
+      },
+      "lacuna": "_ATO"
+     }
+    ]
+   },
+   "gabarito": [
+    "R",
+    "R"
+   ]
+  },
+  {
+   "id": "1C-r",
+   "modelo": "1C",
+   "formato": "digitar_campos",
+   "enunciado": "Escreva as letras que vêm antes e depois.",
+   "dados": {
+    "letra": "R",
+    "campos": [
+     "anterior",
+     "posterior"
+    ]
+   },
+   "gabarito": [
+    "Q",
+    "S"
+   ]
+  },
+  {
+   "id": "1E-r",
+   "modelo": "1E",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a letra que escutar.",
+   "dados": {
+    "audio": "R",
+    "opcoes": [
+     "U",
+     "X",
+     "B",
+     "R",
+     "S"
+    ]
+   },
+   "gabarito": "R"
+  },
+  {
+   "id": "1A-sapato",
+   "modelo": "1A",
+   "formato": "escolha",
+   "enunciado": "Selecione a consoante inicial do nome do desenho.",
+   "dados": {
+    "grupo": "consoante",
+    "opcoes": [
+     "S",
+     "Y",
+     "Z"
+    ],
+    "imagem": {
+     "id": "sapato",
+     "termo": "SAPATO",
+     "descricao": "Ilustração de sapato."
+    },
+    "lacuna": "_APATO"
+   },
+   "gabarito": "S"
+  },
+  {
+   "id": "3A-sapato",
+   "modelo": "3A",
+   "formato": "escolha",
+   "enunciado": "Selecione a letra inicial do nome do desenho.",
+   "dados": {
+    "opcoes": [
+     "S",
+     "Y",
+     "Z"
+    ],
+    "imagem": {
+     "id": "sapato",
+     "termo": "SAPATO",
+     "descricao": "Ilustração de sapato."
+    },
+    "lacuna": "_APATO"
+   },
+   "gabarito": "S"
+  },
+  {
+   "id": "1D-sapato",
+   "modelo": "1D",
+   "formato": "digitar_campos",
+   "enunciado": "Leia a palavra e escreva a primeira e a última letra.",
+   "dados": {
+    "palavra": "SAPATO",
+    "imagem": {
+     "id": "sapato",
+     "termo": "SAPATO",
+     "descricao": "Ilustração de sapato."
+    },
+    "campos": [
+     "inicial",
+     "final"
+    ]
+   },
+   "gabarito": [
+    "S",
+    "O"
+   ]
+  },
+  {
+   "id": "1A-sol",
+   "modelo": "1A",
+   "formato": "escolha",
+   "enunciado": "Selecione a consoante inicial do nome do desenho.",
+   "dados": {
+    "grupo": "consoante",
+    "opcoes": [
+     "S",
+     "Y",
+     "Z"
+    ],
+    "imagem": {
+     "id": "sol",
+     "termo": "SOL",
+     "descricao": "Ilustração de sol."
+    },
+    "lacuna": "_OL"
+   },
+   "gabarito": "S"
+  },
+  {
+   "id": "3A-sol",
+   "modelo": "3A",
+   "formato": "escolha",
+   "enunciado": "Selecione a letra inicial do nome do desenho.",
+   "dados": {
+    "opcoes": [
+     "S",
+     "Y",
+     "Z"
+    ],
+    "imagem": {
+     "id": "sol",
+     "termo": "SOL",
+     "descricao": "Ilustração de sol."
+    },
+    "lacuna": "_OL"
+   },
+   "gabarito": "S"
+  },
+  {
+   "id": "1D-sol",
+   "modelo": "1D",
+   "formato": "digitar_campos",
+   "enunciado": "Leia a palavra e escreva a primeira e a última letra.",
+   "dados": {
+    "palavra": "SOL",
+    "imagem": {
+     "id": "sol",
+     "termo": "SOL",
+     "descricao": "Ilustração de sol."
+    },
+    "campos": [
+     "inicial",
+     "final"
+    ]
+   },
+   "gabarito": [
+    "S",
+    "L"
+   ]
+  },
+  {
+   "id": "3E-s",
+   "modelo": "3E",
+   "formato": "digitar_campos",
+   "enunciado": "Complete as palavras com a letra S.",
+   "dados": {
+    "linhas": [
+     {
+      "imagem": {
+       "id": "sapato",
+       "termo": "SAPATO",
+       "descricao": "Ilustração de sapato."
+      },
+      "lacuna": "_APATO"
+     },
+     {
+      "imagem": {
+       "id": "sol",
+       "termo": "SOL",
+       "descricao": "Ilustração de sol."
+      },
+      "lacuna": "_OL"
+     }
+    ]
+   },
+   "gabarito": [
+    "S",
+    "S"
+   ]
+  },
+  {
+   "id": "1C-s",
+   "modelo": "1C",
+   "formato": "digitar_campos",
+   "enunciado": "Escreva as letras que vêm antes e depois.",
+   "dados": {
+    "letra": "S",
+    "campos": [
+     "anterior",
+     "posterior"
+    ]
+   },
+   "gabarito": [
+    "R",
+    "T"
+   ]
+  },
+  {
+   "id": "1E-s",
+   "modelo": "1E",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a letra que escutar.",
+   "dados": {
+    "audio": "S",
+    "opcoes": [
+     "Y",
+     "C",
+     "S",
+     "T",
+     "V"
+    ]
+   },
+   "gabarito": "S"
+  },
+  {
+   "id": "1A-tapete",
+   "modelo": "1A",
+   "formato": "escolha",
+   "enunciado": "Selecione a consoante inicial do nome do desenho.",
+   "dados": {
+    "grupo": "consoante",
+    "opcoes": [
+     "Z",
+     "B",
+     "T"
+    ],
+    "imagem": {
+     "id": "tapete",
+     "termo": "TAPETE",
+     "descricao": "Ilustração de tapete."
+    },
+    "lacuna": "_APETE"
+   },
+   "gabarito": "T"
+  },
+  {
+   "id": "3A-tapete",
+   "modelo": "3A",
+   "formato": "escolha",
+   "enunciado": "Selecione a letra inicial do nome do desenho.",
+   "dados": {
+    "opcoes": [
+     "Z",
+     "B",
+     "T"
+    ],
+    "imagem": {
+     "id": "tapete",
+     "termo": "TAPETE",
+     "descricao": "Ilustração de tapete."
+    },
+    "lacuna": "_APETE"
+   },
+   "gabarito": "T"
+  },
+  {
+   "id": "1D-tapete",
+   "modelo": "1D",
+   "formato": "digitar_campos",
+   "enunciado": "Leia a palavra e escreva a primeira e a última letra.",
+   "dados": {
+    "palavra": "TAPETE",
+    "imagem": {
+     "id": "tapete",
+     "termo": "TAPETE",
+     "descricao": "Ilustração de tapete."
+    },
+    "campos": [
+     "inicial",
+     "final"
+    ]
+   },
+   "gabarito": [
+    "T",
+    "E"
+   ]
+  },
+  {
+   "id": "1A-tomate",
+   "modelo": "1A",
+   "formato": "escolha",
+   "enunciado": "Selecione a consoante inicial do nome do desenho.",
+   "dados": {
+    "grupo": "consoante",
+    "opcoes": [
+     "Z",
+     "B",
+     "T"
+    ],
+    "imagem": {
+     "id": "tomate",
+     "termo": "TOMATE",
+     "descricao": "Ilustração de tomate."
+    },
+    "lacuna": "_OMATE"
+   },
+   "gabarito": "T"
+  },
+  {
+   "id": "3A-tomate",
+   "modelo": "3A",
+   "formato": "escolha",
+   "enunciado": "Selecione a letra inicial do nome do desenho.",
+   "dados": {
+    "opcoes": [
+     "Z",
+     "B",
+     "T"
+    ],
+    "imagem": {
+     "id": "tomate",
+     "termo": "TOMATE",
+     "descricao": "Ilustração de tomate."
+    },
+    "lacuna": "_OMATE"
+   },
+   "gabarito": "T"
+  },
+  {
+   "id": "1D-tomate",
+   "modelo": "1D",
+   "formato": "digitar_campos",
+   "enunciado": "Leia a palavra e escreva a primeira e a última letra.",
+   "dados": {
+    "palavra": "TOMATE",
+    "imagem": {
+     "id": "tomate",
+     "termo": "TOMATE",
+     "descricao": "Ilustração de tomate."
+    },
+    "campos": [
+     "inicial",
+     "final"
+    ]
+   },
+   "gabarito": [
+    "T",
+    "E"
+   ]
+  },
+  {
+   "id": "3E-t",
+   "modelo": "3E",
+   "formato": "digitar_campos",
+   "enunciado": "Complete as palavras com a letra T.",
+   "dados": {
+    "linhas": [
+     {
+      "imagem": {
+       "id": "tapete",
+       "termo": "TAPETE",
+       "descricao": "Ilustração de tapete."
+      },
+      "lacuna": "_APETE"
+     },
+     {
+      "imagem": {
+       "id": "tomate",
+       "termo": "TOMATE",
+       "descricao": "Ilustração de tomate."
+      },
+      "lacuna": "_OMATE"
+     }
+    ]
+   },
+   "gabarito": [
+    "T",
+    "T"
+   ]
+  },
+  {
+   "id": "1C-t",
+   "modelo": "1C",
+   "formato": "digitar_campos",
+   "enunciado": "Escreva as letras que vêm antes e depois.",
+   "dados": {
+    "letra": "T",
+    "campos": [
+     "anterior",
+     "posterior"
+    ]
+   },
+   "gabarito": [
+    "S",
+    "U"
+   ]
+  },
+  {
+   "id": "1E-t",
+   "modelo": "1E",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a letra que escutar.",
+   "dados": {
+    "audio": "T",
+    "opcoes": [
+     "D",
+     "T",
+     "U",
+     "W",
+     "Z"
+    ]
+   },
+   "gabarito": "T"
+  },
+  {
+   "id": "1A-uva",
+   "modelo": "1A",
+   "formato": "escolha",
+   "enunciado": "Selecione a vogal inicial do nome do desenho.",
+   "dados": {
+    "grupo": "vogal",
+    "opcoes": [
+     "E",
+     "U",
+     "A"
+    ],
+    "imagem": {
+     "id": "uva",
+     "termo": "UVA",
+     "descricao": "Ilustração de uva."
+    },
+    "lacuna": "_VA"
+   },
+   "gabarito": "U"
+  },
+  {
+   "id": "3A-uva",
+   "modelo": "3A",
+   "formato": "escolha",
+   "enunciado": "Selecione a letra inicial do nome do desenho.",
+   "dados": {
+    "opcoes": [
+     "E",
+     "U",
+     "A"
+    ],
+    "imagem": {
+     "id": "uva",
+     "termo": "UVA",
+     "descricao": "Ilustração de uva."
+    },
+    "lacuna": "_VA"
+   },
+   "gabarito": "U"
+  },
+  {
+   "id": "1D-uva",
+   "modelo": "1D",
+   "formato": "digitar_campos",
+   "enunciado": "Leia a palavra e escreva a primeira e a última letra.",
+   "dados": {
+    "palavra": "UVA",
+    "imagem": {
+     "id": "uva",
+     "termo": "UVA",
+     "descricao": "Ilustração de uva."
+    },
+    "campos": [
+     "inicial",
+     "final"
+    ]
+   },
+   "gabarito": [
+    "U",
+    "A"
+   ]
+  },
+  {
+   "id": "1A-urso",
+   "modelo": "1A",
+   "formato": "escolha",
+   "enunciado": "Selecione a vogal inicial do nome do desenho.",
+   "dados": {
+    "grupo": "vogal",
+    "opcoes": [
+     "E",
+     "U",
+     "A"
+    ],
+    "imagem": {
+     "id": "urso",
+     "termo": "URSO",
+     "descricao": "Ilustração de urso."
+    },
+    "lacuna": "_RSO"
+   },
+   "gabarito": "U"
+  },
+  {
+   "id": "3A-urso",
+   "modelo": "3A",
+   "formato": "escolha",
+   "enunciado": "Selecione a letra inicial do nome do desenho.",
+   "dados": {
+    "opcoes": [
+     "E",
+     "U",
+     "A"
+    ],
+    "imagem": {
+     "id": "urso",
+     "termo": "URSO",
+     "descricao": "Ilustração de urso."
+    },
+    "lacuna": "_RSO"
+   },
+   "gabarito": "U"
+  },
+  {
+   "id": "1D-urso",
+   "modelo": "1D",
+   "formato": "digitar_campos",
+   "enunciado": "Leia a palavra e escreva a primeira e a última letra.",
+   "dados": {
+    "palavra": "URSO",
+    "imagem": {
+     "id": "urso",
+     "termo": "URSO",
+     "descricao": "Ilustração de urso."
+    },
+    "campos": [
+     "inicial",
+     "final"
+    ]
+   },
+   "gabarito": [
+    "U",
+    "O"
+   ]
+  },
+  {
+   "id": "3E-u",
+   "modelo": "3E",
+   "formato": "digitar_campos",
+   "enunciado": "Complete as palavras com a letra U.",
+   "dados": {
+    "linhas": [
+     {
+      "imagem": {
+       "id": "uva",
+       "termo": "UVA",
+       "descricao": "Ilustração de uva."
+      },
+      "lacuna": "_VA"
+     },
+     {
+      "imagem": {
+       "id": "urso",
+       "termo": "URSO",
+       "descricao": "Ilustração de urso."
+      },
+      "lacuna": "_RSO"
+     }
+    ]
+   },
+   "gabarito": [
+    "U",
+    "U"
+   ]
+  },
+  {
+   "id": "1C-u",
+   "modelo": "1C",
+   "formato": "digitar_campos",
+   "enunciado": "Escreva as letras que vêm antes e depois.",
+   "dados": {
+    "letra": "U",
+    "campos": [
+     "anterior",
+     "posterior"
+    ]
+   },
+   "gabarito": [
+    "T",
+    "V"
+   ]
+  },
+  {
+   "id": "1E-u",
+   "modelo": "1E",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a letra que escutar.",
+   "dados": {
+    "audio": "U",
+    "opcoes": [
+     "U",
+     "V",
+     "X",
+     "A",
+     "E"
+    ]
+   },
+   "gabarito": "U"
+  },
+  {
+   "id": "1A-vaca",
+   "modelo": "1A",
+   "formato": "escolha",
+   "enunciado": "Selecione a consoante inicial do nome do desenho.",
+   "dados": {
+    "grupo": "consoante",
+    "opcoes": [
+     "V",
+     "C",
+     "D"
+    ],
+    "imagem": {
+     "id": "vaca",
+     "termo": "VACA",
+     "descricao": "Ilustração de vaca."
+    },
+    "lacuna": "_ACA"
+   },
+   "gabarito": "V"
+  },
+  {
+   "id": "3A-vaca",
+   "modelo": "3A",
+   "formato": "escolha",
+   "enunciado": "Selecione a letra inicial do nome do desenho.",
+   "dados": {
+    "opcoes": [
+     "V",
+     "C",
+     "D"
+    ],
+    "imagem": {
+     "id": "vaca",
+     "termo": "VACA",
+     "descricao": "Ilustração de vaca."
+    },
+    "lacuna": "_ACA"
+   },
+   "gabarito": "V"
+  },
+  {
+   "id": "1D-vaca",
+   "modelo": "1D",
+   "formato": "digitar_campos",
+   "enunciado": "Leia a palavra e escreva a primeira e a última letra.",
+   "dados": {
+    "palavra": "VACA",
+    "imagem": {
+     "id": "vaca",
+     "termo": "VACA",
+     "descricao": "Ilustração de vaca."
+    },
+    "campos": [
+     "inicial",
+     "final"
+    ]
+   },
+   "gabarito": [
+    "V",
+    "A"
+   ]
+  },
+  {
+   "id": "1A-vela",
+   "modelo": "1A",
+   "formato": "escolha",
+   "enunciado": "Selecione a consoante inicial do nome do desenho.",
+   "dados": {
+    "grupo": "consoante",
+    "opcoes": [
+     "V",
+     "C",
+     "D"
+    ],
+    "imagem": {
+     "id": "vela",
+     "termo": "VELA",
+     "descricao": "Ilustração de vela."
+    },
+    "lacuna": "_ELA"
+   },
+   "gabarito": "V"
+  },
+  {
+   "id": "3A-vela",
+   "modelo": "3A",
+   "formato": "escolha",
+   "enunciado": "Selecione a letra inicial do nome do desenho.",
+   "dados": {
+    "opcoes": [
+     "V",
+     "C",
+     "D"
+    ],
+    "imagem": {
+     "id": "vela",
+     "termo": "VELA",
+     "descricao": "Ilustração de vela."
+    },
+    "lacuna": "_ELA"
+   },
+   "gabarito": "V"
+  },
+  {
+   "id": "1D-vela",
+   "modelo": "1D",
+   "formato": "digitar_campos",
+   "enunciado": "Leia a palavra e escreva a primeira e a última letra.",
+   "dados": {
+    "palavra": "VELA",
+    "imagem": {
+     "id": "vela",
+     "termo": "VELA",
+     "descricao": "Ilustração de vela."
+    },
+    "campos": [
+     "inicial",
+     "final"
+    ]
+   },
+   "gabarito": [
+    "V",
+    "A"
+   ]
+  },
+  {
+   "id": "3E-v",
+   "modelo": "3E",
+   "formato": "digitar_campos",
+   "enunciado": "Complete as palavras com a letra V.",
+   "dados": {
+    "linhas": [
+     {
+      "imagem": {
+       "id": "vaca",
+       "termo": "VACA",
+       "descricao": "Ilustração de vaca."
+      },
+      "lacuna": "_ACA"
+     },
+     {
+      "imagem": {
+       "id": "vela",
+       "termo": "VELA",
+       "descricao": "Ilustração de vela."
+      },
+      "lacuna": "_ELA"
+     }
+    ]
+   },
+   "gabarito": [
+    "V",
+    "V"
+   ]
+  },
+  {
+   "id": "1C-v",
+   "modelo": "1C",
+   "formato": "digitar_campos",
+   "enunciado": "Escreva as letras que vêm antes e depois.",
+   "dados": {
+    "letra": "V",
+    "campos": [
+     "anterior",
+     "posterior"
+    ]
+   },
+   "gabarito": [
+    "U",
+    "W"
+   ]
+  },
+  {
+   "id": "1E-v",
+   "modelo": "1E",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a letra que escutar.",
+   "dados": {
+    "audio": "V",
+    "opcoes": [
+     "W",
+     "Y",
+     "B",
+     "F",
+     "V"
+    ]
+   },
+   "gabarito": "V"
+  },
+  {
+   "id": "1A-waffle",
+   "modelo": "1A",
+   "formato": "escolha",
+   "enunciado": "Selecione a consoante inicial do nome do desenho.",
+   "dados": {
+    "grupo": "consoante",
+    "opcoes": [
+     "D",
+     "F",
+     "W"
+    ],
+    "imagem": {
+     "id": "waffle",
+     "termo": "WAFFLE",
+     "descricao": "Ilustração de waffle."
+    },
+    "lacuna": "_AFFLE"
+   },
+   "gabarito": "W"
+  },
+  {
+   "id": "3A-waffle",
+   "modelo": "3A",
+   "formato": "escolha",
+   "enunciado": "Selecione a letra inicial do nome do desenho.",
+   "dados": {
+    "opcoes": [
+     "D",
+     "F",
+     "W"
+    ],
+    "imagem": {
+     "id": "waffle",
+     "termo": "WAFFLE",
+     "descricao": "Ilustração de waffle."
+    },
+    "lacuna": "_AFFLE"
+   },
+   "gabarito": "W"
+  },
+  {
+   "id": "1D-waffle",
+   "modelo": "1D",
+   "formato": "digitar_campos",
+   "enunciado": "Leia a palavra e escreva a primeira e a última letra.",
+   "dados": {
+    "palavra": "WAFFLE",
+    "imagem": {
+     "id": "waffle",
+     "termo": "WAFFLE",
+     "descricao": "Ilustração de waffle."
+    },
+    "campos": [
+     "inicial",
+     "final"
+    ]
+   },
+   "gabarito": [
+    "W",
+    "E"
+   ]
+  },
+  {
+   "id": "1A-wi-fi",
+   "modelo": "1A",
+   "formato": "escolha",
+   "enunciado": "Selecione a consoante inicial do nome do desenho.",
+   "dados": {
+    "grupo": "consoante",
+    "opcoes": [
+     "D",
+     "F",
+     "W"
+    ],
+    "imagem": {
+     "id": "wi-fi",
+     "termo": "WI-FI",
+     "descricao": "Ilustração de wi-fi."
+    },
+    "lacuna": "_I-FI"
+   },
+   "gabarito": "W"
+  },
+  {
+   "id": "3A-wi-fi",
+   "modelo": "3A",
+   "formato": "escolha",
+   "enunciado": "Selecione a letra inicial do nome do desenho.",
+   "dados": {
+    "opcoes": [
+     "D",
+     "F",
+     "W"
+    ],
+    "imagem": {
+     "id": "wi-fi",
+     "termo": "WI-FI",
+     "descricao": "Ilustração de wi-fi."
+    },
+    "lacuna": "_I-FI"
+   },
+   "gabarito": "W"
+  },
+  {
+   "id": "1D-wi-fi",
+   "modelo": "1D",
+   "formato": "digitar_campos",
+   "enunciado": "Leia a palavra e escreva a primeira e a última letra.",
+   "dados": {
+    "palavra": "WI-FI",
+    "imagem": {
+     "id": "wi-fi",
+     "termo": "WI-FI",
+     "descricao": "Ilustração de wi-fi."
+    },
+    "campos": [
+     "inicial",
+     "final"
+    ]
+   },
+   "gabarito": [
+    "W",
+    "I"
+   ]
+  },
+  {
+   "id": "3E-w",
+   "modelo": "3E",
+   "formato": "digitar_campos",
+   "enunciado": "Complete as palavras com a letra W.",
+   "dados": {
+    "linhas": [
+     {
+      "imagem": {
+       "id": "waffle",
+       "termo": "WAFFLE",
+       "descricao": "Ilustração de waffle."
+      },
+      "lacuna": "_AFFLE"
+     },
+     {
+      "imagem": {
+       "id": "wi-fi",
+       "termo": "WI-FI",
+       "descricao": "Ilustração de wi-fi."
+      },
+      "lacuna": "_I-FI"
+     }
+    ]
+   },
+   "gabarito": [
+    "W",
+    "W"
+   ]
+  },
+  {
+   "id": "1C-w",
+   "modelo": "1C",
+   "formato": "digitar_campos",
+   "enunciado": "Escreva as letras que vêm antes e depois.",
+   "dados": {
+    "letra": "W",
+    "campos": [
+     "anterior",
+     "posterior"
+    ]
+   },
+   "gabarito": [
+    "V",
+    "X"
+   ]
+  },
+  {
+   "id": "1E-w",
+   "modelo": "1E",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a letra que escutar.",
+   "dados": {
+    "audio": "W",
+    "opcoes": [
+     "Z",
+     "C",
+     "G",
+     "W",
+     "X"
+    ]
+   },
+   "gabarito": "W"
+  },
+  {
+   "id": "1A-xicara",
+   "modelo": "1A",
+   "formato": "escolha",
+   "enunciado": "Selecione a consoante inicial do nome do desenho.",
+   "dados": {
+    "grupo": "consoante",
+    "opcoes": [
+     "G",
+     "X",
+     "F"
+    ],
+    "imagem": {
+     "id": "xicara",
+     "termo": "XÍCARA",
+     "descricao": "Ilustração de xícara."
+    },
+    "lacuna": "_ÍCARA"
+   },
+   "gabarito": "X"
+  },
+  {
+   "id": "3A-xicara",
+   "modelo": "3A",
+   "formato": "escolha",
+   "enunciado": "Selecione a letra inicial do nome do desenho.",
+   "dados": {
+    "opcoes": [
+     "G",
+     "X",
+     "F"
+    ],
+    "imagem": {
+     "id": "xicara",
+     "termo": "XÍCARA",
+     "descricao": "Ilustração de xícara."
+    },
+    "lacuna": "_ÍCARA"
+   },
+   "gabarito": "X"
+  },
+  {
+   "id": "1D-xicara",
+   "modelo": "1D",
+   "formato": "digitar_campos",
+   "enunciado": "Leia a palavra e escreva a primeira e a última letra.",
+   "dados": {
+    "palavra": "XÍCARA",
+    "imagem": {
+     "id": "xicara",
+     "termo": "XÍCARA",
+     "descricao": "Ilustração de xícara."
+    },
+    "campos": [
+     "inicial",
+     "final"
+    ]
+   },
+   "gabarito": [
+    "X",
+    "A"
+   ]
+  },
+  {
+   "id": "1A-xale",
+   "modelo": "1A",
+   "formato": "escolha",
+   "enunciado": "Selecione a consoante inicial do nome do desenho.",
+   "dados": {
+    "grupo": "consoante",
+    "opcoes": [
+     "G",
+     "X",
+     "F"
+    ],
+    "imagem": {
+     "id": "xale",
+     "termo": "XALE",
+     "descricao": "Ilustração de xale."
+    },
+    "lacuna": "_ALE"
+   },
+   "gabarito": "X"
+  },
+  {
+   "id": "3A-xale",
+   "modelo": "3A",
+   "formato": "escolha",
+   "enunciado": "Selecione a letra inicial do nome do desenho.",
+   "dados": {
+    "opcoes": [
+     "G",
+     "X",
+     "F"
+    ],
+    "imagem": {
+     "id": "xale",
+     "termo": "XALE",
+     "descricao": "Ilustração de xale."
+    },
+    "lacuna": "_ALE"
+   },
+   "gabarito": "X"
+  },
+  {
+   "id": "1D-xale",
+   "modelo": "1D",
+   "formato": "digitar_campos",
+   "enunciado": "Leia a palavra e escreva a primeira e a última letra.",
+   "dados": {
+    "palavra": "XALE",
+    "imagem": {
+     "id": "xale",
+     "termo": "XALE",
+     "descricao": "Ilustração de xale."
+    },
+    "campos": [
+     "inicial",
+     "final"
+    ]
+   },
+   "gabarito": [
+    "X",
+    "E"
+   ]
+  },
+  {
+   "id": "3E-x",
+   "modelo": "3E",
+   "formato": "digitar_campos",
+   "enunciado": "Complete as palavras com a letra X.",
+   "dados": {
+    "linhas": [
+     {
+      "imagem": {
+       "id": "xicara",
+       "termo": "XÍCARA",
+       "descricao": "Ilustração de xícara."
+      },
+      "lacuna": "_ÍCARA"
+     },
+     {
+      "imagem": {
+       "id": "xale",
+       "termo": "XALE",
+       "descricao": "Ilustração de xale."
+      },
+      "lacuna": "_ALE"
+     }
+    ]
+   },
+   "gabarito": [
+    "X",
+    "X"
+   ]
+  },
+  {
+   "id": "1C-x",
+   "modelo": "1C",
+   "formato": "digitar_campos",
+   "enunciado": "Escreva as letras que vêm antes e depois.",
+   "dados": {
+    "letra": "X",
+    "campos": [
+     "anterior",
+     "posterior"
+    ]
+   },
+   "gabarito": [
+    "W",
+    "Y"
+   ]
+  },
+  {
+   "id": "1E-x",
+   "modelo": "1E",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a letra que escutar.",
+   "dados": {
+    "audio": "X",
+    "opcoes": [
+     "D",
+     "H",
+     "X",
+     "Y",
+     "A"
+    ]
+   },
+   "gabarito": "X"
+  },
+  {
+   "id": "1A-yoga",
+   "modelo": "1A",
+   "formato": "escolha",
+   "enunciado": "Selecione a consoante inicial do nome do desenho.",
+   "dados": {
+    "grupo": "consoante",
+    "opcoes": [
+     "Y",
+     "G",
+     "H"
+    ],
+    "imagem": {
+     "id": "yoga",
+     "termo": "YOGA",
+     "descricao": "Ilustração de yoga."
+    },
+    "lacuna": "_OGA"
+   },
+   "gabarito": "Y"
+  },
+  {
+   "id": "3A-yoga",
+   "modelo": "3A",
+   "formato": "escolha",
+   "enunciado": "Selecione a letra inicial do nome do desenho.",
+   "dados": {
+    "opcoes": [
+     "Y",
+     "G",
+     "H"
+    ],
+    "imagem": {
+     "id": "yoga",
+     "termo": "YOGA",
+     "descricao": "Ilustração de yoga."
+    },
+    "lacuna": "_OGA"
+   },
+   "gabarito": "Y"
+  },
+  {
+   "id": "1D-yoga",
+   "modelo": "1D",
+   "formato": "digitar_campos",
+   "enunciado": "Leia a palavra e escreva a primeira e a última letra.",
+   "dados": {
+    "palavra": "YOGA",
+    "imagem": {
+     "id": "yoga",
+     "termo": "YOGA",
+     "descricao": "Ilustração de yoga."
+    },
+    "campos": [
+     "inicial",
+     "final"
+    ]
+   },
+   "gabarito": [
+    "Y",
+    "A"
+   ]
+  },
+  {
+   "id": "1A-yakisoba",
+   "modelo": "1A",
+   "formato": "escolha",
+   "enunciado": "Selecione a consoante inicial do nome do desenho.",
+   "dados": {
+    "grupo": "consoante",
+    "opcoes": [
+     "Y",
+     "G",
+     "H"
+    ],
+    "imagem": {
+     "id": "yakisoba",
+     "termo": "YAKISOBA",
+     "descricao": "Ilustração de yakisoba."
+    },
+    "lacuna": "_AKISOBA"
+   },
+   "gabarito": "Y"
+  },
+  {
+   "id": "3A-yakisoba",
+   "modelo": "3A",
+   "formato": "escolha",
+   "enunciado": "Selecione a letra inicial do nome do desenho.",
+   "dados": {
+    "opcoes": [
+     "Y",
+     "G",
+     "H"
+    ],
+    "imagem": {
+     "id": "yakisoba",
+     "termo": "YAKISOBA",
+     "descricao": "Ilustração de yakisoba."
+    },
+    "lacuna": "_AKISOBA"
+   },
+   "gabarito": "Y"
+  },
+  {
+   "id": "1D-yakisoba",
+   "modelo": "1D",
+   "formato": "digitar_campos",
+   "enunciado": "Leia a palavra e escreva a primeira e a última letra.",
+   "dados": {
+    "palavra": "YAKISOBA",
+    "imagem": {
+     "id": "yakisoba",
+     "termo": "YAKISOBA",
+     "descricao": "Ilustração de yakisoba."
+    },
+    "campos": [
+     "inicial",
+     "final"
+    ]
+   },
+   "gabarito": [
+    "Y",
+    "A"
+   ]
+  },
+  {
+   "id": "3E-y",
+   "modelo": "3E",
+   "formato": "digitar_campos",
+   "enunciado": "Complete as palavras com a letra Y.",
+   "dados": {
+    "linhas": [
+     {
+      "imagem": {
+       "id": "yoga",
+       "termo": "YOGA",
+       "descricao": "Ilustração de yoga."
+      },
+      "lacuna": "_OGA"
+     },
+     {
+      "imagem": {
+       "id": "yakisoba",
+       "termo": "YAKISOBA",
+       "descricao": "Ilustração de yakisoba."
+      },
+      "lacuna": "_AKISOBA"
+     }
+    ]
+   },
+   "gabarito": [
+    "Y",
+    "Y"
+   ]
+  },
+  {
+   "id": "1C-y",
+   "modelo": "1C",
+   "formato": "digitar_campos",
+   "enunciado": "Escreva as letras que vêm antes e depois.",
+   "dados": {
+    "letra": "Y",
+    "campos": [
+     "anterior",
+     "posterior"
+    ]
+   },
+   "gabarito": [
+    "X",
+    "Z"
+   ]
+  },
+  {
+   "id": "1E-y",
+   "modelo": "1E",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a letra que escutar.",
+   "dados": {
+    "audio": "Y",
+    "opcoes": [
+     "I",
+     "Y",
+     "Z",
+     "B",
+     "E"
+    ]
+   },
+   "gabarito": "Y"
+  },
+  {
+   "id": "1A-zebra",
+   "modelo": "1A",
+   "formato": "escolha",
+   "enunciado": "Selecione a consoante inicial do nome do desenho.",
+   "dados": {
+    "grupo": "consoante",
+    "opcoes": [
+     "H",
+     "J",
+     "Z"
+    ],
+    "imagem": {
+     "id": "zebra",
+     "termo": "ZEBRA",
+     "descricao": "Ilustração de zebra."
+    },
+    "lacuna": "_EBRA"
+   },
+   "gabarito": "Z"
+  },
+  {
+   "id": "3A-zebra",
+   "modelo": "3A",
+   "formato": "escolha",
+   "enunciado": "Selecione a letra inicial do nome do desenho.",
+   "dados": {
+    "opcoes": [
+     "H",
+     "J",
+     "Z"
+    ],
+    "imagem": {
+     "id": "zebra",
+     "termo": "ZEBRA",
+     "descricao": "Ilustração de zebra."
+    },
+    "lacuna": "_EBRA"
+   },
+   "gabarito": "Z"
+  },
+  {
+   "id": "1D-zebra",
+   "modelo": "1D",
+   "formato": "digitar_campos",
+   "enunciado": "Leia a palavra e escreva a primeira e a última letra.",
+   "dados": {
+    "palavra": "ZEBRA",
+    "imagem": {
+     "id": "zebra",
+     "termo": "ZEBRA",
+     "descricao": "Ilustração de zebra."
+    },
+    "campos": [
+     "inicial",
+     "final"
+    ]
+   },
+   "gabarito": [
+    "Z",
+    "A"
+   ]
+  },
+  {
+   "id": "1A-ziper",
+   "modelo": "1A",
+   "formato": "escolha",
+   "enunciado": "Selecione a consoante inicial do nome do desenho.",
+   "dados": {
+    "grupo": "consoante",
+    "opcoes": [
+     "H",
+     "J",
+     "Z"
+    ],
+    "imagem": {
+     "id": "ziper",
+     "termo": "ZÍPER",
+     "descricao": "Ilustração de zíper."
+    },
+    "lacuna": "_ÍPER"
+   },
+   "gabarito": "Z"
+  },
+  {
+   "id": "3A-ziper",
+   "modelo": "3A",
+   "formato": "escolha",
+   "enunciado": "Selecione a letra inicial do nome do desenho.",
+   "dados": {
+    "opcoes": [
+     "H",
+     "J",
+     "Z"
+    ],
+    "imagem": {
+     "id": "ziper",
+     "termo": "ZÍPER",
+     "descricao": "Ilustração de zíper."
+    },
+    "lacuna": "_ÍPER"
+   },
+   "gabarito": "Z"
+  },
+  {
+   "id": "1D-ziper",
+   "modelo": "1D",
+   "formato": "digitar_campos",
+   "enunciado": "Leia a palavra e escreva a primeira e a última letra.",
+   "dados": {
+    "palavra": "ZÍPER",
+    "imagem": {
+     "id": "ziper",
+     "termo": "ZÍPER",
+     "descricao": "Ilustração de zíper."
+    },
+    "campos": [
+     "inicial",
+     "final"
+    ]
+   },
+   "gabarito": [
+    "Z",
+    "R"
+   ]
+  },
+  {
+   "id": "3E-z",
+   "modelo": "3E",
+   "formato": "digitar_campos",
+   "enunciado": "Complete as palavras com a letra Z.",
+   "dados": {
+    "linhas": [
+     {
+      "imagem": {
+       "id": "zebra",
+       "termo": "ZEBRA",
+       "descricao": "Ilustração de zebra."
+      },
+      "lacuna": "_EBRA"
+     },
+     {
+      "imagem": {
+       "id": "ziper",
+       "termo": "ZÍPER",
+       "descricao": "Ilustração de zíper."
+      },
+      "lacuna": "_ÍPER"
+     }
+    ]
+   },
+   "gabarito": [
+    "Z",
+    "Z"
+   ]
+  },
+  {
+   "id": "1E-z",
+   "modelo": "1E",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a letra que escutar.",
+   "dados": {
+    "audio": "Z",
+    "opcoes": [
+     "Z",
+     "A",
+     "C",
+     "F",
+     "J"
+    ]
+   },
+   "gabarito": "Z"
+  },
+  {
+   "id": "1B-relogio",
+   "modelo": "1B",
+   "formato": "ligar_pares",
+   "enunciado": "Ligue cada objeto à letra inicial do seu nome.",
+   "dados": {
+    "imagens": [
+     {
+      "id": "relogio",
+      "termo": "RELÓGIO",
+      "descricao": "Ilustração de relógio."
+     },
+     {
+      "id": "sapato",
+      "termo": "SAPATO",
+      "descricao": "Ilustração de sapato."
+     },
+     {
+      "id": "bolsa",
+      "termo": "BOLSA",
+      "descricao": "Ilustração de bolsa."
+     },
+     {
+      "id": "oculos",
+      "termo": "ÓCULOS",
+      "descricao": "Ilustração de óculos."
+     }
+    ],
+    "opcoes": [
+     "B",
+     "O",
+     "R",
+     "S"
+    ]
+   },
+   "gabarito": {
+    "relogio": "R",
+    "sapato": "S",
+    "bolsa": "B",
+    "oculos": "O"
+   }
+  },
+  {
+   "id": "1B-abelha",
+   "modelo": "1B",
+   "formato": "ligar_pares",
+   "enunciado": "Ligue cada objeto à letra inicial do seu nome.",
+   "dados": {
+    "imagens": [
+     {
+      "id": "abelha",
+      "termo": "ABELHA",
+      "descricao": "Ilustração de abelha."
+     },
+     {
+      "id": "igreja",
+      "termo": "IGREJA",
+      "descricao": "Ilustração de igreja."
+     },
+     {
+      "id": "escada",
+      "termo": "ESCADA",
+      "descricao": "Ilustração de escada."
+     },
+     {
+      "id": "uva",
+      "termo": "UVA",
+      "descricao": "Ilustração de uva."
+     }
+    ],
+    "opcoes": [
+     "I",
+     "E",
+     "U",
+     "A"
+    ]
+   },
+   "gabarito": {
+    "abelha": "A",
+    "igreja": "I",
+    "escada": "E",
+    "uva": "U"
+   }
+  },
+  {
+   "id": "1B-martelo",
+   "modelo": "1B",
+   "formato": "ligar_pares",
+   "enunciado": "Ligue cada objeto à letra inicial do seu nome.",
+   "dados": {
+    "imagens": [
+     {
+      "id": "martelo",
+      "termo": "MARTELO",
+      "descricao": "Ilustração de martelo."
+     },
+     {
+      "id": "ponte",
+      "termo": "PONTE",
+      "descricao": "Ilustração de ponte."
+     },
+     {
+      "id": "dado",
+      "termo": "DADO",
+      "descricao": "Ilustração de dado."
+     },
+     {
+      "id": "navio",
+      "termo": "NAVIO",
+      "descricao": "Ilustração de navio."
+     }
+    ],
+    "opcoes": [
+     "D",
+     "N",
+     "M",
+     "P"
+    ]
+   },
+   "gabarito": {
+    "martelo": "M",
+    "ponte": "P",
+    "dado": "D",
+    "navio": "N"
+   }
+  },
+  {
+   "id": "1B-laranja",
+   "modelo": "1B",
+   "formato": "ligar_pares",
+   "enunciado": "Ligue cada objeto à letra inicial do seu nome.",
+   "dados": {
+    "imagens": [
+     {
+      "id": "laranja",
+      "termo": "LARANJA",
+      "descricao": "Ilustração de laranja."
+     },
+     {
+      "id": "tomate",
+      "termo": "TOMATE",
+      "descricao": "Ilustração de tomate."
+     },
+     {
+      "id": "copo",
+      "termo": "COPO",
+      "descricao": "Ilustração de copo."
+     },
+     {
+      "id": "foca",
+      "termo": "FOCA",
+      "descricao": "Ilustração de foca."
+     }
+    ],
+    "opcoes": [
+     "F",
+     "L",
+     "T",
+     "C"
+    ]
+   },
+   "gabarito": {
+    "laranja": "L",
+    "tomate": "T",
+    "copo": "C",
+    "foca": "F"
+   }
+  },
+  {
+   "id": "1B-gato",
+   "modelo": "1B",
+   "formato": "ligar_pares",
+   "enunciado": "Ligue cada objeto à letra inicial do seu nome.",
+   "dados": {
+    "imagens": [
+     {
+      "id": "gato",
+      "termo": "GATO",
+      "descricao": "Ilustração de gato."
+     },
+     {
+      "id": "vaca",
+      "termo": "VACA",
+      "descricao": "Ilustração de vaca."
+     },
+     {
+      "id": "jarra",
+      "termo": "JARRA",
+      "descricao": "Ilustração de jarra."
+     },
+     {
+      "id": "zebra",
+      "termo": "ZEBRA",
+      "descricao": "Ilustração de zebra."
+     }
+    ],
+    "opcoes": [
+     "G",
+     "V",
+     "J",
+     "Z"
+    ]
+   },
+   "gabarito": {
+    "gato": "G",
+    "vaca": "V",
+    "jarra": "J",
+    "zebra": "Z"
+   }
+  },
+  {
+   "id": "2A-casa",
+   "modelo": "2A",
+   "formato": "preencher_com_opcoes",
+   "enunciado": "Complete as palavras com as sílabas abaixo.",
+   "dados": {
+    "opcoes": [
+     "DA",
+     "CA",
+     "BO"
+    ],
+    "linhas": [
+     {
+      "imagem": {
+       "id": "casa",
+       "termo": "CASA",
+       "descricao": "Ilustração de casa."
+      },
+      "lacuna": "_SA"
+     },
+     {
+      "imagem": {
+       "id": "dado",
+       "termo": "DADO",
+       "descricao": "Ilustração de dado."
+      },
+      "lacuna": "_DO"
+     },
+     {
+      "imagem": {
+       "id": "bolo",
+       "termo": "BOLO",
+       "descricao": "Ilustração de bolo."
+      },
+      "lacuna": "_LO"
+     }
+    ]
+   },
+   "gabarito": [
+    "CA",
+    "DA",
+    "BO"
+   ]
+  },
+  {
+   "id": "2A-mesa",
+   "modelo": "2A",
+   "formato": "preencher_com_opcoes",
+   "enunciado": "Complete as palavras com as sílabas abaixo.",
+   "dados": {
+    "opcoes": [
+     "NA",
+     "PA",
+     "ME"
+    ],
+    "linhas": [
+     {
+      "imagem": {
+       "id": "mesa",
+       "termo": "MESA",
+       "descricao": "Ilustração de mesa."
+      },
+      "lacuna": "_SA"
+     },
+     {
+      "imagem": {
+       "id": "navio",
+       "termo": "NAVIO",
+       "descricao": "Ilustração de navio."
+      },
+      "lacuna": "_VIO"
+     },
+     {
+      "imagem": {
+       "id": "panela",
+       "termo": "PANELA",
+       "descricao": "Ilustração de panela."
+      },
+      "lacuna": "_NELA"
+     }
+    ]
+   },
+   "gabarito": [
+    "ME",
+    "NA",
+    "PA"
+   ]
+  },
+  {
+   "id": "2A-tapete",
+   "modelo": "2A",
+   "formato": "preencher_com_opcoes",
+   "enunciado": "Complete as palavras com as sílabas abaixo.",
+   "dados": {
+    "opcoes": [
+     "JA",
+     "CO",
+     "TA"
+    ],
+    "linhas": [
+     {
+      "imagem": {
+       "id": "tapete",
+       "termo": "TAPETE",
+       "descricao": "Ilustração de tapete."
+      },
+      "lacuna": "_PETE"
+     },
+     {
+      "imagem": {
+       "id": "janela",
+       "termo": "JANELA",
+       "descricao": "Ilustração de janela."
+      },
+      "lacuna": "_NELA"
+     },
+     {
+      "imagem": {
+       "id": "copo",
+       "termo": "COPO",
+       "descricao": "Ilustração de copo."
+      },
+      "lacuna": "_PO"
+     }
+    ]
+   },
+   "gabarito": [
+    "TA",
+    "JA",
+    "CO"
+   ]
+  },
+  {
+   "id": "2A-uva",
+   "modelo": "2A",
+   "formato": "preencher_com_opcoes",
+   "enunciado": "Complete as palavras com as sílabas abaixo.",
+   "dados": {
+    "opcoes": [
+     "TO",
+     "MA",
+     "U"
+    ],
+    "linhas": [
+     {
+      "imagem": {
+       "id": "uva",
+       "termo": "UVA",
+       "descricao": "Ilustração de uva."
+      },
+      "lacuna": "_VA"
+     },
+     {
+      "imagem": {
+       "id": "tomate",
+       "termo": "TOMATE",
+       "descricao": "Ilustração de tomate."
+      },
+      "lacuna": "_MATE"
+     },
+     {
+      "imagem": {
+       "id": "maca",
+       "termo": "MAÇÃ",
+       "descricao": "Ilustração de maçã."
+      },
+      "lacuna": "_ÇÃ"
+     }
+    ]
+   },
+   "gabarito": [
+    "U",
+    "TO",
+    "MA"
+   ]
+  },
+  {
+   "id": "2B-casa-inicial",
+   "modelo": "2B",
+   "formato": "digitar_campos",
+   "enunciado": "Complete com a sílaba inicial.",
+   "dados": {
+    "imagem": {
+     "id": "casa",
+     "termo": "CASA",
+     "descricao": "Ilustração de casa."
+    },
+    "lacuna": "___ SA"
+   },
+   "gabarito": [
+    "CA"
+   ]
+  },
+  {
+   "id": "2B-casa-final",
+   "modelo": "2B",
+   "formato": "digitar_campos",
+   "enunciado": "Complete com a sílaba final.",
+   "dados": {
+    "imagem": {
+     "id": "casa",
+     "termo": "CASA",
+     "descricao": "Ilustração de casa."
+    },
+    "lacuna": "CA ___"
+   },
+   "gabarito": [
+    "SA"
+   ]
+  },
+  {
+   "id": "2C-casa",
+   "modelo": "2C",
+   "formato": "escolha",
+   "enunciado": "Selecione a sílaba inicial do nome do desenho.",
+   "dados": {
+    "imagem": {
+     "id": "casa",
+     "termo": "CASA",
+     "descricao": "Ilustração de casa."
+    },
+    "opcoes": [
+     "CA",
+     "DA",
+     "BO",
+     "SOR",
+     "NA"
+    ]
+   },
+   "gabarito": "CA"
+  },
+  {
+   "id": "2D-casa",
+   "modelo": "2D",
+   "formato": "digitar_campos",
+   "enunciado": "Separe a palavra em sílabas.",
+   "dados": {
+    "palavra": "CASA",
+    "quantidade_campos": 2
+   },
+   "gabarito": [
+    "CA",
+    "SA"
+   ]
+  },
+  {
+   "id": "2E-casa",
+   "modelo": "2E",
+   "formato": "digitar_campos",
+   "enunciado": "Escreva a palavra formada por estas sílabas.",
+   "dados": {
+    "silabas": [
+     "CA",
+     "SA"
+    ]
+   },
+   "gabarito": [
+    "CASA"
+   ]
+  },
+  {
+   "id": "2B-dado-inicial",
+   "modelo": "2B",
+   "formato": "digitar_campos",
+   "enunciado": "Complete com a sílaba inicial.",
+   "dados": {
+    "imagem": {
+     "id": "dado",
+     "termo": "DADO",
+     "descricao": "Ilustração de dado."
+    },
+    "lacuna": "___ DO"
+   },
+   "gabarito": [
+    "DA"
+   ]
+  },
+  {
+   "id": "2B-dado-final",
+   "modelo": "2B",
+   "formato": "digitar_campos",
+   "enunciado": "Complete com a sílaba final.",
+   "dados": {
+    "imagem": {
+     "id": "dado",
+     "termo": "DADO",
+     "descricao": "Ilustração de dado."
+    },
+    "lacuna": "DA ___"
+   },
+   "gabarito": [
+    "DO"
+   ]
+  },
+  {
+   "id": "2C-dado",
+   "modelo": "2C",
+   "formato": "escolha",
+   "enunciado": "Selecione a sílaba inicial do nome do desenho.",
+   "dados": {
+    "imagem": {
+     "id": "dado",
+     "termo": "DADO",
+     "descricao": "Ilustração de dado."
+    },
+    "opcoes": [
+     "BO",
+     "SOR",
+     "NA",
+     "BA",
+     "DA"
+    ]
+   },
+   "gabarito": "DA"
+  },
+  {
+   "id": "2D-dado",
+   "modelo": "2D",
+   "formato": "digitar_campos",
+   "enunciado": "Separe a palavra em sílabas.",
+   "dados": {
+    "palavra": "DADO",
+    "quantidade_campos": 2
+   },
+   "gabarito": [
+    "DA",
+    "DO"
+   ]
+  },
+  {
+   "id": "2E-dado",
+   "modelo": "2E",
+   "formato": "digitar_campos",
+   "enunciado": "Escreva a palavra formada por estas sílabas.",
+   "dados": {
+    "silabas": [
+     "DA",
+     "DO"
+    ]
+   },
+   "gabarito": [
+    "DADO"
+   ]
+  },
+  {
+   "id": "2B-bolo-inicial",
+   "modelo": "2B",
+   "formato": "digitar_campos",
+   "enunciado": "Complete com a sílaba inicial.",
+   "dados": {
+    "imagem": {
+     "id": "bolo",
+     "termo": "BOLO",
+     "descricao": "Ilustração de bolo."
+    },
+    "lacuna": "___ LO"
+   },
+   "gabarito": [
+    "BO"
+   ]
+  },
+  {
+   "id": "2B-bolo-final",
+   "modelo": "2B",
+   "formato": "digitar_campos",
+   "enunciado": "Complete com a sílaba final.",
+   "dados": {
+    "imagem": {
+     "id": "bolo",
+     "termo": "BOLO",
+     "descricao": "Ilustração de bolo."
+    },
+    "lacuna": "BO ___"
+   },
+   "gabarito": [
+    "LO"
+   ]
+  },
+  {
+   "id": "2C-bolo",
+   "modelo": "2C",
+   "formato": "escolha",
+   "enunciado": "Selecione a sílaba inicial do nome do desenho.",
+   "dados": {
+    "imagem": {
+     "id": "bolo",
+     "termo": "BOLO",
+     "descricao": "Ilustração de bolo."
+    },
+    "opcoes": [
+     "NA",
+     "BA",
+     "ME",
+     "BO",
+     "SOR"
+    ]
+   },
+   "gabarito": "BO"
+  },
+  {
+   "id": "2D-bolo",
+   "modelo": "2D",
+   "formato": "digitar_campos",
+   "enunciado": "Separe a palavra em sílabas.",
+   "dados": {
+    "palavra": "BOLO",
+    "quantidade_campos": 2
+   },
+   "gabarito": [
+    "BO",
+    "LO"
+   ]
+  },
+  {
+   "id": "2E-bolo",
+   "modelo": "2E",
+   "formato": "digitar_campos",
+   "enunciado": "Escreva a palavra formada por estas sílabas.",
+   "dados": {
+    "silabas": [
+     "BO",
+     "LO"
+    ]
+   },
+   "gabarito": [
+    "BOLO"
+   ]
+  },
+  {
+   "id": "2B-sorvete-inicial",
+   "modelo": "2B",
+   "formato": "digitar_campos",
+   "enunciado": "Complete com a sílaba inicial.",
+   "dados": {
+    "imagem": {
+     "id": "sorvete",
+     "termo": "SORVETE",
+     "descricao": "Ilustração de sorvete."
+    },
+    "lacuna": "___ VE TE"
+   },
+   "gabarito": [
+    "SOR"
+   ]
+  },
+  {
+   "id": "2B-sorvete-final",
+   "modelo": "2B",
+   "formato": "digitar_campos",
+   "enunciado": "Complete com a sílaba final.",
+   "dados": {
+    "imagem": {
+     "id": "sorvete",
+     "termo": "SORVETE",
+     "descricao": "Ilustração de sorvete."
+    },
+    "lacuna": "SOR VE ___"
+   },
+   "gabarito": [
+    "TE"
+   ]
+  },
+  {
+   "id": "2C-sorvete",
+   "modelo": "2C",
+   "formato": "escolha",
+   "enunciado": "Selecione a sílaba inicial do nome do desenho.",
+   "dados": {
+    "imagem": {
+     "id": "sorvete",
+     "termo": "SORVETE",
+     "descricao": "Ilustração de sorvete."
+    },
+    "opcoes": [
+     "ME",
+     "SA",
+     "SOR",
+     "NA",
+     "BA"
+    ]
+   },
+   "gabarito": "SOR"
+  },
+  {
+   "id": "2D-sorvete",
+   "modelo": "2D",
+   "formato": "digitar_campos",
+   "enunciado": "Separe a palavra em sílabas.",
+   "dados": {
+    "palavra": "SORVETE",
+    "quantidade_campos": 3
+   },
+   "gabarito": [
+    "SOR",
+    "VE",
+    "TE"
+   ]
+  },
+  {
+   "id": "2E-sorvete",
+   "modelo": "2E",
+   "formato": "digitar_campos",
+   "enunciado": "Escreva a palavra formada por estas sílabas.",
+   "dados": {
+    "silabas": [
+     "SOR",
+     "VE",
+     "TE"
+    ]
+   },
+   "gabarito": [
+    "SORVETE"
+   ]
+  },
+  {
+   "id": "2B-navio-inicial",
+   "modelo": "2B",
+   "formato": "digitar_campos",
+   "enunciado": "Complete com a sílaba inicial.",
+   "dados": {
+    "imagem": {
+     "id": "navio",
+     "termo": "NAVIO",
+     "descricao": "Ilustração de navio."
+    },
+    "lacuna": "___ VI O"
+   },
+   "gabarito": [
+    "NA"
+   ]
+  },
+  {
+   "id": "2B-navio-final",
+   "modelo": "2B",
+   "formato": "digitar_campos",
+   "enunciado": "Complete com a sílaba final.",
+   "dados": {
+    "imagem": {
+     "id": "navio",
+     "termo": "NAVIO",
+     "descricao": "Ilustração de navio."
+    },
+    "lacuna": "NA VI ___"
+   },
+   "gabarito": [
+    "O"
+   ]
+  },
+  {
+   "id": "2C-navio",
+   "modelo": "2C",
+   "formato": "escolha",
+   "enunciado": "Selecione a sílaba inicial do nome do desenho.",
+   "dados": {
+    "imagem": {
+     "id": "navio",
+     "termo": "NAVIO",
+     "descricao": "Ilustração de navio."
+    },
+    "opcoes": [
+     "VI",
+     "VA",
+     "PE",
+     "NA",
+     "RA"
+    ]
+   },
+   "gabarito": "NA"
+  },
+  {
+   "id": "2D-navio",
+   "modelo": "2D",
+   "formato": "digitar_campos",
+   "enunciado": "Separe a palavra em sílabas.",
+   "dados": {
+    "palavra": "NAVIO",
+    "quantidade_campos": 3
+   },
+   "gabarito": [
+    "NA",
+    "VI",
+    "O"
+   ]
+  },
+  {
+   "id": "2E-navio",
+   "modelo": "2E",
+   "formato": "digitar_campos",
+   "enunciado": "Escreva a palavra formada por estas sílabas.",
+   "dados": {
+    "silabas": [
+     "NA",
+     "VI",
+     "O"
+    ]
+   },
+   "gabarito": [
+    "NAVIO"
+   ]
+  },
+  {
+   "id": "2B-camelo-inicial",
+   "modelo": "2B",
+   "formato": "digitar_campos",
+   "enunciado": "Complete com a sílaba inicial.",
+   "dados": {
+    "imagem": {
+     "id": "camelo",
+     "termo": "CAMELO",
+     "descricao": "Ilustração de camelo."
+    },
+    "lacuna": "___ ME LO"
+   },
+   "gabarito": [
+    "CA"
+   ]
+  },
+  {
+   "id": "2B-camelo-final",
+   "modelo": "2B",
+   "formato": "digitar_campos",
+   "enunciado": "Complete com a sílaba final.",
+   "dados": {
+    "imagem": {
+     "id": "camelo",
+     "termo": "CAMELO",
+     "descricao": "Ilustração de camelo."
+    },
+    "lacuna": "CA ME ___"
+   },
+   "gabarito": [
+    "LO"
+   ]
+  },
+  {
+   "id": "2C-camelo",
+   "modelo": "2C",
+   "formato": "escolha",
+   "enunciado": "Selecione a sílaba inicial do nome do desenho.",
+   "dados": {
+    "imagem": {
+     "id": "camelo",
+     "termo": "CAMELO",
+     "descricao": "Ilustração de camelo."
+    },
+    "opcoes": [
+     "CA",
+     "BA",
+     "ME",
+     "SA",
+     "PA"
+    ]
+   },
+   "gabarito": "CA"
+  },
+  {
+   "id": "2D-camelo",
+   "modelo": "2D",
+   "formato": "digitar_campos",
+   "enunciado": "Separe a palavra em sílabas.",
+   "dados": {
+    "palavra": "CAMELO",
+    "quantidade_campos": 3
+   },
+   "gabarito": [
+    "CA",
+    "ME",
+    "LO"
+   ]
+  },
+  {
+   "id": "2E-camelo",
+   "modelo": "2E",
+   "formato": "digitar_campos",
+   "enunciado": "Escreva a palavra formada por estas sílabas.",
+   "dados": {
+    "silabas": [
+     "CA",
+     "ME",
+     "LO"
+    ]
+   },
+   "gabarito": [
+    "CAMELO"
+   ]
+  },
+  {
+   "id": "2B-banana-inicial",
+   "modelo": "2B",
+   "formato": "digitar_campos",
+   "enunciado": "Complete com a sílaba inicial.",
+   "dados": {
+    "imagem": {
+     "id": "banana",
+     "termo": "BANANA",
+     "descricao": "Ilustração de banana."
+    },
+    "lacuna": "___ NA NA"
+   },
+   "gabarito": [
+    "BA"
+   ]
+  },
+  {
+   "id": "2B-banana-final",
+   "modelo": "2B",
+   "formato": "digitar_campos",
+   "enunciado": "Complete com a sílaba final.",
+   "dados": {
+    "imagem": {
+     "id": "banana",
+     "termo": "BANANA",
+     "descricao": "Ilustração de banana."
+    },
+    "lacuna": "BA NA ___"
+   },
+   "gabarito": [
+    "NA"
+   ]
+  },
+  {
+   "id": "2C-banana",
+   "modelo": "2C",
+   "formato": "escolha",
+   "enunciado": "Selecione a sílaba inicial do nome do desenho.",
+   "dados": {
+    "imagem": {
+     "id": "banana",
+     "termo": "BANANA",
+     "descricao": "Ilustração de banana."
+    },
+    "opcoes": [
+     "ME",
+     "SA",
+     "PA",
+     "TA",
+     "BA"
+    ]
+   },
+   "gabarito": "BA"
+  },
+  {
+   "id": "2D-banana",
+   "modelo": "2D",
+   "formato": "digitar_campos",
+   "enunciado": "Separe a palavra em sílabas.",
+   "dados": {
+    "palavra": "BANANA",
+    "quantidade_campos": 3
+   },
+   "gabarito": [
+    "BA",
+    "NA",
+    "NA"
+   ]
+  },
+  {
+   "id": "2E-banana",
+   "modelo": "2E",
+   "formato": "digitar_campos",
+   "enunciado": "Escreva a palavra formada por estas sílabas.",
+   "dados": {
+    "silabas": [
+     "BA",
+     "NA",
+     "NA"
+    ]
+   },
+   "gabarito": [
+    "BANANA"
+   ]
+  },
+  {
+   "id": "2B-mesa-inicial",
+   "modelo": "2B",
+   "formato": "digitar_campos",
+   "enunciado": "Complete com a sílaba inicial.",
+   "dados": {
+    "imagem": {
+     "id": "mesa",
+     "termo": "MESA",
+     "descricao": "Ilustração de mesa."
+    },
+    "lacuna": "___ SA"
+   },
+   "gabarito": [
+    "ME"
+   ]
+  },
+  {
+   "id": "2B-mesa-final",
+   "modelo": "2B",
+   "formato": "digitar_campos",
+   "enunciado": "Complete com a sílaba final.",
+   "dados": {
+    "imagem": {
+     "id": "mesa",
+     "termo": "MESA",
+     "descricao": "Ilustração de mesa."
+    },
+    "lacuna": "ME ___"
+   },
+   "gabarito": [
+    "SA"
+   ]
+  },
+  {
+   "id": "2C-mesa",
+   "modelo": "2C",
+   "formato": "escolha",
+   "enunciado": "Selecione a sílaba inicial do nome do desenho.",
+   "dados": {
+    "imagem": {
+     "id": "mesa",
+     "termo": "MESA",
+     "descricao": "Ilustração de mesa."
+    },
+    "opcoes": [
+     "PA",
+     "TA",
+     "JA",
+     "ME",
+     "SA"
+    ]
+   },
+   "gabarito": "ME"
+  },
+  {
+   "id": "2D-mesa",
+   "modelo": "2D",
+   "formato": "digitar_campos",
+   "enunciado": "Separe a palavra em sílabas.",
+   "dados": {
+    "palavra": "MESA",
+    "quantidade_campos": 2
+   },
+   "gabarito": [
+    "ME",
+    "SA"
+   ]
+  },
+  {
+   "id": "2E-mesa",
+   "modelo": "2E",
+   "formato": "digitar_campos",
+   "enunciado": "Escreva a palavra formada por estas sílabas.",
+   "dados": {
+    "silabas": [
+     "ME",
+     "SA"
+    ]
+   },
+   "gabarito": [
+    "MESA"
+   ]
+  },
+  {
+   "id": "2B-sapato-inicial",
+   "modelo": "2B",
+   "formato": "digitar_campos",
+   "enunciado": "Complete com a sílaba inicial.",
+   "dados": {
+    "imagem": {
+     "id": "sapato",
+     "termo": "SAPATO",
+     "descricao": "Ilustração de sapato."
+    },
+    "lacuna": "___ PA TO"
+   },
+   "gabarito": [
+    "SA"
+   ]
+  },
+  {
+   "id": "2B-sapato-final",
+   "modelo": "2B",
+   "formato": "digitar_campos",
+   "enunciado": "Complete com a sílaba final.",
+   "dados": {
+    "imagem": {
+     "id": "sapato",
+     "termo": "SAPATO",
+     "descricao": "Ilustração de sapato."
+    },
+    "lacuna": "SA PA ___"
+   },
+   "gabarito": [
+    "TO"
+   ]
+  },
+  {
+   "id": "2C-sapato",
+   "modelo": "2C",
+   "formato": "escolha",
+   "enunciado": "Selecione a sílaba inicial do nome do desenho.",
+   "dados": {
+    "imagem": {
+     "id": "sapato",
+     "termo": "SAPATO",
+     "descricao": "Ilustração de sapato."
+    },
+    "opcoes": [
+     "JA",
+     "FO",
+     "SA",
+     "PA",
+     "TA"
+    ]
+   },
+   "gabarito": "SA"
+  },
+  {
+   "id": "2D-sapato",
+   "modelo": "2D",
+   "formato": "digitar_campos",
+   "enunciado": "Separe a palavra em sílabas.",
+   "dados": {
+    "palavra": "SAPATO",
+    "quantidade_campos": 3
+   },
+   "gabarito": [
+    "SA",
+    "PA",
+    "TO"
+   ]
+  },
+  {
+   "id": "2E-sapato",
+   "modelo": "2E",
+   "formato": "digitar_campos",
+   "enunciado": "Escreva a palavra formada por estas sílabas.",
+   "dados": {
+    "silabas": [
+     "SA",
+     "PA",
+     "TO"
+    ]
+   },
+   "gabarito": [
+    "SAPATO"
+   ]
+  },
+  {
+   "id": "2B-panela-inicial",
+   "modelo": "2B",
+   "formato": "digitar_campos",
+   "enunciado": "Complete com a sílaba inicial.",
+   "dados": {
+    "imagem": {
+     "id": "panela",
+     "termo": "PANELA",
+     "descricao": "Ilustração de panela."
+    },
+    "lacuna": "___ NE LA"
+   },
+   "gabarito": [
+    "PA"
+   ]
+  },
+  {
+   "id": "2B-panela-final",
+   "modelo": "2B",
+   "formato": "digitar_campos",
+   "enunciado": "Complete com a sílaba final.",
+   "dados": {
+    "imagem": {
+     "id": "panela",
+     "termo": "PANELA",
+     "descricao": "Ilustração de panela."
+    },
+    "lacuna": "PA NE ___"
+   },
+   "gabarito": [
+    "LA"
+   ]
+  },
+  {
+   "id": "2C-panela",
+   "modelo": "2C",
+   "formato": "escolha",
+   "enunciado": "Selecione a sílaba inicial do nome do desenho.",
+   "dados": {
+    "imagem": {
+     "id": "panela",
+     "termo": "PANELA",
+     "descricao": "Ilustração de panela."
+    },
+    "opcoes": [
+     "CO",
+     "PA",
+     "TA",
+     "JA",
+     "FO"
+    ]
+   },
+   "gabarito": "PA"
+  },
+  {
+   "id": "2D-panela",
+   "modelo": "2D",
+   "formato": "digitar_campos",
+   "enunciado": "Separe a palavra em sílabas.",
+   "dados": {
+    "palavra": "PANELA",
+    "quantidade_campos": 3
+   },
+   "gabarito": [
+    "PA",
+    "NE",
+    "LA"
+   ]
+  },
+  {
+   "id": "2E-panela",
+   "modelo": "2E",
+   "formato": "digitar_campos",
+   "enunciado": "Escreva a palavra formada por estas sílabas.",
+   "dados": {
+    "silabas": [
+     "PA",
+     "NE",
+     "LA"
+    ]
+   },
+   "gabarito": [
+    "PANELA"
+   ]
+  },
+  {
+   "id": "2B-tapete-inicial",
+   "modelo": "2B",
+   "formato": "digitar_campos",
+   "enunciado": "Complete com a sílaba inicial.",
+   "dados": {
+    "imagem": {
+     "id": "tapete",
+     "termo": "TAPETE",
+     "descricao": "Ilustração de tapete."
+    },
+    "lacuna": "___ PE TE"
+   },
+   "gabarito": [
+    "TA"
+   ]
+  },
+  {
+   "id": "2B-tapete-final",
+   "modelo": "2B",
+   "formato": "digitar_campos",
+   "enunciado": "Complete com a sílaba final.",
+   "dados": {
+    "imagem": {
+     "id": "tapete",
+     "termo": "TAPETE",
+     "descricao": "Ilustração de tapete."
+    },
+    "lacuna": "TA PE ___"
+   },
+   "gabarito": [
+    "TE"
+   ]
+  },
+  {
+   "id": "2C-tapete",
+   "modelo": "2C",
+   "formato": "escolha",
+   "enunciado": "Selecione a sílaba inicial do nome do desenho.",
+   "dados": {
+    "imagem": {
+     "id": "tapete",
+     "termo": "TAPETE",
+     "descricao": "Ilustração de tapete."
+    },
+    "opcoes": [
+     "TA",
+     "JA",
+     "FO",
+     "CO",
+     "U"
+    ]
+   },
+   "gabarito": "TA"
+  },
+  {
+   "id": "2D-tapete",
+   "modelo": "2D",
+   "formato": "digitar_campos",
+   "enunciado": "Separe a palavra em sílabas.",
+   "dados": {
+    "palavra": "TAPETE",
+    "quantidade_campos": 3
+   },
+   "gabarito": [
+    "TA",
+    "PE",
+    "TE"
+   ]
+  },
+  {
+   "id": "2E-tapete",
+   "modelo": "2E",
+   "formato": "digitar_campos",
+   "enunciado": "Escreva a palavra formada por estas sílabas.",
+   "dados": {
+    "silabas": [
+     "TA",
+     "PE",
+     "TE"
+    ]
+   },
+   "gabarito": [
+    "TAPETE"
+   ]
+  },
+  {
+   "id": "2B-janela-inicial",
+   "modelo": "2B",
+   "formato": "digitar_campos",
+   "enunciado": "Complete com a sílaba inicial.",
+   "dados": {
+    "imagem": {
+     "id": "janela",
+     "termo": "JANELA",
+     "descricao": "Ilustração de janela."
+    },
+    "lacuna": "___ NE LA"
+   },
+   "gabarito": [
+    "JA"
+   ]
+  },
+  {
+   "id": "2B-janela-final",
+   "modelo": "2B",
+   "formato": "digitar_campos",
+   "enunciado": "Complete com a sílaba final.",
+   "dados": {
+    "imagem": {
+     "id": "janela",
+     "termo": "JANELA",
+     "descricao": "Ilustração de janela."
+    },
+    "lacuna": "JA NE ___"
+   },
+   "gabarito": [
+    "LA"
+   ]
+  },
+  {
+   "id": "2C-janela",
+   "modelo": "2C",
+   "formato": "escolha",
+   "enunciado": "Selecione a sílaba inicial do nome do desenho.",
+   "dados": {
+    "imagem": {
+     "id": "janela",
+     "termo": "JANELA",
+     "descricao": "Ilustração de janela."
+    },
+    "opcoes": [
+     "FO",
+     "CO",
+     "U",
+     "TO",
+     "JA"
+    ]
+   },
+   "gabarito": "JA"
+  },
+  {
+   "id": "2D-janela",
+   "modelo": "2D",
+   "formato": "digitar_campos",
+   "enunciado": "Separe a palavra em sílabas.",
+   "dados": {
+    "palavra": "JANELA",
+    "quantidade_campos": 3
+   },
+   "gabarito": [
+    "JA",
+    "NE",
+    "LA"
+   ]
+  },
+  {
+   "id": "2E-janela",
+   "modelo": "2E",
+   "formato": "digitar_campos",
+   "enunciado": "Escreva a palavra formada por estas sílabas.",
+   "dados": {
+    "silabas": [
+     "JA",
+     "NE",
+     "LA"
+    ]
+   },
+   "gabarito": [
+    "JANELA"
+   ]
+  },
+  {
+   "id": "2B-folha-inicial",
+   "modelo": "2B",
+   "formato": "digitar_campos",
+   "enunciado": "Complete com a sílaba inicial.",
+   "dados": {
+    "imagem": {
+     "id": "folha",
+     "termo": "FOLHA",
+     "descricao": "Ilustração de folha."
+    },
+    "lacuna": "___ LHA"
+   },
+   "gabarito": [
+    "FO"
+   ]
+  },
+  {
+   "id": "2B-folha-final",
+   "modelo": "2B",
+   "formato": "digitar_campos",
+   "enunciado": "Complete com a sílaba final.",
+   "dados": {
+    "imagem": {
+     "id": "folha",
+     "termo": "FOLHA",
+     "descricao": "Ilustração de folha."
+    },
+    "lacuna": "FO ___"
+   },
+   "gabarito": [
+    "LHA"
+   ]
+  },
+  {
+   "id": "2C-folha",
+   "modelo": "2C",
+   "formato": "escolha",
+   "enunciado": "Selecione a sílaba inicial do nome do desenho.",
+   "dados": {
+    "imagem": {
+     "id": "folha",
+     "termo": "FOLHA",
+     "descricao": "Ilustração de folha."
+    },
+    "opcoes": [
+     "U",
+     "TO",
+     "MA",
+     "FO",
+     "CO"
+    ]
+   },
+   "gabarito": "FO"
+  },
+  {
+   "id": "2D-folha",
+   "modelo": "2D",
+   "formato": "digitar_campos",
+   "enunciado": "Separe a palavra em sílabas.",
+   "dados": {
+    "palavra": "FOLHA",
+    "quantidade_campos": 2
+   },
+   "gabarito": [
+    "FO",
+    "LHA"
+   ]
+  },
+  {
+   "id": "2E-folha",
+   "modelo": "2E",
+   "formato": "digitar_campos",
+   "enunciado": "Escreva a palavra formada por estas sílabas.",
+   "dados": {
+    "silabas": [
+     "FO",
+     "LHA"
+    ]
+   },
+   "gabarito": [
+    "FOLHA"
+   ]
+  },
+  {
+   "id": "2B-copo-inicial",
+   "modelo": "2B",
+   "formato": "digitar_campos",
+   "enunciado": "Complete com a sílaba inicial.",
+   "dados": {
+    "imagem": {
+     "id": "copo",
+     "termo": "COPO",
+     "descricao": "Ilustração de copo."
+    },
+    "lacuna": "___ PO"
+   },
+   "gabarito": [
+    "CO"
+   ]
+  },
+  {
+   "id": "2B-copo-final",
+   "modelo": "2B",
+   "formato": "digitar_campos",
+   "enunciado": "Complete com a sílaba final.",
+   "dados": {
+    "imagem": {
+     "id": "copo",
+     "termo": "COPO",
+     "descricao": "Ilustração de copo."
+    },
+    "lacuna": "CO ___"
+   },
+   "gabarito": [
+    "PO"
+   ]
+  },
+  {
+   "id": "2C-copo",
+   "modelo": "2C",
+   "formato": "escolha",
+   "enunciado": "Selecione a sílaba inicial do nome do desenho.",
+   "dados": {
+    "imagem": {
+     "id": "copo",
+     "termo": "COPO",
+     "descricao": "Ilustração de copo."
+    },
+    "opcoes": [
+     "MA",
+     "RA",
+     "CO",
+     "U",
+     "TO"
+    ]
+   },
+   "gabarito": "CO"
+  },
+  {
+   "id": "2D-copo",
+   "modelo": "2D",
+   "formato": "digitar_campos",
+   "enunciado": "Separe a palavra em sílabas.",
+   "dados": {
+    "palavra": "COPO",
+    "quantidade_campos": 2
+   },
+   "gabarito": [
+    "CO",
+    "PO"
+   ]
+  },
+  {
+   "id": "2E-copo",
+   "modelo": "2E",
+   "formato": "digitar_campos",
+   "enunciado": "Escreva a palavra formada por estas sílabas.",
+   "dados": {
+    "silabas": [
+     "CO",
+     "PO"
+    ]
+   },
+   "gabarito": [
+    "COPO"
+   ]
+  },
+  {
+   "id": "2B-uva-inicial",
+   "modelo": "2B",
+   "formato": "digitar_campos",
+   "enunciado": "Complete com a sílaba inicial.",
+   "dados": {
+    "imagem": {
+     "id": "uva",
+     "termo": "UVA",
+     "descricao": "Ilustração de uva."
+    },
+    "lacuna": "___ VA"
+   },
+   "gabarito": [
+    "U"
+   ]
+  },
+  {
+   "id": "2B-uva-final",
+   "modelo": "2B",
+   "formato": "digitar_campos",
+   "enunciado": "Complete com a sílaba final.",
+   "dados": {
+    "imagem": {
+     "id": "uva",
+     "termo": "UVA",
+     "descricao": "Ilustração de uva."
+    },
+    "lacuna": "U ___"
+   },
+   "gabarito": [
+    "VA"
+   ]
+  },
+  {
+   "id": "2C-uva",
+   "modelo": "2C",
+   "formato": "escolha",
+   "enunciado": "Selecione a sílaba inicial do nome do desenho.",
+   "dados": {
+    "imagem": {
+     "id": "uva",
+     "termo": "UVA",
+     "descricao": "Ilustração de uva."
+    },
+    "opcoes": [
+     "CA",
+     "U",
+     "TO",
+     "MA",
+     "RA"
+    ]
+   },
+   "gabarito": "U"
+  },
+  {
+   "id": "2D-uva",
+   "modelo": "2D",
+   "formato": "digitar_campos",
+   "enunciado": "Separe a palavra em sílabas.",
+   "dados": {
+    "palavra": "UVA",
+    "quantidade_campos": 2
+   },
+   "gabarito": [
+    "U",
+    "VA"
+   ]
+  },
+  {
+   "id": "2E-uva",
+   "modelo": "2E",
+   "formato": "digitar_campos",
+   "enunciado": "Escreva a palavra formada por estas sílabas.",
+   "dados": {
+    "silabas": [
+     "U",
+     "VA"
+    ]
+   },
+   "gabarito": [
+    "UVA"
+   ]
+  },
+  {
+   "id": "2B-tomate-inicial",
+   "modelo": "2B",
+   "formato": "digitar_campos",
+   "enunciado": "Complete com a sílaba inicial.",
+   "dados": {
+    "imagem": {
+     "id": "tomate",
+     "termo": "TOMATE",
+     "descricao": "Ilustração de tomate."
+    },
+    "lacuna": "___ MA TE"
+   },
+   "gabarito": [
+    "TO"
+   ]
+  },
+  {
+   "id": "2B-tomate-final",
+   "modelo": "2B",
+   "formato": "digitar_campos",
+   "enunciado": "Complete com a sílaba final.",
+   "dados": {
+    "imagem": {
+     "id": "tomate",
+     "termo": "TOMATE",
+     "descricao": "Ilustração de tomate."
+    },
+    "lacuna": "TO MA ___"
+   },
+   "gabarito": [
+    "TE"
+   ]
+  },
+  {
+   "id": "2C-tomate",
+   "modelo": "2C",
+   "formato": "escolha",
+   "enunciado": "Selecione a sílaba inicial do nome do desenho.",
+   "dados": {
+    "imagem": {
+     "id": "tomate",
+     "termo": "TOMATE",
+     "descricao": "Ilustração de tomate."
+    },
+    "opcoes": [
+     "TO",
+     "MA",
+     "RA",
+     "CA",
+     "DA"
+    ]
+   },
+   "gabarito": "TO"
+  },
+  {
+   "id": "2D-tomate",
+   "modelo": "2D",
+   "formato": "digitar_campos",
+   "enunciado": "Separe a palavra em sílabas.",
+   "dados": {
+    "palavra": "TOMATE",
+    "quantidade_campos": 3
+   },
+   "gabarito": [
+    "TO",
+    "MA",
+    "TE"
+   ]
+  },
+  {
+   "id": "2E-tomate",
+   "modelo": "2E",
+   "formato": "digitar_campos",
+   "enunciado": "Escreva a palavra formada por estas sílabas.",
+   "dados": {
+    "silabas": [
+     "TO",
+     "MA",
+     "TE"
+    ]
+   },
+   "gabarito": [
+    "TOMATE"
+   ]
+  },
+  {
+   "id": "2B-maca-inicial",
+   "modelo": "2B",
+   "formato": "digitar_campos",
+   "enunciado": "Complete com a sílaba inicial.",
+   "dados": {
+    "imagem": {
+     "id": "maca",
+     "termo": "MAÇÃ",
+     "descricao": "Ilustração de maçã."
+    },
+    "lacuna": "___ ÇÃ"
+   },
+   "gabarito": [
+    "MA"
+   ]
+  },
+  {
+   "id": "2B-maca-final",
+   "modelo": "2B",
+   "formato": "digitar_campos",
+   "enunciado": "Complete com a sílaba final.",
+   "dados": {
+    "imagem": {
+     "id": "maca",
+     "termo": "MAÇÃ",
+     "descricao": "Ilustração de maçã."
+    },
+    "lacuna": "MA ___"
+   },
+   "gabarito": [
+    "ÇÃ"
+   ]
+  },
+  {
+   "id": "2C-maca",
+   "modelo": "2C",
+   "formato": "escolha",
+   "enunciado": "Selecione a sílaba inicial do nome do desenho.",
+   "dados": {
+    "imagem": {
+     "id": "maca",
+     "termo": "MAÇÃ",
+     "descricao": "Ilustração de maçã."
+    },
+    "opcoes": [
+     "RA",
+     "CA",
+     "DA",
+     "BO",
+     "MA"
+    ]
+   },
+   "gabarito": "MA"
+  },
+  {
+   "id": "2D-maca",
+   "modelo": "2D",
+   "formato": "digitar_campos",
+   "enunciado": "Separe a palavra em sílabas.",
+   "dados": {
+    "palavra": "MAÇÃ",
+    "quantidade_campos": 2
+   },
+   "gabarito": [
+    "MA",
+    "ÇÃ"
+   ]
+  },
+  {
+   "id": "2E-maca",
+   "modelo": "2E",
+   "formato": "digitar_campos",
+   "enunciado": "Escreva a palavra formada por estas sílabas.",
+   "dados": {
+    "silabas": [
+     "MA",
+     "ÇÃ"
+    ]
+   },
+   "gabarito": [
+    "MAÇÃ"
+   ]
+  },
+  {
+   "id": "2B-rato-inicial",
+   "modelo": "2B",
+   "formato": "digitar_campos",
+   "enunciado": "Complete com a sílaba inicial.",
+   "dados": {
+    "imagem": {
+     "id": "rato",
+     "termo": "RATO",
+     "descricao": "Ilustração de rato."
+    },
+    "lacuna": "___ TO"
+   },
+   "gabarito": [
+    "RA"
+   ]
+  },
+  {
+   "id": "2B-rato-final",
+   "modelo": "2B",
+   "formato": "digitar_campos",
+   "enunciado": "Complete com a sílaba final.",
+   "dados": {
+    "imagem": {
+     "id": "rato",
+     "termo": "RATO",
+     "descricao": "Ilustração de rato."
+    },
+    "lacuna": "RA ___"
+   },
+   "gabarito": [
+    "TO"
+   ]
+  },
+  {
+   "id": "2C-rato",
+   "modelo": "2C",
+   "formato": "escolha",
+   "enunciado": "Selecione a sílaba inicial do nome do desenho.",
+   "dados": {
+    "imagem": {
+     "id": "rato",
+     "termo": "RATO",
+     "descricao": "Ilustração de rato."
+    },
+    "opcoes": [
+     "DA",
+     "BO",
+     "SOR",
+     "RA",
+     "CA"
+    ]
+   },
+   "gabarito": "RA"
+  },
+  {
+   "id": "2D-rato",
+   "modelo": "2D",
+   "formato": "digitar_campos",
+   "enunciado": "Separe a palavra em sílabas.",
+   "dados": {
+    "palavra": "RATO",
+    "quantidade_campos": 2
+   },
+   "gabarito": [
+    "RA",
+    "TO"
+   ]
+  },
+  {
+   "id": "2E-rato",
+   "modelo": "2E",
+   "formato": "digitar_campos",
+   "enunciado": "Escreva a palavra formada por estas sílabas.",
+   "dados": {
+    "silabas": [
+     "RA",
+     "TO"
+    ]
+   },
+   "gabarito": [
+    "RATO"
+   ]
+  },
+  {
+   "id": "2F-ba",
+   "modelo": "2F",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a sílaba que escutar.",
+   "dados": {
+    "audio": "BA",
+    "opcoes": [
+     "BA",
+     "BE",
+     "BI",
+     "BO"
+    ]
+   },
+   "gabarito": "BA"
+  },
+  {
+   "id": "2F-be",
+   "modelo": "2F",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a sílaba que escutar.",
+   "dados": {
+    "audio": "BE",
+    "opcoes": [
+     "BA",
+     "BI",
+     "BO",
+     "BE"
+    ]
+   },
+   "gabarito": "BE"
+  },
+  {
+   "id": "2F-bi",
+   "modelo": "2F",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a sílaba que escutar.",
+   "dados": {
+    "audio": "BI",
+    "opcoes": [
+     "BE",
+     "BO",
+     "BI",
+     "BA"
+    ]
+   },
+   "gabarito": "BI"
+  },
+  {
+   "id": "2F-bo",
+   "modelo": "2F",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a sílaba que escutar.",
+   "dados": {
+    "audio": "BO",
+    "opcoes": [
+     "BI",
+     "BO",
+     "BA",
+     "BE"
+    ]
+   },
+   "gabarito": "BO"
+  },
+  {
+   "id": "2F-bu",
+   "modelo": "2F",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a sílaba que escutar.",
+   "dados": {
+    "audio": "BU",
+    "opcoes": [
+     "BU",
+     "BA",
+     "BE",
+     "BI"
+    ]
+   },
+   "gabarito": "BU"
+  },
+  {
+   "id": "2F-da",
+   "modelo": "2F",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a sílaba que escutar.",
+   "dados": {
+    "audio": "DA",
+    "opcoes": [
+     "DA",
+     "DE",
+     "DI",
+     "DO"
+    ]
+   },
+   "gabarito": "DA"
+  },
+  {
+   "id": "2F-de",
+   "modelo": "2F",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a sílaba que escutar.",
+   "dados": {
+    "audio": "DE",
+    "opcoes": [
+     "DA",
+     "DI",
+     "DO",
+     "DE"
+    ]
+   },
+   "gabarito": "DE"
+  },
+  {
+   "id": "2F-di",
+   "modelo": "2F",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a sílaba que escutar.",
+   "dados": {
+    "audio": "DI",
+    "opcoes": [
+     "DE",
+     "DO",
+     "DI",
+     "DA"
+    ]
+   },
+   "gabarito": "DI"
+  },
+  {
+   "id": "2F-do",
+   "modelo": "2F",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a sílaba que escutar.",
+   "dados": {
+    "audio": "DO",
+    "opcoes": [
+     "DI",
+     "DO",
+     "DA",
+     "DE"
+    ]
+   },
+   "gabarito": "DO"
+  },
+  {
+   "id": "2F-du",
+   "modelo": "2F",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a sílaba que escutar.",
+   "dados": {
+    "audio": "DU",
+    "opcoes": [
+     "DU",
+     "DA",
+     "DE",
+     "DI"
+    ]
+   },
+   "gabarito": "DU"
+  },
+  {
+   "id": "2F-fa",
+   "modelo": "2F",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a sílaba que escutar.",
+   "dados": {
+    "audio": "FA",
+    "opcoes": [
+     "FA",
+     "FE",
+     "FI",
+     "FO"
+    ]
+   },
+   "gabarito": "FA"
+  },
+  {
+   "id": "2F-fe",
+   "modelo": "2F",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a sílaba que escutar.",
+   "dados": {
+    "audio": "FE",
+    "opcoes": [
+     "FA",
+     "FI",
+     "FO",
+     "FE"
+    ]
+   },
+   "gabarito": "FE"
+  },
+  {
+   "id": "2F-fi",
+   "modelo": "2F",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a sílaba que escutar.",
+   "dados": {
+    "audio": "FI",
+    "opcoes": [
+     "FE",
+     "FO",
+     "FI",
+     "FA"
+    ]
+   },
+   "gabarito": "FI"
+  },
+  {
+   "id": "2F-fo",
+   "modelo": "2F",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a sílaba que escutar.",
+   "dados": {
+    "audio": "FO",
+    "opcoes": [
+     "FI",
+     "FO",
+     "FA",
+     "FE"
+    ]
+   },
+   "gabarito": "FO"
+  },
+  {
+   "id": "2F-fu",
+   "modelo": "2F",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a sílaba que escutar.",
+   "dados": {
+    "audio": "FU",
+    "opcoes": [
+     "FU",
+     "FA",
+     "FE",
+     "FI"
+    ]
+   },
+   "gabarito": "FU"
+  },
+  {
+   "id": "2F-ja",
+   "modelo": "2F",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a sílaba que escutar.",
+   "dados": {
+    "audio": "JA",
+    "opcoes": [
+     "JA",
+     "JE",
+     "JI",
+     "JO"
+    ]
+   },
+   "gabarito": "JA"
+  },
+  {
+   "id": "2F-je",
+   "modelo": "2F",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a sílaba que escutar.",
+   "dados": {
+    "audio": "JE",
+    "opcoes": [
+     "JA",
+     "JI",
+     "JO",
+     "JE"
+    ]
+   },
+   "gabarito": "JE"
+  },
+  {
+   "id": "2F-ji",
+   "modelo": "2F",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a sílaba que escutar.",
+   "dados": {
+    "audio": "JI",
+    "opcoes": [
+     "JE",
+     "JO",
+     "JI",
+     "JA"
+    ]
+   },
+   "gabarito": "JI"
+  },
+  {
+   "id": "2F-jo",
+   "modelo": "2F",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a sílaba que escutar.",
+   "dados": {
+    "audio": "JO",
+    "opcoes": [
+     "JI",
+     "JO",
+     "JA",
+     "JE"
+    ]
+   },
+   "gabarito": "JO"
+  },
+  {
+   "id": "2F-ju",
+   "modelo": "2F",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a sílaba que escutar.",
+   "dados": {
+    "audio": "JU",
+    "opcoes": [
+     "JU",
+     "JA",
+     "JE",
+     "JI"
+    ]
+   },
+   "gabarito": "JU"
+  },
+  {
+   "id": "2F-la",
+   "modelo": "2F",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a sílaba que escutar.",
+   "dados": {
+    "audio": "LA",
+    "opcoes": [
+     "LA",
+     "LE",
+     "LI",
+     "LO"
+    ]
+   },
+   "gabarito": "LA"
+  },
+  {
+   "id": "2F-le",
+   "modelo": "2F",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a sílaba que escutar.",
+   "dados": {
+    "audio": "LE",
+    "opcoes": [
+     "LA",
+     "LI",
+     "LO",
+     "LE"
+    ]
+   },
+   "gabarito": "LE"
+  },
+  {
+   "id": "2F-li",
+   "modelo": "2F",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a sílaba que escutar.",
+   "dados": {
+    "audio": "LI",
+    "opcoes": [
+     "LE",
+     "LO",
+     "LI",
+     "LA"
+    ]
+   },
+   "gabarito": "LI"
+  },
+  {
+   "id": "2F-lo",
+   "modelo": "2F",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a sílaba que escutar.",
+   "dados": {
+    "audio": "LO",
+    "opcoes": [
+     "LI",
+     "LO",
+     "LA",
+     "LE"
+    ]
+   },
+   "gabarito": "LO"
+  },
+  {
+   "id": "2F-lu",
+   "modelo": "2F",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a sílaba que escutar.",
+   "dados": {
+    "audio": "LU",
+    "opcoes": [
+     "LU",
+     "LA",
+     "LE",
+     "LI"
+    ]
+   },
+   "gabarito": "LU"
+  },
+  {
+   "id": "2F-ma",
+   "modelo": "2F",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a sílaba que escutar.",
+   "dados": {
+    "audio": "MA",
+    "opcoes": [
+     "BA",
+     "NE",
+     "MA",
+     "PU"
+    ]
+   },
+   "gabarito": "MA"
+  },
+  {
+   "id": "2F-me",
+   "modelo": "2F",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a sílaba que escutar.",
+   "dados": {
+    "audio": "ME",
+    "opcoes": [
+     "MA",
+     "MI",
+     "MO",
+     "ME"
+    ]
+   },
+   "gabarito": "ME"
+  },
+  {
+   "id": "2F-mi",
+   "modelo": "2F",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a sílaba que escutar.",
+   "dados": {
+    "audio": "MI",
+    "opcoes": [
+     "ME",
+     "MO",
+     "MI",
+     "MA"
+    ]
+   },
+   "gabarito": "MI"
+  },
+  {
+   "id": "2F-mo",
+   "modelo": "2F",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a sílaba que escutar.",
+   "dados": {
+    "audio": "MO",
+    "opcoes": [
+     "MI",
+     "MO",
+     "MA",
+     "ME"
+    ]
+   },
+   "gabarito": "MO"
+  },
+  {
+   "id": "2F-mu",
+   "modelo": "2F",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a sílaba que escutar.",
+   "dados": {
+    "audio": "MU",
+    "opcoes": [
+     "MU",
+     "MA",
+     "ME",
+     "MI"
+    ]
+   },
+   "gabarito": "MU"
+  },
+  {
+   "id": "2F-na",
+   "modelo": "2F",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a sílaba que escutar.",
+   "dados": {
+    "audio": "NA",
+    "opcoes": [
+     "NA",
+     "NE",
+     "NI",
+     "NO"
+    ]
+   },
+   "gabarito": "NA"
+  },
+  {
+   "id": "2F-ne",
+   "modelo": "2F",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a sílaba que escutar.",
+   "dados": {
+    "audio": "NE",
+    "opcoes": [
+     "NA",
+     "NI",
+     "NO",
+     "NE"
+    ]
+   },
+   "gabarito": "NE"
+  },
+  {
+   "id": "2F-ni",
+   "modelo": "2F",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a sílaba que escutar.",
+   "dados": {
+    "audio": "NI",
+    "opcoes": [
+     "NE",
+     "NO",
+     "NI",
+     "NA"
+    ]
+   },
+   "gabarito": "NI"
+  },
+  {
+   "id": "2F-no",
+   "modelo": "2F",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a sílaba que escutar.",
+   "dados": {
+    "audio": "NO",
+    "opcoes": [
+     "NI",
+     "NO",
+     "NA",
+     "NE"
+    ]
+   },
+   "gabarito": "NO"
+  },
+  {
+   "id": "2F-nu",
+   "modelo": "2F",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a sílaba que escutar.",
+   "dados": {
+    "audio": "NU",
+    "opcoes": [
+     "NU",
+     "NA",
+     "NE",
+     "NI"
+    ]
+   },
+   "gabarito": "NU"
+  },
+  {
+   "id": "2F-pa",
+   "modelo": "2F",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a sílaba que escutar.",
+   "dados": {
+    "audio": "PA",
+    "opcoes": [
+     "PA",
+     "PE",
+     "PI",
+     "PO"
+    ]
+   },
+   "gabarito": "PA"
+  },
+  {
+   "id": "2F-pe",
+   "modelo": "2F",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a sílaba que escutar.",
+   "dados": {
+    "audio": "PE",
+    "opcoes": [
+     "PA",
+     "PI",
+     "PO",
+     "PE"
+    ]
+   },
+   "gabarito": "PE"
+  },
+  {
+   "id": "2F-pi",
+   "modelo": "2F",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a sílaba que escutar.",
+   "dados": {
+    "audio": "PI",
+    "opcoes": [
+     "PE",
+     "PO",
+     "PI",
+     "PA"
+    ]
+   },
+   "gabarito": "PI"
+  },
+  {
+   "id": "2F-po",
+   "modelo": "2F",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a sílaba que escutar.",
+   "dados": {
+    "audio": "PO",
+    "opcoes": [
+     "PI",
+     "PO",
+     "PA",
+     "PE"
+    ]
+   },
+   "gabarito": "PO"
+  },
+  {
+   "id": "2F-pu",
+   "modelo": "2F",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a sílaba que escutar.",
+   "dados": {
+    "audio": "PU",
+    "opcoes": [
+     "PU",
+     "PA",
+     "PE",
+     "PI"
+    ]
+   },
+   "gabarito": "PU"
+  },
+  {
+   "id": "2F-ra",
+   "modelo": "2F",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a sílaba que escutar.",
+   "dados": {
+    "audio": "RA",
+    "opcoes": [
+     "RA",
+     "RE",
+     "RI",
+     "RO"
+    ]
+   },
+   "gabarito": "RA"
+  },
+  {
+   "id": "2F-re",
+   "modelo": "2F",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a sílaba que escutar.",
+   "dados": {
+    "audio": "RE",
+    "opcoes": [
+     "RA",
+     "RI",
+     "RO",
+     "RE"
+    ]
+   },
+   "gabarito": "RE"
+  },
+  {
+   "id": "2F-ri",
+   "modelo": "2F",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a sílaba que escutar.",
+   "dados": {
+    "audio": "RI",
+    "opcoes": [
+     "RE",
+     "RO",
+     "RI",
+     "RA"
+    ]
+   },
+   "gabarito": "RI"
+  },
+  {
+   "id": "2F-ro",
+   "modelo": "2F",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a sílaba que escutar.",
+   "dados": {
+    "audio": "RO",
+    "opcoes": [
+     "RI",
+     "RO",
+     "RA",
+     "RE"
+    ]
+   },
+   "gabarito": "RO"
+  },
+  {
+   "id": "2F-ru",
+   "modelo": "2F",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a sílaba que escutar.",
+   "dados": {
+    "audio": "RU",
+    "opcoes": [
+     "RU",
+     "RA",
+     "RE",
+     "RI"
+    ]
+   },
+   "gabarito": "RU"
+  },
+  {
+   "id": "2F-sa",
+   "modelo": "2F",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a sílaba que escutar.",
+   "dados": {
+    "audio": "SA",
+    "opcoes": [
+     "SA",
+     "SE",
+     "SI",
+     "SO"
+    ]
+   },
+   "gabarito": "SA"
+  },
+  {
+   "id": "2F-se",
+   "modelo": "2F",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a sílaba que escutar.",
+   "dados": {
+    "audio": "SE",
+    "opcoes": [
+     "SA",
+     "SI",
+     "SO",
+     "SE"
+    ]
+   },
+   "gabarito": "SE"
+  },
+  {
+   "id": "2F-si",
+   "modelo": "2F",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a sílaba que escutar.",
+   "dados": {
+    "audio": "SI",
+    "opcoes": [
+     "SE",
+     "SO",
+     "SI",
+     "SA"
+    ]
+   },
+   "gabarito": "SI"
+  },
+  {
+   "id": "2F-so",
+   "modelo": "2F",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a sílaba que escutar.",
+   "dados": {
+    "audio": "SO",
+    "opcoes": [
+     "SI",
+     "SO",
+     "SA",
+     "SE"
+    ]
+   },
+   "gabarito": "SO"
+  },
+  {
+   "id": "2F-su",
+   "modelo": "2F",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a sílaba que escutar.",
+   "dados": {
+    "audio": "SU",
+    "opcoes": [
+     "SU",
+     "SA",
+     "SE",
+     "SI"
+    ]
+   },
+   "gabarito": "SU"
+  },
+  {
+   "id": "2F-ta",
+   "modelo": "2F",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a sílaba que escutar.",
+   "dados": {
+    "audio": "TA",
+    "opcoes": [
+     "TA",
+     "TE",
+     "TI",
+     "TO"
+    ]
+   },
+   "gabarito": "TA"
+  },
+  {
+   "id": "2F-te",
+   "modelo": "2F",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a sílaba que escutar.",
+   "dados": {
+    "audio": "TE",
+    "opcoes": [
+     "TA",
+     "TI",
+     "TO",
+     "TE"
+    ]
+   },
+   "gabarito": "TE"
+  },
+  {
+   "id": "2F-ti",
+   "modelo": "2F",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a sílaba que escutar.",
+   "dados": {
+    "audio": "TI",
+    "opcoes": [
+     "TE",
+     "TO",
+     "TI",
+     "TA"
+    ]
+   },
+   "gabarito": "TI"
+  },
+  {
+   "id": "2F-to",
+   "modelo": "2F",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a sílaba que escutar.",
+   "dados": {
+    "audio": "TO",
+    "opcoes": [
+     "TI",
+     "TO",
+     "TA",
+     "TE"
+    ]
+   },
+   "gabarito": "TO"
+  },
+  {
+   "id": "2F-tu",
+   "modelo": "2F",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a sílaba que escutar.",
+   "dados": {
+    "audio": "TU",
+    "opcoes": [
+     "TU",
+     "TA",
+     "TE",
+     "TI"
+    ]
+   },
+   "gabarito": "TU"
+  },
+  {
+   "id": "2F-va",
+   "modelo": "2F",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a sílaba que escutar.",
+   "dados": {
+    "audio": "VA",
+    "opcoes": [
+     "VA",
+     "VE",
+     "VI",
+     "VO"
+    ]
+   },
+   "gabarito": "VA"
+  },
+  {
+   "id": "2F-ve",
+   "modelo": "2F",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a sílaba que escutar.",
+   "dados": {
+    "audio": "VE",
+    "opcoes": [
+     "VA",
+     "VI",
+     "VO",
+     "VE"
+    ]
+   },
+   "gabarito": "VE"
+  },
+  {
+   "id": "2F-vi",
+   "modelo": "2F",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a sílaba que escutar.",
+   "dados": {
+    "audio": "VI",
+    "opcoes": [
+     "VE",
+     "VO",
+     "VI",
+     "VA"
+    ]
+   },
+   "gabarito": "VI"
+  },
+  {
+   "id": "2F-vo",
+   "modelo": "2F",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a sílaba que escutar.",
+   "dados": {
+    "audio": "VO",
+    "opcoes": [
+     "VI",
+     "VO",
+     "VA",
+     "VE"
+    ]
+   },
+   "gabarito": "VO"
+  },
+  {
+   "id": "2F-vu",
+   "modelo": "2F",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a sílaba que escutar.",
+   "dados": {
+    "audio": "VU",
+    "opcoes": [
+     "VU",
+     "VA",
+     "VE",
+     "VI"
+    ]
+   },
+   "gabarito": "VU"
+  },
+  {
+   "id": "2F-za",
+   "modelo": "2F",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a sílaba que escutar.",
+   "dados": {
+    "audio": "ZA",
+    "opcoes": [
+     "ZA",
+     "ZE",
+     "ZI",
+     "ZO"
+    ]
+   },
+   "gabarito": "ZA"
+  },
+  {
+   "id": "2F-ze",
+   "modelo": "2F",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a sílaba que escutar.",
+   "dados": {
+    "audio": "ZE",
+    "opcoes": [
+     "ZA",
+     "ZI",
+     "ZO",
+     "ZE"
+    ]
+   },
+   "gabarito": "ZE"
+  },
+  {
+   "id": "2F-zi",
+   "modelo": "2F",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a sílaba que escutar.",
+   "dados": {
+    "audio": "ZI",
+    "opcoes": [
+     "ZE",
+     "ZO",
+     "ZI",
+     "ZA"
+    ]
+   },
+   "gabarito": "ZI"
+  },
+  {
+   "id": "2F-zo",
+   "modelo": "2F",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a sílaba que escutar.",
+   "dados": {
+    "audio": "ZO",
+    "opcoes": [
+     "ZI",
+     "ZO",
+     "ZA",
+     "ZE"
+    ]
+   },
+   "gabarito": "ZO"
+  },
+  {
+   "id": "2F-zu",
+   "modelo": "2F",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a sílaba que escutar.",
+   "dados": {
+    "audio": "ZU",
+    "opcoes": [
+     "ZU",
+     "ZA",
+     "ZE",
+     "ZI"
+    ]
+   },
+   "gabarito": "ZU"
+  },
+  {
+   "id": "2F-ca",
+   "modelo": "2F",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a sílaba que escutar.",
+   "dados": {
+    "audio": "CA",
+    "opcoes": [
+     "CA",
+     "CO",
+     "CU"
+    ]
+   },
+   "gabarito": "CA"
+  },
+  {
+   "id": "2F-co",
+   "modelo": "2F",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a sílaba que escutar.",
+   "dados": {
+    "audio": "CO",
+    "opcoes": [
+     "CA",
+     "CU",
+     "CO"
+    ]
+   },
+   "gabarito": "CO"
+  },
+  {
+   "id": "2F-cu",
+   "modelo": "2F",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a sílaba que escutar.",
+   "dados": {
+    "audio": "CU",
+    "opcoes": [
+     "CO",
+     "CU",
+     "CA"
+    ]
+   },
+   "gabarito": "CU"
+  },
+  {
+   "id": "2F-ga",
+   "modelo": "2F",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a sílaba que escutar.",
+   "dados": {
+    "audio": "GA",
+    "opcoes": [
+     "GA",
+     "GO",
+     "GU"
+    ]
+   },
+   "gabarito": "GA"
+  },
+  {
+   "id": "2F-go",
+   "modelo": "2F",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a sílaba que escutar.",
+   "dados": {
+    "audio": "GO",
+    "opcoes": [
+     "GA",
+     "GU",
+     "GO"
+    ]
+   },
+   "gabarito": "GO"
+  },
+  {
+   "id": "2F-gu",
+   "modelo": "2F",
+   "formato": "escolha",
+   "enunciado": "Toque para ouvir e selecione a sílaba que escutar.",
+   "dados": {
+    "audio": "GU",
+    "opcoes": [
+     "GO",
+     "GU",
+     "GA"
+    ]
+   },
+   "gabarito": "GU"
+  },
+  {
+   "id": "3B-escada",
+   "modelo": "3B",
+   "formato": "ligar_pares",
+   "enunciado": "Ligue cada imagem à palavra correspondente.",
+   "dados": {
+    "imagens": [
+     {
+      "id": "batedeira",
+      "termo": "BATEDEIRA",
+      "descricao": "Ilustração de batedeira."
+     },
+     {
+      "id": "copo",
+      "termo": "COPO",
+      "descricao": "Ilustração de copo."
+     },
+     {
+      "id": "escada",
+      "termo": "ESCADA",
+      "descricao": "Ilustração de escada."
+     },
+     {
+      "id": "sol",
+      "termo": "SOL",
+      "descricao": "Ilustração de sol."
+     }
+    ],
+    "opcoes": [
+     "ESCADA",
+     "BATEDEIRA",
+     "COPO",
+     "SOL"
+    ]
+   },
+   "gabarito": {
+    "escada": "ESCADA",
+    "batedeira": "BATEDEIRA",
+    "copo": "COPO",
+    "sol": "SOL"
+   }
+  },
+  {
+   "id": "3B-casa",
+   "modelo": "3B",
+   "formato": "ligar_pares",
+   "enunciado": "Ligue cada imagem à palavra correspondente.",
+   "dados": {
+    "imagens": [
+     {
+      "id": "porta",
+      "termo": "PORTA",
+      "descricao": "Ilustração de porta."
+     },
+     {
+      "id": "janela",
+      "termo": "JANELA",
+      "descricao": "Ilustração de janela."
+     },
+     {
+      "id": "casa",
+      "termo": "CASA",
+      "descricao": "Ilustração de casa."
+     },
+     {
+      "id": "mesa",
+      "termo": "MESA",
+      "descricao": "Ilustração de mesa."
+     }
+    ],
+    "opcoes": [
+     "CASA",
+     "JANELA",
+     "PORTA",
+     "MESA"
+    ]
+   },
+   "gabarito": {
+    "casa": "CASA",
+    "janela": "JANELA",
+    "porta": "PORTA",
+    "mesa": "MESA"
+   }
+  },
+  {
+   "id": "3B-martelo",
+   "modelo": "3B",
+   "formato": "ligar_pares",
+   "enunciado": "Ligue cada imagem à palavra correspondente.",
+   "dados": {
+    "imagens": [
+     {
+      "id": "garrafa",
+      "termo": "GARRAFA",
+      "descricao": "Ilustração de garrafa."
+     },
+     {
+      "id": "navio",
+      "termo": "NAVIO",
+      "descricao": "Ilustração de navio."
+     },
+     {
+      "id": "ponte",
+      "termo": "PONTE",
+      "descricao": "Ilustração de ponte."
+     },
+     {
+      "id": "martelo",
+      "termo": "MARTELO",
+      "descricao": "Ilustração de martelo."
+     }
+    ],
+    "opcoes": [
+     "MARTELO",
+     "PONTE",
+     "NAVIO",
+     "GARRAFA"
+    ]
+   },
+   "gabarito": {
+    "martelo": "MARTELO",
+    "ponte": "PONTE",
+    "navio": "NAVIO",
+    "garrafa": "GARRAFA"
+   }
+  },
+  {
+   "id": "3B-laranja",
+   "modelo": "3B",
+   "formato": "ligar_pares",
+   "enunciado": "Ligue cada imagem à palavra correspondente.",
+   "dados": {
+    "imagens": [
+     {
+      "id": "pera",
+      "termo": "PERA",
+      "descricao": "Ilustração de pera."
+     },
+     {
+      "id": "maca",
+      "termo": "MAÇÃ",
+      "descricao": "Ilustração de maçã."
+     },
+     {
+      "id": "laranja",
+      "termo": "LARANJA",
+      "descricao": "Ilustração de laranja."
+     },
+     {
+      "id": "uva",
+      "termo": "UVA",
+      "descricao": "Ilustração de uva."
+     }
+    ],
+    "opcoes": [
+     "LARANJA",
+     "PERA",
+     "MAÇÃ",
+     "UVA"
+    ]
+   },
+   "gabarito": {
+    "laranja": "LARANJA",
+    "pera": "PERA",
+    "maca": "MAÇÃ",
+    "uva": "UVA"
+   }
+  },
+  {
+   "id": "3B-vaca",
+   "modelo": "3B",
+   "formato": "ligar_pares",
+   "enunciado": "Ligue cada imagem à palavra correspondente.",
+   "dados": {
+    "imagens": [
+     {
+      "id": "vaca",
+      "termo": "VACA",
+      "descricao": "Ilustração de vaca."
+     },
+     {
+      "id": "rato",
+      "termo": "RATO",
+      "descricao": "Ilustração de rato."
+     },
+     {
+      "id": "foca",
+      "termo": "FOCA",
+      "descricao": "Ilustração de foca."
+     },
+     {
+      "id": "gato",
+      "termo": "GATO",
+      "descricao": "Ilustração de gato."
+     }
+    ],
+    "opcoes": [
+     "VACA",
+     "GATO",
+     "FOCA",
+     "RATO"
+    ]
+   },
+   "gabarito": {
+    "vaca": "VACA",
+    "gato": "GATO",
+    "foca": "FOCA",
+    "rato": "RATO"
+   }
+  },
+  {
+   "id": "3C-folha",
+   "modelo": "3C",
+   "formato": "escolha_imagem",
+   "enunciado": "Selecione o desenho que corresponde à palavra.",
+   "dados": {
+    "palavra": "FOLHA",
+    "imagens": [
+     {
+      "id": "folha",
+      "termo": "FOLHA",
+      "descricao": "Ilustração de folha."
+     },
+     {
+      "id": "chama",
+      "termo": "CHAMA",
+      "descricao": "Ilustração de chama."
+     },
+     {
+      "id": "foca",
+      "termo": "FOCA",
+      "descricao": "Ilustração de foca."
+     }
+    ]
+   },
+   "gabarito": "folha"
+  },
+  {
+   "id": "3C-uva",
+   "modelo": "3C",
+   "formato": "escolha_imagem",
+   "enunciado": "Selecione o desenho que corresponde à palavra.",
+   "dados": {
+    "palavra": "UVA",
+    "imagens": [
+     {
+      "id": "pera",
+      "termo": "PERA",
+      "descricao": "Ilustração de pera."
+     },
+     {
+      "id": "maca",
+      "termo": "MAÇÃ",
+      "descricao": "Ilustração de maçã."
+     },
+     {
+      "id": "uva",
+      "termo": "UVA",
+      "descricao": "Ilustração de uva."
+     }
+    ]
+   },
+   "gabarito": "uva"
+  },
+  {
+   "id": "3C-copo",
+   "modelo": "3C",
+   "formato": "escolha_imagem",
+   "enunciado": "Selecione o desenho que corresponde à palavra.",
+   "dados": {
+    "palavra": "COPO",
+    "imagens": [
+     {
+      "id": "prato",
+      "termo": "PRATO",
+      "descricao": "Ilustração de prato."
+     },
+     {
+      "id": "copo",
+      "termo": "COPO",
+      "descricao": "Ilustração de copo."
+     },
+     {
+      "id": "mesa",
+      "termo": "MESA",
+      "descricao": "Ilustração de mesa."
+     }
+    ]
+   },
+   "gabarito": "copo"
+  },
+  {
+   "id": "3C-navio",
+   "modelo": "3C",
+   "formato": "escolha_imagem",
+   "enunciado": "Selecione o desenho que corresponde à palavra.",
+   "dados": {
+    "palavra": "NAVIO",
+    "imagens": [
+     {
+      "id": "navio",
+      "termo": "NAVIO",
+      "descricao": "Ilustração de navio."
+     },
+     {
+      "id": "ponte",
+      "termo": "PONTE",
+      "descricao": "Ilustração de ponte."
+     },
+     {
+      "id": "carro",
+      "termo": "CARRO",
+      "descricao": "Ilustração de carro."
+     }
+    ]
+   },
+   "gabarito": "navio"
+  },
+  {
+   "id": "3C-bolsa",
+   "modelo": "3C",
+   "formato": "escolha_imagem",
+   "enunciado": "Selecione o desenho que corresponde à palavra.",
+   "dados": {
+    "palavra": "BOLSA",
+    "imagens": [
+     {
+      "id": "bola",
+      "termo": "BOLA",
+      "descricao": "Ilustração de bola."
+     },
+     {
+      "id": "bolo",
+      "termo": "BOLO",
+      "descricao": "Ilustração de bolo."
+     },
+     {
+      "id": "bolsa",
+      "termo": "BOLSA",
+      "descricao": "Ilustração de bolsa."
+     }
+    ]
+   },
+   "gabarito": "bolsa"
+  },
+  {
+   "id": "3C-dado",
+   "modelo": "3C",
+   "formato": "escolha_imagem",
+   "enunciado": "Selecione o desenho que corresponde à palavra.",
+   "dados": {
+    "palavra": "DADO",
+    "imagens": [
+     {
+      "id": "dedo",
+      "termo": "DEDO",
+      "descricao": "Ilustração de dedo."
+     },
+     {
+      "id": "dado",
+      "termo": "DADO",
+      "descricao": "Ilustração de dado."
+     },
+     {
+      "id": "dente",
+      "termo": "DENTE",
+      "descricao": "Ilustração de dente."
+     }
+    ]
+   },
+   "gabarito": "dado"
+  },
+  {
+   "id": "3C-sapato",
+   "modelo": "3C",
+   "formato": "escolha_imagem",
+   "enunciado": "Selecione o desenho que corresponde à palavra.",
+   "dados": {
+    "palavra": "SAPATO",
+    "imagens": [
+     {
+      "id": "sapato",
+      "termo": "SAPATO",
+      "descricao": "Ilustração de sapato."
+     },
+     {
+      "id": "casaco",
+      "termo": "CASACO",
+      "descricao": "Ilustração de casaco."
+     },
+     {
+      "id": "meia",
+      "termo": "MEIA",
+      "descricao": "Ilustração de meia."
+     }
+    ]
+   },
+   "gabarito": "sapato"
+  },
+  {
+   "id": "3D-maca",
+   "modelo": "3D",
+   "formato": "escolha",
+   "enunciado": "Selecione a palavra que corresponde ao desenho.",
+   "dados": {
+    "imagem": {
+     "id": "maca",
+     "termo": "MAÇÃ",
+     "descricao": "Ilustração de maçã."
+    },
+    "opcoes": [
+     "BANANA",
+     "MÃOS",
+     "MEIA",
+     "MAÇÃ",
+     "PERA"
+    ]
+   },
+   "gabarito": "MAÇÃ"
+  },
+  {
+   "id": "3D-bolsa",
+   "modelo": "3D",
+   "formato": "escolha",
+   "enunciado": "Selecione a palavra que corresponde ao desenho.",
+   "dados": {
+    "imagem": {
+     "id": "bolsa",
+     "termo": "BOLSA",
+     "descricao": "Ilustração de bolsa."
+    },
+    "opcoes": [
+     "BOLA",
+     "BOLO",
+     "BOTÃO",
+     "BOLSA"
+    ]
+   },
+   "gabarito": "BOLSA"
+  },
+  {
+   "id": "3D-casa",
+   "modelo": "3D",
+   "formato": "escolha",
+   "enunciado": "Selecione a palavra que corresponde ao desenho.",
+   "dados": {
+    "imagem": {
+     "id": "casa",
+     "termo": "CASA",
+     "descricao": "Ilustração de casa."
+    },
+    "opcoes": [
+     "CAPA",
+     "CALA",
+     "CASA",
+     "CAMA"
+    ]
+   },
+   "gabarito": "CASA"
+  },
+  {
+   "id": "3D-folha",
+   "modelo": "3D",
+   "formato": "escolha",
+   "enunciado": "Selecione a palavra que corresponde ao desenho.",
+   "dados": {
+    "imagem": {
+     "id": "folha",
+     "termo": "FOLHA",
+     "descricao": "Ilustração de folha."
+    },
+    "opcoes": [
+     "FALA",
+     "FOLHA",
+     "FOCA",
+     "FACA"
+    ]
+   },
+   "gabarito": "FOLHA"
+  },
+  {
+   "id": "3D-mesa",
+   "modelo": "3D",
+   "formato": "escolha",
+   "enunciado": "Selecione a palavra que corresponde ao desenho.",
+   "dados": {
+    "imagem": {
+     "id": "mesa",
+     "termo": "MESA",
+     "descricao": "Ilustração de mesa."
+    },
+    "opcoes": [
+     "MESA",
+     "MEIA",
+     "MALA",
+     "MOLA"
+    ]
+   },
+   "gabarito": "MESA"
+  },
+  {
+   "id": "3D-ponte",
+   "modelo": "3D",
+   "formato": "escolha",
+   "enunciado": "Selecione a palavra que corresponde ao desenho.",
+   "dados": {
+    "imagem": {
+     "id": "ponte",
+     "termo": "PONTE",
+     "descricao": "Ilustração de ponte."
+    },
+    "opcoes": [
+     "PORTA",
+     "PONTA",
+     "POSTE",
+     "PONTE"
+    ]
+   },
+   "gabarito": "PONTE"
+  },
+  {
+   "id": "3D-navio",
+   "modelo": "3D",
+   "formato": "escolha",
+   "enunciado": "Selecione a palavra que corresponde ao desenho.",
+   "dados": {
+    "imagem": {
+     "id": "navio",
+     "termo": "NAVIO",
+     "descricao": "Ilustração de navio."
+    },
+    "opcoes": [
+     "NINHO",
+     "NOME",
+     "NAVIO",
+     "NUVEM"
+    ]
+   },
+   "gabarito": "NAVIO"
+  },
+  {
+   "id": "3D-urso",
+   "modelo": "3D",
+   "formato": "escolha",
+   "enunciado": "Selecione a palavra que corresponde ao desenho.",
+   "dados": {
+    "imagem": {
+     "id": "urso",
+     "termo": "URSO",
+     "descricao": "Ilustração de urso."
+    },
+    "opcoes": [
+     "URNA",
+     "URSO",
+     "UVA",
+     "UNHA"
+    ]
+   },
+   "gabarito": "URSO"
+  },
+  {
+   "id": "4A-a-laranja-e-uma-fruta",
+   "modelo": "4A",
+   "formato": "ordenar",
+   "enunciado": "Monte a frase usando o nome da figura.",
+   "dados": {
+    "frase_com_lacuna": "A ___ É UMA FRUTA",
+    "imagem": {
+     "id": "laranja",
+     "termo": "LARANJA",
+     "descricao": "uma laranja"
+    },
+    "pecas": [
+     "FRUTA",
+     "A",
+     "UMA",
+     "É",
+     "LARANJA"
+    ]
+   },
+   "gabarito": [
+    "A",
+    "LARANJA",
+    "É",
+    "UMA",
+    "FRUTA"
+   ]
+  },
+  {
+   "id": "4B-a-laranja-e-uma-fruta",
+   "modelo": "4B",
+   "formato": "escolha",
+   "enunciado": "Observe a ilustração e selecione a frase correspondente.",
+   "dados": {
+    "imagem": {
+     "id": "a-laranja-e-uma-fruta",
+     "termo": "A LARANJA É UMA FRUTA",
+     "descricao": "Cena a ilustrar. A laranja é uma fruta. Mostrar uma laranja inteira, sem outras frutas nem flores."
+    },
+    "opcoes": [
+     "A LARANJA É UMA FRUTA",
+     "A LARANJA É UMA FLOR",
+     "A BANANA É UMA FRUTA"
+    ]
+   },
+   "gabarito": "A LARANJA É UMA FRUTA"
+  },
+  {
+   "id": "4A-o-copo-esta-na-mesa",
+   "modelo": "4A",
+   "formato": "ordenar",
+   "enunciado": "Monte a frase usando o nome da figura.",
+   "dados": {
+    "frase_com_lacuna": "O ___ ESTÁ NA MESA",
+    "imagem": {
+     "id": "copo",
+     "termo": "COPO",
+     "descricao": "um copo"
+    },
+    "pecas": [
+     "NA",
+     "O",
+     "COPO",
+     "MESA",
+     "ESTÁ"
+    ]
+   },
+   "gabarito": [
+    "O",
+    "COPO",
+    "ESTÁ",
+    "NA",
+    "MESA"
+   ]
+  },
+  {
+   "id": "4B-o-copo-esta-na-mesa",
+   "modelo": "4B",
+   "formato": "escolha",
+   "enunciado": "Observe a ilustração e selecione a frase correspondente.",
+   "dados": {
+    "imagem": {
+     "id": "o-copo-esta-na-mesa",
+     "termo": "O COPO ESTÁ NA MESA",
+     "descricao": "Cena a ilustrar. O copo está na mesa. Mostrar só um copo, em cima da mesa, sem prato."
+    },
+    "opcoes": [
+     "O COPO ESTÁ NO CHÃO",
+     "O PRATO ESTÁ NA MESA",
+     "O COPO ESTÁ NA MESA"
+    ]
+   },
+   "gabarito": "O COPO ESTÁ NA MESA"
+  },
+  {
+   "id": "4A-a-menina-brinca-no-balanco",
+   "modelo": "4A",
+   "formato": "ordenar",
+   "enunciado": "Monte a frase usando o nome da figura.",
+   "dados": {
+    "frase_com_lacuna": "A MENINA BRINCA NO ___",
+    "imagem": {
+     "id": "balanco",
+     "termo": "BALANÇO",
+     "descricao": "um balanço"
+    },
+    "pecas": [
+     "NO",
+     "BALANÇO",
+     "BRINCA",
+     "MENINA",
+     "A"
+    ]
+   },
+   "gabarito": [
+    "A",
+    "MENINA",
+    "BRINCA",
+    "NO",
+    "BALANÇO"
+   ]
+  },
+  {
+   "id": "4B-a-menina-brinca-no-balanco",
+   "modelo": "4B",
+   "formato": "escolha",
+   "enunciado": "Observe a ilustração e selecione a frase correspondente.",
+   "dados": {
+    "imagem": {
+     "id": "a-menina-brinca-no-balanco",
+     "termo": "A MENINA BRINCA NO BALANÇO",
+     "descricao": "Cena a ilustrar. A menina brinca no balanço. Mostrar a menina sentada no balanço, em movimento."
+    },
+    "opcoes": [
+     "A MENINA NADA",
+     "A MENINA BRINCA NO BALANÇO",
+     "A MENINA GOSTA DE CHOCOLATE"
+    ]
+   },
+   "gabarito": "A MENINA BRINCA NO BALANÇO"
+  },
+  {
+   "id": "4A-o-gato-dorme-na-cadeira",
+   "modelo": "4A",
+   "formato": "ordenar",
+   "enunciado": "Monte a frase usando o nome da figura.",
+   "dados": {
+    "frase_com_lacuna": "O ___ DORME NA CADEIRA",
+    "imagem": {
+     "id": "gato",
+     "termo": "GATO",
+     "descricao": "um gato"
+    },
+    "pecas": [
+     "DORME",
+     "CADEIRA",
+     "GATO",
+     "NA",
+     "O"
+    ]
+   },
+   "gabarito": [
+    "O",
+    "GATO",
+    "DORME",
+    "NA",
+    "CADEIRA"
+   ]
+  },
+  {
+   "id": "4B-o-gato-dorme-na-cadeira",
+   "modelo": "4B",
+   "formato": "escolha",
+   "enunciado": "Observe a ilustração e selecione a frase correspondente.",
+   "dados": {
+    "imagem": {
+     "id": "o-gato-dorme-na-cadeira",
+     "termo": "O GATO DORME NA CADEIRA",
+     "descricao": "Cena a ilustrar. O gato dorme na cadeira. Mostrar um gato de olhos fechados, sem comida por perto."
+    },
+    "opcoes": [
+     "O GATO DORME NA CADEIRA",
+     "O GATO COME NA CADEIRA",
+     "O CACHORRO DORME NA CADEIRA"
+    ]
+   },
+   "gabarito": "O GATO DORME NA CADEIRA"
+  },
+  {
+   "id": "4A-o-menino-le-um-livro",
+   "modelo": "4A",
+   "formato": "ordenar",
+   "enunciado": "Monte a frase usando o nome da figura.",
+   "dados": {
+    "frase_com_lacuna": "O MENINO LÊ UM ___",
+    "imagem": {
+     "id": "livro",
+     "termo": "LIVRO",
+     "descricao": "um livro"
+    },
+    "pecas": [
+     "O",
+     "MENINO",
+     "UM",
+     "LÊ",
+     "LIVRO"
+    ]
+   },
+   "gabarito": [
+    "O",
+    "MENINO",
+    "LÊ",
+    "UM",
+    "LIVRO"
+   ]
+  },
+  {
+   "id": "4B-o-menino-le-um-livro",
+   "modelo": "4B",
+   "formato": "escolha",
+   "enunciado": "Observe a ilustração e selecione a frase correspondente.",
+   "dados": {
+    "imagem": {
+     "id": "o-menino-le-um-livro",
+     "termo": "O MENINO LÊ UM LIVRO",
+     "descricao": "Cena a ilustrar. O menino lê um livro. Mostrar um menino com o livro aberto, olhando as páginas."
+    },
+    "opcoes": [
+     "O MENINO RASGA UM LIVRO",
+     "A MENINA LÊ UM LIVRO",
+     "O MENINO LÊ UM LIVRO"
+    ]
+   },
+   "gabarito": "O MENINO LÊ UM LIVRO"
+  },
+  {
+   "id": "4A-a-mulher-segura-uma-bolsa",
+   "modelo": "4A",
+   "formato": "ordenar",
+   "enunciado": "Monte a frase usando o nome da figura.",
+   "dados": {
+    "frase_com_lacuna": "A MULHER SEGURA UMA ___",
+    "imagem": {
+     "id": "bolsa",
+     "termo": "BOLSA",
+     "descricao": "uma bolsa"
+    },
+    "pecas": [
+     "UMA",
+     "MULHER",
+     "SEGURA",
+     "BOLSA",
+     "A"
+    ]
+   },
+   "gabarito": [
+    "A",
+    "MULHER",
+    "SEGURA",
+    "UMA",
+    "BOLSA"
+   ]
+  },
+  {
+   "id": "4B-a-mulher-segura-uma-bolsa",
+   "modelo": "4B",
+   "formato": "escolha",
+   "enunciado": "Observe a ilustração e selecione a frase correspondente.",
+   "dados": {
+    "imagem": {
+     "id": "a-mulher-segura-uma-bolsa",
+     "termo": "A MULHER SEGURA UMA BOLSA",
+     "descricao": "Cena a ilustrar. A mulher segura uma bolsa. Mostrar uma mulher segurando uma bolsa com alça, sem sacolas."
+    },
+    "opcoes": [
+     "O HOMEM SEGURA UMA BOLSA",
+     "A MULHER SEGURA UMA BOLSA",
+     "A MULHER SEGURA UMA SACOLA"
+    ]
+   },
+   "gabarito": "A MULHER SEGURA UMA BOLSA"
+  }
+ ]
+}

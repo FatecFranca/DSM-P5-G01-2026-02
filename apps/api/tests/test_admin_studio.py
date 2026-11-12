@@ -10,8 +10,8 @@ def test_local_admin_publishes_snapshot_and_seed_cannot_overwrite(client):
     assert draft.status_code == 200
     body = draft.json()
     u_unit = next(unit for track in body["tracks"] for unit in track["units"] if unit["focus_letter"] == "U")
-    assert all(item.get("context_word") != "UNIDADE" for item in u_unit["items"])
-    assert {item.get("context_word") for item in u_unit["items"] if item.get("context_word")} == {"UAU"}
+    # Lição U do banco da Larissa: UVA e URSO, e o grupo de vogais do modelo 1B fecha nela.
+    assert {"UVA", "URSO"} <= {item.get("context_word") for item in u_unit["items"]}
     assert client.post("/v1/admin/validate", headers=headers).json()["valid"]
     old_etag = client.get("/v1/content").headers["etag"]
     response = client.post("/v1/admin/publish", json={"notes": "primeira versão"}, headers=headers)

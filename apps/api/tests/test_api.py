@@ -14,13 +14,16 @@ def test_health_and_seeded_content(client):
     assert "".join(letters) == "AEIOUMLPSTRNDCGBFVHQJKZXWY"
     assert next(unit for unit in units_of(content, "letter") if unit["focus_letter"] == "G")["phase"] == 2
     assert {item["type"] for unit in units_of(content, "letter") for item in unit["items"]} == {
-        "listen_choose", "recognize_letter", "initial_sound", "find_all_in_word", "compare_words", "complete_word", "mixed_review", "syllable_listen_choose"
+        "listen_choose", "initial_sound", "first_last_letters", "alphabet_neighbors"
     }
-    assert [track["kind"] for track in content["tracks"]] == ["phonics", "theme", "theme"]
+    assert [track["id"] for track in content["tracks"]] == ["alphabet", "silabas", "silabas-complexas", "palavras", "frases"]
     assert {unit["kind"] for unit in units_of(content)} == {"letter", "word", "sentence", "syllable", "word_image", "sentence_image"}
-    assert len(content["words"]) >= 8 and all(word["review_status"] != "candidate" for word in content["words"])
+    assert len(content["words"]) >= 50 and all(word["review_status"] != "candidate" for word in content["words"])
     assert all(set(word["required_letters"]).issubset(set(letters)) for word in content["words"])
-    assert next(word for word in content["words"] if word["text"] == "ÔNIBUS")["required_letters"] == "IOUSNB"
+    assert next(word for word in content["words"] if word["text"] == "SORVETE")["syllables"] == ["SOR", "VE", "TE"]
+    # A primeira pergunta do app é a do banco da Larissa: ouvir a letra A.
+    first = units_of(content, "letter")[0]["items"][0]
+    assert (first["id"], first["instruction"], first["options"]) == ("exercise-A-listen", "Toque para ouvir e selecione a letra que escutar.", ["A", "E", "M", "O", "P"])
     push_schema = client.get("/openapi.json").json()["components"]["schemas"]["SyncPushResult"]
     assert "accepted_ids" in push_schema["required"]
 

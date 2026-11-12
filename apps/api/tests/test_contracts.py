@@ -25,7 +25,8 @@ def test_pedagogy_matches_contract():
     assert [{"phase": phase, "title": title, "letters": letters} for phase, title, letters in PHASE_SPECS] == contract["phases"]
     assert [item.value for item in REQUIRED_LETTER_EXERCISE_TYPES] == contract["required_letter_exercise_types"]
     assert FIND_IN_WORD_EXEMPT_LETTERS == contract["find_in_word_exempt_letters"]
-    assert contract["letter_exercises_per_lesson"] == {"minimum": 7, "maximum": 7}
+    from app.content_types import LETTER_EXERCISES_PER_LESSON
+    assert contract["letter_exercises_per_lesson"] == dict(zip(("minimum", "maximum"), LETTER_EXERCISES_PER_LESSON))
     assert contract["required_item_metadata"] == ["pedagogical_objective", "difficulty", "anti_elimination_rationale", "feedback", "review"]
 
 

@@ -7,98 +7,97 @@ def units_by_id(body):
     return {unit["id"]: unit for track in body["tracks"] for unit in track["units"]}
 
 
-def item(unit, kind):
-    return next(entry for entry in unit["items"] if entry["type"] == kind)
+def by_id(body, item_id):
+    return next(entry for track in body["tracks"] for unit in track["units"] for entry in unit["items"] if entry["id"] == item_id)
 
 
 def test_seeded_content_passes_lint(client):
     assert lint_content(client.get("/v1/content").json()) == []
 
 
-def test_letter_units_have_unambiguous_exercises(client):
-    units = units_by_id(client.get("/v1/content").json())
-    letter_units = {unit["focus_letter"]: unit for unit in units.values() if unit["kind"] == "letter"}
-    complete = [item(unit, "complete_word") for unit in letter_units.values()]
-    assert len(complete) == 26
-    assert all(entry["answer"] in entry["options"] and len(set(entry["options"])) == 3 and entry["word_choices"] is None for entry in complete)
-    expected = {"listen_choose", "recognize_letter", "initial_sound", "find_all_in_word", "compare_words", "complete_word", "mixed_review"}
-    syllable_letters = set("MLPSTRNDCGBFVZJ")
+def test_letter_units_follow_the_question_bank(client):
+    body = client.get("/v1/content").json()
+    letter_units = {unit["focus_letter"]: unit for unit in units_by_id(body).values() if unit["kind"] == "letter"}
     for letter, unit in letter_units.items():
-        expected_types = expected | ({"syllable_listen_choose"} if letter in syllable_letters else set())
-        assert len(unit["items"]) == len(expected_types)
-        assert {entry["type"] for entry in unit["items"]} == expected_types
-    for unit in letter_units.values():
+        types = [entry["type"] for entry in unit["items"]]
+        # 1E abre a lição; 1A e 1D trazem as duas palavras da letra; 1C entra de B a Y.
+        assert types[0] == "listen_choose" and unit["items"][0]["payload"]["difficulty"] == "introducao"
+        assert types.count("first_last_letters") == 2
+        assert types.count("alphabet_neighbors") == (0 if letter in "AZ" else 1)
         for entry in unit["items"]:
-            assert {"pedagogical_objective", "difficulty", "anti_elimination_rationale", "feedback", "review"} <= set(entry["payload"])
+            assert {"pedagogical_objective", "difficulty", "anti_elimination_rationale", "feedback", "review", "source"} <= set(entry["payload"])
             assert entry["payload"]["review"]["status"] == "pending_human_review"
-            assert entry["payload"]["feedback"]["correct"] and entry["payload"]["feedback"]["incorrect"]
+            assert entry["payload"]["source"]["bank"] == "bancoquestoesequiz"
             assert entry["answer"] not in entry["instruction"].split()
-        for kind in ("listen_choose", "initial_sound", "complete_word", "mixed_review"):
-            entry = item(unit, kind)
-            context = entry["payload"]["context"]
-            assert context["hide_word"] is True and context["inline_audio"] is True
-            assert context["masked_word"].count("_") == 1
-            assert entry["context_word"] not in entry["instruction"]
+    abelha = by_id(body, "bq-1A-abelha")
+    assert abelha["options"] == ["A", "E", "I"] and abelha["payload"]["context"]["masked_word"] == "_BELHA" and abelha["payload"]["context"]["image"] == "🐝"
+    assert abelha["instruction"] == "Selecione a vogal inicial do nome do desenho."
+    # Ligar figuras às letras (1B) vira uma escolha por objeto, na lição que fecha as letras do grupo.
+    assert [entry["context_word"] for entry in letter_units["B"]["items"] if entry["id"].startswith("bq-1B-")] == ["RELÓGIO", "SAPATO", "BOLSA", "ÓCULOS"]
+    assert by_id(body, "bq-1B-relogio-oculos")["options"] == ["B", "O", "R", "S"]
+    neighbors = by_id(body, "bq-1C-e")
+    assert neighbors["answer"] == "D E F" and sorted(neighbors["options"]) == ["C E G", "D E F", "F E D"]
+    first_last = by_id(body, "bq-1D-anjo")
+    assert first_last["answer"] == "1,4" and first_last["payload"]["characters"] == ["A", "N", "J", "O"]
 
 
-def test_theme_track_is_gated_by_letters_not_by_track(client):
+def test_levels_two_to_four_use_the_question_bank(client):
     body = client.get("/v1/content").json()
     units = units_by_id(body)
-    casa = units["casa-1"]
-    assert casa["required_letters"] == "AEMLSC" and all(entry["required_letters"] in ("ASC", "AEMS", "AMC", "ALS") for entry in casa["items"])
-    assert {entry["type"] for entry in casa["items"]} == {"word_listen_choose", "word_from_syllables"}
-    build = next(entry for entry in casa["items"] if entry["type"] == "word_from_syllables" and entry["target_id"] == "CASA")
-    assert build["answer"] == "CA-SA" and build["payload"]["tokens"] == ["SA", "CA"] and build["tts_fallback_text"] == "CASA"
-    frases = units["casa-frases"]
-    fill = next(entry for entry in frases["items"] if entry["type"] == "sentence_fill_word")
-    assert fill["payload"]["sentence"] == "EU DURMO NA ___" and fill["answer"] == "CAMA" and fill["options"] == ["CAMA", "COPO", "PORTA"]
-    order = next(entry for entry in frases["items"] if entry["type"] == "sentence_order")
-    assert sorted(order["payload"]["tokens"]) == sorted(order["answer"].split(" ")) and order["payload"]["tokens"] != order["answer"].split(" ")
-    assert set(frases["required_letters"]) >= set("EUDRMNAC")
-    assert {sentence["id"] for sentence in body["sentences"]} == {"casa-frase-1", "casa-frase-2", "casa-frase-3", "casa-frase-4", "casa-frase-5"}
-    assert {"MA", "CA", "SA", "PRA", "POR"} <= {syllable["id"] for syllable in body["syllables"]}
-    assert "CASA" not in build["instruction"]
-    assert len(units["casa-silabas"]["items"]) == 9
-    assert len(units["casa-imagens"]["items"]) == 9
-    assert len(units["casa-cenas"]["items"]) == 5
-    assert {entry["type"] for entry in units["casa-silabas"]["items"]} == {"syllable_position_choose"}
-    assert {entry["type"] for entry in units["casa-imagens"]["items"]} == {"word_image_choose"}
-    assert {entry["type"] for entry in units["casa-cenas"]["items"]} == {"sentence_image_choose"}
-    for unit_id in ("casa-silabas", "casa-imagens", "casa-cenas"):
-        for entry in units[unit_id]["items"]:
-            assert {"pedagogical_objective", "difficulty", "anti_elimination_rationale", "feedback", "review", "image_asset", "image_alt", "license", "attribution"} <= set(entry["payload"])
-            assert entry["answer"] not in entry["instruction"]
+    assert [entry["id"] for entry in units["silabas-m"]["items"]] == ["bq-2F-ma", "bq-2F-me", "bq-2F-mi", "bq-2F-mo", "bq-2F-mu"]
+    assert by_id(body, "bq-2F-ma")["options"] == ["BA", "NE", "MA", "PU"]
+    sorvete = by_id(body, "bq-2B-sorvete-inicial")
+    assert sorvete["answer"] == "SOR" and sorvete["payload"]["context"]["masked_word"] == "___ VE TE" and len(sorvete["options"]) == 3
+    navio = by_id(body, "bq-2C-navio")
+    assert navio["options"] == ["VI", "VA", "PE", "NA", "RA"] and navio["answer"] == "NA"
+    camelo = by_id(body, "bq-2D-camelo")
+    assert camelo["answer"] == "CA-ME-LO" and sorted(camelo["payload"]["tokens"]) == ["CA", "LO", "ME"] and "CAMELO" not in camelo["instruction"]
+    banana = by_id(body, "bq-2E-banana")
+    assert banana["answer"] == "BANANA" and banana["payload"]["context"]["label"] == "BA + NA + NA" and "BANANA" in banana["options"]
+    assert by_id(body, "bq-3D-maca")["options"] == ["BANANA", "MÃOS", "MEIA", "MAÇÃ", "PERA"]
+    folha = by_id(body, "bq-3C-folha")
+    assert folha["answer"] == "FOLHA" and set(folha["payload"]["option_images"]) == {"FOLHA", "CHAMA", "FOCA"}
+    fit = by_id(body, "bq-3E-u-uva")
+    assert fit["answer"] == "uva" and sum(card["word"][0] == "U" for card in fit["word_choices"]) == 1
+    order = by_id(body, "bq-4A-a-laranja-e-uma-fruta")
+    assert order["payload"]["tokens"] == ["FRUTA", "A", "UMA", "É", "LARANJA"] and order["payload"]["context"]["label"] == "A ___ É UMA FRUTA"
+    scene = by_id(body, "bq-4B-a-menina-brinca-no-balanco")
+    assert sorted(scene["options"]) == ["A MENINA BRINCA NO BALANÇO", "A MENINA GOSTA DE CHOCOLATE", "A MENINA NADA"]
+    # Portões: nível 2–3 abre com as fases 1–2 (crédito do nivelamento); nível 4, com as 26 letras.
+    assert units["silabas-completar"]["required_letters"] == "AEIOUMLPSTRNDCG"
+    assert units["silabas-b"]["required_letters"] == "AEIOUMLPSTRNDCGB"
+    assert units["frases-cena"]["required_letters"] == "AEIOUMLPSTRNDCGBFVHQJKZXWY"
 
 
-def test_lint_rejects_invalid_image_exercises(client):
+def test_lint_rejects_broken_adaptations(client):
     body = copy.deepcopy(client.get("/v1/content").json())
-    units = units_by_id(body)
-    syllable = units["casa-silabas"]["items"][0]
-    syllable["answer"] = syllable["payload"]["syllables"][-1]
-    word = units["casa-imagens"]["items"][0]
-    word["options"][1] = word["options"][0]
-    scene = units["casa-cenas"]["items"][0]
-    scene["payload"]["image_asset"] = "images/unknown.svg"
+    by_id(body, "bq-2B-casa-final")["answer"] = "CA"
+    by_id(body, "bq-3D-casa")["options"][1] = by_id(body, "bq-3D-casa")["options"][0]
+    by_id(body, "bq-1D-abelha")["payload"]["target_indices"] = [2]
+    by_id(body, "bq-1A-martelo")["options"] = ["M", "M", "N"]
+    by_id(body, "bq-1C-b")["answer"] = "C B A"
+    build = by_id(body, "bq-2D-panela")
+    build["payload"]["tokens"] = build["answer"].split("-")
+    by_id(body, "bq-2E-casa")["options"].append("JANELAS")
+    for card in by_id(body, "bq-3E-a-anjo")["word_choices"]:
+        card["word"], card["before"], card["after"] = "A" + card["word"][1:], "", card["word"][1:]
     errors = lint_content(body)
     assert any("posição pedida" in error for error in errors)
-    assert any("três palavras distintas" in error for error in errors)
-    assert any("ativo conhecido" in error for error in errors)
-
-
-def test_lint_rejects_future_letters_ambiguous_choices_and_broken_theme_items(client):
-    body = copy.deepcopy(client.get("/v1/content").json())
-    units = units_by_id(body)
-    find_i = item(units["lesson-I"], "find_all_in_word")
-    find_i["payload"]["target_indices"] = [2]
-    item(units["lesson-L"], "complete_word")["payload"]["context"]["masked_word"] = "LATA"
-    item(units["lesson-M"], "initial_sound")["options"] = ["M", "M", "N"]
-    build = next(entry for entry in units["casa-1"]["items"] if entry["type"] == "word_from_syllables")
-    build["payload"]["tokens"] = build["answer"].split("-")
-    fill = next(entry for entry in units["casa-frases"]["items"] if entry["type"] == "sentence_fill_word")
-    fill["options"].append("JANELA")
-    errors = lint_content(body)
-    assert any("deve marcar exatamente todas as ocorrências" in error for error in errors)
-    assert any("lacuna deve formar a palavra" in error for error in errors)
-    assert any("três letras distintas" in error for error in errors)
+    assert any("palavras distintas publicadas" in error for error in errors)
+    assert any("primeira e a última letra" in error for error in errors)
+    assert any("letra inicial de MARTELO" in error for error in errors)
+    assert any("letra anterior" in error for error in errors)
     assert any("tokens devem ser as sílabas da resposta em outra ordem" in error for error in errors)
-    assert any("palavra JANELA não está no catálogo publicado" in error for error in errors)
+    assert any("palavra JANELAS não está no catálogo publicado" in error for error in errors)
+    assert any("exatamente uma palavra deve se completar com A" in error for error in errors)
+
+
+def test_lint_rejects_revealed_answers_and_unknown_images(client):
+    body = copy.deepcopy(client.get("/v1/content").json())
+    by_id(body, "bq-1A-abelha")["instruction"] = "Selecione A vogal inicial."
+    by_id(body, "bq-2A-casa-casa")["payload"]["image_asset"] = "images/unknown.svg"
+    by_id(body, "bq-1A-anjo")["payload"]["context"]["masked_word"] = "ANJO"
+    errors = lint_content(body)
+    assert any("revela a resposta A" in error for error in errors)
+    assert any("ativo conhecido" in error for error in errors)
+    assert any("esconder a resposta" in error for error in errors)

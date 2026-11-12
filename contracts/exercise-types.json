@@ -1,6 +1,6 @@
 {
   "$comment": "Fonte única dos tipos de exercício. API (app/content_types.py) e mobile (src/domain/exercise-types.ts) declaram as mesmas constantes; os testes de cada lado falham se divergirem deste arquivo. id_suffix compõe o ID canônico dos itens de letra: exercise-<LETRA>-<id_suffix>. renderer é o componente do app que apresenta o tipo.",
-  "version": 4,
+  "version": 5,
   "types": [
     { "id": "listen_choose", "target": "letter", "id_suffix": "listen", "renderer": "choice", "description": "Ouvir o nome da letra e escolhê-la." },
     { "id": "recognize_letter", "target": "letter", "id_suffix": "recognize", "renderer": "choice", "description": "Encontrar a letra entre opções visuais." },
@@ -17,9 +17,14 @@
     { "id": "sentence_order", "target": "sentence", "id_suffix": "order", "renderer": "order", "description": "Ordenar as palavras para formar a frase." },
     { "id": "syllable_position_choose", "target": "syllable", "id_suffix": "syllable-position", "renderer": "choice", "description": "Identificar a sílaba inicial ou final de uma palavra ilustrada." },
     { "id": "word_image_choose", "target": "word", "id_suffix": "word-image", "renderer": "choice", "description": "Escolher a palavra correspondente a uma ilustração." },
-    { "id": "sentence_image_choose", "target": "sentence", "id_suffix": "sentence-image", "renderer": "choice", "description": "Escolher a frase correspondente a uma cena ilustrada." }
+    { "id": "sentence_image_choose", "target": "sentence", "id_suffix": "sentence-image", "renderer": "choice", "description": "Escolher a frase correspondente a uma cena ilustrada." },
+    { "id": "first_last_letters", "target": "letter", "id_suffix": "first-last", "renderer": "multi_select", "description": "Tocar a primeira e a última letra de uma palavra escrita (modelo 1D do banco de questões)." },
+    { "id": "alphabet_neighbors", "target": "letter", "id_suffix": "neighbors", "renderer": "choice", "description": "Escolher as letras que vêm antes e depois de uma letra no alfabeto (modelo 1C)." },
+    { "id": "syllables_to_word", "target": "word", "id_suffix": "syllables-word", "renderer": "choice", "description": "Juntar sílabas e escolher a palavra que elas formam (modelo 2E)." },
+    { "id": "picture_choose", "target": "word", "id_suffix": "picture", "renderer": "choice", "description": "Ler a palavra e escolher o desenho correspondente (modelo 3C)." },
+    { "id": "word_letter_fit", "target": "letter", "id_suffix": "letter-fit", "renderer": "word_choices", "description": "Escolher a palavra ilustrada que se completa com a letra dada (modelo 3E)." }
   ],
-  "renderers": ["choice", "order", "multi_select"],
+  "renderers": ["choice", "word_choices", "order", "multi_select"],
   "legacy_aliases": {
     "recognize": "recognize_letter"
   }

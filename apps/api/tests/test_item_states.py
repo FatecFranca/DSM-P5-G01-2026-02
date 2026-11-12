@@ -36,7 +36,7 @@ def test_progress_is_derived_from_item_states(client, auth):
     push(client, headers, item_state("a", "exercise-A-listen", "2026-09-16T10:00:00Z"))
     [progress] = client.get("/v1/progress", headers=headers).json()["items"]
     assert progress["unit_id"] == "lesson-A" and progress["status"] == "in_progress" and progress["completed_exercises"] == 1 and progress["completed_types"] == ["listen_choose"]
-    push(client, headers, item_state("b", "exercise-A-recognize", "2026-09-16T10:05:00Z", reps=2, lapses=1))
+    push(client, headers, item_state("b", "bq-1A-abelha", "2026-09-16T10:05:00Z", reps=2, lapses=1))
     [progress] = client.get("/v1/progress", headers=headers).json()["items"]
     assert progress["status"] == "in_progress" and progress["completed_exercises"] == 2 and progress["attempts"] == 3 and progress["correct_attempts"] == 2
     assert progress["accuracy"] == 2 / 3 and progress["next_review_at"].startswith("2026-09-16T18:00:00")

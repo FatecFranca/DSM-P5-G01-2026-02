@@ -13,15 +13,21 @@ def test_canonical_ids_translate_legacy_formats():
     assert item_id_for("casa-1", 3) == "item-casa-1-3"
 
 
+def track_level(track_id):
+    return {"silabas": "2", "silabas-complexas": "2", "palavras": "3", "frases": "4"}[track_id]
+
+
 def test_seed_uses_canonical_ids(client):
     content = client.get("/v1/content").json()
     for track in content["tracks"]:
         for unit in track["units"]:
             if unit["kind"] == "letter":
                 assert unit["id"] == lesson_id_for(unit["focus_letter"])
-                assert [item["id"] for item in unit["items"]] == [exercise_id_for(unit["focus_letter"], item["type"]) for item in unit["items"]]
+                # A escuta da letra mantém o ID canônico; as demais questões levam o ID do banco da Larissa.
+                assert unit["items"][0]["id"] == exercise_id_for(unit["focus_letter"], "listen_choose")
+                assert all(item["id"].startswith("bq-1") for item in unit["items"][1:])
             else:
-                assert [item["id"] for item in unit["items"]] == [item_id_for(unit["id"], index) for index in range(1, len(unit["items"]) + 1)]
+                assert all(item["id"].startswith(f"bq-{track_level(track['id'])}") for item in unit["items"])
 
 
 def test_sync_push_stores_canonical_ids_for_legacy_clients(client, auth):

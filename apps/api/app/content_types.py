@@ -19,6 +19,11 @@ class ExerciseType(StrEnum):
     SYLLABLE_POSITION_CHOOSE = "syllable_position_choose"
     WORD_IMAGE_CHOOSE = "word_image_choose"
     SENTENCE_IMAGE_CHOOSE = "sentence_image_choose"
+    FIRST_LAST_LETTERS = "first_last_letters"
+    ALPHABET_NEIGHBORS = "alphabet_neighbors"
+    SYLLABLES_TO_WORD = "syllables_to_word"
+    PICTURE_CHOOSE = "picture_choose"
+    WORD_LETTER_FIT = "word_letter_fit"
 
 
 class ItemKind(StrEnum):
@@ -43,6 +48,8 @@ TARGET_OF: dict[ExerciseType, ItemKind] = {
     ExerciseType.SENTENCE_FILL_WORD: ItemKind.SENTENCE, ExerciseType.SENTENCE_ORDER: ItemKind.SENTENCE,
     ExerciseType.SYLLABLE_POSITION_CHOOSE: ItemKind.SYLLABLE, ExerciseType.WORD_IMAGE_CHOOSE: ItemKind.WORD,
     ExerciseType.SENTENCE_IMAGE_CHOOSE: ItemKind.SENTENCE,
+    ExerciseType.FIRST_LAST_LETTERS: ItemKind.LETTER, ExerciseType.ALPHABET_NEIGHBORS: ItemKind.LETTER, ExerciseType.SYLLABLES_TO_WORD: ItemKind.WORD,
+    ExerciseType.PICTURE_CHOOSE: ItemKind.WORD, ExerciseType.WORD_LETTER_FIT: ItemKind.LETTER,
 }
 RENDERER_OF: dict[ExerciseType, Renderer] = {
     ExerciseType.LISTEN_CHOOSE: Renderer.CHOICE, ExerciseType.RECOGNIZE_LETTER: Renderer.CHOICE, ExerciseType.FIND_IN_WORD: Renderer.CHOICE,
@@ -51,6 +58,8 @@ RENDERER_OF: dict[ExerciseType, Renderer] = {
     ExerciseType.WORD_FROM_SYLLABLES: Renderer.ORDER, ExerciseType.SENTENCE_FILL_WORD: Renderer.CHOICE, ExerciseType.SENTENCE_ORDER: Renderer.ORDER,
     ExerciseType.SYLLABLE_POSITION_CHOOSE: Renderer.CHOICE, ExerciseType.WORD_IMAGE_CHOOSE: Renderer.CHOICE,
     ExerciseType.SENTENCE_IMAGE_CHOOSE: Renderer.CHOICE,
+    ExerciseType.FIRST_LAST_LETTERS: Renderer.MULTI_SELECT, ExerciseType.ALPHABET_NEIGHBORS: Renderer.CHOICE, ExerciseType.SYLLABLES_TO_WORD: Renderer.CHOICE,
+    ExerciseType.PICTURE_CHOOSE: Renderer.CHOICE, ExerciseType.WORD_LETTER_FIT: Renderer.WORD_CHOICES,
 }
 EXERCISE_ID_SUFFIX: dict[ExerciseType, str] = {
     ExerciseType.LISTEN_CHOOSE: "listen", ExerciseType.RECOGNIZE_LETTER: "recognize", ExerciseType.FIND_IN_WORD: "find",
@@ -59,9 +68,12 @@ EXERCISE_ID_SUFFIX: dict[ExerciseType, str] = {
     ExerciseType.WORD_FROM_SYLLABLES: "build", ExerciseType.SENTENCE_FILL_WORD: "fill", ExerciseType.SENTENCE_ORDER: "order",
     ExerciseType.SYLLABLE_POSITION_CHOOSE: "syllable-position", ExerciseType.WORD_IMAGE_CHOOSE: "word-image",
     ExerciseType.SENTENCE_IMAGE_CHOOSE: "sentence-image",
+    ExerciseType.FIRST_LAST_LETTERS: "first-last", ExerciseType.ALPHABET_NEIGHBORS: "neighbors", ExerciseType.SYLLABLES_TO_WORD: "syllables-word",
+    ExerciseType.PICTURE_CHOOSE: "picture", ExerciseType.WORD_LETTER_FIT: "letter-fit",
 }
 LEGACY_ALIASES: dict[str, ExerciseType] = {"recognize": ExerciseType.RECOGNIZE_LETTER}
-REQUIRED_LETTER_EXERCISE_TYPES = (ExerciseType.LISTEN_CHOOSE, ExerciseType.RECOGNIZE_LETTER, ExerciseType.INITIAL_SOUND, ExerciseType.FIND_ALL_IN_WORD, ExerciseType.COMPARE_WORDS, ExerciseType.COMPLETE_WORD, ExerciseType.MIXED_REVIEW)
+REQUIRED_LETTER_EXERCISE_TYPES = (ExerciseType.LISTEN_CHOOSE, ExerciseType.INITIAL_SOUND, ExerciseType.FIRST_LAST_LETTERS)
+LETTER_EXERCISES_PER_LESSON = (5, 10)
 FIND_IN_WORD_EXEMPT_LETTERS = "AE"
 
 LEARNING_ORDER = "AEIOUMLPSTRNDCGBFVHQJKZXWY"

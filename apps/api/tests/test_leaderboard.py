@@ -85,7 +85,7 @@ def standing(client, headers):
 def test_learners_are_ranked_and_ties_share_a_place(client):
     ana = learner(client, "ana@example.com",
                   attempt("a1", "exercise-A-listen", 0, True),  # 3: de primeira
-                  attempt("a2", "exercise-A-recognize", 1, False), attempt("a3", "exercise-A-recognize", 2, True, attempt_index=2))  # 1: recuperado
+                  attempt("a2", "bq-1A-abelha", 1, False), attempt("a3", "bq-1A-abelha", 2, True, attempt_index=2))  # 1: recuperado
     bia = learner(client, "bia@example.com",
                   attempt("b1", "exercise-A-listen", 0, True, session_id="s9"),  # 3
                   attempt("b2", "exercise-E-listen", 1, False, session_id=None),  # 0: sem sessão, conta sozinha
@@ -119,7 +119,7 @@ def test_top_lists_first_learners_and_me_with_first_names_only(client):
     register = client.post("/v1/auth/register", json={"email": "ana.souza@example.com", "password": "Senha-forte-123", "name": "Ana Souza"})
     assert register.status_code == 201, register.text
     ana = bearer(register.json())
-    push(client, ana, attempt("a1", "exercise-A-listen", 0, True), attempt("a2", "exercise-A-recognize", 1, True))  # 6
+    push(client, ana, attempt("a1", "exercise-A-listen", 0, True), attempt("a2", "bq-1A-abelha", 1, True))  # 6
     learner(client, "bia@example.com", attempt("b1", "exercise-A-listen", 0, True))  # 3
     learner(client, "caio@example.com", attempt("c1", "exercise-A-listen", 0, True))  # 3
     duda = learner(client, "duda@example.com")  # 0
@@ -158,7 +158,7 @@ def test_league_board_ranks_this_week_among_the_same_league(client, monkeypatch)
     old = {"client_event_id": "old", "type": "attempt", "occurred_at": "2026-10-12T10:00:00Z",
            "payload": {"client_attempt_id": "old", "item_id": "exercise-E-listen", "answer": "A", "correct": True, "duration_ms": 500, "session_id": "s0", "attempt_index_in_item": 1}}
     ana = learner(client, "ana@example.com", old, attempt("a1", "exercise-A-listen", 0, True))  # 6 no total, 3 na semana
-    learner(client, "bia@example.com", attempt("b1", "exercise-A-listen", 0, True), attempt("b2", "exercise-A-recognize", 1, True))  # 6 na semana
+    learner(client, "bia@example.com", attempt("b1", "exercise-A-listen", 0, True), attempt("b2", "bq-1A-abelha", 1, True))  # 6 na semana
     learner(client, "caio@example.com")  # 0
     body = client.get("/v1/leaderboard/league", headers=ana).json()
     assert body["league"] == {"id": "lapis", "name": "Lápis", "min_points": 0}
@@ -172,7 +172,7 @@ def test_league_board_ranks_this_week_among_the_same_league(client, monkeypatch)
 def test_league_board_leaves_other_leagues_out(client, monkeypatch):
     import app.leaderboard as leaderboard
     monkeypatch.setattr(leaderboard, "LEAGUES", (("lapis", "Lápis", 0), ("caderno", "Caderno", 5)))
-    ana = learner(client, "ana@example.com", attempt("a1", "exercise-A-listen", 0, True), attempt("a2", "exercise-A-recognize", 1, True))  # 6: Caderno
+    ana = learner(client, "ana@example.com", attempt("a1", "exercise-A-listen", 0, True), attempt("a2", "bq-1A-abelha", 1, True))  # 6: Caderno
     bia = learner(client, "bia@example.com", attempt("b1", "exercise-A-listen", 0, True))  # 3: Lápis
     body = client.get("/v1/leaderboard/league", headers=ana).json()
     assert body["league"]["id"] == "caderno" and body["next"] is None and body["members"] == 1
