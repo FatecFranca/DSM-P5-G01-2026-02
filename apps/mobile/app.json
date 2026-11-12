@@ -25,7 +25,7 @@
       "bundleIdentifier": "br.edu.prosa.mobile"
     },
     "extra": {
-      "apiUrl": "http://10.0.2.2:8000",
+      "apiUrl": "https://prosa.up.railway.app",
       "googleClientIds": {
         "web": "205863827206-r1c2gbtf16gebhimbbls95vdg8kfr3sl.apps.googleusercontent.com",
         "ios": "205863827206-jk6do03rttouvklesi1mb7if71421fbo.apps.googleusercontent.com",
