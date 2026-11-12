@@ -1,7 +1,7 @@
 """Inferência local do classificador lexical do Prosa (manifesto em ml/artifacts).
 
 Implementação em Python puro — a API não depende do pacote ml em runtime.
-A curadoria em content_data.WORDS continua soberana.
+A curadoria do banco de questões (app/question_bank.py) continua soberana.
 """
 from __future__ import annotations
 

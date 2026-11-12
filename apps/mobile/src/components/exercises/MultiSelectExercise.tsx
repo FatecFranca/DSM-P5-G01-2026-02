@@ -21,7 +21,7 @@ export function MultiSelectExercise({ exercise, selected, disabled, onChoose, on
     onChoose(answer, answer === selectedPositionsAnswer(expected));
   };
   const firstLast = exercise.type === "first_last_letters";
-  return <View style={styles.container}>
+  return <View testID={`exercise-${exercise.id}`} style={styles.container}>
     <ExerciseFigure exercise={exercise} size={110} />
     <View style={styles.word} accessibilityLabel={`Palavra ${word}`}>
       {[...word].map((character, index) => <Pressable key={`${character}-${index}`} disabled={disabled || character === " "} accessibilityRole="checkbox" accessibilityLabel={`Letra ${character}, posição ${index + 1}`} accessibilityState={{ checked: positions.includes(index), disabled }} onPress={() => toggle(index)} style={[styles.letter, positions.includes(index) && styles.marked]}><Text style={[styles.letterText, positions.includes(index) && styles.markedText]}>{character}</Text></Pressable>)}

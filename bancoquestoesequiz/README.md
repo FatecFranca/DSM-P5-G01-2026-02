@@ -83,7 +83,21 @@ ORDER BY termo;
 
 Quando a equipe importar mais palavras em `public.words`, execute novamente a carga ou rode `vincular_vocabulario.sql` no mesmo banco. A tabela `questao_vocabulario` lista as palavras associadas a cada questão fixa, inclusive as que aguardam vínculo.
 
-As novas questões fixas e configurações entram como rascunho. Imagens têm identificadores editoriais e descrições, e o áudio tem texto de referência. A consulta de montagem é para revisão e testes no banco. O quiz já está integrado ao app. Para que as questões do catálogo cheguem aos estudantes, os itens aprovados precisam virar tipos de exercício do contrato (`contracts/exercise-types.json`) no Estúdio de conteúdo, com mídias próprias e os metadados pedagógicos obrigatórios. Formatos de digitar e de ligar pares não entram assim: o app responde só por toque (`docs/EXERCISES_IMPLEMENTATION_ROADMAP.md`).
+As novas questões fixas e configurações entram como rascunho. Imagens têm identificadores editoriais e descrições, e o áudio tem texto de referência. A consulta de montagem é para revisão e testes no banco.
+
+### Como as questões chegam ao app
+
+A trilha do app é este banco. `apps/api/app/data/banco_questoes.json` é uma cópia gerada de `itens()` deste gerador (o container da API só leva `apps/api`), e `apps/api/app/question_bank.py` converte cada questão num tipo de `contracts/exercise-types.json`, respondido por toque:
+
+| Modelo | No app |
+| --- | --- |
+| 1E, 1A, 1D, 1C e 1B | Lição de cada letra (Nível 1). 1E abre a lição; 1D vira tocar a primeira e a última letra; 1C vira escolher a sequência certa (`D E F`); 1B vira uma escolha por objeto, na lição que fecha as letras do grupo. |
+| 2F, 2A, 2C | Trilha Sílabas simples: uma unidade por família silábica, completar com sílabas e sílaba do desenho. |
+| 2B, 2D, 2E | Trilha Sílabas complexas: escolher a sílaba inicial ou final entre três, montar a separação tocando as sílabas, escolher a palavra formada. |
+| 3A, 3B, 3C, 3D, 3E | Trilha Palavras. Ligar (3B) vira uma escolha por imagem; 3C mostra os desenhos como opções; 3E vira escolher, entre palavras ilustradas, a que se completa com a letra. |
+| 4A, 4B | Trilha Frases: montar a frase e escolher a frase da cena. |
+
+As figuras são emoji (ou os desenhos embarcados de casa, mesa, copo, prato, porta, panela, cama, sala, tapete e sapato). Para mudar uma questão: edite `gerar_banco.py`, rode `apps/api/.venv/bin/python apps/api/scripts/export_question_bank.py`, depois `apps/api/scripts/export_content_bundle.py` e o seed (`python -m app.seed`) no banco de destino. `apps/api/tests/test_question_bank.py` falha se a cópia divergir do gerador ou se alguma questão não chegar ao app.
 
 Na geração, as questões que antes seguiam um padrão decorável foram corrigidas:
 

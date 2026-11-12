@@ -223,9 +223,9 @@ function LessonSession({ unit }: { unit: Unit }) {
 
   const countAudio = () => { audioRepeats.current += 1; setOutcome((current) => ({ ...current, audioPlays: current.audioPlays + 1 })); interact(); };
 
-  return <QuizLayout prompt={exercise.instruction} onPromptAudio={countAudio} onClose={leaveLesson}
+  return <QuizLayout prompt={exercise.instruction} onPromptAudio={countAudio} onClose={leaveLesson} scrollKey={`${exercise.id}-${position}-${feedback ? "feedback" : "question"}`} revealEnd={Boolean(feedback)}
     progress={{ current: position + 1, total: Math.max(1, position + queue.length), accessibilityLabel: `Progresso da sessão: ${position + 1} de pelo menos ${session.queue.length}` }}>
-        {!exercise.inlineAudio && exercise.ttsText !== exercise.instruction && <View style={styles.hintRow}><AudioButton label={exercise.itemKind === "letter" ? "Ouvir pista" : "Ouvir conteúdo"} text={exercise.ttsText} compact onPlay={countAudio} /><Text style={styles.hintText}>{exercise.itemKind === "letter" ? "Ouvir pista" : "Ouvir conteúdo"}</Text></View>}
+        {!exercise.inlineAudio && exercise.ttsText !== exercise.instruction && <View style={styles.hintRow}><AudioButton label={hintLabel(exercise)} text={exercise.ttsText} compact onPlay={countAudio} /><Text style={styles.hintText}>{hintLabel(exercise)}</Text></View>}
         <Renderer key={`${exercise.id}-${position}-${resetVersion}`} exercise={exercise} letter={unit.letter} selected={selected} disabled={saving || Boolean(feedback)} onChoose={(answer, correct) => { void choose(answer, correct); }} onInteract={interact} onAudioPlay={() => { audioRepeats.current += 1; setOutcome((current) => ({ ...current, audioPlays: current.audioPlays + 1 })); }} />
         {saving && <Text accessibilityLiveRegion="polite" style={styles.saving}>Salvando resposta…</Text>}
         {feedback && <View accessibilityRole="alert" style={[styles.feedback, feedback.kind === "success" ? styles.success : styles.care]}><Text style={styles.feedbackTitle}>{feedback.title}</Text><Text style={styles.feedbackText}>{feedback.message}</Text></View>}
@@ -233,6 +233,14 @@ function LessonSession({ unit }: { unit: Unit }) {
         {feedback && feedback.kind !== "try-again" && <PrimaryButton label={isLast ? "Ver progresso" : feedback.kind === "success" ? "Próxima atividade" : "Tentar novamente"} variant={feedback.kind === "success" ? "solid" : "outline"} icon={feedback.kind === "success" ? <CheckCircleIcon size={26} /> : undefined} onPress={next} />}
         {!feedback && !saving && <Pressable accessibilityRole="button" accessibilityLabel="Reiniciar esta atividade" style={styles.restart} onPress={retryNow}><Text style={styles.restartText}>Reiniciar atividade</Text></Pressable>}
   </QuizLayout>;
+}
+
+/** Rótulo do botão de áudio da questão: nas de escuta, é o próprio estímulo. */
+function hintLabel(exercise: { type: string; itemKind: string }) {
+  if (exercise.type === "listen_choose" || exercise.type === "word_letter_fit") return "Ouvir a letra";
+  if (exercise.type === "syllable_listen_choose" || exercise.type === "syllables_to_word") return "Ouvir as sílabas";
+  if (exercise.type === "first_last_letters" || exercise.type === "word_from_syllables") return "Ouvir a palavra";
+  return exercise.itemKind === "letter" ? "Ouvir pista" : "Ouvir conteúdo";
 }
 
 const styles = StyleSheet.create({

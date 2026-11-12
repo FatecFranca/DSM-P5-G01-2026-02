@@ -7,7 +7,7 @@ import { ManagedIllustration } from "../../assets/ManagedIllustration";
 /** Cartões de palavra com lacuna: a letra da unidade entra na lacuna de exatamente uma delas. */
 export function WordChoicesExercise({ exercise, letter: unitLetter = "", selected, disabled = false, onChoose, onInteract, onAudioPlay }: ExerciseRendererProps) {
   const letter = exercise.targetLetter ?? unitLetter;
-  return <View style={styles.list}>
+  return <View testID={`exercise-${exercise.id}`} style={styles.list}>
     <Text style={styles.helper}>Toque na palavra que combina com a letra {letter}.</Text>
     {(exercise.wordChoices ?? []).map((word) => {
       const chosen = selected === word.id;

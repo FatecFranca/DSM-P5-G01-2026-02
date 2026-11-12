@@ -123,20 +123,25 @@ unidades e IDs novos não alteram conclusões existentes nem exigem migração.
 
 ## Catálogo de `bancoquestoesequiz`: como cada modelo entra no app
 
-O banco PostgreSQL da curadoria (`bancoquestoesequiz/`) é fonte editorial e não é lido pelo app. Um item só chega ao estudante depois de aprovado e convertido, no Estúdio ou em `content_data.py`, para um tipo de `contracts/exercise-types.json`. Ele precisa ter os metadados obrigatórios e uma ilustração própria. O quiz de nivelamento já foi integrado (ADR 0006).
+O banco da curadoria (`bancoquestoesequiz/`) é a trilha do app desde 12/11/2026: `apps/api/app/question_bank.py` converte cada questão (cópia em `apps/api/app/data/banco_questoes.json`) num tipo de `contracts/exercise-types.json`. As lições geradas antes em `content_data.py` (Tem em casa, Família e as sete práticas por letra) foram aposentadas. O quiz de nivelamento já estava integrado (ADR 0006).
 
-| Modelo do banco | Tipo do app | Ajuste necessário |
+| Modelo do banco | Tipo do app | Adaptação para toque |
 | --- | --- | --- |
-| 1A, 3A letra inicial pela figura | `initial_sound` | Usar só palavras com letras já apresentadas. |
-| 1E letra ouvida | `listen_choose` | Já existe uma por letra; serve como item extra de revisão. |
-| 2F sílaba ouvida | `syllable_listen_choose` | Já existe para as consoantes CV. |
-| 2B, 2C sílaba inicial ou final | `syllable_position_choose` | Resposta por toque, em vez de digitar. |
-| 2D, 2E separar e formar | `word_from_syllables` | Montagem por toque, sem teclado. |
-| 3C desenho da palavra | Novo renderizador de escolha por imagem | Exige decisão de contrato. |
-| 3D palavra do desenho | `word_image_choose` | Ilustração própria por palavra. |
-| 4A ordenar frase | `sentence_order` | Peças já embaralhadas sem rotação na carga. |
-| 4B frase da cena | `sentence_image_choose` | Pares mínimos já curados na carga; ilustrar cada cena. |
-| 1B, 3B ligar pares; 1C, 1D, 3E digitar | Não entram | O piloto decidiu por decisões individuais por toque (seção de decisões acima). |
+| 1E letra ouvida | `listen_choose` | Igual ao original; abre a lição da letra. |
+| 1A, 3A letra inicial pela figura | `initial_sound` | Igual ao original, com a palavra lacunada e o áudio do nome. |
+| 1B ligar objeto à letra | `initial_sound` | Uma escolha por objeto, com as letras do grupo como opções. |
+| 1C letra antes e depois | `alphabet_neighbors` | Escolher a sequência certa entre três (`D E F`, `F E D`, `C E G`). |
+| 1D primeira e última letra | `first_last_letters` | Tocar as duas letras na palavra. |
+| 2A, 2B, 2C sílaba inicial ou final | `syllable_position_choose` | Escolher a sílaba; 2B ganha dois distratores de outras palavras. |
+| 2D separar | `word_from_syllables` | Montar a separação tocando as sílabas na ordem. |
+| 2E formar | `syllables_to_word` | Escolher a palavra formada entre três. |
+| 2F sílaba ouvida | `syllable_listen_choose` | Igual ao original. |
+| 3B ligar imagem à palavra | `word_image_choose` | Uma escolha por imagem, com as palavras do grupo. |
+| 3C desenho da palavra | `picture_choose` | As opções são os desenhos. |
+| 3D palavra do desenho | `word_image_choose` | Igual ao original. |
+| 3E completar com a letra | `word_letter_fit` | Escolher, entre palavras ilustradas, a que se completa com a letra. |
+| 4A ordenar frase | `sentence_order` | Igual ao original. |
+| 4B frase da cena | `sentence_image_choose` | Igual ao original, com a cena em emoji. |
 
 ## Registro de execução
 

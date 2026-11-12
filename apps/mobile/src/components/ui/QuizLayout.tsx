@@ -1,4 +1,4 @@
-import { useState, type PropsWithChildren } from "react";
+import { useEffect, useRef, useState, type PropsWithChildren } from "react";
 import { Pressable, ScrollView, StyleSheet, Text, useWindowDimensions, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { colors, FIGMA_FRAME_WIDTH, fonts, radius, shadows } from "../../theme";
@@ -16,6 +16,9 @@ type QuizLayoutProps = PropsWithChildren<{
   progress: { current: number; total: number; accessibilityLabel?: string };
   onClose: () => void;
   closeLabel?: string;
+  /** Muda a cada questão (volta ao topo) e quando o retorno aparece (`revealEnd`: rola até o botão de seguir). */
+  scrollKey?: string;
+  revealEnd?: boolean;
 }>;
 
 // Mascote no frame do Figma: 177 de largura, topo em -9.6.
@@ -26,8 +29,15 @@ const MASCOT_TOP = -9.6;
  * Layout do Quiz no Figma (1:381, frame 320×608): topo com fechar, progresso e mascote; enunciado num balão;
  * conteúdo numa folha areia. Posições em unidades do frame, multiplicadas por s (largura da tela / 320).
  */
-export function QuizLayout({ prompt, promptAudio, promptAudioLabel = "Ouvir enunciado", onPromptAudio, progress, onClose, closeLabel = "Sair da atividade", children }: QuizLayoutProps) {
+export function QuizLayout({ prompt, promptAudio, promptAudioLabel = "Ouvir enunciado", onPromptAudio, progress, onClose, closeLabel = "Sair da atividade", scrollKey, revealEnd = false, children }: QuizLayoutProps) {
   const s = useWindowDimensions().width / FIGMA_FRAME_WIDTH;
+  const scroll = useRef<ScrollView>(null);
+  // Questões com figura e palavra deixam o botão de seguir abaixo da dobra: o retorno rola até ele; a próxima questão abre no topo.
+  useEffect(() => {
+    if (scrollKey === undefined) return;
+    const timer = setTimeout(() => { if (revealEnd) scroll.current?.scrollToEnd({ animated: true }); else scroll.current?.scrollTo({ y: 0, animated: false }); }, revealEnd ? 120 : 0);
+    return () => clearTimeout(timer);
+  }, [scrollKey, revealEnd]);
   const [sheetY, setSheetY] = useState<number>();
   // As patas do mascote terminam a ~91% da altura da imagem (o PNG tem margem transparente embaixo).
   // Com balão curto a folha sobe; o respiro do topo garante que o conteúdo comece abaixo das patas.
@@ -35,7 +45,7 @@ export function QuizLayout({ prompt, promptAudio, promptAudioLabel = "Ouvir enun
   const sheetPaddingTop = sheetY === undefined ? 34 : Math.max(34, pawsBottom - sheetY + 12);
   return <SafeAreaView style={styles.safe} edges={["top", "bottom"]}>
     <CornerShape scale={s} style={{ position: "absolute", top: -10 * s, left: -60 * s }} />
-    <ScrollView contentContainerStyle={styles.content}>
+    <ScrollView ref={scroll} contentContainerStyle={styles.content}>
       <Mascot width={MASCOT_WIDTH * s} style={[styles.mascot, { top: MASCOT_TOP * s, right: -58 * s }]} />
       <View style={[styles.top, { paddingLeft: 10 * s, paddingTop: 20 * s }]}>
         <Pressable accessibilityRole="button" accessibilityLabel={closeLabel} hitSlop={12} style={[styles.close, { marginLeft: 4 * s }]} onPress={onClose}><Text style={styles.closeText}>X</Text></Pressable>

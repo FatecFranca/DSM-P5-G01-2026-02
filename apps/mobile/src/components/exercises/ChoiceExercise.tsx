@@ -27,12 +27,15 @@ export function ChoiceExercise({ exercise, selected, disabled = false, onChoose,
   const wide = !pictures && (exercise.options ?? []).some((option) => option.length > 3);
   const [pending, setPending] = useState<string>();
   const label = exercise.contextLabel;
-  return <View>
+  return <View testID={`exercise-${exercise.id}`}>
     {(exercise.imageAsset || exercise.image || label) && <View style={styles.contextCard}>
-      {exercise.imageAsset ? <ManagedIllustration assetId={exercise.imageAsset} sourceUri={exercise.imageUri} accessibilityLabel={exercise.imageLabel ?? "Ilustração contextual"} /> : <ExerciseFigure exercise={exercise} />}
-      {label && (label.includes("_") ? <GapText text={label} options={exercise.options} size={label.length > 16 ? 28 : 42} />
+      {/* Figura e áudio lado a lado; a palavra lacunada embaixo, para o CONFIRMAR caber na tela sem rolar. */}
+      <View style={styles.figureRow}>
+        {exercise.imageAsset ? <ManagedIllustration assetId={exercise.imageAsset} sourceUri={exercise.imageUri} accessibilityLabel={exercise.imageLabel ?? "Ilustração contextual"} size={170} /> : <ExerciseFigure exercise={exercise} size={110} />}
+        {exercise.inlineAudio && <AudioButton label="Ouvir a palavra" text={exercise.ttsText} compact onPlay={() => { onInteract?.(); onAudioPlay?.(); }} />}
+      </View>
+      {label && (label.includes("_") ? <GapText text={label} options={exercise.options} size={label.length > 16 ? 28 : 40} style={styles.fullRow} />
         : <Text style={label.length <= 16 ? styles.maskedWord : styles.contextLabel}>{label}</Text>)}
-      {exercise.inlineAudio && <AudioButton label="Ouvir a palavra" text={exercise.ttsText} compact onPlay={() => { onInteract?.(); onAudioPlay?.(); }} />}
     </View>}
     {exercise.type === "find_in_word" && <Text style={styles.contextWord}>{exercise.contextWord}</Text>}
     {exercise.type === "compare_words" && <Text accessibilityLabel={`Comparar ${exercise.compareWords?.join(" e ")}`} style={styles.contextWord}>{exercise.compareWords?.join("  ↔  ")}</Text>}
@@ -58,7 +61,7 @@ export function ChoiceExercise({ exercise, selected, disabled = false, onChoose,
 // Figma (Quiz 1:381): sand cards with soft shadow; the chosen correct answer glows green. Sizes are scaled up from the
 // 320px-wide frame (95×54 cards, 32px letters) to keep large touch targets.
 const styles = StyleSheet.create({
-  options: { flexDirection: "row", flexWrap: "wrap", gap: 18, justifyContent: "center", marginVertical: 20 },
+  options: { flexDirection: "row", flexWrap: "wrap", gap: 16, justifyContent: "center", marginVertical: 16 },
   option: { minWidth: 124, minHeight: 76, borderRadius: radius.md, backgroundColor: colors.surface, alignItems: "center", justifyContent: "center", paddingHorizontal: 14, ...shadows.card },
   wideOption: { minWidth: "100%", minHeight: 72 },
   optionText: { fontSize: 40, color: colors.text, fontFamily: fonts.semibold },
@@ -67,7 +70,9 @@ const styles = StyleSheet.create({
   correct: { backgroundColor: colors.selectedBg, ...shadows.selected },
   contextWord: { alignSelf: "center", color: colors.text, fontSize: 40, fontFamily: fonts.bold, letterSpacing: 3, marginVertical: 18, textAlign: "center" },
   sentence: { alignSelf: "center", color: colors.text, fontSize: 28, fontFamily: fonts.semibold, letterSpacing: 1, marginVertical: 18, textAlign: "center" },
-  contextCard: { flexDirection: "row", flexWrap: "wrap", alignItems: "center", justifyContent: "center", gap: 14, padding: 12, marginTop: 12 },
+  contextCard: { alignItems: "center", justifyContent: "center", gap: 10, paddingHorizontal: 12, marginTop: 4 },
+  figureRow: { flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 14 },
+  fullRow: { width: "100%" },
   pictureOption: { minWidth: 128, minHeight: 112, padding: 6 },
   pictureText: { fontSize: 64 }, contextLabel: { color: colors.text, fontSize: 22, fontFamily: fonts.semibold, textAlign: "center" }, disabled: { opacity: 0.65 },
   confirmRow: { flexDirection: "row", alignItems: "center", gap: 12 },

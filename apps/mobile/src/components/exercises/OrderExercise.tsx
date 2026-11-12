@@ -20,7 +20,7 @@ export function OrderExercise({ exercise, selected, disabled = false, onChoose, 
     setPicked(next);
   };
   const done = picked.length === tokens.length && tokens.length > 0;
-  return <View style={styles.container}>
+  return <View testID={`exercise-${exercise.id}`} style={styles.container}>
     {exercise.imageAsset ? <View style={styles.context}><ManagedIllustration assetId={exercise.imageAsset} sourceUri={exercise.imageUri} accessibilityLabel={exercise.imageLabel ?? "Ilustração contextual"} /></View> : <ExerciseFigure exercise={exercise} size={110} />}
     {exercise.contextLabel && (exercise.contextLabel.includes("_") ? <GapText text={exercise.contextLabel} options={tokens} size={exercise.contextLabel.length > 16 ? 26 : 38} />
       : <Text style={styles.label}>{exercise.contextLabel}</Text>)}
