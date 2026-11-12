@@ -130,9 +130,48 @@ def metadata(question: dict, objective: str, difficulty: str, rationale: str, co
     return {
         "pedagogical_objective": objective, "difficulty": difficulty, "anti_elimination_rationale": rationale,
         "feedback": {"correct": correct, "incorrect": retry}, "review": REVIEW,
-        "source": {"bank": "bancoquestoesequiz", "question_id": question["id"], "model": question["modelo"], "original_instruction": question["enunciado"]},
+        "source": {"bank": "variacoes-prosa" if question.get("variation") else "bancoquestoesequiz", "question_id": question["id"], "model": question["modelo"], "original_instruction": question["enunciado"]},
         **extra,
     }
+
+
+def variation(model: str, key: str, instruction: str) -> dict:
+    """Questão nova no formato de um modelo de EXERCICIOSPARAOAPP.txt, para dar mais variedade ao banco."""
+    return {"id": f"var-{model}-{key}", "modelo": model, "enunciado": instruction, "variation": True}
+
+
+def scrambled(tokens: list[str], seed: str) -> list[str]:
+    """Ordem estável e diferente da original (letras repetidas podem formar a mesma palavra: evita isso também)."""
+    generator = random.Random(f"prosa:{seed}")
+    for _ in range(200):
+        candidate = list(tokens)
+        generator.shuffle(candidate)
+        if "".join(candidate) != "".join(tokens):
+            return candidate
+    return list(reversed(tokens))
+
+
+def letters_to_word(question: dict, item_id: str, word: str, difficulty: str = "medio") -> dict:
+    """Figura e as letras do nome embaralhadas: a pessoa monta a palavra na ordem (no lugar de 1D, primeira e última letra)."""
+    answer = word.replace("-", "")
+    pic = picture(word)
+    return spec(item_id, ExerciseType.LETTERS_TO_WORD, "Monte o nome do desenho: toque nas letras na ordem.", answer, metadata(
+        question, "Escrever o nome do desenho ordenando as letras.", difficulty, "Todas as letras da palavra aparecem fora de ordem; só a sequência certa forma o nome.",
+        f"Isso: {word}.", "Ouça o nome do desenho e procure a primeira letra; depois siga o som.", tokens=scrambled(list(answer), item_id),
+        context={"word": word, "hide_word": True, **emoji_of(pic)}, **asset_of(pic)), target_id=word, tts=word, required=word)
+
+
+def match_row(word: str, masked: str, answer: str) -> dict:
+    return {"word": word, "masked": masked, "answer": answer, **thumbnail(word)}
+
+
+def match_missing(question: dict, item_id: str, rows: list[dict], options: list[str], instruction: str, piece: str, difficulty: str) -> dict:
+    """Várias figuras, cada uma com o nome faltando uma letra ou sílaba: a pessoa completa (liga) cada figura à peça certa."""
+    words = [row["word"] for row in rows]
+    return spec(item_id, ExerciseType.MATCH_MISSING, instruction, ",".join(row["answer"] for row in rows), metadata(
+        question, f"Completar o nome de cada figura com a {piece} que falta.", difficulty, "As peças servem a figuras diferentes; cada nome só se completa com uma delas.",
+        "Isso: todas as palavras ficaram completas.", "Ouça o nome de cada figura e confira a peça que falta.", rows=rows, piece=piece),
+        options=options, tts=instruction, required="".join(words))
 
 
 def spec(item_id: str, kind: ExerciseType, instruction: str, answer: str, payload: dict, *, tts: str | None = None, required: str | None = None, **fields) -> dict:
@@ -161,15 +200,6 @@ def initial_from_picture(question: dict, item_id: str, term: str, options: list[
         f"Isso: {term} começa com {letter}.", "Ouça o nome do desenho e preste atenção ao primeiro som.", context=context, **visual), options=options, context_word=term, tts=term)
 
 
-def first_last(question: dict) -> dict:
-    word = question["dados"]["palavra"]
-    positions = [1, len(word)]
-    return spec(f"bq-{question['id']}", ExerciseType.FIRST_LAST_LETTERS, "Leia a palavra e toque na primeira e na última letra.", ",".join(map(str, positions)), metadata(
-        question, "Localizar a primeira e a última letra de uma palavra escrita.", "medio", "Todas as letras da palavra podem ser tocadas; é preciso olhar o começo e o fim.",
-        f"Isso: {word[0]} é a primeira e {word[-1]} é a última letra.", "Olhe o começo e o fim da palavra e tente de novo.",
-        characters=list(word), target_indices=positions, context={"word": word, **emoji_of(picture(word))}, **asset_of(picture(word))), options=[str(index + 1) for index in range(len(word))], context_word=word, tts=word, required=word)
-
-
 def neighbors(question: dict) -> dict:
     letter = question["dados"]["letra"]
     before, after = question["gabarito"]
@@ -183,12 +213,14 @@ def neighbors(question: dict) -> dict:
         letter=letter, context={"label": f"_ {letter} _"}), options=options, required=answer)
 
 
-def match_letters(question: dict) -> list[dict]:
-    items = []
-    for image in question["dados"]["imagens"]:
-        items.append(initial_from_picture(question, f"bq-{question['id']}-{image['id']}", image["termo"], question["dados"]["opcoes"],
-                                          "Toque na letra inicial do nome do objeto.", "medio", None))
-    return items
+def initial_mask(term: str) -> str:
+    return "_" + term[1:]
+
+
+def match_letters(question: dict) -> dict:
+    """1B, ligar cada objeto à letra inicial: as figuras aparecem com o nome sem a primeira letra."""
+    rows = [match_row(image["termo"], initial_mask(image["termo"]), question["gabarito"][image["id"]]) for image in question["dados"]["imagens"]]
+    return match_missing(question, f"bq-{question['id']}", rows, question["dados"]["opcoes"], "Complete o nome de cada objeto com a letra que falta.", "letra", "medio")
 
 
 def letter_units() -> list[dict]:
@@ -199,13 +231,14 @@ def letter_units() -> list[dict]:
         term = question["dados"]["imagem"]["termo"]
         by_letter[initial(term)].append(initial_from_picture(question, f"bq-{question['id']}", term, question["dados"]["opcoes"], question["enunciado"], "facil", question["dados"]["lacuna"]))
     for question in questions("1D"):
-        by_letter[initial(question["dados"]["palavra"])].append(first_last(question))
+        word = question["dados"]["palavra"]
+        by_letter[initial(word)].append(letters_to_word(question, f"bq-{question['id']}", word, "facil" if len(word) <= 4 else "medio"))
     for question in questions("1C"):
         by_letter[question["dados"]["letra"]].append(neighbors(question))
     # Ligar figuras às letras entra como revisão na lição que completa as letras do grupo.
     for question in questions("1B"):
         last = max(question["gabarito"].values(), key=LEARNING_ORDER.index)
-        by_letter[last].extend(match_letters(question))
+        by_letter[last].append(match_letters(question))
     return [{"letter": letter, "items": by_letter[letter]} for letter in LEARNING_ORDER]
 
 
@@ -226,12 +259,28 @@ def syllable_position(question: dict, item_id: str, word: str, position: str, op
         word=word, syllables=parts, position=position, context=context, **visual), options=options, target_id=answer, context_word=word, tts=word, required=word)
 
 
-def complete_with_syllables(question: dict) -> list[dict]:
-    items = []
+def complete_with_syllables(question: dict) -> dict:
+    """2A: as figuras com a sílaba inicial faltando e as sílabas embaixo; cada sílaba completa uma palavra."""
+    rows = []
     for line in question["dados"]["linhas"]:
         word = line["imagem"]["termo"]
-        items.append(syllable_position(question, f"bq-{question['id']}-{line['imagem']['id']}", word, "initial", question["dados"]["opcoes"],
-                                       "Complete a palavra com uma das sílabas.", gapped(syllables_of()[word], 0), "facil"))
+        rows.append(match_row(word, gapped(syllables_of()[word], 0), syllables_of()[word][0]))
+    return match_missing(question, f"bq-{question['id']}", rows, question["dados"]["opcoes"], question["enunciado"], "sílaba", "facil")
+
+
+def syllable_groups(position: str) -> list[dict]:
+    """Novas variações de 2A com as 18 palavras curadas: grupos de três, sílaba inicial ou final faltando."""
+    words = list(bank()["silabas_por_palavra"])
+    index = 0 if position == "initial" else -1
+    # Grupos diferentes dos de 2A: palavras de posições alternadas.
+    order = words[1::2] + words[0::2] if position == "initial" else words[2:] + words[:2]
+    items = []
+    for number, group in enumerate(chunks(order, 3), 1):
+        rows = [match_row(word, gapped(syllables_of()[word], index if index == 0 else len(syllables_of()[word]) - 1), syllables_of()[word][index]) for word in group]
+        options = shuffled(list(dict.fromkeys(row["answer"] for row in rows)), f"2A-{position}-{number}")
+        label = "inicial" if position == "initial" else "final"
+        question = variation("2A", f"{label}-{number}", f"Complete as palavras com a sílaba {label}.")
+        items.append(match_missing(question, question["id"], rows, options, question["enunciado"], "sílaba", "facil" if position == "initial" else "medio"))
     return items
 
 
@@ -297,10 +346,11 @@ def syllable_tracks() -> list[dict]:
     family_units = {consonant: {"id": f"silabas-{consonant.lower()}", "kind": "syllable", "title": f"Sílabas com {consonant}",
                                 "required_letters": LEARNING_ORDER[:max(LEARNING_ORDER.index(consonant) + 1, len(PHASES_1_2))], "items": families[consonant]}
                     for consonant in LEARNING_ORDER if consonant in families}
-    complete = [item for question in questions("2A") for item in complete_with_syllables(question)]
+    complete = [complete_with_syllables(question) for question in questions("2A")] + syllable_groups("initial")
     pictures = [syllable_from_picture(question) for question in questions("2C")]
     simple = [unit for consonant, unit in family_units.items() if consonant in PHASES_1_2]
-    simple += [{"id": "silabas-completar", "kind": "syllable", "title": "Complete com a sílaba", "required_letters": PHASES_1_2, "items": complete}]
+    simple += [{"id": "silabas-completar", "kind": "syllable", "title": "Complete com a sílaba", "required_letters": PHASES_1_2, "items": complete},
+               {"id": "silabas-completar-final", "kind": "syllable", "title": "Complete com a sílaba final", "required_letters": PHASES_1_2, "items": syllable_groups("final")}]
     simple += [{"id": f"silabas-desenho-{index}", "kind": "syllable", "title": f"Sílaba inicial do desenho {index}", "required_letters": PHASES_1_2, "items": part}
                for index, part in enumerate(chunks(pictures, 9), 1)]
     simple += [unit for consonant, unit in family_units.items() if consonant not in PHASES_1_2]
@@ -373,6 +423,46 @@ def picture_for_word(question: dict) -> dict:
         option_images=images, context={"label": word}), options=options, target_id=word, required=word)
 
 
+VOWELS = "AEIOU"
+
+
+def letter_groups() -> list[dict]:
+    """Novas variações de 1B (ligar figura e letra): três ou quatro figuras de letras diferentes, sem a letra inicial."""
+    by_letter: dict[str, list[str]] = {}
+    for question in questions("1A"):
+        term = question["dados"]["imagem"]["termo"]
+        by_letter.setdefault(initial(term), []).append(term)
+    letters = [letter for letter in "ABCDEFGHIJKLMNOPQRSTUVWXYZ" if letter in by_letter]
+    groups = chunks(letters, 3)
+    if len(groups[-1]) < 3:
+        groups[-2] += groups.pop()
+    items = []
+    for set_index in range(2):
+        for number, group in enumerate(groups, 1):
+            rows = [match_row(by_letter[letter][set_index], initial_mask(by_letter[letter][set_index]), letter) for letter in group]
+            extra = next(letter for letter in letters[letters.index(group[-1]) + 1:] + letters if letter not in group and letter != "H")
+            question = variation("1B", f"letras-{set_index + 1}-{number}", "Complete o nome de cada figura com a letra que falta.")
+            items.append(match_missing(question, question["id"], rows, shuffled([*group, extra], question["id"]), question["enunciado"], "letra", "medio"))
+    return items
+
+
+def vowel_groups() -> list[dict]:
+    """Variação de 3E com a vogal do meio: C_SA, B_LO... A pessoa ouve o nome e completa com a vogal certa."""
+    words = [word for word in bank()["silabas_por_palavra"] if any(letter in VOWELS for letter in strip_marks(word)[1:])]
+    items = []
+    for number, group in enumerate(chunks(words, 3), 1):
+        rows = []
+        for word in group:
+            plain = strip_marks(word)
+            at = next(index for index in range(1, len(plain)) if plain[index] in VOWELS)
+            rows.append(match_row(word, word[:at] + "_" + word[at + 1:], plain[at]))
+        answers = list(dict.fromkeys(row["answer"] for row in rows))
+        fillers = [vowel for vowel in VOWELS if vowel not in answers][: max(0, 3 - len(answers))]
+        question = variation("3E", f"vogal-{number}", "Complete cada palavra com a vogal que falta.")
+        items.append(match_missing(question, question["id"], rows, shuffled([*answers, *fillers], question["id"]), question["enunciado"], "vogal", "medio"))
+    return items
+
+
 def word_tracks() -> list[dict]:
     letter_lines = {question["id"].split("-", 1)[1].upper(): question["dados"]["linhas"] for question in questions("3E")}
     groups = ("ABCDE", "FGHIJ", "KLMNO", "PQRST", "UVWXYZ")
@@ -390,6 +480,18 @@ def word_tracks() -> list[dict]:
               for index, part in enumerate(chunks(links, 12), 1)]
     units += [{"id": "palavras-desenho", "kind": "word_image", "title": "Qual é o desenho?", "required_letters": PHASES_1_2, "items": drawings},
               {"id": "palavras-nome", "kind": "word_image", "title": "Qual é a palavra?", "required_letters": PHASES_1_2, "items": named}]
+    # Montar o nome com as letras embaralhadas: palavras das escolhas de imagem (3B, 3C, 3D) que não estão nas lições de letra.
+    lesson_words = {question["dados"]["palavra"] for question in questions("1D")}
+    to_build = list(dict.fromkeys([*bank()["silabas_por_palavra"], *(image["termo"] for question in questions("3B") for image in question["dados"]["imagens"]),
+                                   *(image["termo"] for question in questions("3C") for image in question["dados"]["imagens"]), *(question["gabarito"] for question in questions("3D"))]))
+    to_build = [word for word in to_build if word not in lesson_words and len(word) <= 9 and (word in EMOJI or word in SVG)]
+    builds = [letters_to_word(variation("1D", f"montar-{strip_marks(word).lower()}", "Monte o nome do desenho com as letras."), f"var-1D-montar-{strip_marks(word).lower()}", word)
+              for word in to_build]
+    units += [{"id": f"palavras-montar-{index}", "kind": "word", "title": f"Monte a palavra {index}", "required_letters": PHASES_1_2, "items": part}
+              for index, part in enumerate(chunks(builds, 8), 1)]
+    units += [{"id": f"palavras-letra-falta-{index}", "kind": "word_image", "title": f"Figura e letra que falta {index}", "required_letters": PHASES_1_2, "items": part}
+              for index, part in enumerate(chunks(letter_groups(), 8), 1)]
+    units += [{"id": "palavras-vogal-falta", "kind": "word", "title": "Qual vogal falta?", "required_letters": PHASES_1_2, "items": vowel_groups()}]
     units += [{"id": f"palavras-completar-{index}", "kind": "word", "title": f"Complete com a letra: {group[0]} a {group[-1]}", "required_letters": PHASES_1_2,
                "items": [item for item in fits if item["payload"]["letter"] in group]} for index, group in enumerate(groups, 1)]
     return [{"id": "palavras", "slug": "palavras", "title": "Palavras", "kind": "theme", "position": 4,

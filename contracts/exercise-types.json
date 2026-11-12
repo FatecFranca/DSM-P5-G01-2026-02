@@ -1,6 +1,6 @@
 {
   "$comment": "Fonte única dos tipos de exercício. API (app/content_types.py) e mobile (src/domain/exercise-types.ts) declaram as mesmas constantes; os testes de cada lado falham se divergirem deste arquivo. id_suffix compõe o ID canônico dos itens de letra: exercise-<LETRA>-<id_suffix>. renderer é o componente do app que apresenta o tipo.",
-  "version": 5,
+  "version": 6,
   "types": [
     { "id": "listen_choose", "target": "letter", "id_suffix": "listen", "renderer": "choice", "description": "Ouvir o nome da letra e escolhê-la." },
     { "id": "recognize_letter", "target": "letter", "id_suffix": "recognize", "renderer": "choice", "description": "Encontrar a letra entre opções visuais." },
@@ -22,9 +22,11 @@
     { "id": "alphabet_neighbors", "target": "letter", "id_suffix": "neighbors", "renderer": "choice", "description": "Escolher as letras que vêm antes e depois de uma letra no alfabeto (modelo 1C)." },
     { "id": "syllables_to_word", "target": "word", "id_suffix": "syllables-word", "renderer": "choice", "description": "Juntar sílabas e escolher a palavra que elas formam (modelo 2E)." },
     { "id": "picture_choose", "target": "word", "id_suffix": "picture", "renderer": "choice", "description": "Ler a palavra e escolher o desenho correspondente (modelo 3C)." },
-    { "id": "word_letter_fit", "target": "letter", "id_suffix": "letter-fit", "renderer": "word_choices", "description": "Escolher a palavra ilustrada que se completa com a letra dada (modelo 3E)." }
+    { "id": "word_letter_fit", "target": "letter", "id_suffix": "letter-fit", "renderer": "word_choices", "description": "Escolher a palavra ilustrada que se completa com a letra dada (modelo 3E)." },
+    { "id": "letters_to_word", "target": "word", "id_suffix": "letters-word", "renderer": "order", "description": "Montar o nome do desenho tocando as letras embaralhadas na ordem." },
+    { "id": "match_missing", "target": "word", "id_suffix": "match-missing", "renderer": "match_fill", "description": "Ligar figuras às palavras completando a letra ou sílaba que falta em cada uma (modelos 1B e 2A)." }
   ],
-  "renderers": ["choice", "word_choices", "order", "multi_select"],
+  "renderers": ["choice", "word_choices", "order", "multi_select", "match_fill"],
   "legacy_aliases": {
     "recognize": "recognize_letter"
   }

@@ -25,8 +25,11 @@ def test_every_bank_question_reaches_the_app(client):
     import json
     questions = {entry["id"]: entry for entry in json.loads(BANK.read_text(encoding="utf-8"))["questoes"]}
     content = client.get("/v1/content").json()
-    sources = {item["payload"]["source"]["question_id"] for track in content["tracks"] for unit in track["units"] for item in unit["items"]}
-    assert sources == set(questions)
+    payloads = [item["payload"] for track in content["tracks"] for unit in track["units"] for item in unit["items"]]
+    assert {payload["source"]["question_id"] for payload in payloads if payload["source"]["bank"] == "bancoquestoesequiz"} == set(questions)
+    # As variações novas seguem os modelos de EXERCICIOSPARAOAPP.txt e ficam identificadas.
+    variations = [payload["source"] for payload in payloads if payload["source"]["bank"] == "variacoes-prosa"]
+    assert len(variations) >= 40 and {source["model"] for source in variations} == {"1B", "1D", "2A", "3E"}
 
 
 def test_seed_retires_the_previous_catalog(client):

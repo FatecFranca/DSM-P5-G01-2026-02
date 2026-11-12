@@ -24,6 +24,8 @@ class ExerciseType(StrEnum):
     SYLLABLES_TO_WORD = "syllables_to_word"
     PICTURE_CHOOSE = "picture_choose"
     WORD_LETTER_FIT = "word_letter_fit"
+    LETTERS_TO_WORD = "letters_to_word"
+    MATCH_MISSING = "match_missing"
 
 
 class ItemKind(StrEnum):
@@ -38,6 +40,7 @@ class Renderer(StrEnum):
     WORD_CHOICES = "word_choices"
     ORDER = "order"
     MULTI_SELECT = "multi_select"
+    MATCH_FILL = "match_fill"
 
 
 TARGET_OF: dict[ExerciseType, ItemKind] = {
@@ -50,6 +53,7 @@ TARGET_OF: dict[ExerciseType, ItemKind] = {
     ExerciseType.SENTENCE_IMAGE_CHOOSE: ItemKind.SENTENCE,
     ExerciseType.FIRST_LAST_LETTERS: ItemKind.LETTER, ExerciseType.ALPHABET_NEIGHBORS: ItemKind.LETTER, ExerciseType.SYLLABLES_TO_WORD: ItemKind.WORD,
     ExerciseType.PICTURE_CHOOSE: ItemKind.WORD, ExerciseType.WORD_LETTER_FIT: ItemKind.LETTER,
+    ExerciseType.LETTERS_TO_WORD: ItemKind.WORD, ExerciseType.MATCH_MISSING: ItemKind.WORD,
 }
 RENDERER_OF: dict[ExerciseType, Renderer] = {
     ExerciseType.LISTEN_CHOOSE: Renderer.CHOICE, ExerciseType.RECOGNIZE_LETTER: Renderer.CHOICE, ExerciseType.FIND_IN_WORD: Renderer.CHOICE,
@@ -60,6 +64,7 @@ RENDERER_OF: dict[ExerciseType, Renderer] = {
     ExerciseType.SENTENCE_IMAGE_CHOOSE: Renderer.CHOICE,
     ExerciseType.FIRST_LAST_LETTERS: Renderer.MULTI_SELECT, ExerciseType.ALPHABET_NEIGHBORS: Renderer.CHOICE, ExerciseType.SYLLABLES_TO_WORD: Renderer.CHOICE,
     ExerciseType.PICTURE_CHOOSE: Renderer.CHOICE, ExerciseType.WORD_LETTER_FIT: Renderer.WORD_CHOICES,
+    ExerciseType.LETTERS_TO_WORD: Renderer.ORDER, ExerciseType.MATCH_MISSING: Renderer.MATCH_FILL,
 }
 EXERCISE_ID_SUFFIX: dict[ExerciseType, str] = {
     ExerciseType.LISTEN_CHOOSE: "listen", ExerciseType.RECOGNIZE_LETTER: "recognize", ExerciseType.FIND_IN_WORD: "find",
@@ -70,9 +75,10 @@ EXERCISE_ID_SUFFIX: dict[ExerciseType, str] = {
     ExerciseType.SENTENCE_IMAGE_CHOOSE: "sentence-image",
     ExerciseType.FIRST_LAST_LETTERS: "first-last", ExerciseType.ALPHABET_NEIGHBORS: "neighbors", ExerciseType.SYLLABLES_TO_WORD: "syllables-word",
     ExerciseType.PICTURE_CHOOSE: "picture", ExerciseType.WORD_LETTER_FIT: "letter-fit",
+    ExerciseType.LETTERS_TO_WORD: "letters-word", ExerciseType.MATCH_MISSING: "match-missing",
 }
 LEGACY_ALIASES: dict[str, ExerciseType] = {"recognize": ExerciseType.RECOGNIZE_LETTER}
-REQUIRED_LETTER_EXERCISE_TYPES = (ExerciseType.LISTEN_CHOOSE, ExerciseType.INITIAL_SOUND, ExerciseType.FIRST_LAST_LETTERS)
+REQUIRED_LETTER_EXERCISE_TYPES = (ExerciseType.LISTEN_CHOOSE, ExerciseType.INITIAL_SOUND, ExerciseType.LETTERS_TO_WORD)
 LETTER_EXERCISES_PER_LESSON = (5, 10)
 FIND_IN_WORD_EXEMPT_LETTERS = "AE"
 

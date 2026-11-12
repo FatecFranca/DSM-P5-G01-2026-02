@@ -27,7 +27,9 @@ def test_seed_uses_canonical_ids(client):
                 assert unit["items"][0]["id"] == exercise_id_for(unit["focus_letter"], "listen_choose")
                 assert all(item["id"].startswith("bq-1") for item in unit["items"][1:])
             else:
-                assert all(item["id"].startswith(f"bq-{track_level(track['id'])}") for item in unit["items"])
+                # Questões do banco levam o modelo no ID; as variações novas, `var-<modelo>`.
+                assert all(item["id"].startswith(("bq-", "var-")) for item in unit["items"])
+                assert all(item["id"].startswith(f"bq-{track_level(track['id'])}") for item in unit["items"] if item["id"].startswith("bq-"))
 
 
 def test_sync_push_stores_canonical_ids_for_legacy_clients(client, auth):

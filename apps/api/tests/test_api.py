@@ -14,7 +14,7 @@ def test_health_and_seeded_content(client):
     assert "".join(letters) == "AEIOUMLPSTRNDCGBFVHQJKZXWY"
     assert next(unit for unit in units_of(content, "letter") if unit["focus_letter"] == "G")["phase"] == 2
     assert {item["type"] for unit in units_of(content, "letter") for item in unit["items"]} == {
-        "listen_choose", "initial_sound", "first_last_letters", "alphabet_neighbors"
+        "listen_choose", "initial_sound", "letters_to_word", "alphabet_neighbors", "match_missing"
     }
     assert [track["id"] for track in content["tracks"]] == ["alphabet", "silabas", "silabas-complexas", "palavras", "frases"]
     assert {unit["kind"] for unit in units_of(content)} == {"letter", "word", "sentence", "syllable", "word_image", "sentence_image"}

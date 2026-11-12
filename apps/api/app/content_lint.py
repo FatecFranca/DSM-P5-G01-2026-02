@@ -178,6 +178,26 @@ def lint_content(body: dict) -> list[str]:
                     errors.append(f"{where}: deve oferecer três frases distintas, incluindo a cena-alvo.")
                 if not (payload.get("image_asset") or context.get("image")):
                     errors.append(f"{where}: a cena precisa de figura.")
+            elif kind is ExerciseType.LETTERS_TO_WORD:
+                tokens = payload.get("tokens") or []
+                target = (item.get("target_id") or "").replace("-", "")
+                if not target or answer != target or sorted(tokens) != sorted(answer) or "".join(tokens) == answer:
+                    errors.append(f"{where}: as letras devem ser as do nome do desenho, fora de ordem.")
+                if not (payload.get("image_asset") or context.get("image")):
+                    errors.append(f"{where}: o nome a montar precisa de figura.")
+            elif kind is ExerciseType.MATCH_MISSING:
+                rows = payload.get("rows") or []
+                if not 2 <= len(rows) <= 5 or answer != ",".join(row.get("answer", "") for row in rows):
+                    errors.append(f"{where}: a resposta deve ser a peça de cada figura, na ordem das linhas.")
+                if not distinct(options, 2, 6) or any(row.get("answer") not in options for row in rows):
+                    errors.append(f"{where}: as opções devem ser distintas e incluir a peça de cada figura.")
+                for row in rows:
+                    masked_row, piece, word = row.get("masked", ""), row.get("answer", ""), row.get("word", "")
+                    filled = masked_row.replace("___", piece, 1) if "___" in masked_row else masked_row.replace("_", piece, 1)
+                    if "_" not in masked_row or strip_marks(filled.replace(" ", "")) != strip_marks(word):
+                        errors.append(f"{where}: a lacuna de {word} deve se completar só com {piece}.")
+                    if not (row.get("image") or row.get("image_asset")):
+                        errors.append(f"{where}: {word} precisa de figura.")
             elif kind in (ExerciseType.FIND_IN_WORD, ExerciseType.FIND_ALL_IN_WORD, ExerciseType.COMPARE_WORDS, ExerciseType.MIXED_REVIEW, ExerciseType.COMPLETE_WORD):
                 if answer not in options and kind is not ExerciseType.FIND_ALL_IN_WORD:
                     errors.append(f"{where}: a resposta deve estar entre as opções.")

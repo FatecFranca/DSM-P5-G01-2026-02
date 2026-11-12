@@ -22,7 +22,7 @@ def test_letter_units_follow_the_question_bank(client):
         types = [entry["type"] for entry in unit["items"]]
         # 1E abre a lição; 1A e 1D trazem as duas palavras da letra; 1C entra de B a Y.
         assert types[0] == "listen_choose" and unit["items"][0]["payload"]["difficulty"] == "introducao"
-        assert types.count("first_last_letters") == 2
+        assert types.count("letters_to_word") == 2
         assert types.count("alphabet_neighbors") == (0 if letter in "AZ" else 1)
         for entry in unit["items"]:
             assert {"pedagogical_objective", "difficulty", "anti_elimination_rationale", "feedback", "review", "source"} <= set(entry["payload"])
@@ -32,13 +32,16 @@ def test_letter_units_follow_the_question_bank(client):
     abelha = by_id(body, "bq-1A-abelha")
     assert abelha["options"] == ["A", "E", "I"] and abelha["payload"]["context"]["masked_word"] == "_BELHA" and abelha["payload"]["context"]["image"] == "🐝"
     assert abelha["instruction"] == "Selecione a vogal inicial do nome do desenho."
-    # Ligar figuras às letras (1B) vira uma escolha por objeto, na lição que fecha as letras do grupo.
-    assert [entry["context_word"] for entry in letter_units["B"]["items"] if entry["id"].startswith("bq-1B-")] == ["RELÓGIO", "SAPATO", "BOLSA", "ÓCULOS"]
-    assert by_id(body, "bq-1B-relogio-oculos")["options"] == ["B", "O", "R", "S"]
+    # Ligar figuras às letras (1B): as figuras com o nome sem a letra inicial, na lição que fecha as letras do grupo.
+    match = by_id(body, "bq-1B-relogio")
+    assert match in letter_units["B"]["items"] and match["options"] == ["B", "O", "R", "S"] and match["answer"] == "R,S,B,O"
+    assert [row["masked"] for row in match["payload"]["rows"]] == ["_ELÓGIO", "_APATO", "_OLSA", "_CULOS"]
     neighbors = by_id(body, "bq-1C-e")
     assert neighbors["answer"] == "D E F" and sorted(neighbors["options"]) == ["C E G", "D E F", "F E D"]
-    first_last = by_id(body, "bq-1D-anjo")
-    assert first_last["answer"] == "1,4" and first_last["payload"]["characters"] == ["A", "N", "J", "O"]
+    # 1D vira montar o nome do desenho com as letras embaralhadas.
+    build = by_id(body, "bq-1D-bolsa")
+    assert build["type"] == "letters_to_word" and build["answer"] == "BOLSA" and sorted(build["payload"]["tokens"]) == sorted("BOLSA") and build["payload"]["tokens"] != list("BOLSA")
+    assert "BOLSA" not in build["instruction"] and build["payload"]["context"]["image"] == "👜"
 
 
 def test_levels_two_to_four_use_the_question_bank(client):
@@ -52,6 +55,9 @@ def test_levels_two_to_four_use_the_question_bank(client):
     assert navio["options"] == ["VI", "VA", "PE", "NA", "RA"] and navio["answer"] == "NA"
     camelo = by_id(body, "bq-2D-camelo")
     assert camelo["answer"] == "CA-ME-LO" and sorted(camelo["payload"]["tokens"]) == ["CA", "LO", "ME"] and "CAMELO" not in camelo["instruction"]
+    casa = by_id(body, "bq-2A-casa")
+    assert casa["type"] == "match_missing" and casa["answer"] == "CA,DA,BO" and [row["masked"] for row in casa["payload"]["rows"]] == ["___ SA", "___ DO", "___ LO"]
+    assert len(units["silabas-completar-final"]["items"]) == 6 and len(units["palavras-vogal-falta"]["items"]) == 6
     banana = by_id(body, "bq-2E-banana")
     assert banana["answer"] == "BANANA" and banana["payload"]["context"]["label"] == "BA + NA + NA" and "BANANA" in banana["options"]
     assert by_id(body, "bq-3D-maca")["options"] == ["BANANA", "MÃOS", "MEIA", "MAÇÃ", "PERA"]
@@ -73,7 +79,8 @@ def test_lint_rejects_broken_adaptations(client):
     body = copy.deepcopy(client.get("/v1/content").json())
     by_id(body, "bq-2B-casa-final")["answer"] = "CA"
     by_id(body, "bq-3D-casa")["options"][1] = by_id(body, "bq-3D-casa")["options"][0]
-    by_id(body, "bq-1D-abelha")["payload"]["target_indices"] = [2]
+    by_id(body, "bq-1D-abelha")["payload"]["tokens"] = list("ABELHA")
+    by_id(body, "bq-1B-relogio")["payload"]["rows"][0]["masked"] = "R_LÓGIO"
     by_id(body, "bq-1A-martelo")["options"] = ["M", "M", "N"]
     by_id(body, "bq-1C-b")["answer"] = "C B A"
     build = by_id(body, "bq-2D-panela")
@@ -84,7 +91,8 @@ def test_lint_rejects_broken_adaptations(client):
     errors = lint_content(body)
     assert any("posição pedida" in error for error in errors)
     assert any("palavras distintas publicadas" in error for error in errors)
-    assert any("primeira e a última letra" in error for error in errors)
+    assert any("fora de ordem" in error for error in errors)
+    assert any("lacuna de RELÓGIO" in error for error in errors)
     assert any("letra inicial de MARTELO" in error for error in errors)
     assert any("letra anterior" in error for error in errors)
     assert any("tokens devem ser as sílabas da resposta em outra ordem" in error for error in errors)
@@ -95,7 +103,7 @@ def test_lint_rejects_broken_adaptations(client):
 def test_lint_rejects_revealed_answers_and_unknown_images(client):
     body = copy.deepcopy(client.get("/v1/content").json())
     by_id(body, "bq-1A-abelha")["instruction"] = "Selecione A vogal inicial."
-    by_id(body, "bq-2A-casa-casa")["payload"]["image_asset"] = "images/unknown.svg"
+    by_id(body, "bq-2B-casa-inicial")["payload"]["image_asset"] = "images/unknown.svg"
     by_id(body, "bq-1A-anjo")["payload"]["context"]["masked_word"] = "ANJO"
     errors = lint_content(body)
     assert any("revela a resposta A" in error for error in errors)
