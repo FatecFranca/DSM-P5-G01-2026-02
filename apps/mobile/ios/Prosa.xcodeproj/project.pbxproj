@@ -14,9 +14,11 @@
 		CDE595C6A14B7A490EA3FF47 /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09D6C9AA41C01C58BA9B1B40 /* ExpoModulesProvider.swift */; };
 		E23E90086BC605FC2C860F88 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 6714F0C9C68375F84DB69485 /* PrivacyInfo.xcprivacy */; };
 		F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11748412D0307B40044C1D9 /* AppDelegate.swift */; };
+		F3CF456A69AE22A725C62E18 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 036E28DF8F9EBAA69AAEE0E8 /* SceneDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		036E28DF8F9EBAA69AAEE0E8 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SceneDelegate.swift; path = Prosa/SceneDelegate.swift; sourceTree = "<group>"; };
 		09D6C9AA41C01C58BA9B1B40 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-Prosa/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* Prosa.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Prosa.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Prosa/Images.xcassets; sourceTree = "<group>"; };
@@ -70,6 +72,7 @@
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */,
 				6714F0C9C68375F84DB69485 /* PrivacyInfo.xcprivacy */,
+				036E28DF8F9EBAA69AAEE0E8 /* SceneDelegate.swift */,
 			);
 			name = Prosa;
 			sourceTree = "<group>";
@@ -339,6 +342,7 @@
 			files = (
 				F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */,
 				CDE595C6A14B7A490EA3FF47 /* ExpoModulesProvider.swift in Sources */,
+				F3CF456A69AE22A725C62E18 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
