@@ -25,8 +25,9 @@ def required_letters(text: str) -> str:
 
 
 def syllable_pattern(syllable: str) -> str:
+    """Forma consoante/vogal (CV, CVC, CVVC...). A coluna tem 4 caracteres: formas maiores viram "X"."""
     shape = re.sub(r"[AEIOU]", "V", re.sub(r"[^AEIOU]", "C", strip_marks(syllable)))
-    return shape if shape in {"V", "CV", "CVC", "CCV", "CVV", "VC"} else "outro"
+    return shape if len(shape) <= 4 else "X"
 
 
 def deterministic_shuffle(tokens: list[str]) -> list[str]:

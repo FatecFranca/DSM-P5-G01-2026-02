@@ -1,5 +1,5 @@
 {
-  "version": "588f2bad47015799",
+  "version": "2f63869ecc75bd00",
   "learning_order": "AEIOUMLPSTRNDCGBFVHQJKZXWY",
   "tracks": [
     {
@@ -25471,7 +25471,7 @@
     {
       "id": "MÃOS",
       "text": "MÃOS",
-      "pattern": "outro",
+      "pattern": "CVVC",
       "required_letters": "AOMS",
       "position": 8
     },
