@@ -177,3 +177,24 @@ export async function applyPulled(incoming: { progress: LessonProgress[]; itemSt
   });
   return { progress, itemStates, placement };
 }
+
+/** Dono dos dados locais (id da conta). Sem ele não dá para saber de quem é o progresso guardado no aparelho. */
+export const OWNER_KEY = "owner_id";
+
+/**
+ * Garante que o banco local pertence à conta que acabou de entrar. Se for outra conta (ou o dono é desconhecido
+ * e `strict`), apaga progresso, tentativas, fila de sincronização e configurações da conta anterior; o conteúdo
+ * baixado e a marca de migração ficam. Devolve true quando apagou.
+ */
+export async function claimLocalData(accountId: string | undefined, strict: boolean): Promise<boolean> {
+  const conn = await db();
+  const owner = (await conn.getFirstAsync<{ value: string }>("SELECT value FROM settings WHERE key = ?", OWNER_KEY))?.value;
+  const foreign = accountId ? (owner ? owner !== accountId : strict) : false;
+  if (foreign) {
+    await conn.withTransactionAsync(async () => {
+      await conn.execAsync("DELETE FROM attempts; DELETE FROM progress; DELETE FROM item_states; DELETE FROM sync_queue; DELETE FROM settings WHERE key <> 'content_ids';");
+    });
+  }
+  if (accountId && (foreign || !owner)) await conn.runAsync("INSERT OR REPLACE INTO settings VALUES (?, ?)", OWNER_KEY, accountId);
+  return foreign;
+}

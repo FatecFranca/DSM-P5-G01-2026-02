@@ -14,7 +14,7 @@ export default function Profile() {
   const s = useWindowDimensions().width / FIGMA_FRAME_WIDTH;
   const { name, points, streak, position } = useLearnerStats();
   const logout = useAuthStore((state) => state.logout);
-  // O progresso fica no aparelho; só a sessão e o nome guardado saem.
+  // O progresso fica no aparelho para quem voltar com a mesma conta; outra conta começa do zero (ver claimLocalData).
   const confirmLogout = () => Alert.alert("Sair da conta?", "Suas lições continuam salvas neste aparelho.", [
     { text: "Cancelar", style: "cancel" },
     { text: "Sair", style: "destructive", onPress: () => { void setSetting(USER_NAME_KEY, "").then(logout).then(() => router.replace("/auth")); } },
