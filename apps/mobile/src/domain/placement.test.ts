@@ -4,7 +4,7 @@ import pedagogyContract from "../../../../contracts/pedagogy.json";
 import { isKnownIllustration } from "../assets/illustration-manifest";
 import {
   PLACEMENT_DEMO, PLACEMENT_INTRO, PLACEMENT_ITEMS, PLACEMENT_OUTRO, PLACEMENT_QUIZ_VERSION, PLACEMENT_RULES,
-  creditedLettersFor, itemBand, placementGuidance, placementHitList, scorePlacement, type PlacementResponses,
+  creditedLettersFor, itemBand, placementGuidance, placementHitList, scorePlacement, stimulusParts, type PlacementResponses,
 } from "./placement";
 
 type Example = { name: string; skipped?: boolean; responses: PlacementResponses; expected: { hits: Record<string, number>; difficulty: string; provisional: boolean; provisional_reason: string | null; start_level: number; credited_phases: number[] } };
@@ -103,5 +103,23 @@ describe("crédito e faixa dos exercícios", () => {
     expect(placementGuidance(skipped)).toMatch(/ajust/i);
     const full = scorePlacement({ F1: 2, F2: 1, F3: 3, F4: 2, M1: 3, M2: 1, M3: 2, M4: 3, D1: 1, D2: 2, D3: 3, D4: 1 });
     expect(placementGuidance(full)).toMatch(/frases/i);
+  });
+});
+
+describe("lacuna do estímulo", () => {
+  const byId = (id: string) => PLACEMENT_ITEMS.find((item) => item.id === id)!;
+  it("mostra uma casa por letra da resposta, não os três traços do marcador", () => {
+    expect(stimulusParts(byId("F3"))).toEqual([{ kind: "gap", slots: 2 }, { kind: "text", text: "SA" }]);
+    expect(stimulusParts(byId("M1"))).toEqual([{ kind: "text", text: "PA" }, { kind: "gap", slots: 2 }, { kind: "text", text: "LA" }]);
+    expect(stimulusParts(byId("M2"))).toEqual([{ kind: "text", text: "TA PE" }, { kind: "gap", slots: 2 }]);
+    expect(stimulusParts(byId("D1"))).toEqual([{ kind: "gap", slots: 3 }, { kind: "text", text: "TO" }]);
+  });
+  it("a contagem de casas não entrega o gabarito: as opções de cada item com lacuna têm o mesmo tamanho", () => {
+    for (const item of PLACEMENT_ITEMS.filter((entry) => entry.stimulus.text?.includes("___"))) {
+      expect(new Set(item.options.map((option) => option.label.length)).size, item.id).toBe(1);
+    }
+  });
+  it("texto sem lacuna fica inteiro", () => {
+    expect(stimulusParts(byId("F4"))).toEqual([{ kind: "text", text: "COPO" }]);
   });
 });

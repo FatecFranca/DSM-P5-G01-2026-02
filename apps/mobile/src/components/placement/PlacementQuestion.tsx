@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import Svg, { Circle, Rect } from "react-native-svg";
 import { ManagedIllustration } from "../../assets/ManagedIllustration";
-import type { PlacementItem, PlacementOption } from "../../domain/placement";
+import { PLACEMENT_GAP, stimulusParts, type PlacementItem, type PlacementOption } from "../../domain/placement";
 import { colors, fonts, radius, shadows } from "../../theme";
 import { AudioButton } from "../AudioButton";
 import { CheckCircleIcon } from "../brand/Decor";
@@ -59,7 +59,13 @@ export function PlacementQuestion({ item, onAnswer }: { item: PlacementItem; onA
   return <View style={styles.body}>
     {audio && <View style={styles.listen}><AudioButton label="Ouvir de novo" text={audio} /><Text style={styles.listenText}>Ouvir de novo</Text></View>}
     {image && <ManagedIllustration assetId={image} accessibilityLabel={imageAlt ?? "Ilustração"} size={200} />}
-    {text && <Text accessibilityLabel={text.includes("___") ? `Texto com espaço vazio: ${text.replaceAll("___", "espaço")}` : undefined} style={[styles.reading, text.length > 24 && styles.longReading]}>{text}</Text>}
+    {text && (text.includes(PLACEMENT_GAP)
+      ? <View accessible accessibilityLabel={`Texto com espaço vazio: ${text.replaceAll(PLACEMENT_GAP, "espaço")}`} style={styles.gapRow}>
+        {stimulusParts(item).map((part, index) => part.kind === "text"
+          ? <Text key={index} style={styles.reading}>{part.text}</Text>
+          : <View key={index} style={styles.gap}>{Array.from({ length: part.slots }, (_, slot) => <View key={slot} style={styles.slot} />)}</View>)}
+      </View>
+      : <Text style={[styles.reading, text.length > 24 && styles.longReading]}>{text}</Text>)}
     <Options options={item.options} pending={pending} onPick={setPending} />
     <Actions pending={pending} onConfirm={() => { if (pending !== undefined) onAnswer(pending); }} onSkip={() => onAnswer(null)} />
   </View>;
@@ -86,6 +92,9 @@ const styles = StyleSheet.create({
   listen: { flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 12 },
   listenText: { color: colors.text, fontFamily: fonts.semibold, fontSize: 20 },
   reading: { alignSelf: "center", color: colors.text, fontFamily: fonts.bold, fontSize: 38, letterSpacing: 3, textAlign: "center", lineHeight: 48 },
+  gapRow: { alignSelf: "center", flexDirection: "row", flexWrap: "wrap", alignItems: "center", justifyContent: "center", gap: 14 },
+  gap: { flexDirection: "row", gap: 6 },
+  slot: { width: 34, height: 46, borderBottomWidth: 4, borderColor: colors.text },
   longReading: { fontSize: 24, lineHeight: 34, letterSpacing: 1 },
   options: { flexDirection: "row", flexWrap: "wrap", gap: 16, justifyContent: "center", marginVertical: 8 },
   option: { minWidth: 104, minHeight: 76, borderRadius: radius.md, backgroundColor: colors.surface, alignItems: "center", justifyContent: "center", paddingHorizontal: 14, borderWidth: 2, borderColor: "transparent", ...shadows.card },

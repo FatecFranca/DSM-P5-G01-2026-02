@@ -171,3 +171,21 @@ const LEVEL_GUIDANCE: Record<PlacementStartLevel, string> = {
 
 export const placementGuidance = (score: Pick<PlacementScore, "startLevel" | "provisional">): string =>
   score.provisional ? `${LEVEL_GUIDANCE[1]} Vamos ajustando conforme você pratica.` : LEVEL_GUIDANCE[score.startLevel];
+
+/** Marcador de lacuna do contrato; é só um sinal, não o número de letras. */
+export const PLACEMENT_GAP = "___";
+export type StimulusPart = { kind: "text"; text: string } | { kind: "gap"; slots: number };
+
+/**
+ * Quebra o texto do estímulo em trechos e lacunas. Cada lacuna mostra uma casa por letra da resposta: "___ SA" com
+ * opções PA/MA/CA vira duas casas, não três. Todas as opções de um item têm o mesmo tamanho, então a contagem não
+ * entrega o gabarito; se um dia divergirem, vale a maior.
+ */
+export function stimulusParts(item: Pick<PlacementItem, "stimulus" | "options">): StimulusPart[] {
+  const text = item.stimulus.text ?? "";
+  const slots = Math.max(1, ...item.options.map((option) => option.label.replace(/\s/g, "").length));
+  return text.split(PLACEMENT_GAP).flatMap((segment, index): StimulusPart[] => [
+    ...(index > 0 ? [{ kind: "gap", slots } as const] : []),
+    ...(segment.trim() ? [{ kind: "text", text: segment.trim() } as const] : []),
+  ]);
+}
