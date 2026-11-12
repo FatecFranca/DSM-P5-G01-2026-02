@@ -14,14 +14,14 @@ describe("carregamento de conteúdo", () => {
   it("usa o bundle embarcado quando não há cache válido", async () => {
     database.getContentBundle.mockResolvedValue({ version: "x", etag: "\"x\"", payload: { version: "x" } });
     expect(await loadContent()).toBe("seed");
-    expect(useContentStore.getState().tracks).toHaveLength(3);
-    expect(useContentStore.getState().units).toHaveLength(34);
-    expect(useContentStore.getState().units.slice(-5).map((unit) => unit.id)).toEqual(["casa-silabas", "casa-imagens", "casa-cenas", "familia-1", "familia-2"]);
+    expect(useContentStore.getState().tracks.map((track) => track.id)).toEqual(["alphabet", "silabas", "silabas-complexas", "palavras", "frases"]);
+    expect(useContentStore.getState().units).toHaveLength(68);
+    expect(useContentStore.getState().units.slice(-2).map((unit) => unit.id)).toEqual(["frases-montar", "frases-cena"]);
     expect(useContentStore.getState().version).toBe(seed.version);
-    expect(requiredTypesOf("lesson-A")).toEqual(["listen_choose", "recognize_letter", "initial_sound", "find_all_in_word", "compare_words", "complete_word", "mixed_review"]);
     expect(requiredTypesOf("inexistente")).toBeUndefined();
     // Unidade com vários itens do mesmo tipo: acertar um de cada tipo não conclui; a conclusão vem dos itens.
-    expect(requiredTypesOf("casa-frases")).toBeUndefined();
+    expect(requiredTypesOf("lesson-A")).toBeUndefined();
+    expect(requiredTypesOf("frases-cena")).toBeUndefined();
   });
 
   it("prefere o cache local válido e envia seu ETag ao atualizar", async () => {

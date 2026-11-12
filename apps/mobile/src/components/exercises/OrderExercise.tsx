@@ -4,6 +4,7 @@ import { colors, fonts, radius, shadows } from "../../theme";
 import type { ExerciseRendererProps } from "./ChoiceExercise";
 import { ManagedIllustration } from "../../assets/ManagedIllustration";
 import { joinTokens } from "./order";
+import { ExerciseFigure, GapText } from "./GapText";
 
 export { joinTokens } from "./order";
 
@@ -20,7 +21,9 @@ export function OrderExercise({ exercise, selected, disabled = false, onChoose, 
   };
   const done = picked.length === tokens.length && tokens.length > 0;
   return <View style={styles.container}>
-    {exercise.imageAsset && <View style={styles.context}><ManagedIllustration assetId={exercise.imageAsset} sourceUri={exercise.imageUri} accessibilityLabel={exercise.imageLabel ?? "Ilustração contextual"} /></View>}
+    {exercise.imageAsset ? <View style={styles.context}><ManagedIllustration assetId={exercise.imageAsset} sourceUri={exercise.imageUri} accessibilityLabel={exercise.imageLabel ?? "Ilustração contextual"} /></View> : <ExerciseFigure exercise={exercise} size={110} />}
+    {exercise.contextLabel && (exercise.contextLabel.includes("_") ? <GapText text={exercise.contextLabel} options={tokens} size={exercise.contextLabel.length > 16 ? 26 : 38} />
+      : <Text style={styles.label}>{exercise.contextLabel}</Text>)}
     <View accessibilityLiveRegion="polite" style={[styles.assembly, done && (assembled === exercise.answer ? styles.correct : styles.wrong)]}>
       <Text style={styles.assembled}>{assembled || "…"}</Text>
     </View>
@@ -38,6 +41,7 @@ export function OrderExercise({ exercise, selected, disabled = false, onChoose, 
 const styles = StyleSheet.create({
   container: { gap: 16, marginVertical: 12 },
   context: { alignItems: "center" },
+  label: { alignSelf: "center", color: colors.text, fontSize: 40, fontFamily: fonts.bold, letterSpacing: 4, textAlign: "center" },
   assembly: { minHeight: 72, borderRadius: radius.md, borderWidth: 2, borderStyle: "dashed", borderColor: colors.track, backgroundColor: colors.background, alignItems: "center", justifyContent: "center", paddingHorizontal: 12 },
   correct: { borderStyle: "solid", borderColor: colors.successBright, backgroundColor: colors.selectedBg },
   wrong: { borderStyle: "solid", borderColor: colors.accent, backgroundColor: colors.careBg },

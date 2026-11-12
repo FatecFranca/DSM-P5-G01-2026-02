@@ -12,6 +12,8 @@ export type WordChoice = {
   before: string;
   after: string;
   word: string;
+  /** Desenho embarcado, quando a palavra tem um; senão vale o emoji de `image`. */
+  imageAsset?: string;
 };
 
 export type Exercise = {
@@ -52,6 +54,10 @@ export type Exercise = {
   reviewStatus?: string;
   reviewCriterion?: string;
   compareWords?: string[];
+  /** Figura de cada opção (escolher o desenho da palavra): emoji ou desenho embarcado. */
+  optionImages?: Record<string, { image?: string; imageAsset?: string }>;
+  /** Letra pedida no enunciado (completar com a letra, letras vizinhas). */
+  targetLetter?: string;
 };
 
 export type UnitKind = "letter" | "word" | "sentence" | "syllable" | "word_image" | "sentence_image";

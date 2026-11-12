@@ -3,6 +3,7 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 import { colors, fonts, radius, shadows } from "../../theme";
 import { selectedPositionsAnswer } from "../../domain/session";
 import type { ExerciseRendererProps } from "./ChoiceExercise";
+import { ExerciseFigure } from "./GapText";
 
 /** Caça à letra: cada caractere é um alvo grande e a confirmação evita acerto parcial acidental. */
 export function MultiSelectExercise({ exercise, selected, disabled, onChoose, onInteract }: ExerciseRendererProps) {
@@ -19,11 +20,13 @@ export function MultiSelectExercise({ exercise, selected, disabled, onChoose, on
     const answer = selectedPositionsAnswer(positions);
     onChoose(answer, answer === selectedPositionsAnswer(expected));
   };
+  const firstLast = exercise.type === "first_last_letters";
   return <View style={styles.container}>
+    <ExerciseFigure exercise={exercise} size={110} />
     <View style={styles.word} accessibilityLabel={`Palavra ${word}`}>
       {[...word].map((character, index) => <Pressable key={`${character}-${index}`} disabled={disabled || character === " "} accessibilityRole="checkbox" accessibilityLabel={`Letra ${character}, posição ${index + 1}`} accessibilityState={{ checked: positions.includes(index), disabled }} onPress={() => toggle(index)} style={[styles.letter, positions.includes(index) && styles.marked]}><Text style={[styles.letterText, positions.includes(index) && styles.markedText]}>{character}</Text></Pressable>)}
     </View>
-    <Text style={styles.helper}>{positions.length ? `${positions.length} marcada${positions.length === 1 ? "" : "s"}` : "Toque em todas as letras pedidas."}</Text>
+    <Text style={styles.helper}>{positions.length ? `${positions.length} marcada${positions.length === 1 ? "" : "s"}` : (firstLast ? "Toque na primeira e na última letra." : "Toque em todas as letras pedidas.")}</Text>
     <Pressable disabled={disabled || positions.length === 0} accessibilityRole="button" accessibilityState={{ disabled: disabled || positions.length === 0 }} onPress={submit} style={[styles.confirm, (disabled || positions.length === 0) && styles.disabled]}><Text style={styles.confirmText}>Confirmar</Text></Pressable>
   </View>;
 }

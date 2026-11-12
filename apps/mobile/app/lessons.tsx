@@ -19,7 +19,7 @@ const LAYOUT: Record<TrailStageId, { x: number; y: number; dot: [number, number]
   "consoantes": { x: 59, y: 297, dot: [120, 319], fontSize: 9, label: "Consoantes" },
   "silabas-simples": { x: 265, y: 227, dot: [204, 248], fontSize: 11, label: "Sílabas\nsimples" },
   "silabas-complexas": { x: 59, y: 197, dot: [120, 218], fontSize: 10, label: "Sílabas\ncomplexas" },
-  "palavras": { x: 174, y: 87, dot: [174, 140], fontSize: 12, label: "Palavras" },
+  "palavras": { x: 174, y: 87, dot: [174, 140], fontSize: 11, label: "Palavras\ne frases" },
 };
 // A árvore no Figma: imagem 1024×1536 em "cover", desenhada em 349,3×524 a partir de (-10,15; 51).
 const TREE = { left: -10.15, top: 51, width: 349.3, height: 524 };

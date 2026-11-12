@@ -10,14 +10,18 @@ const tracks: Track[] = [
     id: "alphabet", slug: "alfabeto", title: "Alfabeto", kind: "phonics", order: 1,
     units: [letter("E", 1, 2, ["A"]), letter("A", 1, 1), letter("M", 2, 3, ["A", "E"]), letter("B", 3, 4, ["A", "E", "M"])],
   },
-  {
-    id: "casa", slug: "tem-em-casa", title: "Tem em casa", kind: "theme", order: 2,
-    units: [
-      { id: "casa-silabas", trackId: "casa", kind: "syllable", title: "Sílabas", order: 2, prerequisiteLetters: ["M"], exercises: [] },
-      { id: "casa-1", trackId: "casa", kind: "word", title: "Palavras", order: 1, prerequisiteLetters: ["M"], exercises: [] },
-      { id: "casa-frases", trackId: "casa", kind: "sentence", title: "Frases", order: 3, prerequisiteLetters: ["M"], exercises: [] },
-    ],
-  },
+  { id: "silabas", slug: "silabas", title: "Sílabas", kind: "theme", order: 2, units: [
+    { id: "casa-silabas", trackId: "silabas", kind: "syllable", title: "Sílabas", order: 1, prerequisiteLetters: ["M"], exercises: [] },
+  ] },
+  { id: "silabas-complexas", slug: "silabas-complexas", title: "Sílabas complexas", kind: "theme", order: 3, units: [
+    { id: "complexas-1", trackId: "silabas-complexas", kind: "syllable", title: "Separe", order: 1, prerequisiteLetters: ["M"], exercises: [] },
+  ] },
+  { id: "palavras", slug: "palavras", title: "Palavras", kind: "theme", order: 4, units: [
+    { id: "casa-1", trackId: "palavras", kind: "word", title: "Palavras", order: 1, prerequisiteLetters: ["M"], exercises: [] },
+  ] },
+  { id: "frases", slug: "frases", title: "Frases", kind: "theme", order: 5, units: [
+    { id: "casa-frases", trackId: "frases", kind: "sentence", title: "Frases", order: 1, prerequisiteLetters: ["M"], exercises: [] },
+  ] },
 ];
 
 const ids = (units: Unit[]) => units.map((unit) => unit.id);
@@ -29,8 +33,9 @@ describe("etapas da árvore da trilha", () => {
     expect(ids(unitsForStage(tracks, trailStage("letras")!))).toEqual(["lesson-A", "lesson-E", "lesson-M", "lesson-B"]);
   });
 
-  it("agrupa as trilhas temáticas por tipo de unidade", () => {
+  it("agrupa os níveis 2 a 4 pelas trilhas do banco de questões", () => {
     expect(ids(unitsForStage(tracks, trailStage("silabas-simples")!))).toEqual(["casa-silabas"]);
+    expect(ids(unitsForStage(tracks, trailStage("silabas-complexas")!))).toEqual(["complexas-1"]);
     expect(ids(unitsForStage(tracks, trailStage("palavras")!))).toEqual(["casa-1", "casa-frases"]);
   });
 

@@ -10,8 +10,9 @@ export type TrailStageId = "letras" | "vogais" | "consoantes" | "silabas-simples
 export type TrailStage = {
   id: TrailStageId;
   title: string;
-  /** Fases da trilha fônica que a etapa mostra, ou tipos de unidade das trilhas temáticas. */
+  /** Fases da trilha fônica que a etapa mostra, ou as trilhas temáticas (níveis 2 a 4 do banco de questões). */
   phases?: readonly (1 | 2 | 3)[];
+  trackIds?: readonly string[];
   unitKinds?: readonly UnitKind[];
 };
 
@@ -22,9 +23,11 @@ export const TRAIL_STAGES: readonly TrailStage[] = [
   { id: "letras", title: "Letras", phases: [1, 2, 3] },
   { id: "vogais", title: "Vogais", phases: [1] },
   { id: "consoantes", title: "Consoantes", phases: [2] },
-  { id: "silabas-simples", title: "Sílabas simples", unitKinds: ["syllable"] },
-  { id: "silabas-complexas", title: "Sílabas complexas", unitKinds: ["word_image"] },
-  { id: "palavras", title: "Palavras", unitKinds: ["word", "sentence", "sentence_image"] },
+  // Nível 2 do banco de questões: ouvir e completar sílabas; depois sílaba inicial/final, separar e formar.
+  { id: "silabas-simples", title: "Sílabas simples", trackIds: ["silabas"] },
+  { id: "silabas-complexas", title: "Sílabas complexas", trackIds: ["silabas-complexas"] },
+  // Níveis 3 e 4: palavras e, no fim, frases.
+  { id: "palavras", title: "Palavras e frases", trackIds: ["palavras", "frases"] },
 ];
 
 /** Ordem pedagógica: a próxima lição é procurada nesta ordem, não na ordem visual da árvore. */
@@ -39,9 +42,11 @@ export function unitsForStage(tracks: Track[], stage: TrailStage): Unit[] {
     return (phonics?.units ?? []).filter((unit) => unit.phase !== undefined && phases.has(unit.phase)).sort((a, b) => a.order - b.order);
   }
   const kinds = new Set(stage.unitKinds ?? []);
+  const trackIds = new Set(stage.trackIds ?? []);
   return [...tracks]
     .sort((a, b) => a.order - b.order)
-    .flatMap((track) => [...track.units].sort((a, b) => a.order - b.order).filter((unit) => kinds.has(unit.kind)));
+    .filter((track) => !stage.trackIds || trackIds.has(track.id))
+    .flatMap((track) => [...track.units].sort((a, b) => a.order - b.order).filter((unit) => stage.trackIds || kinds.has(unit.kind)));
 }
 
 export type TrailStatus = "done" | "current" | "available" | "locked";

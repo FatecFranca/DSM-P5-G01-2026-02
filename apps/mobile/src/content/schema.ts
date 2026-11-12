@@ -1,4 +1,4 @@
-import { LEARNING_ORDER, PHASES, TARGET_OF, normalizeExerciseType, requiredLetters, requiredTypesFor } from "../domain/exercise-types";
+import { LEARNING_ORDER, LETTER_EXERCISES_PER_LESSON, PHASES, TARGET_OF, normalizeExerciseType, requiredLetters, requiredTypesFor } from "../domain/exercise-types";
 import type { Exercise, Track, Unit, WordChoice } from "../domain/types";
 import { ILLUSTRATION_ATTRIBUTION, ILLUSTRATION_LICENSE, isKnownIllustration } from "../assets/illustration-manifest";
 
@@ -8,7 +8,7 @@ const ACCEPTED_ILLUSTRATION_ATTRIBUTIONS = new Set([ILLUSTRATION_ATTRIBUTION, "E
 import { isManagedMediaId, isSafeApiMediaPath, isSafeApiMediaUrl } from "../assets/managed-media";
 
 // Formato de GET /v1/content e de assets/content/seed-bundle.json. As regras pedagógicas espelham apps/api/app/content_lint.py.
-export type BundleWordChoice = { id: string; word: string; before: string; after: string };
+export type BundleWordChoice = { id: string; word: string; before: string; after: string; image?: string; image_asset?: string };
 export type BundleItem = { id: string; type: string; item_kind: string; target_id?: string | null; instruction: string; answer: string; options?: string[] | null; context_word?: string | null; word_choices?: BundleWordChoice[] | null; payload?: Record<string, unknown> | null; required_letters: string; audio_asset?: string | null; tts_fallback_text?: string | null; position: number };
 export type BundleUnit = { id: string; kind: string; title: string; position: number; phase?: number | null; phase_title?: string | null; focus_letter?: string | null; required_letters: string; items: BundleItem[] };
 export type BundleTrack = { id: string; slug: string; title: string; kind: string; description?: string | null; position: number; units: BundleUnit[] };
@@ -54,6 +54,13 @@ function structuralErrors(value: unknown): string[] {
   return errors;
 }
 
+const ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+const REQUIRED_METADATA = ["pedagogical_objective", "difficulty", "anti_elimination_rationale", "feedback", "review"];
+const stripMarks = (text: string) => text.normalize("NFD").replace(/\p{Mn}/gu, "").toUpperCase();
+const distinct = (options: string[], minimum = 3, maximum = 5) => options.length >= minimum && options.length <= maximum && new Set(options).size === options.length;
+const sameList = (a: unknown, b: unknown) => JSON.stringify(a) === JSON.stringify(b);
+
+/** Espelha apps/api/app/content_lint.py: cada adaptação para toque do banco de questões tem uma única resposta certa. */
 function pedagogicalErrors(bundle: ContentBundle): string[] {
   const errors: string[] = [];
   const order = bundle.learning_order;
@@ -80,26 +87,21 @@ function pedagogicalErrors(bundle: ContentBundle): string[] {
   if (letterUnits.map((unit) => unit.focus_letter ?? "").join("") !== LEARNING_ORDER) errors.push("A trilha fônica deve conter as 26 letras na ordem definida.");
   const ids = units.flatMap(({ unit }) => unit.items.map((item) => item.id));
   if (new Set(ids).size !== ids.length) errors.push("IDs de item duplicados.");
-  const checkLetters = (where: string, text: string, allowed: Set<string>) => {
-    const future = [...requiredLetters(text)].filter((letter) => !allowed.has(letter)).sort().join("");
-    if (future) errors.push(`${where}: ${text} usa letra ainda não apresentada (${future}).`);
-  };
   for (const { track, unit } of units) {
     const letter = unit.focus_letter ?? "";
-    let allowed: Set<string>;
+    if (!unit.items.length) errors.push(`${unit.id}: unidade sem itens.`);
     if (unit.kind === "letter") {
       if (track.kind !== "phonics" || !letter) { errors.push(`${unit.id}: unidade de letra fora da trilha fônica.`); continue; }
       const index = order.indexOf(letter);
       const phase = PHASES.find((entry) => entry.letters.includes(letter));
       if (!phase || phase.phase !== unit.phase || phase.title !== unit.phase_title) errors.push(`${unit.id}: fase incorreta.`);
       if (unit.required_letters !== order.slice(0, index)) errors.push(`${unit.id}: pré-requisitos devem ser as letras anteriores.`);
-      allowed = new Set(order.slice(0, index + 1));
       const types = unit.items.map((item) => normalizeExerciseType(item.type));
       const missing = requiredTypesFor(letter).filter((type) => !types.includes(type));
       if (missing.length) errors.push(`${unit.id}: faltam exercícios obrigatórios (${missing.join(", ")}).`);
-    } else {
-      allowed = new Set(order);
-      if (requiredLetters(unit.items.map((item) => item.required_letters).join("")) !== unit.required_letters) errors.push(`${unit.id}: required_letters deve ser a união das letras dos itens.`);
+      if (unit.items.length < LETTER_EXERCISES_PER_LESSON.minimum || unit.items.length > LETTER_EXERCISES_PER_LESSON.maximum) errors.push(`${unit.id}: a lição de letra deve ter de ${LETTER_EXERCISES_PER_LESSON.minimum} a ${LETTER_EXERCISES_PER_LESSON.maximum} exercícios.`);
+    } else if (!order.startsWith(unit.required_letters)) {
+      errors.push(`${unit.id}: required_letters deve ser um trecho inicial da ordem de aprendizagem (portão do nível).`);
     }
     for (const item of unit.items) {
       const where = item.id;
@@ -108,97 +110,85 @@ function pedagogicalErrors(bundle: ContentBundle): string[] {
       const answer = item.answer;
       if (!type) { errors.push(`${where}: tipo desconhecido ${item.type}.`); continue; }
       if (item.item_kind !== TARGET_OF[type]) errors.push(`${where}: item_kind deve ser ${TARGET_OF[type]}.`);
-      if (unit.kind === "letter" && item.required_letters !== unit.required_letters) errors.push(`${where}: required_letters deve ser igual ao da unidade de letra.`);
-      if (unit.kind === "letter" || ["syllable_position_choose", "word_image_choose", "sentence_image_choose"].includes(type)) {
-        const metadata = item.payload ?? {};
-        const requiredMetadata = ["pedagogical_objective", "difficulty", "anti_elimination_rationale", "feedback", "review", ...(unit.kind === "letter" ? ["context"] : [])];
-        const missing = requiredMetadata.filter((key) => !(key in metadata));
-        if (missing.length) errors.push(`${where}: metadados pedagógicos ausentes (${missing.join(", ")}).`);
-        const feedback = isRecord(metadata.feedback) ? metadata.feedback : {}; const review = isRecord(metadata.review) ? metadata.review : {};
-        if (typeof feedback.correct !== "string" || !feedback.correct || typeof feedback.incorrect !== "string" || !feedback.incorrect) errors.push(`${where}: feedback correto e de nova tentativa são obrigatórios.`);
-        if (!["pending_human_review", "approved", "changes_requested"].includes(String(review.status)) || typeof review.criterion !== "string" || !review.criterion) errors.push(`${where}: status e critério de revisão pedagógica são obrigatórios.`);
-        const context = isRecord(metadata.context) ? metadata.context : {};
-        if (answer && item.instruction.split(/\s+/).includes(answer)) errors.push(`${where}: o enunciado revela a resposta ${answer}.`);
-        if (["listen_choose", "initial_sound", "complete_word", "mixed_review"].includes(type)) {
-          const masked = typeof context.masked_word === "string" ? context.masked_word : "";
-          if (context.hide_word !== true || context.inline_audio !== true || !masked.includes("_")) errors.push(`${where}: palavra deve aparecer lacunada, sem resposta visível, com áudio junto ao contexto.`);
-          if (item.context_word && item.instruction.includes(item.context_word)) errors.push(`${where}: o enunciado não pode mostrar a palavra pronta.`);
-        }
-      }
+      const payload = item.payload ?? {};
+      const missingMetadata = REQUIRED_METADATA.filter((key) => !(key in payload));
+      if (missingMetadata.length) errors.push(`${where}: metadados pedagógicos ausentes (${missingMetadata.join(", ")}).`);
+      const feedback = isRecord(payload.feedback) ? payload.feedback : {}; const review = isRecord(payload.review) ? payload.review : {};
+      if (typeof feedback.correct !== "string" || !feedback.correct || typeof feedback.incorrect !== "string" || !feedback.incorrect) errors.push(`${where}: feedback correto e de nova tentativa são obrigatórios.`);
+      if (!["pending_human_review", "approved", "changes_requested"].includes(String(review.status)) || typeof review.criterion !== "string" || !review.criterion) errors.push(`${where}: status e critério de revisão pedagógica são obrigatórios.`);
+      if (answer && item.instruction.split(/\s+/).includes(answer)) errors.push(`${where}: o enunciado revela a resposta ${answer}.`);
+      const context = isRecord(payload.context) ? payload.context : {};
+      const masked = typeof context.masked_word === "string" ? context.masked_word : undefined;
+      if (masked !== undefined && (!masked.includes("_") || context.hide_word !== true)) errors.push(`${where}: a palavra lacunada deve esconder a resposta.`);
+      if (context.hide_word === true && item.context_word && item.instruction.includes(item.context_word)) errors.push(`${where}: o enunciado não pode mostrar a palavra escondida.`);
+      if (payload.image_asset != null) imageMetadataErrors(where, payload);
+      const word = item.context_word ?? "";
       if (type === "listen_choose" || type === "recognize_letter") {
-        if (answer !== letter || !options.includes(letter)) errors.push(`${where}: a resposta deve ser ${letter} e estar entre as opções.`);
-      } else if (type === "find_in_word") {
-        const word = item.context_word ?? "";
-        checkLetters(where, word, allowed);
-        if (!letter || !word.includes(letter) || answer !== `${word.indexOf(letter) + 1}ª posição` || !options.includes(answer)) errors.push(`${where}: a resposta deve ser a primeira posição de ${letter} em ${word} e estar entre as opções.`);
+        if ((unit.kind === "letter" && answer !== letter) || !options.includes(answer) || !distinct(options)) errors.push(`${where}: a letra ouvida deve ser a resposta, entre três a cinco opções distintas.`);
       } else if (type === "initial_sound") {
-        if (answer !== letter || !options.includes(answer) || new Set(options).size !== 3 || !item.context_word) errors.push(`${where}: som inicial precisa de palavra e três letras distintas contendo ${letter}.`);
-      } else if (type === "find_all_in_word") {
-        const word = item.context_word ?? ""; const expected = [...word].flatMap((character, index) => character === letter ? [index + 1] : []);
-        const indices = Array.isArray(item.payload?.target_indices) ? item.payload.target_indices : [];
-        const characters = Array.isArray(item.payload?.characters) ? item.payload.characters : [];
-        if (!expected.length || JSON.stringify(characters) !== JSON.stringify([...word]) || JSON.stringify(indices) !== JSON.stringify(expected) || answer !== expected.join(",")) errors.push(`${where}: deve marcar exatamente todas as ocorrências de ${letter} em ${word}.`);
-        if (JSON.stringify(options) !== JSON.stringify([...word].map((_, index) => String(index + 1)))) errors.push(`${where}: opções devem representar todas as posições da palavra.`);
-      } else if (type === "compare_words") {
-        const pair = isStringArray(item.payload?.words) ? item.payload.words : [];
-        if (answer !== letter || !options.includes(answer) || pair.length !== 2 || !pair.includes(item.context_word ?? "")) errors.push(`${where}: comparação precisa de duas palavras e da letra-alvo entre as opções.`);
-      } else if (type === "mixed_review") {
-        if (answer !== letter || !options.includes(answer) || !item.context_word) errors.push(`${where}: revisão precisa reapresentar a letra em uma palavra.`);
+        if (!word || answer !== stripMarks(word)[0] || !options.includes(answer) || !distinct(options, 3, 4)) errors.push(`${where}: a resposta deve ser a letra inicial de ${word}, entre três ou quatro opções distintas.`);
+        if (masked !== undefined && masked !== `_${word.slice(1)}`) errors.push(`${where}: a lacuna deve esconder só a letra inicial de ${word}.`);
+      } else if (type === "first_last_letters") {
+        const expected = [1, word.length];
+        if (word.length < 2 || !sameList(payload.characters, [...word]) || !sameList(payload.target_indices, expected) || answer !== expected.join(",")) errors.push(`${where}: deve marcar a primeira e a última letra de ${word}.`);
+        if (!sameList(options, [...word].map((_, index) => String(index + 1)))) errors.push(`${where}: opções devem representar todas as posições da palavra.`);
+      } else if (type === "alphabet_neighbors") {
+        const target = typeof payload.letter === "string" ? payload.letter : "";
+        const index = target ? ALPHABET.indexOf(target) : -1;
+        if (index <= 0 || index >= 25 || answer !== `${ALPHABET[index - 1]} ${target} ${ALPHABET[index + 1]}` || !options.includes(answer) || !distinct(options, 3, 3)) errors.push(`${where}: a resposta deve ser a letra anterior, ${target} e a posterior, entre três sequências.`);
       } else if (type === "syllable_listen_choose") {
-        if (!options.includes(answer) || item.target_id !== answer || options.length < 2) errors.push(`${where}: a sílaba-alvo deve ser a resposta e estar entre as opções.`);
-        for (const option of options) { checkLetters(where, option, allowed); if (!syllables.has(option)) errors.push(`${where}: sílaba ${option} não catalogada.`); }
-      } else if (type === "complete_word") {
-        const context = isRecord(item.payload?.context) ? item.payload.context : {};
-        const masked = typeof context.masked_word === "string" ? context.masked_word : "";
-        const word = item.context_word ?? "";
-        if (answer !== letter || !options.includes(answer) || options.length !== 3 || new Set(options).size !== 3) errors.push(`${where}: deve oferecer três letras distintas e ter ${letter} como resposta.`);
-        if (!word || masked.split("_").length !== 2 || masked.replace("_", letter) !== word) errors.push(`${where}: a lacuna deve formar a palavra de contexto somente com ${letter}.`);
-        if (item.word_choices?.length) errors.push(`${where}: não deve mostrar cartões com palavras prontas.`);
-      } else if (type === "word_listen_choose") {
-        if (!options.includes(answer) || options.length < 2 || item.target_id !== answer) errors.push(`${where}: a palavra-alvo deve ser a resposta e estar entre as opções.`);
-        for (const option of options) if (!words.has(option)) errors.push(`${where}: palavra ${option} não está no catálogo publicado.`);
-        if (item.required_letters !== requiredLetters(answer)) errors.push(`${where}: required_letters deve ser as letras de ${answer}.`);
-      } else if (type === "word_from_syllables") {
-        const parts = answer.split("-");
-        const tokens = isStringArray(item.payload?.tokens) ? item.payload.tokens : [];
-        const word = words.get(item.target_id ?? "");
-        if (!word || word.syllables.join("-") !== answer) errors.push(`${where}: a resposta deve ser a separação silábica catalogada de ${item.target_id ?? ""}.`);
-        if (sortedTokens(tokens) !== sortedTokens(parts) || (tokens.join("-") === answer && new Set(parts).size > 1)) errors.push(`${where}: tokens devem ser as sílabas da resposta em outra ordem.`);
-        if (item.required_letters !== requiredLetters(parts.join(""))) errors.push(`${where}: required_letters deve ser as letras da palavra.`);
-      } else if (type === "sentence_fill_word") {
-        const sentence = sentences.get(item.target_id ?? "");
-        const gapped = typeof item.payload?.sentence === "string" ? item.payload.sentence : "";
-        if (!sentence || !gapped.includes("___") || gapped.replace("___", answer) !== sentence.text) errors.push(`${where}: a frase com a lacuna preenchida deve ser a frase catalogada.`);
-        if (!options.includes(answer) || options.length < 2) errors.push(`${where}: a resposta deve estar entre as opções.`);
-        for (const option of options) if (!words.has(option)) errors.push(`${where}: palavra ${option} não está no catálogo publicado.`);
-        if (sentence && item.required_letters !== sentence.required_letters) errors.push(`${where}: required_letters deve ser as letras da frase.`);
-      } else if (type === "sentence_order") {
-        const sentence = sentences.get(item.target_id ?? "");
-        const tokens = isStringArray(item.payload?.tokens) ? item.payload.tokens : [];
-        if (!sentence || answer !== sentence.text) errors.push(`${where}: a resposta deve ser a frase catalogada.`);
-        if (sortedTokens(tokens) !== sortedTokens(answer.split(" ")) || tokens.join(" ") === answer) errors.push(`${where}: tokens devem ser as palavras da frase em outra ordem.`);
-        if (sentence && item.required_letters !== sentence.required_letters) errors.push(`${where}: required_letters deve ser as letras da frase.`);
+        if (!options.includes(answer) || item.target_id !== answer || !distinct(options, 2, 5)) errors.push(`${where}: a sílaba-alvo deve ser a resposta e estar entre as opções.`);
+        for (const option of options) if (!syllables.has(option)) errors.push(`${where}: sílaba ${option} não catalogada.`);
       } else if (type === "syllable_position_choose") {
-        const payload = item.payload ?? {};
-        const word = words.get(typeof payload.word === "string" ? payload.word : "");
+        const catalogued = words.get(typeof payload.word === "string" ? payload.word : "");
         const parts = isStringArray(payload.syllables) ? payload.syllables : [];
         const position = payload.position;
         const expected = position === "initial" ? parts[0] : position === "final" ? parts.at(-1) : undefined;
-        if (!word || JSON.stringify(parts) !== JSON.stringify(word.syllables) || answer !== expected || item.target_id !== answer) errors.push(`${where}: a resposta deve ser a sílaba catalogada na posição pedida.`);
-        if (!options.includes(answer) || options.length !== 3 || new Set(options).size !== 3 || options.some((option) => !syllables.has(option))) errors.push(`${where}: deve oferecer três sílabas catalogadas e distintas, incluindo a resposta.`);
-        imageMetadataErrors(where, payload);
-      } else if (type === "word_image_choose") {
-        const payload = item.payload ?? {};
-        if (item.target_id !== answer || !words.has(answer) || !options.includes(answer) || options.length !== 3 || new Set(options).size !== 3) errors.push(`${where}: deve oferecer três palavras distintas publicadas, incluindo a palavra-alvo.`);
+        if (!catalogued || !sameList(parts, catalogued.syllables) || answer !== expected || item.target_id !== answer) errors.push(`${where}: a resposta deve ser a sílaba catalogada na posição pedida.`);
+        if (!options.includes(answer) || !distinct(options) || options.some((option) => !syllables.has(option))) errors.push(`${where}: deve oferecer de três a cinco sílabas catalogadas e distintas, incluindo a resposta.`);
+        const gapAt = position === "initial" ? 0 : parts.length - 1;
+        if (masked !== undefined && !sameList(masked.split(" "), parts.map((part, index) => index === gapAt ? "___" : part))) errors.push(`${where}: a lacuna deve esconder só a sílaba pedida.`);
+      } else if (type === "word_from_syllables") {
+        const parts = answer.split("-");
+        const tokens = isStringArray(payload.tokens) ? payload.tokens : [];
+        const catalogued = words.get(item.target_id ?? "");
+        if (!catalogued || catalogued.syllables.join("-") !== answer) errors.push(`${where}: a resposta deve ser a separação silábica catalogada de ${item.target_id ?? ""}.`);
+        if (sortedTokens(tokens) !== sortedTokens(parts) || (tokens.join("-") === answer && new Set(parts).size > 1)) errors.push(`${where}: tokens devem ser as sílabas da resposta em outra ordem.`);
+        if (catalogued && item.instruction.includes(catalogued.text)) errors.push(`${where}: o enunciado de montagem não pode revelar a palavra pronta.`);
+      } else if (type === "syllables_to_word") {
+        const parts = isStringArray(payload.syllables) ? payload.syllables : [];
+        if (!parts.length || answer !== parts.join("") || item.target_id !== answer || !options.includes(answer) || !distinct(options, 3, 3)) errors.push(`${where}: a resposta deve ser a palavra formada pelas sílabas, entre três palavras.`);
+        for (const option of options) if (!words.has(option)) errors.push(`${where}: palavra ${option} não está no catálogo publicado.`);
+      } else if (type === "word_letter_fit") {
+        const cards = item.word_choices ?? [];
+        const target = typeof payload.letter === "string" ? payload.letter : "";
+        const fitting = cards.filter((card) => card.before === "" && stripMarks(card.word).slice(0, 1) === target && card.word.slice(1) === card.after);
+        if (cards.length < 2 || fitting.length !== 1 || fitting[0].id !== answer || new Set(cards.map((card) => card.id)).size !== cards.length) errors.push(`${where}: exatamente uma palavra deve se completar com ${target}.`);
+        if (cards.some((card) => card.word !== card.before + card.word.charAt(card.before.length) + card.after)) errors.push(`${where}: cada cartão deve ter uma única lacuna.`);
+      } else if (type === "word_listen_choose") {
+        if (!options.includes(answer) || options.length < 2 || item.target_id !== answer) errors.push(`${where}: a palavra-alvo deve ser a resposta e estar entre as opções.`);
+        for (const option of options) if (!words.has(option)) errors.push(`${where}: palavra ${option} não está no catálogo publicado.`);
+      } else if (type === "word_image_choose" || type === "picture_choose") {
+        if (item.target_id !== answer || !words.has(answer) || !options.includes(answer) || !distinct(options)) errors.push(`${where}: deve oferecer de três a cinco palavras distintas publicadas, incluindo a palavra-alvo.`);
         if (options.some((option) => !words.has(option))) errors.push(`${where}: todas as opções devem ser palavras publicadas.`);
-        imageMetadataErrors(where, payload);
-      } else if (type === "sentence_image_choose") {
-        const payload = item.payload ?? {};
+        if (type === "word_image_choose" && !payload.image_asset && typeof context.image !== "string") errors.push(`${where}: a palavra precisa de figura.`);
+        if (type === "picture_choose" && !sameList(Object.keys(isRecord(payload.option_images) ? payload.option_images : {}).sort(), [...options].sort())) errors.push(`${where}: cada opção precisa de figura.`);
+      } else if (type === "sentence_fill_word") {
         const sentence = sentences.get(item.target_id ?? "");
-        const published = new Set(bundle.sentences.map((entry) => entry.text));
-        if (!sentence || answer !== sentence.text || !options.includes(answer) || options.length !== 3 || new Set(options).size !== 3) errors.push(`${where}: deve oferecer três frases distintas, incluindo a cena-alvo.`);
-        if (options.some((option) => !published.has(option))) errors.push(`${where}: todas as opções devem ser frases publicadas.`);
-        imageMetadataErrors(where, payload);
+        const gapped = typeof payload.sentence === "string" ? payload.sentence : "";
+        if (!sentence || !gapped.includes("___") || gapped.replace("___", answer) !== sentence.text) errors.push(`${where}: a frase com a lacuna preenchida deve ser a frase catalogada.`);
+        if (!options.includes(answer) || options.length < 2) errors.push(`${where}: a resposta deve estar entre as opções.`);
+      } else if (type === "sentence_order") {
+        const sentence = sentences.get(item.target_id ?? "");
+        const tokens = isStringArray(payload.tokens) ? payload.tokens : [];
+        if (!sentence || answer !== sentence.text) errors.push(`${where}: a resposta deve ser a frase catalogada.`);
+        if (sortedTokens(tokens) !== sortedTokens(answer.split(" ")) || tokens.join(" ") === answer) errors.push(`${where}: tokens devem ser as palavras da frase em outra ordem.`);
+      } else if (type === "sentence_image_choose") {
+        const sentence = sentences.get(item.target_id ?? "");
+        if (!sentence || answer !== sentence.text || !options.includes(answer) || !distinct(options, 3, 3)) errors.push(`${where}: deve oferecer três frases distintas, incluindo a cena-alvo.`);
+        if (!payload.image_asset && typeof context.image !== "string") errors.push(`${where}: a cena precisa de figura.`);
+      } else if (type !== "find_all_in_word" && !options.includes(answer)) {
+        errors.push(`${where}: a resposta deve estar entre as opções.`);
       }
     }
   }
@@ -214,7 +204,7 @@ export function validateBundle(value: unknown): string[] {
   return errors.length ? errors : pedagogicalErrors(value as ContentBundle);
 }
 
-const toWordChoice = (choice: BundleWordChoice): WordChoice => ({ id: choice.id, word: choice.word, before: choice.before, after: choice.after, image: contextualIllustration(choice.word) ?? "🔤", imageLabel: choice.word, audioText: choice.word });
+const toWordChoice = (choice: BundleWordChoice): WordChoice => ({ id: choice.id, word: choice.word, before: choice.before, after: choice.after, image: choice.image ?? contextualIllustration(choice.word) ?? "🔤", ...(isKnownIllustration(choice.image_asset) ? { imageAsset: choice.image_asset } : {}), imageLabel: choice.word, audioText: choice.word });
 
 function toExercise(item: BundleItem, visual?: { image_asset?: string | null; image_alt?: string | null }, assets = new Map<string, BundleAsset>()): Exercise {
   const type = normalizeExerciseType(item.type);
@@ -234,6 +224,11 @@ function toExercise(item: BundleItem, visual?: { image_asset?: string | null; im
   const maskedWord = contextText("masked_word");
   const hideWord = context?.hide_word === true;
   const inlineAudio = context?.inline_audio === true;
+  const optionImages = isRecord(item.payload?.option_images)
+    ? Object.fromEntries(Object.entries(item.payload.option_images).filter((entry): entry is [string, Record<string, unknown>] => isRecord(entry[1])).map(([option, visual]) => [option, {
+      ...(typeof visual.image === "string" ? { image: visual.image } : {}), ...(isKnownIllustration(visual.image_asset) ? { imageAsset: visual.image_asset } : {}),
+    }]))
+    : undefined;
   const targetPositions = Array.isArray(item.payload?.target_indices) && item.payload.target_indices.every((value) => typeof value === "number" && Number.isInteger(value) && value > 0) ? (item.payload.target_indices as number[]).map((value) => value - 1) : undefined;
   return {
     id: item.id, type, itemKind: TARGET_OF[type], instruction: item.instruction, answer: item.answer, requiredLetters: item.required_letters,
@@ -251,6 +246,7 @@ function toExercise(item: BundleItem, visual?: { image_asset?: string | null; im
     ...(targetPositions ? { targetPositions } : {}), ...(characters ? { contextWord: characters } : {}),
     ...(typeof review?.status === "string" ? { reviewStatus: review.status } : {}), ...(typeof review?.criterion === "string" ? { reviewCriterion: review.criterion } : {}),
     ...(compareWords ? { compareWords } : {}),
+    ...(optionImages ? { optionImages } : {}), ...(payloadText("letter") ? { targetLetter: payloadText("letter") } : {}),
   };
 }
 

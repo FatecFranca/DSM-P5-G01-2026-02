@@ -2,15 +2,17 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 import { colors, fonts, radius, shadows } from "../../theme";
 import { AudioButton } from "../AudioButton";
 import type { ExerciseRendererProps } from "./ChoiceExercise";
+import { ManagedIllustration } from "../../assets/ManagedIllustration";
 
 /** Cartões de palavra com lacuna: a letra da unidade entra na lacuna de exatamente uma delas. */
-export function WordChoicesExercise({ exercise, letter = "", selected, disabled = false, onChoose, onInteract, onAudioPlay }: ExerciseRendererProps) {
+export function WordChoicesExercise({ exercise, letter: unitLetter = "", selected, disabled = false, onChoose, onInteract, onAudioPlay }: ExerciseRendererProps) {
+  const letter = exercise.targetLetter ?? unitLetter;
   return <View style={styles.list}>
     <Text style={styles.helper}>Toque na palavra que combina com a letra {letter}.</Text>
     {(exercise.wordChoices ?? []).map((word) => {
       const chosen = selected === word.id;
       return <Pressable key={word.id} disabled={disabled} accessibilityRole="button" accessibilityLabel={`Completar palavra ${word.imageLabel}`} accessibilityState={{ selected: chosen, disabled }} onPress={() => { onInteract?.(); onChoose(word.id, word.id === exercise.answer); }} style={[styles.card, disabled && styles.disabled, chosen && (word.id === exercise.answer ? styles.correct : styles.selected)]}>
-        <Text accessibilityLabel={`Imagem de ${word.imageLabel}`} style={styles.image}>{word.image}</Text>
+        {word.imageAsset ? <ManagedIllustration assetId={word.imageAsset} accessibilityLabel={`Imagem de ${word.imageLabel}`} size={110} /> : <Text accessibilityLabel={`Imagem de ${word.imageLabel}`} style={styles.image}>{word.image}</Text>}
         <AudioButton label={`Ouvir ${word.audioText}`} text={word.audioText} compact onPlay={() => { onInteract?.(); onAudioPlay?.(); }} />
         <View style={styles.row}><Text style={styles.part}>{word.before}</Text><View style={[styles.blank, chosen && styles.filledBlank]}><Text style={styles.blankText}>{chosen ? letter : "_"}</Text></View><Text style={styles.part}>{word.after}</Text></View>
         {chosen && <Text style={styles.completed}>{word.before}{letter}{word.after}</Text>}
