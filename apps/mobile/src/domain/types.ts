@@ -16,6 +16,8 @@ export type WordChoice = {
   imageAsset?: string;
 };
 
+export type MatchRow = { word: string; masked: string; answer: string; image?: string; imageAsset?: string };
+
 export type Exercise = {
   id: string;
   type: ExerciseType;
@@ -56,6 +58,8 @@ export type Exercise = {
   compareWords?: string[];
   /** Figura de cada opção (escolher o desenho da palavra): emoji ou desenho embarcado. */
   optionImages?: Record<string, { image?: string; imageAsset?: string }>;
+  /** Figuras com o nome lacunado (ligar figura e peça que falta), na ordem da resposta. */
+  matchRows?: MatchRow[];
   /** Letra pedida no enunciado (completar com a letra, letras vizinhas). */
   targetLetter?: string;
 };

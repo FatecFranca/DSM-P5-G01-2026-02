@@ -20,17 +20,18 @@ export function OrderExercise({ exercise, selected, disabled = false, onChoose, 
     setPicked(next);
   };
   const done = picked.length === tokens.length && tokens.length > 0;
+  const letters = exercise.type === "letters_to_word";
   return <View testID={`exercise-${exercise.id}`} style={styles.container}>
     {exercise.imageAsset ? <View style={styles.context}><ManagedIllustration assetId={exercise.imageAsset} sourceUri={exercise.imageUri} accessibilityLabel={exercise.imageLabel ?? "Ilustração contextual"} /></View> : <ExerciseFigure exercise={exercise} size={110} />}
     {exercise.contextLabel && (exercise.contextLabel.includes("_") ? <GapText text={exercise.contextLabel} options={tokens} size={exercise.contextLabel.length > 16 ? 26 : 38} />
       : <Text style={styles.label}>{exercise.contextLabel}</Text>)}
     <View accessibilityLiveRegion="polite" style={[styles.assembly, done && (assembled === exercise.answer ? styles.correct : styles.wrong)]}>
-      <Text style={styles.assembled}>{assembled || "…"}</Text>
+      <Text style={[styles.assembled, letters && styles.assembledWord]}>{assembled || "…"}</Text>
     </View>
     <View style={styles.tokens}>{tokens.map((token, index) => {
       const used = picked.includes(index);
-      return <Pressable key={`${token}-${index}`} disabled={disabled || used || done} accessibilityRole="button" accessibilityLabel={`Peça ${token}`} accessibilityState={{ disabled: disabled || used || done }} onPress={() => pick(index)} style={[styles.token, used && styles.usedToken]}>
-        <Text style={[styles.tokenText, used && styles.usedText]}>{token}</Text>
+      return <Pressable key={`${token}-${index}`} disabled={disabled || used || done} accessibilityRole="button" accessibilityLabel={`Peça ${token}`} accessibilityState={{ disabled: disabled || used || done }} onPress={() => pick(index)} style={[styles.token, letters && styles.letterToken, used && styles.usedToken]}>
+        <Text style={[styles.tokenText, letters && styles.letterText, used && styles.usedText]}>{token}</Text>
       </Pressable>;
     })}</View>
     {done && <Pressable disabled={disabled} accessibilityRole="button" accessibilityLabel="Confirmar resposta montada" onPress={() => { onInteract?.(); onChoose(assembled, assembled === exercise.answer); }} style={styles.confirm}><Text style={styles.confirmText}>Confirmar resposta</Text></Pressable>}
@@ -46,8 +47,11 @@ const styles = StyleSheet.create({
   correct: { borderStyle: "solid", borderColor: colors.successBright, backgroundColor: colors.selectedBg },
   wrong: { borderStyle: "solid", borderColor: colors.accent, backgroundColor: colors.careBg },
   assembled: { color: colors.text, fontSize: 28, fontFamily: fonts.semibold, letterSpacing: 1, textAlign: "center" },
+  assembledWord: { fontSize: 34, letterSpacing: 6 },
   tokens: { flexDirection: "row", flexWrap: "wrap", gap: 14, justifyContent: "center" },
   token: { minWidth: 84, minHeight: 72, borderRadius: radius.md, backgroundColor: colors.surface, alignItems: "center", justifyContent: "center", paddingHorizontal: 14, ...shadows.card },
+  letterToken: { minWidth: 58, minHeight: 66, paddingHorizontal: 8 },
+  letterText: { fontSize: 32 },
   usedToken: { opacity: 0.35 },
   tokenText: { fontSize: 30, color: colors.text, fontFamily: fonts.semibold, letterSpacing: 1 },
   usedText: { color: colors.muted },

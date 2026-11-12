@@ -21,16 +21,25 @@ describe("bundle de conteúdo", () => {
     expect(letters.find((unit) => unit.letter === "G")?.phase).toBe(2);
     const unit = (id: string) => tracks.flatMap((track) => track.units).find((entry) => entry.id === id)!;
     expect(unit("lesson-A").exercises.map((exercise) => exercise.id)).toEqual(["exercise-A-listen", "bq-1A-abelha", "bq-1A-anjo", "bq-1D-abelha", "bq-1D-anjo"]);
-    const [listen, abelha, , firstLast] = unit("lesson-A").exercises;
+    const [listen, abelha, , build] = unit("lesson-A").exercises;
     expect(listen).toMatchObject({ type: "listen_choose", answer: "A", options: ["A", "E", "M", "O", "P"], ttsText: "a", difficulty: "introducao" });
     expect(abelha).toMatchObject({ type: "initial_sound", answer: "A", maskedWord: "_BELHA", contextLabel: "_BELHA", image: "🐝", inlineAudio: true, ttsText: "ABELHA" });
-    expect(firstLast).toMatchObject({ type: "first_last_letters", contextWord: "ABELHA", targetPositions: [0, 5], answer: "1,6", image: "🐝" });
+    expect(build).toMatchObject({ type: "letters_to_word", answer: "ABELHA", targetId: "ABELHA", image: "🐝" });
+    expect([...(build.tokens ?? [])].sort()).toEqual([..."ABELHA"].sort());
+    expect(build.contextLabel).toBeUndefined();
     const neighbors = unit("lesson-E").exercises.find((exercise) => exercise.type === "alphabet_neighbors")!;
     expect(neighbors).toMatchObject({ answer: "D E F", contextLabel: "_ E _", targetLetter: "E" });
     const gap = unit("complexas-1-inicial").exercises.find((exercise) => exercise.id === "bq-2B-sorvete-inicial")!;
     expect(gap).toMatchObject({ type: "syllable_position_choose", answer: "SOR", maskedWord: "___ VE TE", image: "🍦" });
     const casa = unit("silabas-completar").exercises[0];
-    expect(casa).toMatchObject({ answer: "CA", imageAsset: "images/words/casa.svg", options: ["DA", "CA", "BO"] });
+    expect(casa).toMatchObject({ type: "match_missing", answer: "CA,DA,BO", options: ["DA", "CA", "BO"] });
+    expect(casa.matchRows).toEqual([
+      { word: "CASA", masked: "___ SA", answer: "CA", imageAsset: "images/words/casa.svg" },
+      { word: "DADO", masked: "___ DO", answer: "DA", image: "🎲" },
+      { word: "BOLO", masked: "___ LO", answer: "BO", image: "🎂" },
+    ]);
+    const relogio = unit("lesson-B").exercises.find((exercise) => exercise.type === "match_missing")!;
+    expect(relogio.matchRows?.map((row) => row.masked)).toEqual(["_ELÓGIO", "_APATO", "_OLSA", "_CULOS"]);
     const separate = unit("complexas-1-separar").exercises[0];
     expect(separate).toMatchObject({ type: "word_from_syllables", answer: "CA-SA", tokens: ["SA", "CA"], contextLabel: "CASA" });
     const formed = unit("complexas-1-formar").exercises[0];
@@ -56,8 +65,11 @@ describe("bundle de conteúdo", () => {
   it("rejeita posições erradas, distrator ambíguo, montagem trivial e palavra não publicada", () => {
     const item = (value: ContentBundle, id: string) => value.tracks.flatMap((track) => track.units).flatMap((unit) => unit.items).find((entry) => entry.id === id)!;
     const wrongPositions = bundle();
-    item(wrongPositions, "bq-1D-ilha").payload!.target_indices = [2];
-    expect(validateBundle(wrongPositions)).toContain("bq-1D-ilha: deve marcar a primeira e a última letra de ILHA.");
+    item(wrongPositions, "bq-1D-ilha").payload!.tokens = ["I", "L", "H", "A"];
+    expect(validateBundle(wrongPositions)).toContain("bq-1D-ilha: as letras devem ser as do nome do desenho, fora de ordem.");
+    const badRow = bundle();
+    ((item(badRow, "bq-2A-casa").payload!.rows as Record<string, unknown>[])[0]).masked = "CA ___";
+    expect(validateBundle(badRow)).toContain("bq-2A-casa: a lacuna de CASA deve se completar só com CA.");
 
     const revealed = bundle();
     (item(revealed, "bq-1A-escada").payload!.context as Record<string, unknown>).masked_word = "ESCADA";
@@ -77,17 +89,17 @@ describe("bundle de conteúdo", () => {
     expect(validateBundle(ambiguous)).toContain("bq-3E-a-anjo: exatamente uma palavra deve se completar com A.");
 
     const missing = bundle();
-    unitOf(missing, "lesson-M").items = unitOf(missing, "lesson-M").items.filter((entry) => entry.type !== "first_last_letters");
-    expect(validateBundle(missing)).toContain("lesson-M: faltam exercícios obrigatórios (first_last_letters).");
+    unitOf(missing, "lesson-M").items = unitOf(missing, "lesson-M").items.filter((entry) => entry.type !== "letters_to_word");
+    expect(validateBundle(missing)).toContain("lesson-M: faltam exercícios obrigatórios (letters_to_word).");
   });
 
   it("rejeita ativo visual ausente e rótulo acessível vazio", () => {
     const unknown = bundle();
-    itemOf(unknown, "silabas-completar", "syllable_position_choose").payload!.image_asset = "images/words/janela.svg";
-    expect(validateBundle(unknown)).toContain("bq-2A-casa-casa: image_asset deve referenciar uma ilustração local ou mídia administrada conhecida.");
+    itemOf(unknown, "complexas-1-inicial", "syllable_position_choose").payload!.image_asset = "images/words/janela.svg";
+    expect(validateBundle(unknown)).toContain("bq-2B-casa-inicial: image_asset deve referenciar uma ilustração local ou mídia administrada conhecida.");
     const unlabeled = bundle();
-    itemOf(unlabeled, "silabas-completar", "syllable_position_choose").payload!.image_alt = "";
-    expect(validateBundle(unlabeled)).toContain("bq-2A-casa-casa: image_alt é obrigatório.");
+    itemOf(unlabeled, "complexas-1-inicial", "syllable_position_choose").payload!.image_alt = "";
+    expect(validateBundle(unlabeled)).toContain("bq-2B-casa-inicial: image_alt é obrigatório.");
   });
 
   it("aceita mídia administrada publicada pela API e a projeta para o renderer", () => {

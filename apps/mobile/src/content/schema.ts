@@ -165,6 +165,21 @@ function pedagogicalErrors(bundle: ContentBundle): string[] {
         const fitting = cards.filter((card) => card.before === "" && stripMarks(card.word).slice(0, 1) === target && card.word.slice(1) === card.after);
         if (cards.length < 2 || fitting.length !== 1 || fitting[0].id !== answer || new Set(cards.map((card) => card.id)).size !== cards.length) errors.push(`${where}: exatamente uma palavra deve se completar com ${target}.`);
         if (cards.some((card) => card.word !== card.before + card.word.charAt(card.before.length) + card.after)) errors.push(`${where}: cada cartão deve ter uma única lacuna.`);
+      } else if (type === "letters_to_word") {
+        const tokens = isStringArray(payload.tokens) ? payload.tokens : [];
+        const target = (item.target_id ?? "").replace(/-/g, "");
+        if (!target || answer !== target || sortedTokens(tokens) !== sortedTokens([...answer]) || tokens.join("") === answer) errors.push(`${where}: as letras devem ser as do nome do desenho, fora de ordem.`);
+        if (!payload.image_asset && typeof context.image !== "string") errors.push(`${where}: o nome a montar precisa de figura.`);
+      } else if (type === "match_missing") {
+        const rows = Array.isArray(payload.rows) ? payload.rows.filter(isRecord) : [];
+        if (rows.length < 2 || rows.length > 5 || answer !== rows.map((row) => String(row.answer ?? "")).join(",")) errors.push(`${where}: a resposta deve ser a peça de cada figura, na ordem das linhas.`);
+        if (!distinct(options, 2, 6) || rows.some((row) => !options.includes(String(row.answer ?? "")))) errors.push(`${where}: as opções devem ser distintas e incluir a peça de cada figura.`);
+        for (const row of rows) {
+          const masked = String(row.masked ?? ""), piece = String(row.answer ?? ""), word = String(row.word ?? "");
+          const filled = masked.includes("___") ? masked.replace("___", piece) : masked.replace("_", piece);
+          if (!masked.includes("_") || stripMarks(filled.replace(/ /g, "")) !== stripMarks(word)) errors.push(`${where}: a lacuna de ${word} deve se completar só com ${piece}.`);
+          if (typeof row.image !== "string" && typeof row.image_asset !== "string") errors.push(`${where}: ${word} precisa de figura.`);
+        }
       } else if (type === "word_listen_choose") {
         if (!options.includes(answer) || options.length < 2 || item.target_id !== answer) errors.push(`${where}: a palavra-alvo deve ser a resposta e estar entre as opções.`);
         for (const option of options) if (!words.has(option)) errors.push(`${where}: palavra ${option} não está no catálogo publicado.`);
@@ -229,6 +244,12 @@ function toExercise(item: BundleItem, visual?: { image_asset?: string | null; im
       ...(typeof visual.image === "string" ? { image: visual.image } : {}), ...(isKnownIllustration(visual.image_asset) ? { imageAsset: visual.image_asset } : {}),
     }]))
     : undefined;
+  const matchRows = Array.isArray(item.payload?.rows)
+    ? item.payload.rows.filter(isRecord).map((row) => ({
+      word: String(row.word ?? ""), masked: String(row.masked ?? ""), answer: String(row.answer ?? ""),
+      ...(typeof row.image === "string" ? { image: row.image } : {}), ...(isKnownIllustration(row.image_asset) ? { imageAsset: row.image_asset } : {}),
+    }))
+    : undefined;
   const targetPositions = Array.isArray(item.payload?.target_indices) && item.payload.target_indices.every((value) => typeof value === "number" && Number.isInteger(value) && value > 0) ? (item.payload.target_indices as number[]).map((value) => value - 1) : undefined;
   return {
     id: item.id, type, itemKind: TARGET_OF[type], instruction: item.instruction, answer: item.answer, requiredLetters: item.required_letters,
@@ -246,7 +267,7 @@ function toExercise(item: BundleItem, visual?: { image_asset?: string | null; im
     ...(targetPositions ? { targetPositions } : {}), ...(characters ? { contextWord: characters } : {}),
     ...(typeof review?.status === "string" ? { reviewStatus: review.status } : {}), ...(typeof review?.criterion === "string" ? { reviewCriterion: review.criterion } : {}),
     ...(compareWords ? { compareWords } : {}),
-    ...(optionImages ? { optionImages } : {}), ...(payloadText("letter") ? { targetLetter: payloadText("letter") } : {}),
+    ...(optionImages ? { optionImages } : {}), ...(matchRows ? { matchRows } : {}), ...(payloadText("letter") ? { targetLetter: payloadText("letter") } : {}),
   };
 }
 

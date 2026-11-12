@@ -4,8 +4,9 @@ import { ChoiceExercise, type ExerciseRendererProps } from "./ChoiceExercise";
 import { OrderExercise } from "./OrderExercise";
 import { WordChoicesExercise } from "./WordChoicesExercise";
 import { MultiSelectExercise } from "./MultiSelectExercise";
+import { MatchFillExercise } from "./MatchFillExercise";
 
 // Cada renderer do contrato tem exatamente um componente; um tipo novo sem renderer não compila.
-const RENDERERS: Record<Renderer, ComponentType<ExerciseRendererProps>> = { choice: ChoiceExercise, word_choices: WordChoicesExercise, order: OrderExercise, multi_select: MultiSelectExercise };
+const RENDERERS: Record<Renderer, ComponentType<ExerciseRendererProps>> = { choice: ChoiceExercise, word_choices: WordChoicesExercise, order: OrderExercise, multi_select: MultiSelectExercise, match_fill: MatchFillExercise };
 
 export const rendererFor = (type: ExerciseType): ComponentType<ExerciseRendererProps> => RENDERERS[RENDERER_OF[type]];
