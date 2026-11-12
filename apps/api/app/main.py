@@ -21,7 +21,8 @@ app.include_router(auth_router); app.include_router(content_router); app.include
 # Interface local distribuída no próprio servidor, sem depender do diretório
 # atual de execução (uvicorn, testes e executável usam CWDs diferentes).
 ADMIN_WEB_ROOT = Path(__file__).resolve().parents[2] / "admin"
-app.mount("/admin", StaticFiles(directory=ADMIN_WEB_ROOT, html=True), name="admin-web")
+if ADMIN_WEB_ROOT.is_dir():  # ausente em containers que copiam só apps/api
+    app.mount("/admin", StaticFiles(directory=ADMIN_WEB_ROOT, html=True), name="admin-web")
 
 @app.get("/health", tags=["operations"])
 def health(): return {"status": "ok"}

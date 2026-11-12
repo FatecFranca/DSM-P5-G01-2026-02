@@ -12,7 +12,9 @@ import unicodedata
 from functools import lru_cache
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parents[3]
+_PARENTS = Path(__file__).resolve().parents
+# Em container o código fica fora do monorepo (sem ml/); o manifesto é opcional.
+REPO_ROOT = _PARENTS[3] if len(_PARENTS) > 3 else _PARENTS[-1]
 DEFAULT_MANIFEST = REPO_ROOT / "ml" / "artifacts" / "difficulty_manifest.json"
 ACCENT_CHARS = set("ÁÉÍÓÚÂÊÔÃÕÀÜÇ")
 VOWELS = set("AEIOU")
