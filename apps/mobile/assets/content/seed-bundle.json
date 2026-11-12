@@ -1,5 +1,5 @@
 {
-  "version": "3124455f78b59c20",
+  "version": "27703c6da37d30d3",
   "learning_order": "AEIOUMLPSTRNDCGBFVHQJKZXWY",
   "tracks": [
     {
@@ -21074,14 +21074,12 @@
               "item_kind": "word",
               "target_id": null,
               "instruction": "Complete o nome de cada figura com a letra que falta.",
-              "answer": "V,W,X,Y,Z",
+              "answer": "S,T,U,V",
               "options": [
-                "X",
-                "W",
-                "V",
-                "Z",
-                "Y",
-                "A"
+                "S",
+                "T",
+                "U",
+                "V"
               ],
               "context_word": null,
               "word_choices": null,
@@ -21105,39 +21103,33 @@
                 },
                 "rows": [
                   {
+                    "word": "SAPATO",
+                    "masked": "_APATO",
+                    "answer": "S",
+                    "image_asset": "images/quiz/sapato.svg"
+                  },
+                  {
+                    "word": "TAPETE",
+                    "masked": "_APETE",
+                    "answer": "T",
+                    "image_asset": "images/words/tapete.svg"
+                  },
+                  {
+                    "word": "UVA",
+                    "masked": "_VA",
+                    "answer": "U",
+                    "image": "🍇"
+                  },
+                  {
                     "word": "VACA",
                     "masked": "_ACA",
                     "answer": "V",
                     "image": "🐄"
-                  },
-                  {
-                    "word": "WAFFLE",
-                    "masked": "_AFFLE",
-                    "answer": "W",
-                    "image": "🧇"
-                  },
-                  {
-                    "word": "XÍCARA",
-                    "masked": "_ÍCARA",
-                    "answer": "X",
-                    "image": "☕"
-                  },
-                  {
-                    "word": "YOGA",
-                    "masked": "_OGA",
-                    "answer": "Y",
-                    "image": "🧘"
-                  },
-                  {
-                    "word": "ZEBRA",
-                    "masked": "_EBRA",
-                    "answer": "Z",
-                    "image": "🦓"
                   }
                 ],
                 "piece": "letra"
               },
-              "required_letters": "AEIOLRCGBFVZXWY",
+              "required_letters": "AEOUPSTCV",
               "audio_asset": null,
               "tts_fallback_text": "Complete o nome de cada figura com a letra que falta.",
               "position": 7
@@ -21148,14 +21140,12 @@
               "item_kind": "word",
               "target_id": null,
               "instruction": "Complete o nome de cada figura com a letra que falta.",
-              "answer": "V,W,X,Y,Z",
+              "answer": "W,X,Y,Z",
               "options": [
-                "V",
-                "X",
                 "Y",
-                "A",
+                "Z",
                 "W",
-                "Z"
+                "X"
               ],
               "context_word": null,
               "word_choices": null,
@@ -21179,12 +21169,6 @@
                 },
                 "rows": [
                   {
-                    "word": "VACA",
-                    "masked": "_ACA",
-                    "answer": "V",
-                    "image": "🐄"
-                  },
-                  {
                     "word": "WAFFLE",
                     "masked": "_AFFLE",
                     "answer": "W",
@@ -21211,7 +21195,7 @@
                 ],
                 "piece": "letra"
               },
-              "required_letters": "AEIOLRCGBFVZXWY",
+              "required_letters": "AEIOLRCGBFZXWY",
               "audio_asset": null,
               "tts_fallback_text": "Complete o nome de cada figura com a letra que falta.",
               "position": 8
@@ -21594,14 +21578,12 @@
               "item_kind": "word",
               "target_id": null,
               "instruction": "Complete o nome de cada figura com a letra que falta.",
-              "answer": "V,W,X,Y,Z",
+              "answer": "S,T,U,V",
               "options": [
-                "W",
-                "X",
-                "A",
-                "Z",
-                "V",
-                "Y"
+                "T",
+                "U",
+                "S",
+                "V"
               ],
               "context_word": null,
               "word_choices": null,
@@ -21625,39 +21607,33 @@
                 },
                 "rows": [
                   {
+                    "word": "SOL",
+                    "masked": "_OL",
+                    "answer": "S",
+                    "image": "☀️"
+                  },
+                  {
+                    "word": "TOMATE",
+                    "masked": "_OMATE",
+                    "answer": "T",
+                    "image": "🍅"
+                  },
+                  {
+                    "word": "URSO",
+                    "masked": "_RSO",
+                    "answer": "U",
+                    "image": "🐻"
+                  },
+                  {
                     "word": "VELA",
                     "masked": "_ELA",
                     "answer": "V",
                     "image": "🕯️"
-                  },
-                  {
-                    "word": "WI-FI",
-                    "masked": "_I-FI",
-                    "answer": "W",
-                    "image": "📶"
-                  },
-                  {
-                    "word": "XALE",
-                    "masked": "_ALE",
-                    "answer": "X",
-                    "image": "🧣"
-                  },
-                  {
-                    "word": "YAKISOBA",
-                    "masked": "_AKISOBA",
-                    "answer": "Y",
-                    "image": "🍜"
-                  },
-                  {
-                    "word": "ZÍPER",
-                    "masked": "_ÍPER",
-                    "answer": "Z",
-                    "image": "🤐"
                   }
                 ],
                 "piece": "letra"
               },
-              "required_letters": "AEIOLPSRBFVKZXWY",
+              "required_letters": "AEOUMLSTRV",
               "audio_asset": null,
               "tts_fallback_text": "Complete o nome de cada figura com a letra que falta.",
               "position": 7
@@ -21668,14 +21644,12 @@
               "item_kind": "word",
               "target_id": null,
               "instruction": "Complete o nome de cada figura com a letra que falta.",
-              "answer": "V,W,X,Y,Z",
+              "answer": "W,X,Y,Z",
               "options": [
-                "X",
-                "Y",
                 "Z",
-                "A",
-                "V",
-                "W"
+                "W",
+                "Y",
+                "X"
               ],
               "context_word": null,
               "word_choices": null,
@@ -21699,12 +21673,6 @@
                 },
                 "rows": [
                   {
-                    "word": "VELA",
-                    "masked": "_ELA",
-                    "answer": "V",
-                    "image": "🕯️"
-                  },
-                  {
                     "word": "WI-FI",
                     "masked": "_I-FI",
                     "answer": "W",
@@ -21731,7 +21699,7 @@
                 ],
                 "piece": "letra"
               },
-              "required_letters": "AEIOLPSRBFVKZXWY",
+              "required_letters": "AEIOLPSRBFKZXWY",
               "audio_asset": null,
               "tts_fallback_text": "Complete o nome de cada figura com a letra que falta.",
               "position": 8
@@ -21754,7 +21722,7 @@
               "item_kind": "word",
               "target_id": null,
               "instruction": "Complete cada palavra com a vogal que falta.",
-              "answer": "A,A,O",
+              "answer": "A,O,O",
               "options": [
                 "O",
                 "E",
@@ -21789,8 +21757,8 @@
                   },
                   {
                     "word": "DADO",
-                    "masked": "D_DO",
-                    "answer": "A",
+                    "masked": "DAD_",
+                    "answer": "O",
                     "image": "🎲"
                   },
                   {
@@ -21813,7 +21781,7 @@
               "item_kind": "word",
               "target_id": null,
               "instruction": "Complete cada palavra com a vogal que falta.",
-              "answer": "O,A,A",
+              "answer": "O,A,E",
               "options": [
                 "E",
                 "O",
@@ -21854,8 +21822,8 @@
                   },
                   {
                     "word": "CAMELO",
-                    "masked": "C_MELO",
-                    "answer": "A",
+                    "masked": "CAM_LO",
+                    "answer": "E",
                     "image": "🐫"
                   }
                 ],
@@ -21872,9 +21840,9 @@
               "item_kind": "word",
               "target_id": null,
               "instruction": "Complete cada palavra com a vogal que falta.",
-              "answer": "A,E,A",
+              "answer": "A,E,O",
               "options": [
-                "I",
+                "O",
                 "A",
                 "E"
               ],
@@ -21913,8 +21881,8 @@
                   },
                   {
                     "word": "SAPATO",
-                    "masked": "S_PATO",
-                    "answer": "A",
+                    "masked": "SAPAT_",
+                    "answer": "O",
                     "image_asset": "images/quiz/sapato.svg"
                   }
                 ],
@@ -21931,7 +21899,7 @@
               "item_kind": "word",
               "target_id": null,
               "instruction": "Complete cada palavra com a vogal que falta.",
-              "answer": "A,A,A",
+              "answer": "A,E,A",
               "options": [
                 "A",
                 "E",
@@ -21966,8 +21934,8 @@
                   },
                   {
                     "word": "TAPETE",
-                    "masked": "T_PETE",
-                    "answer": "A",
+                    "masked": "TAP_TE",
+                    "answer": "E",
                     "image_asset": "images/words/tapete.svg"
                   },
                   {

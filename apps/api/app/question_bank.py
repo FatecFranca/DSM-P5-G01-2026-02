@@ -433,16 +433,20 @@ def letter_groups() -> list[dict]:
         term = question["dados"]["imagem"]["termo"]
         by_letter.setdefault(initial(term), []).append(term)
     letters = [letter for letter in "ABCDEFGHIJKLMNOPQRSTUVWXYZ" if letter in by_letter]
+    # Grupos de três figuras; a sobra vira dois grupos de quatro (cinco linhas não cabem na tela com as opções).
     groups = chunks(letters, 3)
     if len(groups[-1]) < 3:
-        groups[-2] += groups.pop()
+        leftover = groups.pop()
+        merged = [letter for group in groups[-2:] for letter in group] + leftover
+        groups[-2:] = [merged[: len(merged) // 2], merged[len(merged) // 2:]]
     items = []
     for set_index in range(2):
         for number, group in enumerate(groups, 1):
             rows = [match_row(by_letter[letter][set_index], initial_mask(by_letter[letter][set_index]), letter) for letter in group]
-            extra = next(letter for letter in letters[letters.index(group[-1]) + 1:] + letters if letter not in group and letter != "H")
+            # Com três figuras, uma letra a mais evita acertar a última por eliminação.
+            extra = [next(letter for letter in letters[letters.index(group[-1]) + 1:] + letters if letter not in group and letter != "H")] if len(group) == 3 else []
             question = variation("1B", f"letras-{set_index + 1}-{number}", "Complete o nome de cada figura com a letra que falta.")
-            items.append(match_missing(question, question["id"], rows, shuffled([*group, extra], question["id"]), question["enunciado"], "letra", "medio"))
+            items.append(match_missing(question, question["id"], rows, shuffled([*group, *extra], question["id"]), question["enunciado"], "letra", "medio"))
     return items
 
 
@@ -451,10 +455,13 @@ def vowel_groups() -> list[dict]:
     words = [word for word in bank()["silabas_por_palavra"] if any(letter in VOWELS for letter in strip_marks(word)[1:])]
     items = []
     for number, group in enumerate(chunks(words, 3), 1):
-        rows = []
+        rows, used = [], set()
         for word in group:
             plain = strip_marks(word)
-            at = next(index for index in range(1, len(plain)) if plain[index] in VOWELS)
+            # Vogal de qualquer posição depois da primeira letra; prefere uma que ainda não saiu no grupo.
+            spots = [index for index in range(1, len(plain)) if plain[index] in VOWELS]
+            at = next((index for index in spots if plain[index] not in used), spots[0])
+            used.add(plain[at])
             rows.append(match_row(word, word[:at] + "_" + word[at + 1:], plain[at]))
         answers = list(dict.fromkeys(row["answer"] for row in rows))
         fillers = [vowel for vowel in VOWELS if vowel not in answers][: max(0, 3 - len(answers))]
