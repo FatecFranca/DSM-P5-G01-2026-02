@@ -24,7 +24,10 @@ export type ExerciseRendererProps = {
 /** Grade de opções: letras, sílabas, palavras ou posições. Palavras longas ganham botões largos. */
 export function ChoiceExercise({ exercise, selected, disabled = false, onChoose, onInteract, onAudioPlay }: ExerciseRendererProps) {
   const pictures = exercise.optionImages;
-  const wide = !pictures && (exercise.options ?? []).some((option) => option.length > 3);
+  const longest = Math.max(0, ...(exercise.options ?? []).map((option) => option.length));
+  const wide = !pictures && longest > 3;
+  // Palavras curtas cabem em duas colunas; frases ocupam a linha toda.
+  const half = wide && longest <= 9;
   const [pending, setPending] = useState<string>();
   const label = exercise.contextLabel;
   return <View testID={`exercise-${exercise.id}`}>
@@ -44,9 +47,9 @@ export function ChoiceExercise({ exercise, selected, disabled = false, onChoose,
       const chosen = selected === option;
       const marked = !selected && pending === option;
       const picture = pictures?.[option];
-      return <Pressable key={option} disabled={disabled} accessibilityRole="button" accessibilityLabel={picture ? `Escolher a figura de ${option.toLowerCase()}` : `Escolher ${option}`} accessibilityState={{ selected: chosen || marked, disabled }} onPress={() => { onInteract?.(); setPending(option); }} style={[styles.option, wide && styles.wideOption, picture && styles.pictureOption, disabled && !chosen && styles.disabled, marked && styles.correct, chosen && (option === exercise.answer ? styles.correct : styles.selected)]}>
+      return <Pressable key={option} disabled={disabled} accessibilityRole="button" accessibilityLabel={picture ? `Escolher a figura de ${option.toLowerCase()}` : `Escolher ${option}`} accessibilityState={{ selected: chosen || marked, disabled }} onPress={() => { onInteract?.(); setPending(option); }} style={[styles.option, wide && styles.wideOption, half && styles.halfOption, picture && styles.pictureOption, disabled && !chosen && styles.disabled, marked && styles.correct, chosen && (option === exercise.answer ? styles.correct : styles.selected)]}>
         {picture ? (picture.imageAsset ? <ManagedIllustration assetId={picture.imageAsset} accessibilityLabel={option} size={120} /> : <Text accessible={false} style={styles.pictureText}>{picture.image}</Text>)
-          : <Text style={[styles.optionText, wide && styles.wideText]}>{option}</Text>}
+          : <Text adjustsFontSizeToFit numberOfLines={half ? 1 : undefined} style={[styles.optionText, wide && styles.wideText, half && styles.halfText, longest > 14 && styles.sentenceText]}>{option}</Text>}
       </Pressable>;
     })}</View>
     {/* Modelos de pergunta do Figma: tocar só marca a opção; CONFIRMAR envia (fica apagado até haver escolha). */}
@@ -64,8 +67,11 @@ const styles = StyleSheet.create({
   options: { flexDirection: "row", flexWrap: "wrap", gap: 16, justifyContent: "center", marginVertical: 16 },
   option: { minWidth: 124, minHeight: 76, borderRadius: radius.md, backgroundColor: colors.surface, alignItems: "center", justifyContent: "center", paddingHorizontal: 14, ...shadows.card },
   wideOption: { minWidth: "100%", minHeight: 72 },
+  halfOption: { minWidth: "46%", minHeight: 68, paddingHorizontal: 8 },
   optionText: { fontSize: 40, color: colors.text, fontFamily: fonts.semibold },
   wideText: { fontSize: 30, letterSpacing: 1 },
+  halfText: { fontSize: 24, letterSpacing: 0.5 },
+  sentenceText: { fontSize: 22, letterSpacing: 0.5, lineHeight: 28 },
   selected: { backgroundColor: "#FFF1D6", borderWidth: 2, borderColor: colors.accent },
   correct: { backgroundColor: colors.selectedBg, ...shadows.selected },
   contextWord: { alignSelf: "center", color: colors.text, fontSize: 40, fontFamily: fonts.bold, letterSpacing: 3, marginVertical: 18, textAlign: "center" },

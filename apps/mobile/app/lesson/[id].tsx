@@ -238,7 +238,8 @@ function LessonSession({ unit }: { unit: Unit }) {
 /** Rótulo do botão de áudio da questão: nas de escuta, é o próprio estímulo. */
 function hintLabel(exercise: { type: string; itemKind: string }) {
   if (exercise.type === "listen_choose" || exercise.type === "word_letter_fit") return "Ouvir a letra";
-  if (exercise.type === "syllable_listen_choose" || exercise.type === "syllables_to_word") return "Ouvir as sílabas";
+  if (exercise.type === "syllable_listen_choose") return "Ouvir a sílaba";
+  if (exercise.type === "syllables_to_word") return "Ouvir as sílabas";
   if (exercise.type === "first_last_letters" || exercise.type === "word_from_syllables") return "Ouvir a palavra";
   return exercise.itemKind === "letter" ? "Ouvir pista" : "Ouvir conteúdo";
 }
