@@ -27,7 +27,8 @@ A imagem **não** inclui `ml/` — a API aplica manifestos JSON (coeficientes) e
 3. Liberar apenas SSH administrado, HTTP (80/443) e UDP 443 no firewall.
 4. Copiar o código e preencher `infra/.env` **sem** versioná-lo (`chmod 600 .env`).
 5. `docker compose config --quiet` e `docker compose up -d --build`.
-6. Executar migrations (`alembic upgrade head`) e seed da API.
+6. O container executa as migrations (`alembic upgrade head`) antes de iniciar a API; execute
+   o seed da API após o primeiro deploy.
 7. Confirmar o health check por HTTPS (`curl -fsS https://SEU_DOMINIO/health`) antes de
    apontar o app para a API.
 
